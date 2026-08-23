@@ -14,7 +14,8 @@ public class Hex : MonoBehaviour
         Ice,
         Poison,
         Courage,
-        Hope
+        Hope,
+        PcReveal
     }
 
     private sealed class SharedParticlePoolState
@@ -150,8 +151,6 @@ public class Hex : MonoBehaviour
     private Vector3 terrainBaseScale;
     private bool terrainBaseScaleCaptured;
     private Coroutine pcRevealPulseCoroutine;
-    private Vector3 pcBaseScale;
-    private bool pcBaseScaleCaptured;
     private bool terrainOverdrawApplied;
     // Last reveal state pushed to the seamless-blend rebuild queue; neighbors must re-blend
     // whenever this flips (their rims either fade into fog toward us or blend our art).
@@ -1003,7 +1002,7 @@ public class Hex : MonoBehaviour
                 _hexInfoCharacters.Add(ch);
                 _hexInfoArmies.Add(null);
                 _hexInfoTroopNames.Add(null);
-                string linkedName = $"<link=\"{linkIdx}\"><color=#FFFFFF>{charName}</color></link>";
+                string linkedName = $"<link=\"{linkIdx}\"><color={colors.GetHexColorByName("HoverLinkDefault")}>{charName}</color></link>";
                 if (ch.IsArmyCommander())
                 {
                     Army army = ch.GetArmy();
@@ -1030,7 +1029,7 @@ public class Hex : MonoBehaviour
                             _hexInfoCharacters.Add(ch);
                             _hexInfoArmies.Add(army);
                             _hexInfoTroopNames.Add(troopLines[t].troopName);
-                            sbArmy.Append('\n').Append($"<link=\"{troopLinkIdx}\"><color=#FFFFFF>{troopLines[t].line}</color></link>");
+                            sbArmy.Append('\n').Append($"<link=\"{troopLinkIdx}\"><color={colors.GetHexColorByName("HoverLinkDefault")}>{troopLines[t].line}</color></link>");
                         }
                         linkedArmy = sbArmy.ToString();
                     }
@@ -1041,7 +1040,7 @@ public class Hex : MonoBehaviour
                         _hexInfoArmies.Add(null);
                         _hexInfoTroopNames.Add(null);
                         string armyDisplay = $"\n\t{armyText.Trim()}";
-                        linkedArmy = $"<link=\"{armyLinkIdx}\"><color=#FFFFFF>{armyDisplay}</color></link>";
+                        linkedArmy = $"<link=\"{armyLinkIdx}\"><color={colors.GetHexColorByName("HoverLinkDefault")}>{armyDisplay}</color></link>";
                     }
                     sbChars.Append(linkedName).Append(linkedArmy).Append('\n');
                 }
@@ -1084,7 +1083,7 @@ public class Hex : MonoBehaviour
         string header = IsHexRevealed() ? BuildTerrainFeatureHeader() : string.Empty;
         string presence = string.IsNullOrEmpty(charText)
             ? string.Empty
-            : $"<color=#D8C9A3><b>Presence</b>:</color>\n{charText}";
+            : $"<color={colors.GetHexColorByName("HoverHeader")}><b>Presence</b>:</color>\n{charText}";
 
         string hoverText = string.Join("\n", new[] { pcHeader, header, presence }.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -1102,7 +1101,7 @@ public class Hex : MonoBehaviour
             : $"{pcData.pcName} (Unowned)";
         string alignmentText = pcData.owner != null ? $" {GetAlignmentDisplayName(pcData.owner.GetAlignment())}" : string.Empty;
 
-        return $"<color=#D8C9A3><b>PC</b></color>: {ownerText}{alignmentText}";
+        return $"<color={colors.GetHexColorByName("HoverHeader")}><b>PC</b></color>: {ownerText}{alignmentText}";
     }
 
     private static string GetAlignmentDisplayName(AlignmentEnum alignment)
@@ -1119,14 +1118,14 @@ public class Hex : MonoBehaviour
     {
         string terrainName = TerrainData.GetDisplayName(terrainType);
         StringBuilder sb = new();
-        sb.Append("<color=#8FBF6F><b>Terrain</b></color>: ")
+        sb.Append($"<color={colors.GetHexColorByName("HoverTerrain")}><b>Terrain</b></color>: ")
           .Append(TooltipLink($"<b>{terrainName}</b>", TerrainData.GetDescription(terrainType)))
           .Append(' ').Append(SpriteTag(terrainName));
 
         // Chasm is the only landmark feature: shown when this tile's art depicts one.
         if (isChasm)
         {
-            sb.Append('\n').Append("<color=#6FA8DC><b>Features</b></color>: ")
+            sb.Append('\n').Append($"<color={colors.GetHexColorByName("HoverFeatures")}><b>Features</b></color>: ")
               .Append(TooltipLink("<b>Chasm</b>", ChasmTiles.Description))
               .Append(' ').Append(SpriteTag("Chasm"));
         }
@@ -1460,18 +1459,17 @@ public class Hex : MonoBehaviour
         _terrainTooltipInstance.transform.position = cam.ScreenToWorldPoint(screen);
     }
 
-    private static readonly Color32 LinkColorDefault = new(0xFF, 0xFF, 0xFF, 0xFF);
-    private static readonly Color32 LinkColorHover   = new(0xFF, 0xD7, 0x00, 0xFF);
-
     private void ApplyHexInfoLinkHighlight(int hoveredLinkIdx)
     {
         if (hexInfoText == null) return;
         hexInfoText.ForceMeshUpdate();
         TMP_TextInfo ti = hexInfoText.textInfo;
+        Color32 defaultCol = colors.GetColorByName("HoverLinkDefault");
+        Color32 hoverCol = colors.GetColorByName("HoverLinkHover");
 
         for (int i = 0; i < ti.linkCount; i++)
         {
-            Color32 col = i == hoveredLinkIdx ? LinkColorHover : LinkColorDefault;
+            Color32 col = i == hoveredLinkIdx ? hoverCol : defaultCol;
             TMP_LinkInfo link = ti.linkInfo[i];
             for (int j = 0; j < link.linkTextLength; j++)
             {
@@ -2507,11 +2505,11 @@ public class Hex : MonoBehaviour
     }
 
     // Distinct from the terrain's reveal pulse above: a Population Center is the important
-    // discovery on this hex, so it gets its own showier "landmark found" beat — a golden
-    // flash and a spin-in with scale overshoot — layered on top of, not instead of, the
-    // terrain pulse, so a newly-revealed PC is unmistakable at a glance.
-    private const float PcRevealSpinDuration = 0.85f;
-    private static readonly Color PcRevealFlashColor = new(1f, 0.86f, 0.35f, 1f);
+    // discovery on this hex, so it gets its own showier "landmark found" beat — magic
+    // sparkles play alone for a beat, THEN the PC icon paints in under them, so the
+    // sparkles read as the thing revealing it rather than just decorating a pop-in.
+    private const float PcRevealSparkleDelay = 2.5f;
+    private const float PcRevealFadeDuration = 0.6f;
 
     private void PlayPcRevealPulse()
     {
@@ -2529,51 +2527,33 @@ public class Hex : MonoBehaviour
             yield break;
         }
 
-        Transform pcTransform = pcTexture.transform;
-        if (!pcBaseScaleCaptured)
-        {
-            pcBaseScale = pcTransform.localScale;
-            pcBaseScaleCaptured = true;
-        }
-        Vector3 endScale = pcBaseScale;
-        Color baseColor = pcTexture.color;
-        Quaternion baseRotation = pcTransform.localRotation;
+        float endAlpha = pcTexture.color.a;
+        SetSpriteAlpha(pcTexture, 0f);
 
-        pcTransform.localScale = Vector3.zero;
-        pcTransform.localRotation = Quaternion.Euler(0f, 0f, -160f);
-        pcTexture.color = PcRevealFlashColor;
-        yield return null;
+        if (ShouldShowPlayerParticles()) PlaySharedOneShotParticles(SharedParticleType.PcReveal);
+
+        float delay = 0f;
+        while (delay < PcRevealSparkleDelay)
+        {
+            if (pcTexture == null) { pcRevealPulseCoroutine = null; yield break; }
+            delay += Time.unscaledDeltaTime;
+            yield return null;
+        }
 
         float elapsed = 0f;
-        while (elapsed < PcRevealSpinDuration)
+        while (elapsed < PcRevealFadeDuration)
         {
             if (pcTexture == null) { pcRevealPulseCoroutine = null; yield break; }
 
             elapsed += Time.unscaledDeltaTime;
-            float t = Mathf.Clamp01(elapsed / PcRevealSpinDuration);
-            float scaleEase = EaseOutBackPc(t);
-            pcTransform.localScale = endScale * scaleEase;
-            pcTransform.localRotation = Quaternion.Lerp(Quaternion.Euler(0f, 0f, -160f), baseRotation, Mathf.SmoothStep(0f, 1f, t));
-            pcTexture.color = Color.Lerp(PcRevealFlashColor, baseColor, Mathf.Clamp01(t * 1.4f));
+            float t = Mathf.Clamp01(elapsed / PcRevealFadeDuration);
+            SetSpriteAlpha(pcTexture, Mathf.SmoothStep(0f, endAlpha, t));
             yield return null;
         }
 
-        if (pcTexture != null)
-        {
-            pcTransform.localScale = endScale;
-            pcTransform.localRotation = baseRotation;
-            pcTexture.color = baseColor;
-        }
+        if (pcTexture != null) SetSpriteAlpha(pcTexture, endAlpha);
 
         pcRevealPulseCoroutine = null;
-    }
-
-    private static float EaseOutBackPc(float t)
-    {
-        t = Mathf.Clamp01(t);
-        const float c1 = 1.70158f;
-        const float c3 = c1 + 1f;
-        return 1f + c3 * Mathf.Pow(t - 1f, 3f) + c1 * Mathf.Pow(t - 1f, 2f);
     }
 
     public void ClearScouting()
@@ -3154,7 +3134,11 @@ public class Hex : MonoBehaviour
     // change destroyed the old ones).
     private static void EnsureSharedParticleTemplates(GameObject prefab)
     {
-        bool poolsAlive = sharedParticlePools.Count > 0;
+        // Must match by count against every enum member, not just "existing entries look valid" —
+        // otherwise a new SharedParticleType added after the pools were already built (e.g. domain
+        // reload disabled on Enter Play Mode, so statics survive across Play sessions) never gets
+        // registered until something forces a real reload, and its one-shot silently no-ops forever.
+        bool poolsAlive = sharedParticlePools.Count == Enum.GetValues(typeof(SharedParticleType)).Length;
         foreach (SharedParticlePoolState state in sharedParticlePools.Values)
         {
             if (state == null || state.template == null)
@@ -3191,6 +3175,7 @@ public class Hex : MonoBehaviour
         RegisterSharedParticleTemplate(SharedParticleType.Poison, prefab.transform.Find("Particles/poisonParticles"));
         RegisterSharedParticleTemplate(SharedParticleType.Courage, prefab.transform.Find("Particles/courageParticles"));
         RegisterSharedParticleTemplate(SharedParticleType.Hope, prefab.transform.Find("Particles/hopeParticles"));
+        RegisterSharedParticleTemplate(SharedParticleType.PcReveal, prefab.transform.Find("Particles/pcRevealParticles"));
     }
 
     private void SetSharedSelectedParticlesActive(bool active)

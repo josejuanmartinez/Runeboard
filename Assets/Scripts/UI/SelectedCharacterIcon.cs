@@ -37,7 +37,7 @@ public class SelectedCharacterIcon : MonoBehaviour
     [Header("Levels")]
     public TextMeshProUGUI commander;
     public TextMeshProUGUI agent;
-    public TextMeshProUGUI emmissary;
+    public TextMeshProUGUI emmissary; 
     public TextMeshProUGUI mage;
     public TextMeshProUGUI movementLeft;
 

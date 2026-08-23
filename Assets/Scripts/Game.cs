@@ -9,22 +9,6 @@ using RetroLOTR.Scenarios;
 
 public class Game : MonoBehaviour
 {
-    private static readonly Color[] NationColorPalette =
-    {
-        new(0.90f, 0.29f, 0.24f, 1f),
-        new(0.18f, 0.60f, 0.86f, 1f),
-        new(0.96f, 0.70f, 0.20f, 1f),
-        new(0.19f, 0.69f, 0.49f, 1f),
-        new(0.57f, 0.40f, 0.78f, 1f),
-        new(0.95f, 0.49f, 0.13f, 1f),
-        new(0.91f, 0.46f, 0.64f, 1f),
-        new(0.10f, 0.73f, 0.73f, 1f),
-        new(0.67f, 0.78f, 0.18f, 1f),
-        new(0.55f, 0.35f, 0.24f, 1f),
-        new(0.36f, 0.49f, 0.92f, 1f),
-        new(0.85f, 0.24f, 0.53f, 1f)
-    };
-
     [Header("Sound")]
     public AudioSource soundPlayer;
     public AudioSource musicPlayer;
@@ -395,11 +379,13 @@ public class Game : MonoBehaviour
     private void AssignNationColors()
     {
         List<Leader> leaders = GetAllLeadersForNationColors();
+        Colors colors = FindFirstObjectByType<Colors>();
+        Color[] palette = colors != null ? colors.nationColors : null;
         for (int i = 0; i < leaders.Count; i++)
         {
             Leader leader = leaders[i];
             if (leader == null) continue;
-            leader.nationColor = GetNationColorForIndex(i);
+            leader.nationColor = GetNationColorForIndex(i, palette);
         }
     }
 
@@ -412,11 +398,11 @@ public class Game : MonoBehaviour
         return leaders;
     }
 
-    private static Color GetNationColorForIndex(int index)
+    private static Color GetNationColorForIndex(int index, Color[] palette)
     {
-        if (index < NationColorPalette.Length)
+        if (palette != null && index < palette.Length)
         {
-            return NationColorPalette[index];
+            return palette[index];
         }
 
         float hue = Mathf.Repeat(0.137508f * index, 1f);

@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.004, y: 0.093}
-  m_SizeDelta: {x: 0.7503, y: 0.6507}
+  m_AnchoredPosition: {x: -0.004, y: -0.015}
+  m_SizeDelta: {x: 0.7503, y: 0.4347}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &4318891292767980709
 MeshRenderer:
@@ -117,8 +117,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -210,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 1113915757845565571}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.0297, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -266,12 +266,12 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 9999
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -9015232842386444363, guid: 0bc1b6513ed15884391b540695fbd32c, type: 3}
+  m_Sprite: {fileID: -1022272517, guid: 206438e3f064acd4a9abb0345a579f78, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.5043531, y: 0.5043531}
+  m_Size: {x: 0.5043531, y: 0.44488794}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

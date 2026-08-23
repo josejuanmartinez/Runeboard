@@ -1,0 +1,691 @@
+fileFormatVersion: 2
+guid: 19e3ae124560e5a4c8124dbff9f02fdb
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3388978446503202414
+    second: 2DRigging_0
+  - first:
+      213: -7072754853595716501
+    second: 2DRigging_1
+  - first:
+      213: 2077481977625479013
+    second: 2DRigging_2
+  - first:
+      213: 7691444545158966348
+    second: 2DRigging_3
+  - first:
+      213: -1155418677144121741
+    second: 2DRigging_4
+  - first:
+      213: -7125757502115876312
+    second: 2DRigging_5
+  - first:
+      213: 8276656979027504776
+    second: 2DRigging_6
+  - first:
+      213: -3083293698526267889
+    second: 2DRigging_7
+  - first:
+      213: -7239717970380515529
+    second: 2DRigging_8
+  - first:
+      213: -7617942706510937631
+    second: 2DRigging_9
+  - first:
+      213: 2406024105819582035
+    second: 2DRigging_10
+  - first:
+      213: -2931694705291413176
+    second: 2DRigging_11
+  - first:
+      213: -1242703455035153759
+    second: 2DRigging_12
+  - first:
+      213: 5348412749311653005
+    second: 2DRigging_13
+  - first:
+      213: 3251955830300489584
+    second: 2DRigging_14
+  - first:
+      213: -5789126516179571858
+    second: 2DRigging_15
+  - first:
+      213: 1589847718153965065
+    second: 2DRigging_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 2DRigging_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 757
+        width: 194
+        height: 234
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 291b8b8fe0ee7f0d0800000000000000
+      internalID: -3388978446503202414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_1
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 766
+        width: 199
+        height: 228
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b64e1080fe688dd90800000000000000
+      internalID: -7072754853595716501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_2
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 376
+        width: 140
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56784a70ad2b4dc10800000000000000
+      internalID: 2077481977625479013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_4
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 805
+        width: 268
+        height: 216
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37e09f5b5d027ffe0800000000000000
+      internalID: -1155418677144121741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_5
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 601
+        width: 260
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 822fec24e493c1d90800000000000000
+      internalID: -7125757502115876312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_6
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 460
+        width: 235
+        height: 143
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88e21babba79cd270800000000000000
+      internalID: 8276656979027504776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_7
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 610
+        width: 297
+        height: 152
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f06342997b0f535d0800000000000000
+      internalID: -3083293698526267889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_8
+      rect:
+        serializedVersion: 2
+        x: 1388
+        y: 327
+        width: 148
+        height: 452
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73715751dda578b90800000000000000
+      internalID: -7239717970380515529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_9
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 39
+        width: 260
+        height: 337
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e143235871a74690800000000000000
+      internalID: -7617942706510937631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_10
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 51
+        width: 237
+        height: 326
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35e27643d2ae36120800000000000000
+      internalID: 2406024105819582035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_11
+      rect:
+        serializedVersion: 2
+        x: 574
+        y: 26
+        width: 221
+        height: 326
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8493635c2378057d0800000000000000
+      internalID: -2931694705291413176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_12
+      rect:
+        serializedVersion: 2
+        x: 701
+        y: 350
+        width: 218
+        height: 194
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a2aa71bac701cee0800000000000000
+      internalID: -1242703455035153759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_13
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 85
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8434e2fe01693a40800000000000000
+      internalID: 5348412749311653005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_14
+      rect:
+        serializedVersion: 2
+        x: 838
+        y: 28
+        width: 219
+        height: 320
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 077325a1994412d20800000000000000
+      internalID: 3251955830300489584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_15
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 31
+        width: 148
+        height: 234
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6b625b0b14e8afa0800000000000000
+      internalID: -5789126516179571858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_16
+      rect:
+        serializedVersion: 2
+        x: 1278
+        y: 31
+        width: 223
+        height: 241
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90e48878316401610800000000000000
+      internalID: 1589847718153965065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_17
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 469
+        width: 281
+        height: 143
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f644ae22769237b4288299e3c41ed79d
+      internalID: -414344654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_18
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 376
+        width: 132
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 196a35fba84ee21449f60b4ce3a2af93
+      internalID: 980415949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_19
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 356
+        width: 266
+        height: 206
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff6957ba9538c4e47b5d71092d7feaa1
+      internalID: 2107331267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_20
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 562
+        width: 265
+        height: 399
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c316c8b0658fbb4d98d05ab726ca82e
+      internalID: -47809437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_21
+      rect:
+        serializedVersion: 2
+        x: 956
+        y: 566
+        width: 284
+        height: 451
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 109, y: -114.5}
+        - {x: 125, y: -114.5}
+        - {x: 125, y: -102.5}
+        - {x: 109, y: -102.5}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fbdc90dad858bb47bbbf6a75389a8d3
+      internalID: 628507799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 2DRigging_3
+      rect:
+        serializedVersion: 2
+        x: 1202
+        y: 344
+        width: 163
+        height: 437
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfd1fe0de32d57b4888ebf9edde5cecd
+      internalID: 7691444545158966348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: a3bfd1cd0cae1774ca3dddb79eb7fa1d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      2DRigging_0: -3388978446503202414
+      2DRigging_1: -7072754853595716501
+      2DRigging_10: 2406024105819582035
+      2DRigging_11: -2931694705291413176
+      2DRigging_12: -1242703455035153759
+      2DRigging_13: 5348412749311653005
+      2DRigging_14: 3251955830300489584
+      2DRigging_15: -5789126516179571858
+      2DRigging_16: 1589847718153965065
+      2DRigging_17: -414344654
+      2DRigging_18: 980415949
+      2DRigging_19: 2107331267
+      2DRigging_2: 2077481977625479013
+      2DRigging_20: -47809437
+      2DRigging_21: 628507799
+      2DRigging_3: 7691444545158966348
+      2DRigging_4: -1155418677144121741
+      2DRigging_5: -7125757502115876312
+      2DRigging_6: 8276656979027504776
+      2DRigging_7: -3083293698526267889
+      2DRigging_8: -7239717970380515529
+      2DRigging_9: -7617942706510937631
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

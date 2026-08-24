@@ -1831,7 +1831,25 @@ public class DeckManager : MonoBehaviour
     public static void NotifyEncounterPlaced(Hex targetHex)
     {
         const string text = "An encounter can be investigated";
-        MessageDisplay.ShowMessage(text, Color.yellow, forceImmediate: true, logToWidget: false);
+        // A tray icon rather than MessageDisplayNoUI's hex-anchored floating text: that system
+        // marks MessageDisplayNoUI.IsDisplaying while a message is up, which
+        // BoardNavigator.IsNavigationInputLocked() treats as a reason to block ALL board input
+        // (zoom, character hover, etc.) board-wide until it finishes — fine for a single rare
+        // toast, but encounters can appear several at a time as fog clears, which froze input
+        // for as long as the queue took to drain. The tray icon doesn't touch that lock.
+        EventIconsManager manager = EventIconsManager.FindManager();
+        if (manager != null)
+        {
+            manager.AddEventIcon(
+                EventIconType.Encounter,
+                discardable: true,
+                // Queued (EnqueueFocus) rather than a direct LookAt() call: LookAt() stops and
+                // overwrites BoardNavigator's shared lookAtCoroutine unconditionally, which can
+                // clobber an in-flight queued pan from an unrelated system (e.g. MessageDisplayNoUI's
+                // RequestFocusForMessage, which awaits that same coroutine finishing to release its
+                // focus hold) — going through the queue avoids stepping on other consumers.
+                onOpen: () => BoardNavigator.Instance?.EnqueueFocus(targetHex, 1f, 0f, true));
+        }
         LogManager.Log(LogCategory.Event, Game.Instance?.currentlyPlaying?.characterName, null, text);
     }
 

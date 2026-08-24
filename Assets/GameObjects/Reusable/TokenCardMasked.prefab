@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 1629306647366911531}
   - component: {fileID: 3544926332397231628}
   - component: {fileID: 7337017429235271300}
+  - component: {fileID: 4974302036713529638}
   m_Layer: 5
   m_Name: TokenCardMasked
   m_TagString: Untagged
@@ -388,7 +389,22 @@ MonoBehaviour:
   realCardCanvasGroup: {fileID: 0}
   environmentalSprite: {fileID: 5361619962468679475}
   requirementsMessageColor: {r: 1, g: 0, b: 0, a: 1}
+  showRequirementWarnings: 1
+  showCloseIcon: 1
+  typewriterEffect: 1
   isTokenOnlyPresentation: 1
+--- !u!114 &4974302036713529638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7070350429690719310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53fea792acb0bb4a8571aa376223141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinResweepOnEnable
 --- !u!1 &8039085361002298790
 GameObject:
   m_ObjectHideFlags: 0

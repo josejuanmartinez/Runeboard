@@ -77,7 +77,6 @@ public class PlayableLeader : Leader
         baseCharacterName = fromName;
         characterName = selectedVariantCharacterName;
         RefreshStatsFromCard();
-        MessageDisplay.ShowMessage($"{fromName} steps forward as {selectedVariantCharacterName}.", new Color(1f, 0.84f, 0f), playSound: false);
         Sounds.Instance?.PlayArtifactFound();
         CharacterIcons.RefreshForHumanPlayerOf(this);
     }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [DefaultExecutionOrder(-10000)]
 public class CardBloomWheel : MonoBehaviour
@@ -32,6 +33,11 @@ public class CardBloomWheel : MonoBehaviour
     [Range(0f, 1f)][SerializeField] private float unhoveredDim = 0.45f;
     [Tooltip("How strongly cards that cannot currently be played shift toward red (0 = none, 1 = full).")]
     [Range(0f, 1f)][SerializeField] private float unplayableRedness = 0.85f;
+
+    [Header("Center Icon")]
+    [Tooltip("Shown at the wheel's center while collapsed; clicking it opens the bloom.")]
+    [SerializeField] private Sprite centerIconSprite;
+    [SerializeField] private float centerIconSize = 72f;
 
     private readonly List<RectTransform> cardRects = new();
     private readonly List<CanvasGroup> cardGroups = new();
@@ -69,6 +75,10 @@ public class CardBloomWheel : MonoBehaviour
     private float cachedEndAngle;
     private float hoverTimer;
 
+    private RectTransform centerIconRect;
+    private CanvasGroup centerIconGroup;
+    private float centerIconAlpha;
+
     // Index last handed to CardCenterPreview (see UpdateCenterPreview) — -1 when nothing of
     // ours is currently shown there.
     private int lastPreviewIndex = -1;
@@ -102,6 +112,56 @@ public class CardBloomWheel : MonoBehaviour
         linesGo.AddComponent<CardBloomLinesGraphic>().Init(this);
         linesGo.transform.SetAsFirstSibling();
         linesGraphicTransform = linesGo.transform;
+
+        BuildCenterIcon();
+    }
+
+    // Purely visual icon shown at the wheel's center while collapsed, so the bloom starts
+    // closed. Hidden once open or once there are no cards to show (e.g. before the wheel has
+    // ever been populated, so it doesn't appear during load screens). It has no click handling
+    // of its own — SituationCardsUI's full-screen dismiss catcher sits behind the whole wheel
+    // and owns every click while an offer is up (see its own click handler), so routing "click
+    // the icon" through a second, independent raycast target here would race that catcher
+    // non-deterministically instead of reliably opening the bloom.
+    private void BuildCenterIcon()
+    {
+        var iconGo = new GameObject("CenterIcon", typeof(RectTransform));
+        iconGo.transform.SetParent(transform, false);
+
+        centerIconRect = iconGo.GetComponent<RectTransform>();
+        centerIconRect.anchorMin = centerIconRect.anchorMax = centerIconRect.pivot = new Vector2(0.5f, 0.5f);
+        centerIconRect.sizeDelta = Vector2.one * centerIconSize;
+        centerIconRect.anchoredPosition = Vector2.zero;
+
+        Image iconImage = iconGo.AddComponent<Image>();
+        iconImage.sprite = centerIconSprite;
+        iconImage.preserveAspect = true;
+        iconImage.raycastTarget = false;
+
+        centerIconGroup = iconGo.AddComponent<CanvasGroup>();
+        centerIconGroup.alpha = 0f;
+        centerIconAlpha = 0f;
+
+        iconGo.transform.SetAsLastSibling();
+    }
+
+    /// <summary>Opens the bloom (clicking the collapsed-state center icon).</summary>
+    public void OpenBloom()
+    {
+        if (!isOpen) SetOpenState(true);
+    }
+
+    /// <summary>Collapses the bloom back to just its center icon (used by SituationCardsUI's dismiss catcher when a click lands back on that icon while open — a manual toggle-close alongside the existing auto-close-on-mouse-away).</summary>
+    public void CollapseBloom()
+    {
+        if (isOpen) SetOpenState(false);
+    }
+
+    /// <summary>True if the mouse is currently over the collapsed-state center icon.</summary>
+    public bool IsCenterIconUnderMouse()
+    {
+        return centerIconRect != null &&
+            RectTransformUtility.RectangleContainsScreenPoint(centerIconRect, Input.mousePosition, CanvasCamera());
     }
 
     private void Start()
@@ -141,6 +201,14 @@ public class CardBloomWheel : MonoBehaviour
         {
             int clickedIndex = FindHoveredCardIndex(CanvasCamera());
             if (clickedIndex >= 0) PlayCardAtIndex(clickedIndex);
+        }
+        // While collapsed, SituationCardsUI's dismiss catcher is inactive (see
+        // SyncBloomDismissCatcher) so there's nothing else listening for this click —
+        // handle opening directly.
+        else if (!isOpen && isVisible && cardRects.Count > 0 && Input.GetMouseButtonDown(0)
+            && IsCenterIconUnderMouse())
+        {
+            OpenBloom();
         }
 
         if (useWorldAnchor) ApplyWorldAnchor();
@@ -392,6 +460,10 @@ public class CardBloomWheel : MonoBehaviour
     {
         isOpen = false;
         hoveredCardIndex = -1;
+
+        centerIconAlpha = (isVisible && cardRects.Count > 0) ? 1f : 0f;
+        if (centerIconGroup != null) centerIconGroup.alpha = centerIconAlpha;
+
         for (int i = 0; i < cardRects.Count; i++)
         {
             if (cardRects[i] != null)
@@ -484,6 +556,18 @@ public class CardBloomWheel : MonoBehaviour
         }
 
         UpdateCenterPreview(isOpen ? hoveredCardIndex : -1);
+        UpdateCenterIcon(speed);
+    }
+
+    private void UpdateCenterIcon(float speed)
+    {
+        if (centerIconGroup == null) return;
+
+        // Only ever visible once the wheel actually has an offer to show — otherwise it would
+        // sit at the wheel's authored position (e.g. over loading screens) with nothing behind it.
+        float target = (isOpen || !isVisible || cardRects.Count == 0) ? 0f : 1f;
+        centerIconAlpha = Mathf.Lerp(centerIconAlpha, target, Time.deltaTime * speed * 1.5f);
+        centerIconGroup.alpha = centerIconAlpha;
     }
 
     // Shows the hovered card's full face via the shared CardCenterPreview singleton (same

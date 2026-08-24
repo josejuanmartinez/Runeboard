@@ -149,6 +149,15 @@ public class MessageDisplay : MonoBehaviour
         if (persistentActive) { isDisplayingMessage = false; return; }
         if (ShouldDelayForFocusOrWorldMessages())
         {
+            // Nothing is actually being displayed while we wait here (DisplayCoroutine already
+            // finished, or hasn't started) — must clear this so WaitForSyncThenProcess's
+            // `if (!isDisplayingMessage) ProcessNextMessage()` below can fire once the wait
+            // ends. Leaving it true here stranded the queue forever whenever this branch was
+            // entered from the end of a DisplayCoroutine (e.g. a toast finishing right as the
+            // Turn banner starts) with nothing left queued: this flag never got reset by
+            // anything else, so IsDisplaying() stayed true - and the board-input lock it feeds
+            // in BoardNavigator.IsNavigationInputLocked() stayed engaged - permanently.
+            isDisplayingMessage = false;
             if (waitForSyncRoutine == null)
             {
                 waitForSyncRoutine = StartCoroutine(WaitForSyncThenProcess());
@@ -224,6 +233,7 @@ public class MessageDisplay : MonoBehaviour
     /// </summary>
     private IEnumerator DisplayCoroutine(string message, Color textColor)
     {
+        Debug.Log($"[MsgDisplay] DisplayCoroutine START '{message}' (frame={Time.frameCount})");
         isDisplayingMessage = true;
         SetCanvasGroupVisible(true);
 
@@ -244,8 +254,14 @@ public class MessageDisplay : MonoBehaviour
 
         SetCanvasGroupVisible(false);
 
+        Debug.Log($"[MsgDisplay] DisplayCoroutine END '{message}' (frame={Time.frameCount})");
         // Process the next message in the queue if there is one
         ProcessNextMessage();
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log($"[MsgDisplay] OnDisable — isDisplayingMessage={isDisplayingMessage} messageQueue.Count={messageQueue.Count}");
     }
 
     /// <summary>

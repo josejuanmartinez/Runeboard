@@ -43368,29 +43368,6 @@
             ]
         },
         {
-            "row": 16,
-            "col": 31,
-            "characterName": "Bilbo",
-            "ownerLeaderName": "Elrond",
-            "ownerVariantId": "",
-            "fallbackOwnerName": "",
-            "variantId": "",
-            "spawnConditionLeaderName": "",
-            "spawnConditionVariantId": "",
-            "spawnConditionExclude": false,
-            "army": {
-                "xp": 25,
-                "stacks": [],
-                "spawnConditionLeaderName": "",
-                "spawnConditionVariantId": "",
-                "spawnConditionExclude": false
-            },
-            "startingObjects": [
-                "Sting",
-                "Mithril coat"
-            ]
-        },
-        {
             "row": 15,
             "col": 31,
             "characterName": "Mithrandir",
@@ -43418,6 +43395,29 @@
             ]
         },
         {
+            "row": 16,
+            "col": 31,
+            "characterName": "Bilbo",
+            "ownerLeaderName": "Elrond",
+            "ownerVariantId": "",
+            "fallbackOwnerName": "",
+            "variantId": "",
+            "spawnConditionLeaderName": "",
+            "spawnConditionVariantId": "",
+            "spawnConditionExclude": false,
+            "army": {
+                "xp": 25,
+                "stacks": [],
+                "spawnConditionLeaderName": "",
+                "spawnConditionVariantId": "",
+                "spawnConditionExclude": false
+            },
+            "startingObjects": [
+                "Sting",
+                "Mithril coat"
+            ]
+        },
+        {
             "row": 15,
             "col": 30,
             "characterName": "Glorfindel",
@@ -43440,6 +43440,26 @@
                         "amount": 100
                     }
                 ],
+                "spawnConditionLeaderName": "",
+                "spawnConditionVariantId": "",
+                "spawnConditionExclude": false
+            },
+            "startingObjects": []
+        },
+        {
+            "row": 15,
+            "col": 30,
+            "characterName": "Arwen",
+            "ownerLeaderName": "Elrond",
+            "ownerVariantId": "",
+            "fallbackOwnerName": "",
+            "variantId": "",
+            "spawnConditionLeaderName": "",
+            "spawnConditionVariantId": "",
+            "spawnConditionExclude": false,
+            "army": {
+                "xp": 25,
+                "stacks": [],
                 "spawnConditionLeaderName": "",
                 "spawnConditionVariantId": "",
                 "spawnConditionExclude": false
@@ -43629,26 +43649,6 @@
         },
         {
             "row": 33,
-            "col": 27,
-            "characterName": "Grima",
-            "ownerLeaderName": "Saruman",
-            "ownerVariantId": "",
-            "fallbackOwnerName": "",
-            "variantId": "",
-            "spawnConditionLeaderName": "",
-            "spawnConditionVariantId": "",
-            "spawnConditionExclude": false,
-            "army": {
-                "xp": 25,
-                "stacks": [],
-                "spawnConditionLeaderName": "",
-                "spawnConditionVariantId": "",
-                "spawnConditionExclude": false
-            },
-            "startingObjects": []
-        },
-        {
-            "row": 33,
             "col": 28,
             "characterName": "Saruman the White",
             "ownerLeaderName": "Saruman",
@@ -43677,6 +43677,26 @@
             "startingObjects": [
                 "Ring of Orthanc"
             ]
+        },
+        {
+            "row": 33,
+            "col": 27,
+            "characterName": "Grima",
+            "ownerLeaderName": "Saruman",
+            "ownerVariantId": "",
+            "fallbackOwnerName": "",
+            "variantId": "",
+            "spawnConditionLeaderName": "",
+            "spawnConditionVariantId": "",
+            "spawnConditionExclude": false,
+            "army": {
+                "xp": 25,
+                "stacks": [],
+                "spawnConditionLeaderName": "",
+                "spawnConditionVariantId": "",
+                "spawnConditionExclude": false
+            },
+            "startingObjects": []
         },
         {
             "row": 31,
@@ -43871,8 +43891,8 @@
             "startingObjects": []
         },
         {
-            "row": 31,
-            "col": 36,
+            "row": 14,
+            "col": 40,
             "characterName": "Stormcrow",
             "ownerLeaderName": "Gandalf",
             "ownerVariantId": "stormcrow",
@@ -43885,8 +43905,12 @@
                 "xp": 25,
                 "stacks": [
                     {
-                        "armyCardName": "Light Cavalry",
-                        "amount": 1
+                        "armyCardName": "Woodmen",
+                        "amount": 100
+                    },
+                    {
+                        "armyCardName": "Rivermen",
+                        "amount": 100
                     }
                 ],
                 "spawnConditionLeaderName": "",
@@ -45943,9 +45967,9 @@
             "row": 8,
             "col": 51,
             "characterName": "Bain",
-            "ownerLeaderName": "Bard",
-            "ownerVariantId": "",
-            "fallbackOwnerName": "",
+            "ownerLeaderName": "Gandalf",
+            "ownerVariantId": "stormcrow",
+            "fallbackOwnerName": "Bard",
             "variantId": "",
             "spawnConditionLeaderName": "",
             "spawnConditionVariantId": "",
@@ -47252,37 +47276,12 @@
             "startingObjects": []
         },
         {
-            "row": 30,
-            "col": 37,
-            "characterName": "Bugrug",
-            "ownerLeaderName": "Khamul",
-            "ownerVariantId": "",
-            "fallbackOwnerName": "",
-            "variantId": "",
-            "spawnConditionLeaderName": "Gandalf",
-            "spawnConditionVariantId": "stormcrow",
-            "spawnConditionExclude": false,
-            "army": {
-                "xp": 25,
-                "stacks": [
-                    {
-                        "armyCardName": "Wargs",
-                        "amount": 1
-                    }
-                ],
-                "spawnConditionLeaderName": "Gandalf",
-                "spawnConditionVariantId": "stormcrow",
-                "spawnConditionExclude": false
-            },
-            "startingObjects": []
-        },
-        {
             "row": 35,
             "col": 36,
             "characterName": "Eomer",
-            "ownerLeaderName": "Theoden",
-            "ownerVariantId": "",
-            "fallbackOwnerName": "",
+            "ownerLeaderName": "Gandalf",
+            "ownerVariantId": "stormcrow",
+            "fallbackOwnerName": "Theoden",
             "variantId": "",
             "spawnConditionLeaderName": "",
             "spawnConditionVariantId": "",
@@ -47598,20 +47597,25 @@
         },
         {
             "row": 15,
-            "col": 30,
-            "characterName": "Arwen",
-            "ownerLeaderName": "Elrond",
+            "col": 40,
+            "characterName": "Bugrug",
+            "ownerLeaderName": "Khamul",
             "ownerVariantId": "",
             "fallbackOwnerName": "",
             "variantId": "",
-            "spawnConditionLeaderName": "",
-            "spawnConditionVariantId": "",
+            "spawnConditionLeaderName": "Gandalf",
+            "spawnConditionVariantId": "stormcrow",
             "spawnConditionExclude": false,
             "army": {
                 "xp": 25,
-                "stacks": [],
-                "spawnConditionLeaderName": "",
-                "spawnConditionVariantId": "",
+                "stacks": [
+                    {
+                        "armyCardName": "Wargs",
+                        "amount": 100
+                    }
+                ],
+                "spawnConditionLeaderName": "Gandalf",
+                "spawnConditionVariantId": "stormcrow",
                 "spawnConditionExclude": false
             },
             "startingObjects": []
@@ -47971,13 +47975,13 @@
             "row": 38,
             "col": 32,
             "leaderName": "Gandalf",
-            "variantId": "gandalf_the_white"
+            "variantId": "stormcrow"
         },
         {
             "row": 37,
             "col": 32,
             "leaderName": "Gandalf",
-            "variantId": "gandalf_the_white"
+            "variantId": "stormcrow"
         },
         {
             "row": 36,
@@ -50072,6 +50076,78 @@
             "col": 27,
             "leaderName": "Sauron",
             "variantId": "the_deceiver"
+        },
+        {
+            "row": 13,
+            "col": 40,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 14,
+            "col": 40,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 18,
+            "col": 41,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 18,
+            "col": 40,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 17,
+            "col": 40,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 17,
+            "col": 41,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 16,
+            "col": 41,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 16,
+            "col": 40,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 15,
+            "col": 40,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 16,
+            "col": 42,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 15,
+            "col": 39,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
+        },
+        {
+            "row": 14,
+            "col": 39,
+            "leaderName": "Gandalf",
+            "variantId": "stormcrow"
         }
     ]
 }

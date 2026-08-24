@@ -219,6 +219,10 @@ public class MessageDisplayNoUI : MonoBehaviour
         }
     }
 
+    // Diagnostic accessor only (see BoardNavigator.IsNavigationInputLocked's [NavLock] logging) —
+    // IsHoldingFocus alone can't distinguish "held by one message" from "leaked and stuck".
+    public static int FocusHoldCountDebug => instance != null ? instance.focusHoldCount : 0;
+
     // -------------------------------------------------------------------------
     // Queue / Display Logic
     // -------------------------------------------------------------------------

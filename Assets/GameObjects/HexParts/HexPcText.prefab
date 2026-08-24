@@ -66,8 +66,8 @@ Transform:
   m_GameObject: {fileID: 5222481909127433000}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.024999976, y: 0.3089, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.5, z: 1}
+  m_LocalPosition: {x: -0.068, y: 0.325, z: 0}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9000000000000002}
@@ -98,7 +98,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 04f33fce15d54cbd933231f31a56e89c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,12 +121,12 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3013519042920543747, guid: 206438e3f064acd4a9abb0345a579f78, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -6749324499808399212, guid: 5b3bed165517c62489589c64263843a1, type: 3}
+  m_Color: {r: 0.9339623, g: 0.9339623, b: 0.9339623, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.7, y: 0.21}
+  m_Size: {x: 1.1, y: 0.57}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteRendererFitToTMP
   label: {fileID: 7944563718846919063}
-  padding: {x: 0, y: 0.05}
+  padding: {x: 0.2, y: 0.2}
   growRight: 0
   hoverCollider: {fileID: 9000000000000007}
   anchorSet: 1
@@ -187,13 +187,13 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.8, y: 1.11}
-    newSize: {x: 1.7, y: 0.21}
+    oldSize: {x: 14.94, y: 10.23}
+    newSize: {x: 1.1, y: 0.57}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.7, y: 0.21}
+  m_Size: {x: 1.1, y: 0.57}
   m_EdgeRadius: 0
 --- !u!114 &9000000000000008
 MonoBehaviour:
@@ -315,8 +315,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Caras Galadhon <sprite name="pc">5<sprite name="loyalty">5<sprite name="fort">3
-    <sprite name="port">
+  m_text: 'Caras Galadhon
+
+    <sprite name="pc">5<sprite name="loyalty">5<sprite
+    name="fort">3 <sprite name="port">'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 680e7ef931356a4489c7ed407e323bd6, type: 2}
   m_sharedMaterial: {fileID: -4350441904132810264, guid: 680e7ef931356a4489c7ed407e323bd6, type: 2}
@@ -325,8 +327,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4278190335
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -351,7 +353,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1

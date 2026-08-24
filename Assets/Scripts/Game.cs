@@ -205,7 +205,6 @@ public class Game : MonoBehaviour
 
         currentlyPlaying = player;
         MessageDisplay.ClearPersistent();
-        MessageDisplay.ShowPersistent("Game starting...", Color.yellow);
 
         AssignNationColors();
         InitializePlayableLeaderIcons();

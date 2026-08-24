@@ -16,14 +16,14 @@ public class HexPcTextHover : MonoBehaviour
 
         Sounds.Instance?.PlayUiHover();
         hex.SetPcTextHovered(true);
-        band.color = new Color(band.color.r, band.color.g, band.color.b, 1f);
+        band.color = new Color(band.color.r, band.color.g, band.color.b, 0.8f);
     }
 
     private void OnMouseExit()
     {
         if (hex == null) return;
         hex.SetPcTextHovered(false);
-        band.color = new Color(band.color.r, band.color.g, band.color.b, 0.7f);
+        band.color = new Color(band.color.r, band.color.g, band.color.b, 1f);
     }
 
     private void OnDisable()

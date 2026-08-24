@@ -67,9 +67,12 @@ namespace RetroLOTR.Scenarios
         // v13 added ScenarioData.zoneOfControl: sparse per-hex nation ownership (row/col/leaderName)
         // for hexes revealed to that nation from the very start of the game, regardless of unit
         // presence, and never re-hidden. Resolved against the named leader once scenario leader
-        // identity is final (see NationSpawner.ApplyScenarioZoneOfControl), applied via the same
-        // Hex.EnsurePersistentScouting mechanism already used for a nation's own founded PCs. Empty
-        // list = no scenario-authored ZoC (fully backward compatible).
+        // identity is final (see NationSpawner.ApplyScenarioZoneOfControl). For the human player
+        // this means the hex's fog is cleared (Hex.RevealMapOnlyArea) — discovered, not scouted:
+        // the terrain is known but units there aren't under live watch. For an AI leader it instead
+        // uses Hex.EnsurePersistentScouting, the same self-knowledge mechanism already used for a
+        // Non-Playable Leader's own founded PCs. Empty list = no scenario-authored ZoC (fully
+        // backward compatible).
         // v14 added ScenarioZoneOfControlCell.variantId: a playable leader's ZoC is now per-variant
         // rather than shared across every variant of that leader — a cell only applies when its
         // variantId matches the variant actually selected/surviving for that leader this game

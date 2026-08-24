@@ -314,6 +314,7 @@ GameObject:
   - component: {fileID: 8412289522182181554}
   - component: {fileID: 2521344461661271660}
   - component: {fileID: 4129349649535596259}
+  - component: {fileID: 3477261440536370409}
   m_Layer: 5
   m_Name: CarouselItem
   m_TagString: Untagged
@@ -394,3 +395,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarouselItem
   image: {fileID: 7047535524463384730}
   label: {fileID: 4036223778148202322}
+--- !u!114 &3477261440536370409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797740083788070774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53fea792acb0bb4a8571aa376223141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinResweepOnEnable

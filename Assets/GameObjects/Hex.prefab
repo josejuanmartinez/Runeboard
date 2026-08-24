@@ -303,7 +303,6 @@ MonoBehaviour:
   pcTextPrefab: {fileID: 9000000000000001, guid: 359f1cbd8bc14f9283111f83ecec7fd8, type: 3}
   movementCostPrefab: {fileID: 6692920881900465037, guid: 8d34b62d960849e89c3a73a291dcecfd, type: 3}
   spriteRendererLayoutIcon: {fileID: 5707050488477407365, guid: 3684c0112ce62014a842462cbe19e367, type: 3}
-  characterClassesIconGrid: {fileID: 0}
   terrainTexture: {fileID: 1202935138384858293}
   pcTexture: {fileID: 1246686261725466849}
   underground: {fileID: 2595860277653055481}

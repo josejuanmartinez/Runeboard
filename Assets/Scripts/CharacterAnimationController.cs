@@ -25,9 +25,15 @@ public class CharacterAnimationController : MonoBehaviour
     // default that makes sense for every kind of character this component ends up attached to.
     public string fallback;
 
-    // Steady tint applied to this character's sprite whenever it is neither hovered nor the
-    // currently selected character (a selected character counts as hovered) — read by
+    // Tint applied to THIS character's sprite while the cursor is over it — read by
     // Hex.UpdateCharacterSpriteAlpha, not applied by this component itself.
+    public Color hoveredColor = Color.white;
+    // Tint applied to every OTHER character's sprite while some character (anywhere on the
+    // board) is hovered — read by Hex.UpdateCharacterSpriteAlpha, not applied by this component.
+    public Color otherHoveredColor = new Color(0.38679248f, 0.38679248f, 0.38679248f, 0.2784314f);
+    // Steady tint applied to this character's sprite when no character anywhere is hovered
+    // (a selected character counts as hovered) — read by Hex.UpdateCharacterSpriteAlpha, not
+    // applied by this component itself.
     public Color unhoveredColor = Color.white;
     // Cycles per second of the Unhovered Color <-> white sprite pulse Hex.UpdateCharacterSpriteAlpha
     // plays on the currently selected character only. Read from there, not applied by this

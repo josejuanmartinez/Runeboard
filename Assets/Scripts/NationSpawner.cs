@@ -996,15 +996,22 @@ public class NationSpawner : MonoBehaviour
         }
     }
 
-    // Marks each scenario-authored Zone of Control hex as permanently revealed to its owning
-    // nation, via the same mechanism that already keeps a nation's own founded PC hexes visible
-    // forever (see Hex.EnsurePersistentScouting). Unlike ApplyScenarioRegions this never spreads —
-    // ZoC is exactly the painted set, nothing more. Must run after scenario leader identity is
-    // final (see ReconcileScenarioSpawnConditions) so a playable leader's ZoC resolves against the
-    // variant that actually survived selection, not just whichever sibling happens to be spawned.
+    // Marks each scenario-authored Zone of Control hex as discovered (map/terrain revealed, fog
+    // cleared) from game start, for the human player's ZoC. Uses Hex.RevealMapOnlyArea — the same
+    // "known but not currently watched" reveal used by rumour-style events — rather than
+    // Hex.EnsurePersistentScouting, which grants live unit-level visibility ("scouted") and is
+    // reserved for a Non-Playable Leader's own self-knowledge of its own PCs (see PC.CapturePC /
+    // ClaimByAllegiance and Hex.SetPC). A ZoC cell owned by an AI leader instead uses that NPL
+    // self-knowledge mechanism, since there is no separate human-facing fog to clear for it.
+    // Unlike ApplyScenarioRegions this never spreads — ZoC is exactly the painted set, nothing
+    // more. Must run after scenario leader identity is final (see
+    // ReconcileScenarioSpawnConditions) so a playable leader's ZoC resolves against the variant
+    // that actually survived selection, not just whichever sibling happens to be spawned.
     public void ApplyScenarioZoneOfControl(ScenarioData scenario)
     {
         if (board?.hexes == null || scenario == null) return;
+
+        PlayableLeader humanPlayer = Game.Instance != null ? Game.Instance.player : null;
 
         foreach (ScenarioZoneOfControlCell cell in scenario.zoneOfControl ?? new List<ScenarioZoneOfControlCell>())
         {
@@ -1030,7 +1037,14 @@ public class NationSpawner : MonoBehaviour
             }
             if (leader == null) continue;
 
-            hex.EnsurePersistentScouting(leader);
+            if (leader == humanPlayer)
+            {
+                hex.RevealMapOnlyArea(0, false, false);
+            }
+            else
+            {
+                hex.EnsurePersistentScouting(leader);
+            }
         }
     }
 

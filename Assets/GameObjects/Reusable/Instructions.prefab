@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 413486742097929956}
   - component: {fileID: 348947511786913695}
   - component: {fileID: 7314298650027411924}
+  - component: {fileID: 4648818972552875629}
   m_Layer: 0
   m_Name: Instructions
   m_TagString: Untagged
@@ -95,11 +96,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 162458fc2b4b4ce9b6aa0a7c8dd52de3, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  tutorialId:
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialId: 
   sequenceOrder: 0
   closeButton: {fileID: 1216454267186397888}
+--- !u!114 &4648818972552875629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1061177515584187527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53fea792acb0bb4a8571aa376223141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinResweepOnEnable
 --- !u!1 &1076998936398037084
 GameObject:
   m_ObjectHideFlags: 0

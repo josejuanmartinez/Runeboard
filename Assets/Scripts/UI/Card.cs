@@ -913,7 +913,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
             else if (character == null)
             {
-                Debug.LogWarning($"[CardPlay/Evaluate] '{cardData.name}': has actionRef '{actionRef}' but no character passed in — action gate skipped (treated as met).");
+                // Normal during selection changes (e.g. Board.UnselectHex evaluates every
+                // active card with no character yet) — not worth logging every time.
             }
             else
             {
@@ -935,11 +936,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             character,
             _ => meetsResources,
             _ => actionConditionsMet);
-
-        if (!result)
-        {
-            Debug.Log($"[CardPlay/Evaluate] '{cardData.name}' EvaluateIsPlayable=false for '{(character != null ? character.characterName : "none")}' (meetsResources={meetsResources}, actionConditionsMet={actionConditionsMet}).");
-        }
 
         return result;
     }

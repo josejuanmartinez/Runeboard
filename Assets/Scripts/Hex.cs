@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
+using Unity.Collections;
 using UnityEngine;
 
 public class Hex : MonoBehaviour
@@ -82,7 +83,7 @@ public class Hex : MonoBehaviour
 
     [Header("Grid Sprite Rendereres")]
     public GameObject spriteRendererLayoutIcon;
-    public SpriteRendererGridLayout characterClassesIconGrid;
+    // public SpriteRendererGridLayout characterClassesIconGrid;
 
     public SpriteRenderer terrainTexture;
     public SpriteRenderer pcTexture;
@@ -192,6 +193,11 @@ public class Hex : MonoBehaviour
     private const int SharedOneShotParticlePoolSize = 3;
     private bool isCharacterHovered = false;
     private bool isPcTextHovered = false;
+    // Counts hexes whose character sprite is currently hovered (should only ever be 0 or 1, but a
+    // counter sidesteps any transient overlap between one OnMouseExit and the next OnMouseEnter).
+    // Lets every hex's UpdateCharacterSpriteAlpha tell "someone else is hovered" apart from
+    // "nobody is hovered" instead of only knowing about its own character.
+    private static int hoveredCharacterCount = 0;
 
     // Scene singletons shared by every hex. Cached statically because Awake runs once
     // per instantiated hex and FindFirstObjectByType scans the whole scene — per-hex
@@ -373,7 +379,7 @@ public class Hex : MonoBehaviour
 
         characterSpriteRenderer = FindPart<SpriteRenderer>(characterBg, "character");
         bannerSpriteRenderer = FindPart<SpriteRenderer>(characterBg, "banner");
-        characterClassesIconGrid = FindPart<SpriteRendererGridLayout>(characterBg, "ClassesSpriteRendererLayout");
+        // characterClassesIconGrid = FindPart<SpriteRendererGridLayout>(characterBg, "ClassesSpriteRendererLayout");
         CharacterSpriteHover hover = characterBg.GetComponent<CharacterSpriteHover>();
         if (hover != null) hover.hex = this;   // serialized ref could not cross the prefab split
         characterAnimationController = characterSpriteRenderer != null
@@ -383,7 +389,7 @@ public class Hex : MonoBehaviour
         // Everything starts hidden; each caller applies the state it needs right after.
         if (characterSpriteRenderer != null) SetActiveFast(characterSpriteRenderer.gameObject, false);
         if (bannerSpriteRenderer != null) SetActiveFast(bannerSpriteRenderer.gameObject, false);
-        if (characterClassesIconGrid != null) SetActiveFast(characterClassesIconGrid.gameObject, false);
+        // if (characterClassesIconGrid != null) SetActiveFast(characterClassesIconGrid.gameObject, false);
 
         return characterSpriteRenderer != null;
     }
@@ -761,29 +767,37 @@ public class Hex : MonoBehaviour
             characterCounts[(int)align]++;
         }
 
-        bool hasContent = shouldShowPc
-            || armyCounts[0] > 0 || armyCounts[1] > 0 || armyCounts[2] > 0
+        bool hasArmiesOrCharacters = armyCounts[0] > 0 || armyCounts[1] > 0 || armyCounts[2] > 0
             || characterCounts[0] > 0 || characterCounts[1] > 0 || characterCounts[2] > 0;
+
+        bool hasContent = shouldShowPc || hasArmiesOrCharacters;
+            
         if (!hasContent) { HideHexLabel(); return; }
         if (!EnsurePcText()) return;
 
         StringBuilder builder = new();
         if (shouldShowPc) builder.Append(BuildPcNameLabel());
 
-        void AppendGroup(string spriteName, int count)
+        if(hasArmiesOrCharacters)
         {
-            if (count <= 0) return;
-            if (builder.Length > 0) builder.Append(' ');
-            builder.Append("<sprite name=\"").Append(spriteName).Append("\">").Append(count);
+            if(shouldShowPc) builder.Append("<br>");
+            void AppendGroup(string spriteName, int count)
+            {
+                if (count <= 0) return;
+                if (builder.Length > 0) builder.Append(' ');
+                builder.Append("<sprite name=\"").Append(spriteName).Append("\">").Append(count);
+            }
+
+            AppendGroup("freePeople", armyCounts[(int)AlignmentEnum.freePeople]);
+            AppendGroup("darkServants", armyCounts[(int)AlignmentEnum.darkServants]);
+            AppendGroup("neutral", armyCounts[(int)AlignmentEnum.neutral]);
+            AppendGroup("freePeopleCharacter", characterCounts[(int)AlignmentEnum.freePeople]);
+            AppendGroup("darkServantsCharacter", characterCounts[(int)AlignmentEnum.darkServants]);
+            AppendGroup("neutralCharacter", characterCounts[(int)AlignmentEnum.neutral]);
+    
         }
-
-        AppendGroup("freePeople", armyCounts[(int)AlignmentEnum.freePeople]);
-        AppendGroup("darkServants", armyCounts[(int)AlignmentEnum.darkServants]);
-        AppendGroup("neutral", armyCounts[(int)AlignmentEnum.neutral]);
-        AppendGroup("freePeopleCharacter", characterCounts[(int)AlignmentEnum.freePeople]);
-        AppendGroup("darkServantsCharacter", characterCounts[(int)AlignmentEnum.darkServants]);
-        AppendGroup("neutralCharacter", characterCounts[(int)AlignmentEnum.neutral]);
-
+        
+        if(!shouldShowPc) builder.Append($" @ {v2.x},{v2.y}");        
         pcName.text = builder.ToString();
         pcName.color = shouldShowPc && pc.owner != null ? pc.owner.nationColor : Color.white;
         SetActiveFast(pcName.gameObject, true);
@@ -818,12 +832,12 @@ public class Hex : MonoBehaviour
         if (seen && hasCharacter)
         {
             UpdateCharacterIconSprite();
-            UpdateClassIcons();
+            // UpdateClassIcons();
         }
         else
         {
             GetCharacterAnimationController()?.Clear();
-            ClearClassIcons();
+            // ClearClassIcons();
         }
         UpdateArmyStackVisual(hasKnown ? known : null);
         UpdateBannerSpriteForKnownCharacter();
@@ -2005,7 +2019,7 @@ public class Hex : MonoBehaviour
         GetCharacterAnimationController()?.PlayAction(character);
     }
 
-    private void UpdateClassIcons()
+    /*private void UpdateClassIcons()
     {
         ClearClassIcons();
 
@@ -2039,9 +2053,9 @@ public class Hex : MonoBehaviour
         // Content is always (re)built here, but it only stays hidden/shown by hover state —
         // see SetCharacterHovered, which CharacterSpriteHover drives on OnMouseEnter/Exit.
         SetActiveFast(characterClassesIconGrid.gameObject, isCharacterHovered);
-    }
+    }*/
 
-    private void ClearClassIcons()
+    /*private void ClearClassIcons()
     {
         if (characterClassesIconGrid == null) return;
         if (classArrangeCoroutine != null)
@@ -2055,14 +2069,14 @@ public class Hex : MonoBehaviour
             Destroy(gridTransform.GetChild(i).gameObject);
         }
         SetActiveFast(characterClassesIconGrid.gameObject, false);
-    }
+    }*/
 
-    private IEnumerator DelayedArrangeClasses()
+    /*private IEnumerator DelayedArrangeClasses()
     {
         yield return null;
         if (characterClassesIconGrid != null) characterClassesIconGrid.Arrange();
         classArrangeCoroutine = null;
-    }
+    }*/
 
     private void UpdateBannerSpriteForKnownCharacter()
     {
@@ -3447,6 +3461,7 @@ public class Hex : MonoBehaviour
 
         StringBuilder builder = new();
         builder.Append(pc.pcName ?? string.Empty);
+        if (pc.pcName != null) builder.Append("<br>");
 
         if (pc.citySize != PCSizeEnum.NONE)
         {
@@ -3497,11 +3512,14 @@ public class Hex : MonoBehaviour
     {
         if (isCharacterHovered == hovered) return;
         isCharacterHovered = hovered;
+        hoveredCharacterCount = Mathf.Max(0, hoveredCharacterCount + (hovered ? 1 : -1));
 
         // Class icons (commander/agent/emmissary/mage) only show while the cursor is actually
         // on the character sprite — otherwise they sit on screen permanently and bury the map.
+        /*
         if (characterClassesIconGrid != null)
-            SetActiveFast(characterClassesIconGrid.gameObject, hovered && characterClassesIconGrid.transform.childCount > 0);
+            SetActiveFast(characterClassesIconGrid.gameObject, hovered && characterClassesIconGrid.transform.childCount > 0);  
+        */
     }
 
     // Driven by HexPcTextHover (mouse over the HexPcText label/Band), not by hovering the hex at
@@ -3526,29 +3544,34 @@ public class Hex : MonoBehaviour
 
         if (isCharacterHovered)
         {
-            color = Color.white;
+            color = controller != null ? controller.hoveredColor : Color.white;
             controller?.SetOutlineAlpha(1f);
-            controller?.SetOutlineSize(outlineSize);            
+            controller?.SetOutlineSize(outlineSize);
             ApplyCharacterAndStackColor(color);
             return;
         }
 
+        bool someoneElseHovered = hoveredCharacterCount > 0;
+
         if (board == null) board = Board.Instance;
         Character selected = board != null ? board.selectedCharacter : null;
+
+        Color idleColor = controller != null
+            ? (someoneElseHovered ? controller.otherHoveredColor : controller.unhoveredColor)
+            : Color.white;
 
         if (selected != null && selected.hex == this && characterSpriteRenderer.sprite != null)
         {
             // The selected character's outline stays steady like everyone else's — instead its
-            // sprite color pulses between Unhovered Color and white to show it's the selection.
+            // sprite color pulses between the idle color above and white to show it's the selection.
             float pulseSpeed = controller != null ? controller.selectionPulseSpeed : 1f;
             float colorT = Mathf.PingPong(Time.time * pulseSpeed, 1f);
-            Color baseColor = controller != null ? controller.unhoveredColor : Color.white;
-            color = Color.Lerp(baseColor, Color.white, colorT);
+            color = Color.Lerp(idleColor, Color.white, colorT);
             controller?.SetOutlineSize(outlineSize);
         }
         else
         {
-            color = controller != null ? controller.unhoveredColor : Color.white;
+            color = idleColor;
             controller?.SetOutlineSize(outlineSize);
         }
         controller?.SetOutlineAlpha(1f);

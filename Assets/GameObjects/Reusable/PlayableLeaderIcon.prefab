@@ -848,6 +848,7 @@ GameObject:
   - component: {fileID: 713234538336416089}
   - component: {fileID: 6038486612600536922}
   - component: {fileID: 4125257069219480226}
+  - component: {fileID: 6774328083087078278}
   m_Layer: 5
   m_Name: PlayableLeaderIcon
   m_TagString: Untagged
@@ -953,6 +954,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6774328083087078278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181293669788447730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53fea792acb0bb4a8571aa376223141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkinResweepOnEnable
 --- !u!1 &4921690321324445466
 GameObject:
   m_ObjectHideFlags: 0

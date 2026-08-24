@@ -75,9 +75,24 @@ public class FrameColors : MonoBehaviour
         ApplyColor(color);
     }
 
+    // Only ever writes RGB. Alpha on these same renderers is a separate concern owned by
+    // Hex.SetHexSpriteAlpha (the discovered-but-unscouted fog dimming) — overwriting it here
+    // (these serialized colors are all a:1) used to snap a fogged hex back to fully opaque the
+    // moment it was hovered/unhovered, since Hover()/Unhover() route through this Refresh() and
+    // nothing re-applied the fog alpha afterward.
     private void ApplyColor(Color color)
     {
-        if (pcSpriteRenderer != null) pcSpriteRenderer.color = color;
-        if (terrainSpriteRenderer != null) terrainSpriteRenderer.color = color;
+        if (pcSpriteRenderer != null)
+        {
+            Color c = pcSpriteRenderer.color;
+            c.r = color.r; c.g = color.g; c.b = color.b;
+            pcSpriteRenderer.color = c;
+        }
+        if (terrainSpriteRenderer != null)
+        {
+            Color c = terrainSpriteRenderer.color;
+            c.r = color.r; c.g = color.g; c.b = color.b;
+            terrainSpriteRenderer.color = c;
+        }
     }
 }

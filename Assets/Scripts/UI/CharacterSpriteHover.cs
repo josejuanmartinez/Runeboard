@@ -7,9 +7,6 @@ public class CharacterSpriteHover : MonoBehaviour
     [Tooltip("Seconds the cursor must stay on a character's sprite, uninterrupted, before its card preview appears.")]
     [SerializeField] private float cardPreviewHoverDelay = 5f;
     
-    public Vector3 hoveredScale = Vector3.one;
-    public Vector3 unhoveredScale = Vector3.one;
-
     private SelectedCharacterIcon selectedIcon;
     private Board board;
     private bool isPreviewing;
@@ -19,8 +16,8 @@ public class CharacterSpriteHover : MonoBehaviour
 
     // OnMouseEnter/Exit are physics-raycast events that Unity can silently fail to
     // pair up (pointer teleports on alt-tab/focus loss, this object gets repositioned
-    // or its content swapped without ever being disabled, etc.), which is what left
-    // characters stuck scaled up with no matching exit. isHovered + the pointer-overlap
+    // or its content swapped without ever being disabled, etc.), which could leave a
+    // hover state stuck on with no matching exit. isHovered + the pointer-overlap
     // check in Update() self-heal that within a frame instead of trusting the event pairing.
     private bool isHovered;
     private BoxCollider2D hoverCollider;
@@ -30,19 +27,9 @@ public class CharacterSpriteHover : MonoBehaviour
         board = Board.Instance;
         selectedIcon = FindFirstObjectByType<SelectedCharacterIcon>();
         // OnMouseEnter/Exit only fire on the GameObject that owns the collider, so this
-        // script (and hoverCollider) must stay on the HexCharacterLayer root — the scale
-        // pop below is applied to the "character" child sprite instead, not to this
-        // transform, so it never touches the root/collider and leaves siblings
-        // (banner, ClassesSpriteRendererLayout, GoldRing, pole) untouched.
+        // script (and hoverCollider) must stay on the HexCharacterLayer root, not the
+        // "character" child sprite.
         hoverCollider = GetComponent<BoxCollider2D>();
-    }
-
-    private void SetScale(Vector3 scale)
-    {
-        if (hex != null && hex.characterSpriteRenderer != null)
-        {
-            hex.characterSpriteRenderer.transform.localScale = scale;
-        }
     }
 
     private bool IsStillUnderPointer()
@@ -73,7 +60,6 @@ public class CharacterSpriteHover : MonoBehaviour
             hex.GetCharacterAnimationController()?.SetHoverCursor(true);
         }
         hex.Hover();
-        SetScale(hoveredScale);
         isHovered = true;
 
         board ??= Board.Instance;
@@ -217,7 +203,6 @@ public class CharacterSpriteHover : MonoBehaviour
 
     private void ClearPreview()
     {
-        SetScale(unhoveredScale);
         // Only tear down/restore when THIS component actually put up a preview — otherwise
         // every mouse-exit (including ones where OnMouseEnter no-opped, e.g. hovering the
         // already-selected character's own sprite) redundantly re-touches the shared

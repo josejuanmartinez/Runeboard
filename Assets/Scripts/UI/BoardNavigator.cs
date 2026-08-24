@@ -389,6 +389,17 @@ public class BoardNavigator : MonoBehaviour
         return focusQueue.Count > 0 || focusQueueRoutine != null || lookAtCoroutine != null;
     }
 
+    // Set the instant any single flag below is the one holding IsNavigationInputLocked() true,
+    // logged once on the false->true transition, plus a periodic heartbeat every few seconds
+    // while it stays locked (see the diagnostic block at the bottom of this method) — a single
+    // edge-triggered log misses the case where one flag drops and another picks up the lock in
+    // the same frame (the aggregate OR never dips to false), which was exactly what happened
+    // investigating this: TurnBanner released cleanly but the log tail still showed no further
+    // [NavLock] lines because something else silently took over. The heartbeat guarantees
+    // whatever tail gets pasted next shows a *current* breakdown, not just the original trigger.
+    private static bool s_wasLocked;
+    private static float s_nextHeartbeatTime;
+
     public static bool IsNavigationInputLocked()
     {
         bool popupActive = PopupManager.IsShowing || ConfirmationDialog.IsShowing || SelectionDialog.IsShowing;
@@ -401,7 +412,27 @@ public class BoardNavigator : MonoBehaviour
         // meant to be fully paused, so no board/keyboard input should get through either.
         bool bannerShowing = TurnBanner.IsShowing;
         bool instructionsShowing = TutorialInstructionsManager.Instance.IsShowing;
-        return popupActive || focusQueued || messageUiShowing || messageNoUiShowing || bannerShowing || instructionsShowing || IsStartupPopupLookAtBlocked();
+        bool startupPopupBlocked = IsStartupPopupLookAtBlocked();
+        bool locked = popupActive || focusQueued || messageUiShowing || messageNoUiShowing || bannerShowing || instructionsShowing || startupPopupBlocked;
+
+        bool dueForHeartbeat = locked && s_wasLocked && Time.unscaledTime >= s_nextHeartbeatTime;
+        if ((locked && !s_wasLocked) || dueForHeartbeat)
+        {
+            string tag = dueForHeartbeat ? "HEARTBEAT (still locked)" : "ENGAGED";
+            Debug.Log($"[NavLock] {tag} — popupActive={popupActive} focusQueued={focusQueued} " +
+                $"(focusQueue={Instance?.focusQueue.Count ?? -1} focusQueueRoutine={Instance?.focusQueueRoutine != null} lookAtCoroutine={Instance?.lookAtCoroutine != null}) " +
+                $"messageUiShowing={messageUiShowing} messageNoUiShowing={messageNoUiShowing} " +
+                $"messageNoUiHoldingFocus={MessageDisplayNoUI.IsHoldingFocus} messageNoUiFocusHoldCount={MessageDisplayNoUI.FocusHoldCountDebug} " +
+                $"bannerShowing={bannerShowing} instructionsShowing={instructionsShowing} startupPopupBlocked={startupPopupBlocked}");
+            s_nextHeartbeatTime = Time.unscaledTime + 3f;
+        }
+        else if (!locked && s_wasLocked)
+        {
+            Debug.Log("[NavLock] cleared.");
+        }
+        s_wasLocked = locked;
+
+        return locked;
     }
 
     public void LookAtSelected()

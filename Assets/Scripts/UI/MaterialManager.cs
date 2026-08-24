@@ -13,6 +13,8 @@ public class SkinMaterial
 
 public class MaterialManager : SearcherByName
 {
+    public static MaterialManager Instance { get; private set; }
+
     [SerializeField] private SkinMaterial[] skinMaterials;
 
     private readonly Dictionary<Image, Material> originalImageMaterials = new();
@@ -25,22 +27,14 @@ public class MaterialManager : SearcherByName
     private bool useSkinMaterials;
     private bool hasAppliedSkin;
 
-    // ApplySkin() only sweeps whatever Image/SpriteRenderer components exist at the moment a skin
-    // is chosen. Anything that ships with a skin material baked into its own prefab (e.g. a leader
-    // portrait authored with the Bakshi material already assigned) and is instantiated or enabled
-    // *after* that sweep never gets corrected — it's stuck on its spawn-time material regardless of
-    // the active skin. This periodic re-sweep catches those without needing every such prefab to
-    // call back in individually.
-    private const float ResweepInterval = 1f;
-    private float resweepTimer;
-
-    private void Update()
+    private void Awake()
     {
-        if (!hasAppliedSkin) return;
-        resweepTimer += Time.deltaTime;
-        if (resweepTimer < ResweepInterval) return;
-        resweepTimer = 0f;
-        ApplyToAllRenderers(FindObjectsByType<Hex>(FindObjectsInactive.Include, FindObjectsSortMode.None));
+        Instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
     }
 
     public void ApplySkin(Skins skin)
@@ -56,35 +50,25 @@ public class MaterialManager : SearcherByName
         RestoreHexTerrainMaterials(hexes);
     }
 
+    // Prefabs authored with a skin material already baked in (e.g. a leader portrait shipped with
+    // the Bakshi material assigned) never went through the scene-wide sweep in ApplySkin() if they
+    // spawn later. Rather than re-sweeping the whole scene to catch them, such prefabs carry a
+    // SkinResweepOnEnable component that calls this on OnEnable to fix up just themselves.
+    public void ApplyToSubtree(GameObject root)
+    {
+        if (!hasAppliedSkin) return;
+
+        foreach (Image image in root.GetComponentsInChildren<Image>(true))
+            ApplyToImage(image);
+
+        foreach (SpriteRenderer spriteRenderer in root.GetComponentsInChildren<SpriteRenderer>(true))
+            ApplyToSprite(spriteRenderer);
+    }
+
     private void ApplyToAllRenderers(Hex[] hexes)
     {
         foreach (Image image in FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-        {
-            if (!originalImageMaterials.ContainsKey(image))
-            {
-                Material original = image.material;
-                if (IsAnimatedMaterial(original)) animatedImages.Add(image);
-                originalImageMaterials[image] = IsManagedMaterial(original) ? null : original;
-            }
-
-            Material originalMaterial = originalImageMaterials[image];
-            if (image.TryGetComponent<ImageUnaffectedBySkin>(out _))
-            {
-                if (image.material != originalMaterial) image.material = originalMaterial;
-                continue;
-            }
-
-            if (!IsSkinCandidate(originalMaterial))
-            {
-                if (image.material != originalMaterial) image.material = originalMaterial;
-                continue;
-            }
-
-            Material targetMaterial = useSkinMaterials
-                ? (animatedImages.Contains(image) && activeAnimatedMaterial != null ? activeAnimatedMaterial : activeMaterial)
-                : originalImageMaterials[image];
-            if (image.material != targetMaterial) image.material = targetMaterial;
-        }
+            ApplyToImage(image);
 
         // HexSeamlessTerrain exclusively owns each hex's terrain SpriteRenderer (runtime-generated
         // material + per-hex MaterialPropertyBlock data, rebuilt via MarkDirty/RestoreHexTerrainMaterials
@@ -99,29 +83,61 @@ public class MaterialManager : SearcherByName
         foreach (SpriteRenderer spriteRenderer in FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             if (hexTerrainRenderers.Contains(spriteRenderer)) continue;
-
-            if (!originalSpriteMaterials.ContainsKey(spriteRenderer))
-            {
-                Material original = spriteRenderer.sharedMaterial;
-                if (IsAnimatedMaterial(original)) animatedSprites.Add(spriteRenderer);
-                originalSpriteMaterials[spriteRenderer] = IsManagedMaterial(original) ? null : original;
-            }
-
-            Material originalMaterial = originalSpriteMaterials[spriteRenderer];
-            if (!IsSkinCandidate(originalMaterial))
-            {
-                if (spriteRenderer.sharedMaterial != originalMaterial)
-                    spriteRenderer.sharedMaterial = originalMaterial;
-                continue;
-            }
-
-            Material targetMaterial = useSkinMaterials
-                ? (animatedSprites.Contains(spriteRenderer) && activeAnimatedMaterial != null ? activeAnimatedMaterial : activeMaterial)
-                : originalSpriteMaterials[spriteRenderer];
-            if (spriteRenderer.sharedMaterial != targetMaterial) spriteRenderer.sharedMaterial = targetMaterial;
+            ApplyToSprite(spriteRenderer);
         }
 
         RemoveDestroyedRenderers();
+    }
+
+    private void ApplyToImage(Image image)
+    {
+        if (!originalImageMaterials.ContainsKey(image))
+        {
+            Material original = image.material;
+            if (IsAnimatedMaterial(original)) animatedImages.Add(image);
+            originalImageMaterials[image] = IsManagedMaterial(original) ? null : original;
+        }
+
+        Material originalMaterial = originalImageMaterials[image];
+        if (image.TryGetComponent<ImageUnaffectedBySkin>(out _))
+        {
+            if (image.material != originalMaterial) image.material = originalMaterial;
+            return;
+        }
+
+        if (!IsSkinCandidate(originalMaterial))
+        {
+            if (image.material != originalMaterial) image.material = originalMaterial;
+            return;
+        }
+
+        Material targetMaterial = useSkinMaterials
+            ? (animatedImages.Contains(image) && activeAnimatedMaterial != null ? activeAnimatedMaterial : activeMaterial)
+            : originalImageMaterials[image];
+        if (image.material != targetMaterial) image.material = targetMaterial;
+    }
+
+    private void ApplyToSprite(SpriteRenderer spriteRenderer)
+    {
+        if (!originalSpriteMaterials.ContainsKey(spriteRenderer))
+        {
+            Material original = spriteRenderer.sharedMaterial;
+            if (IsAnimatedMaterial(original)) animatedSprites.Add(spriteRenderer);
+            originalSpriteMaterials[spriteRenderer] = IsManagedMaterial(original) ? null : original;
+        }
+
+        Material originalMaterial = originalSpriteMaterials[spriteRenderer];
+        if (!IsSkinCandidate(originalMaterial))
+        {
+            if (spriteRenderer.sharedMaterial != originalMaterial)
+                spriteRenderer.sharedMaterial = originalMaterial;
+            return;
+        }
+
+        Material targetMaterial = useSkinMaterials
+            ? (animatedSprites.Contains(spriteRenderer) && activeAnimatedMaterial != null ? activeAnimatedMaterial : activeMaterial)
+            : originalSpriteMaterials[spriteRenderer];
+        if (spriteRenderer.sharedMaterial != targetMaterial) spriteRenderer.sharedMaterial = targetMaterial;
     }
 
     private static void RestoreHexTerrainMaterials(Hex[] hexes)

@@ -418,16 +418,20 @@ public class SituationCardsUI : MonoBehaviour
         wheel.SetCards(cardInstances, index => OnBloomCardClicked(index, offers, character, leader));
         wheel.SetWorldAnchor(character.hex.transform.position, Camera.main);
         wheel.SetVisible(true);
-        wheel.SetForcedOpen(true);
         Sounds.Instance?.PlayUiClick();
 
         BuildBloomDismissCatcher();
         showCoroutine = null;
     }
 
-    // Full-screen, invisible click-catcher behind the bloom wheel: clicking anywhere that
-    // isn't a card dismisses the offer, mirroring the dim overlay's click-to-dismiss in the
-    // non-bloom presentation.
+    // Full-screen, invisible click-catcher behind the bloom wheel: clicking anywhere that isn't
+    // a card dismisses the offer, mirroring the dim overlay's click-to-dismiss in the non-bloom
+    // presentation. Only ever active while the wheel is actually OPEN (synced every frame in
+    // Update, see SyncBloomDismissCatcher) — while the wheel sits collapsed as just its center
+    // icon, this would otherwise swallow every click anywhere on screen (selecting another
+    // character, moving on the board, ...) and dismiss the offer instead of leaving normal play
+    // alone. Opening from the collapsed icon is handled entirely by CardBloomWheel's own manual
+    // click detection instead, since there's no catcher live yet to race against at that point.
     private void BuildBloomDismissCatcher()
     {
         DestroyBloomDismissCatcher();
@@ -447,7 +451,34 @@ public class SituationCardsUI : MonoBehaviour
 
         var btn = bloomDismissCatcher.AddComponent<Button>();
         btn.transition = Selectable.Transition.None;
-        btn.onClick.AddListener(DismissBloom);
+        btn.onClick.AddListener(HandleBloomCatcherClicked);
+
+        bloomDismissCatcher.SetActive(false);
+    }
+
+    // Clicking back on the wheel's own center (where its icon sits) toggles it collapsed
+    // instead of dismissing the whole offer; clicking anywhere else while open still dismisses.
+    private void HandleBloomCatcherClicked()
+    {
+        if (activeBloomWheel == null) return;
+
+        if (activeBloomWheel.IsCenterIconUnderMouse())
+        {
+            activeBloomWheel.CollapseBloom();
+            return;
+        }
+
+        DismissBloom();
+    }
+
+    // Keeps the dismiss catcher live only while the bloom is actually open — see
+    // BuildBloomDismissCatcher for why it must stay inert while merely collapsed.
+    private void SyncBloomDismissCatcher()
+    {
+        if (bloomDismissCatcher == null) return;
+        bool shouldBlock = activeBloomWheel != null && activeBloomWheel.IsOpen;
+        if (bloomDismissCatcher.activeSelf != shouldBlock)
+            bloomDismissCatcher.SetActive(shouldBlock);
     }
 
     private void DestroyBloomDismissCatcher()
@@ -543,7 +574,10 @@ public class SituationCardsUI : MonoBehaviour
             || activeBloomCharacter.hex == null || activeBloomCharacter.hex != activeBloomHex)
         {
             DismissBloom(saveForCharacter: false);
+            return;
         }
+
+        SyncBloomDismissCatcher();
     }
 
     // Called from Board.Move so starting a walk always clears whatever offer was left open at

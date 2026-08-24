@@ -26,6 +26,11 @@ public class Board : MonoBehaviour
     [Header("Hex Configuration")]
     public GameObject hexPrefab;
     public Vector2 hexSize;
+
+    [Header("Hex UI Hover")]
+    [Tooltip("Single UI panel shared by every hex's hover info (see HexUIHover). Assigned in the scene.")]
+    [SerializeField] private HexUIHover uiHover;
+    public HexUIHover UIHover => uiHover;
     // Runtime-copied by HexSeamlessTerrain (play-mode grid toggle must never dirty the asset).
     public Material hexSeamlessBlendMaterial;
     // Separate, dedicated asset for just the neon grid's look (color/intensity/width/glow/hue) —

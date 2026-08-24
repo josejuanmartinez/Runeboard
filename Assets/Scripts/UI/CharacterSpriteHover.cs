@@ -5,7 +5,7 @@ public class CharacterSpriteHover : MonoBehaviour
 {
     public Hex hex;
     [Tooltip("Seconds the cursor must stay on a character's sprite, uninterrupted, before its card preview appears.")]
-    [SerializeField] private float cardPreviewHoverDelay = 5f;
+    [SerializeField] private float cardPreviewHoverDelay = 0.5f;
     
     private SelectedCharacterIcon selectedIcon;
     private Board board;
@@ -75,20 +75,19 @@ public class CharacterSpriteHover : MonoBehaviour
         previewedHex = hex;
 
         // The already-selected character's info sits permanently in SelectedCharacterIcon
-        // already, so skip the transient hover-text overwrite for it — but the card preview
-        // below is independent of that panel and should still show on hover either way.
-        if (!isSelected)
-        {
-            if (!hex.TryGetPreviewTextForCharacter(character, out string hoverText)) return;
-            if (selectedIcon == null)
-            {
-                Layout layout = FindFirstObjectByType<Layout>();
-                selectedIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
-            }
-            if (selectedIcon == null) return;
+        // already, so hovering it again is a no-op: no transient hover-text overwrite and no
+        // delayed card preview either — there's nothing new to show that isn't already up.
+        if (isSelected) return;
 
-            selectedIcon.RefreshHoverPreview(character, hoverText, isScouted, isScouted);
+        if (!hex.TryGetPreviewTextForCharacter(character, out string hoverText)) return;
+        if (selectedIcon == null)
+        {
+            Layout layout = FindFirstObjectByType<Layout>();
+            selectedIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
+        if (selectedIcon == null) return;
+
+        selectedIcon.RefreshHoverPreview(character, hoverText, isScouted, isScouted);
 
         if (cardPreviewCoroutine != null) StopCoroutine(cardPreviewCoroutine);
         cardPreviewCoroutine = StartCoroutine(ShowCardPreviewAfterDelay(character, isScouted));

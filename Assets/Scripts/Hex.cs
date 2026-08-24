@@ -58,20 +58,13 @@ public class Hex : MonoBehaviour
     public HoverNoUI encounterHover;
 
     [Header("Hex Info Panel")]
-    public GameObject hexInfoArrow;
-    public GameObject hexInfo;
-    public TextMeshPro hexInfoText;
     [SerializeField] private float hexInfoHoverDelay = 2f;
     [Tooltip("Seconds the cursor must stay on a PC hex, uninterrupted, before its PC/region card preview appears.")]
-    [SerializeField] private float pcCardPreviewHoverDelay = 5f;
-    [Tooltip("World-space tooltip shown at the cursor when hovering a terrain/feature name. Must contain a TextMeshPro.")]
-    [SerializeField] private GameObject terrainTooltipPrefab;
+    [SerializeField] private float pcCardPreviewHoverDelay = 0.5f;
 
     [Header("Lazily attached sub-prefabs (Resources/HexParts)")]
     [Tooltip("Instantiated ONCE per scene as the shared particle-system pool templates (fire/ice/poison/courage/hope + selection).")]
     [SerializeField] private GameObject sharedParticlesPrefab;
-    [Tooltip("Attached to a hex on first hover: hover info panel, terrain tooltip link.")]
-    [SerializeField] private GameObject hoverPanelPrefab;
     [Tooltip("Attached to a hex on its first floating message (MessageNoUIText.prefab): TMP text + fitted SpriteRenderer band.")]
     [SerializeField] private GameObject messageNoUITextPrefab;
     [Tooltip("Attached to a hex when a character needs to show: character sprite/Animator, banner, class icons.")]
@@ -122,23 +115,11 @@ public class Hex : MonoBehaviour
     private Coroutine classArrangeCoroutine;
     private Coroutine hexInfoShowCoroutine;
     private Coroutine pcCardPreviewCoroutine;
-    private Coroutine _arrowBounceCoroutine;
-    private float _arrowOriginX;
-    private readonly List<Character> _hexInfoCharacters = new();
-    private readonly List<Army> _hexInfoArmies = new();   // null entry = character link, non-null = army link
-    private readonly List<string> _hexInfoTroopNames = new();   // non-null entry = a single troop card's link within an army (see _hexInfoArmies)
-    private readonly List<string> _hexInfoTooltips = new();   // terrain/feature link descriptions, addressed by "t{idx}" link ids
-    private int _lastHexInfoLinkIdx = -1;
-    private string _hoverTextCache;   // hover text lives here until the lazy panel exists
+    private string _hoverTextCache;   // hover text lives here even when this hex doesn't own the shared HexUIHover panel
     private bool _hoverTextDirty;     // rebuild deferred during movement; Hover() rebuilds on demand
     private bool _iconGridsPendingRebuild;   // grids were cleared while SuppressHexIconGrids was on; defeats RevealInternal's seen-hex early-out until rebuilt
-    private GameObject _terrainTooltipInstance;
-    private TextMeshPro _terrainTooltip;
-    private bool _terrainTooltipActive;
-    private SelectedCharacterIcon _selectedIcon;
     private DeckManager _deckManager;
     private bool _showingPcCardPreview;
-    private bool _showingTroopCardPreview;
     private bool artifactRevealed = false;
     private static Hex s_hexInfoActiveHex;
 
@@ -163,7 +144,6 @@ public class Hex : MonoBehaviour
     private PlayableLeader leader;
 
     // Cached singletons/components (avoid repeated global lookups)
-    private Colors colors;
     private Board board;
     private BoardNavigator navigator;
     private Game game;
@@ -175,9 +155,6 @@ public class Hex : MonoBehaviour
 
     // Reused buffers to avoid GC in UI building / raycasts
     private static readonly StringBuilder sbChars = new(256);
-    private static readonly StringBuilder sbFree = new(256);
-    private static readonly StringBuilder sbNeutral = new(256);
-    private static readonly StringBuilder sbDark = new(256);
     private static readonly Queue<Vector2Int> areaQueue = new(64);
     private static readonly HashSet<Vector2Int> areaVisited = new();
     private static GameObject sharedSelectedParticles;
@@ -204,7 +181,6 @@ public class Hex : MonoBehaviour
     // lookups made board creation O(hexes²) and took minutes on large maps. Unity's
     // overloaded null-check makes destroyed references re-resolve on the next scene.
     private static Game sharedGame;
-    private static Colors sharedColors;
     private static Board sharedBoard;
     private static BoardNavigator sharedNavigator;
     private static Illustrations sharedIllustrations;
@@ -236,12 +212,10 @@ public class Hex : MonoBehaviour
 
         // Cache singletons once per scene, not once per hex
         if (sharedGame == null) sharedGame = Game.Instance;
-        if (sharedColors == null) sharedColors = FindFirstObjectByType<Colors>();
         if (sharedBoard == null) sharedBoard = Board.Instance;
         if (sharedNavigator == null) sharedNavigator = FindFirstObjectByType<BoardNavigator>();
         if (sharedIllustrations == null) sharedIllustrations = FindFirstObjectByType<Illustrations>();
         game = sharedGame;
-        colors = sharedColors;
         board = sharedBoard;
         navigator = sharedNavigator;
         illustrations = sharedIllustrations;
@@ -259,37 +233,26 @@ public class Hex : MonoBehaviour
         // Fog/particle visuals are NOT refreshed here: Awake fires when a pooled hex is
         // created (possibly thousands per board), before the hex is placed anywhere.
         // Initialize(row, col) runs the fog pass once the hex actually joins the board.
-        SetActiveFast(hexInfoArrow, false);
-        SetActiveFast(hexInfo, false);
     }
 
     void Update()
     {
         UpdateCharacterSpriteAlpha();
-        if (hexInfo != null && hexInfo.activeSelf)
+        if (s_hexInfoActiveHex == this)
         {
-            // The link hit-test below is a manual world-space raycast against this hex's own
-            // TextMeshPro — it has no idea a uGUI panel (e.g. SelectedCharacterIcon) might be
-            // drawn on top of it on screen, so without this check clicks/hovers "pass through"
-            // whatever UI currently covers this hex.
             if (!IsMouseOverHexOrPanel() || BoardNavigator.IsPointerOverVisibleUIElement())
                 Unhover();
-            else
-            {
-                UpdateHexInfoLinkHover();
-                if (Input.GetMouseButtonDown(0) && _lastHexInfoLinkIdx >= 0)
-                    HandleHexInfoLinkClick(_lastHexInfoLinkIdx);
-            }
         }
     }
 
-    void OnDestroy()
+    // Pooled hexes get deactivated/reused rather than destroyed — if this hex owned the shared
+    // hover panel when that happens, nothing else would ever hide it or hand it back.
+    void OnDisable()
     {
-        if (_terrainTooltipInstance != null)
+        if (s_hexInfoActiveHex == this)
         {
-            Destroy(_terrainTooltipInstance);
-            _terrainTooltipInstance = null;
-            _terrainTooltip = null;
+            board?.UIHover?.Hide();
+            s_hexInfoActiveHex = null;
         }
     }
 
@@ -301,10 +264,11 @@ public class Hex : MonoBehaviour
     // (assigned in the Inspector — see Resources/HexParts for the assets) and are
     // attached per hex only when something actually needs them:
     //   sharedParticlesPrefab — instantiated ONCE per scene as the shared pool templates
-    //   hoverPanelPrefab      — per hex, on first hover / first floating message
     //   characterLayerPrefab  — per hex, when a character shows (sprite/Animator/banner/class icons)
     //   pcTextPrefab          — per hex, when the PC name, armies, or scouted characters show
     //   movementCostPrefab    — per hex, when a movement cost bubble shows
+    // The hover info panel is no longer a per-hex sub-prefab: it's a single shared UI element
+    // (see HexUIHover, referenced by Board.UIHover) that every hex repositions/refills.
 
     private static GameObject FindPart(Transform root, string name)
     {
@@ -317,29 +281,6 @@ public class Hex : MonoBehaviour
     {
         GameObject go = FindPart(root, name);
         return go != null ? go.GetComponent<T>() : null;
-    }
-
-    private bool EnsureHoverPanel()
-    {
-        if (hexInfo != null) return true;
-        if (hoverPanelPrefab == null)
-        {
-            Debug.LogError("Hex.hoverPanelPrefab is not assigned in the Inspector; hover info panel disabled.");
-            return false;
-        }
-
-        Transform panelRoot = Instantiate(hoverPanelPrefab, transform, false).transform;
-        panelRoot.name = "HoverPanel";
-        hexInfoArrow = FindPart(panelRoot, "Arrow");
-        hexInfo = FindPart(panelRoot, "HexInfoBackground");
-        hexInfoText = hexInfo != null ? hexInfo.GetComponentInChildren<TextMeshPro>(true) : null;
-        if (terrainTooltipPrefab == null) terrainTooltipPrefab = FindPart(panelRoot, "InfoTooltip");
-        ApplyCurrentFont(hexInfoText);
-
-        SetActiveFast(hexInfoArrow, false);
-        SetActiveFast(hexInfo, false);
-        if (hexInfoText != null) hexInfoText.text = _hoverTextCache ?? string.Empty;
-        return hexInfo != null;
     }
 
     private bool EnsureMessageNoUIText()
@@ -674,12 +615,10 @@ public class Hex : MonoBehaviour
         bool viewerHasCharacter = viewer != null && HasCharacterOfLeader(viewer);
         if (!canSee && !(character.IsArmyCommander() && (viewerHasCharacter || isSeen))) return false;
 
+        // Troop composition used to be appended here as plain text; it now shows as its own
+        // card gallery inside SelectedCharacterIcon (see RefreshArmyCardGallery), driven
+        // directly off the Character it's given rather than off this string.
         text = character.characterName;
-        if (character.IsArmyCommander())
-        {
-            Army army = character.GetArmy();
-            if (army != null) text += army.GetHoverTextNoXp();
-        }
         return true;
     }
 
@@ -950,7 +889,7 @@ public class Hex : MonoBehaviour
         // lands here — the string build below is the per-hop GC spike. The panel is
         // hover-only, so while a unit is in transit defer the rebuild to Hover(), unless
         // the panel is on screen right now and would go stale.
-        if (Board.SuppressHexIconGrids && (hexInfo == null || !hexInfo.activeSelf))
+        if (Board.SuppressHexIconGrids && s_hexInfoActiveHex != this)
         {
             _hoverTextDirty = true;
             return;
@@ -965,21 +904,9 @@ public class Hex : MonoBehaviour
         PlayableLeader viewer = GetPlayer();
         bool isScouted = IsScouted(viewer);
         bool viewerHasCharacter = viewer != null && HasCharacterOfLeader(viewer);
-        
-        sbChars.Clear();
-        sbFree.Clear();
-        sbDark.Clear();
-        sbNeutral.Clear();
-        _hexInfoCharacters.Clear();
-        _hexInfoArmies.Clear();
-        _hexInfoTroopNames.Clear();
-        _hexInfoTooltips.Clear();
 
-        // Track whether we've already shown an Unknown for each bucket
+        sbChars.Clear();
         bool unkCharsShown = false;
-        bool unkFreeShown = false;
-        bool unkDarkShown = false;
-        bool unkNeutralShown = false;
 
         for (int i = 0, n = characters.Count; i < n; i++)
         {
@@ -1008,152 +935,74 @@ public class Hex : MonoBehaviour
                     bool isHuman = g != null && g.currentlyPlaying == g.player;
                     npl.RevealToLeader(g.currentlyPlaying, isHuman);
                 }
-                
-                Leader charLeader = ch.GetOwner();
-                string charNamePrefix = (charLeader != null && charLeader != ch) ? $"{charLeader.characterName}'s " : null;
-                var charName = ch.GetHoverText(true, true, true, false, false, true, charNamePrefix);
-                int linkIdx = _hexInfoCharacters.Count;
-                _hexInfoCharacters.Add(ch);
-                _hexInfoArmies.Add(null);
-                _hexInfoTroopNames.Add(null);
-                string linkedName = $"<link=\"{linkIdx}\"><color={colors.GetHexColorByName("HoverLinkDefault")}>{charName}</color></link>";
-                if (ch.IsArmyCommander())
-                {
-                    Army army = ch.GetArmy();
-                    var armyText = army != null ? army.GetHoverText() : ch.GetHoverText(false, false, false, true, false, false);
-                    switch (ch.alignment)
-                    {
-                        case AlignmentEnum.freePeople: sbFree.Append(armyText).Append('\n'); break;
-                        case AlignmentEnum.neutral: sbNeutral.Append(armyText).Append('\n'); break;
-                        case AlignmentEnum.darkServants: sbDark.Append(armyText).Append('\n'); break;
-                    }
 
-                    string linkedArmy;
-                    if (army != null)
-                    {
-                        // One link per troop group instead of one link for the whole army: they used to
-                        // share a single link, so hovering/clicking any card name in a multi-troop army
-                        // treated the whole block as one target and card lookups saw every name
-                        // concatenated together instead of resolving the specific card under the cursor.
-                        List<(string troopName, string line)> troopLines = army.GetLinkableTroopHoverLines();
-                        var sbArmy = new StringBuilder();
-                        for (int t = 0; t < troopLines.Count; t++)
-                        {
-                            int troopLinkIdx = _hexInfoCharacters.Count;
-                            _hexInfoCharacters.Add(ch);
-                            _hexInfoArmies.Add(army);
-                            _hexInfoTroopNames.Add(troopLines[t].troopName);
-                            sbArmy.Append('\n').Append($"<link=\"{troopLinkIdx}\"><color={colors.GetHexColorByName("HoverLinkDefault")}>{troopLines[t].line}</color></link>");
-                        }
-                        linkedArmy = sbArmy.ToString();
-                    }
-                    else
-                    {
-                        int armyLinkIdx = _hexInfoCharacters.Count;
-                        _hexInfoCharacters.Add(ch);
-                        _hexInfoArmies.Add(null);
-                        _hexInfoTroopNames.Add(null);
-                        string armyDisplay = $"\n\t{armyText.Trim()}";
-                        linkedArmy = $"<link=\"{armyLinkIdx}\"><color={colors.GetHexColorByName("HoverLinkDefault")}>{armyDisplay}</color></link>";
-                    }
-                    sbChars.Append(linkedName).Append(linkedArmy).Append('\n');
-                }
-                else
-                {
-                    sbChars.Append(linkedName).Append('\n');
-                }
+                Leader charLeader = ch.GetOwner();
+                bool isFollower = charLeader != null && charLeader != ch;
+                // withHealth=false: no heart-block indicator in the description.
+                string charDisplay = ch.GetHoverText(true, true, true, false, false, false);
+
+                sbChars.Append(charDisplay);
+                if (isFollower) sbChars.Append(", following ").Append(charLeader.characterName);
+                sbChars.Append(" is here");
+                if (ch.IsArmyCommander())
+                    sbChars.Append(" (leading an army of ").Append(BuildArmyTroopDescription(ch.GetArmy())).Append(')');
+                sbChars.Append('\n');
             }
             else
             {
-                if (ch.IsArmyCommander())
-                {
-                    switch (ch.alignment)
-                    {
-                        case AlignmentEnum.freePeople:
-                            if (!unkFreeShown) { sbFree.Append(Unknown).Append('\n'); unkFreeShown = true; }
-                            break;
-                        case AlignmentEnum.neutral:
-                            if (!unkNeutralShown) { sbNeutral.Append(Unknown).Append('\n'); unkNeutralShown = true; }
-                            break;
-                        case AlignmentEnum.darkServants:
-                            if (!unkDarkShown) { sbDark.Append(Unknown).Append('\n'); unkDarkShown = true; }
-                            break;
-                    }
-                    if (!unkCharsShown) { sbChars.Append(Unknown).Append('\n'); unkCharsShown = true; }
-                }
-                else
-                {
-                    if (!unkCharsShown) { sbChars.Append(Unknown).Append('\n'); unkCharsShown = true; }
-                }
+                if (!unkCharsShown) { sbChars.Append(Unknown).Append('\n'); unkCharsShown = true; }
             }
         }
 
         // Trim trailing newlines and always push an explicit refresh, even when the hex is empty.
         string charText = sbChars.ToString().TrimEnd('\n');
 
-        // Hex info block: PC header (only when a revealed PC sits here) + Terrain/Features header
-        // (shown for any discovered hex) followed by the Presence list of visible characters/armies.
-        string pcHeader = IsHexRevealed() ? BuildPcHeader() : string.Empty;
-        string header = IsHexRevealed() ? BuildTerrainFeatureHeader() : string.Empty;
-        string presence = string.IsNullOrEmpty(charText)
-            ? string.Empty
-            : $"<color={colors.GetHexColorByName("HoverHeader")}><b>Presence</b>:</color>\n{charText}";
+        string terrainText = IsHexRevealed() ? BuildTerrainDescription() : string.Empty;
+        string pcText = IsHexRevealed() ? BuildPcDescription() : string.Empty;
 
-        string hoverText = string.Join("\n", new[] { pcHeader, header, presence }.Where(s => !string.IsNullOrEmpty(s)));
+        string hoverText = string.Join("\n\n", new[] { terrainText, pcText, charText }.Where(s => !string.IsNullOrEmpty(s)));
 
         _hoverTextCache = hoverText;
-        if (hexInfoText != null) hexInfoText.text = hoverText;
+        if (s_hexInfoActiveHex == this) board?.UIHover?.SetText(hoverText);
     }
 
-    private string BuildPcHeader()
+    // "{amount} {troopName} <sprite troopType>, {amount} {troopName} <sprite troopType>, ..."
+    private static string BuildArmyTroopDescription(Army army)
+    {
+        if (army == null) return string.Empty;
+
+        List<ArmyTroopAbilityGroup> groups = army.GetTroopGroups();
+        List<(string troopName, string line)> linkableLines = army.GetLinkableTroopHoverLines();
+        var parts = new List<string>(groups.Count);
+        for (int i = 0; i < groups.Count && i < linkableLines.Count; i++)
+        {
+            string spriteName = groups[i].troopType.ToString().ToLowerInvariant();
+            parts.Add($"{groups[i].amount} {linkableLines[i].troopName} <sprite name=\"{spriteName}\">");
+        }
+        return string.Join(", ", parts);
+    }
+
+    private string BuildPcDescription()
     {
         PC pcData = GetPC();
         if (pcData == null) return string.Empty;
 
-        string ownerText = pcData.owner != null
-            ? $"{pcData.owner.characterName}'s {pcData.pcName}"
-            : $"{pcData.pcName} (Unowned)";
-        string alignmentText = pcData.owner != null ? $" {GetAlignmentDisplayName(pcData.owner.GetAlignment())}" : string.Empty;
-
-        return $"<color={colors.GetHexColorByName("HoverHeader")}><b>PC</b></color>: {ownerText}{alignmentText}";
+        return pcData.owner != null
+            ? $"The PC of {pcData.pcName} waving the flag of {pcData.owner.characterName} is here"
+            : $"The PC of {pcData.pcName} is here";
     }
 
-    private static string GetAlignmentDisplayName(AlignmentEnum alignment)
-    {
-        return alignment switch
-        {
-            AlignmentEnum.freePeople => "Free People",
-            AlignmentEnum.darkServants => "Dark Servants",
-            _ => "Neutral"
-        };
-    }
-
-    private string BuildTerrainFeatureHeader()
+    private string BuildTerrainDescription()
     {
         string terrainName = TerrainData.GetDisplayName(terrainType);
         StringBuilder sb = new();
-        sb.Append($"<color={colors.GetHexColorByName("HoverTerrain")}><b>Terrain</b></color>: ")
-          .Append(TooltipLink($"<b>{terrainName}</b>", TerrainData.GetDescription(terrainType)))
-          .Append(' ').Append(SpriteTag(terrainName));
+        sb.Append(SpriteTag(terrainName)).Append(' ').Append(terrainName);
 
         // Chasm is the only landmark feature: shown when this tile's art depicts one.
         if (isChasm)
-        {
-            sb.Append('\n').Append($"<color={colors.GetHexColorByName("HoverFeatures")}><b>Features</b></color>: ")
-              .Append(TooltipLink("<b>Chasm</b>", ChasmTiles.Description))
-              .Append(' ').Append(SpriteTag("Chasm"));
-        }
+            sb.Append('\n').Append(SpriteTag("Chasm")).Append(" Chasm");
 
         return sb.ToString();
-    }
-
-    // Wraps display text in a hover link whose payload is a tooltip description, addressed by a
-    // "t{idx}" link id so it never collides with the numeric ids used for character/army links.
-    private string TooltipLink(string display, string description)
-    {
-        int idx = _hexInfoTooltips.Count;
-        _hexInfoTooltips.Add(description);
-        return $"<link=\"t{idx}\">{display}</link>";
     }
 
     // Sprite from environment_terrain_features_spritesheet, looked up by the normalized name
@@ -1182,9 +1031,8 @@ public class Hex : MonoBehaviour
         if (s_hexInfoActiveHex != null && s_hexInfoActiveHex != this && s_hexInfoActiveHex.IsMouseOverHexOrPanel())
             return;
 
-        if (hexInfoShowCoroutine == null && (hexInfo == null || !hexInfo.activeSelf))
+        if (hexInfoShowCoroutine == null && s_hexInfoActiveHex != this)
         {
-            EnsureHoverPanel();
             hexInfoShowCoroutine = StartCoroutine(ShowHexInfoAfterDelay());
         }
     }
@@ -1247,52 +1095,15 @@ public class Hex : MonoBehaviour
     {
         yield return new WaitForSeconds(hexInfoHoverDelay);
         if (_hoverTextDirty) BuildHoverText();
-        bool hasText = hexInfoText != null && !string.IsNullOrWhiteSpace(hexInfoText.text);
-        SetActiveFast(hexInfoArrow, hasText);
-        SetActiveFast(hexInfo, hasText);
-        if (hasText)
+        bool hasText = !string.IsNullOrWhiteSpace(_hoverTextCache);
+        HexUIHover hover = board != null ? board.UIHover : null;
+        if (hasText && hover != null)
         {
             s_hexInfoActiveHex = this;
-            StartArrowBounce();
+            hover.SetText(_hoverTextCache);
+            hover.Show();
         }
         hexInfoShowCoroutine = null;
-    }
-
-    private void StartArrowBounce()
-    {
-        if (_arrowBounceCoroutine != null) StopCoroutine(_arrowBounceCoroutine);
-        if (hexInfoArrow == null) return;
-        _arrowOriginX = hexInfoArrow.transform.localPosition.x;
-        _arrowBounceCoroutine = StartCoroutine(ArrowBounceCoroutine());
-    }
-
-    private void StopArrowBounce()
-    {
-        if (_arrowBounceCoroutine == null) return;
-        StopCoroutine(_arrowBounceCoroutine);
-        _arrowBounceCoroutine = null;
-        if (hexInfoArrow != null)
-        {
-            Vector3 p = hexInfoArrow.transform.localPosition;
-            p.x = _arrowOriginX;
-            hexInfoArrow.transform.localPosition = p;
-        }
-    }
-
-    private IEnumerator ArrowBounceCoroutine()
-    {
-        Transform t = hexInfoArrow.transform;
-        float elapsed = 0f;
-        while (true)
-        {
-            elapsed += Time.deltaTime;
-            float t01 = Mathf.PingPong(elapsed, 1f);
-            t01 = t01 * t01 * (3f - 2f * t01); // smoothstep
-            Vector3 p = t.localPosition;
-            p.x = Mathf.Lerp(_arrowOriginX, 0.2f, t01);
-            t.localPosition = p;
-            yield return null;
-        }
     }
 
     public void Unhover()
@@ -1300,250 +1111,14 @@ public class Hex : MonoBehaviour
         if (IsMouseOverHexOrPanel()) return;
         framesColors?.SetHovered(false);
         if (hexInfoShowCoroutine != null) { StopCoroutine(hexInfoShowCoroutine); hexInfoShowCoroutine = null; }
-        if (_lastHexInfoLinkIdx >= 0) ApplyHexInfoLinkHighlight(-1);
-        _lastHexInfoLinkIdx = -1;
-        HideTerrainTooltip();
-        StopArrowBounce();
-        SetActiveFast(hexInfoArrow, false);
-        SetActiveFast(hexInfo, false);
-        if (s_hexInfoActiveHex == this) s_hexInfoActiveHex = null;
+        if (s_hexInfoActiveHex == this)
+        {
+            board?.UIHover?.Hide();
+            s_hexInfoActiveHex = null;
+        }
         CancelPcCardPreview();
-        HideTroopCardPreview();
     }
 
-    private void UpdateHexInfoLinkHover()
-    {
-        if (hexInfoText == null) return;
-        Camera cam = Camera.main;
-        if (cam == null) return;
-
-        int linkIdx = GetHoveredHexInfoLinkIndex(cam);
-        if (linkIdx != _lastHexInfoLinkIdx)
-        {
-            _lastHexInfoLinkIdx = linkIdx;
-            ApplyHexInfoLinkHighlight(linkIdx);
-            RefreshHexInfoHoverTarget(linkIdx);
-        }
-
-        // The terrain/feature tooltip trails the cursor, so keep repositioning it every frame.
-        if (_terrainTooltipActive) PositionTerrainTooltip(cam);
-    }
-
-    private void RefreshHexInfoHoverTarget(int linkIdx)
-    {
-        string linkId = GetHexInfoLinkId(linkIdx);
-
-        // Terrain / feature links ("t{idx}") show a description tooltip at the cursor instead of a card.
-        if (linkId != null && linkId.Length > 1 && linkId[0] == 't'
-            && int.TryParse(linkId.Substring(1), out int tIdx)
-            && tIdx >= 0 && tIdx < _hexInfoTooltips.Count)
-        {
-            ShowTerrainTooltip(_hexInfoTooltips[tIdx]);
-            RestoreSelectedIcon();
-            HideTroopCardPreview();
-            return;
-        }
-
-        HideTerrainTooltip();
-
-        if (_selectedIcon == null) _selectedIcon = FindFirstObjectByType<SelectedCharacterIcon>();
-        if (_selectedIcon == null) return;
-
-        if (linkId != null && int.TryParse(linkId, out int charLink)
-            && charLink >= 0 && charLink < _hexInfoCharacters.Count)
-        {
-            Army army = charLink < _hexInfoArmies.Count ? _hexInfoArmies[charLink] : null;
-            if (army != null)
-            {
-                _selectedIcon.RefreshForArmy(army);
-                string troopName = charLink < _hexInfoTroopNames.Count ? _hexInfoTroopNames[charLink] : null;
-                ShowTroopCardPreview(troopName);
-            }
-            else
-            {
-                HideTroopCardPreview();
-                Character ch = _hexInfoCharacters[charLink];
-                if (ch != null && !ch.killed)
-                {
-                    TryGetPreviewTextForCharacter(ch, out string hoverText);
-                    bool isScouted = IsScouted();
-                    _selectedIcon.RefreshHoverPreview(ch, hoverText, isScouted, isScouted);
-                }
-            }
-        }
-        else
-        {
-            RestoreSelectedIcon();
-            HideTroopCardPreview();
-        }
-    }
-
-    // Enlarges the specific army card under the cursor — each troop group now has its own
-    // link (see BuildHoverText), so this always resolves one card, never the whole army at once.
-    private void ShowTroopCardPreview(string troopName)
-    {
-        if (string.IsNullOrWhiteSpace(troopName) || CardCenterPreview.Instance == null) { HideTroopCardPreview(); return; }
-        if (_deckManager == null) _deckManager = DeckManager.Instance;
-        CardData card = _deckManager != null ? _deckManager.FindArmyCardByName(troopName) : null;
-        if (card == null) { HideTroopCardPreview(); return; }
-        _showingTroopCardPreview = true;
-        CardCenterPreview.Instance.ShowPreview(card, hoverDriven: true);
-    }
-
-    private void HideTroopCardPreview()
-    {
-        if (!_showingTroopCardPreview) return;
-        _showingTroopCardPreview = false;
-        CardCenterPreview.Instance?.HidePreview();
-    }
-
-    private void RestoreSelectedIcon()
-    {
-        if (_selectedIcon == null) _selectedIcon = FindFirstObjectByType<SelectedCharacterIcon>();
-        if (_selectedIcon == null) return;
-        if (board != null && board.selectedCharacter != null)
-            _selectedIcon.Refresh(board.selectedCharacter);
-        else
-            _selectedIcon.Hide();
-    }
-
-    private string GetHexInfoLinkId(int positionalIdx)
-    {
-        if (hexInfoText == null || positionalIdx < 0) return null;
-        TMP_TextInfo ti = hexInfoText.textInfo;
-        if (ti == null || positionalIdx >= ti.linkCount) return null;
-        return ti.linkInfo[positionalIdx].GetLinkID();
-    }
-
-    private void HandleHexInfoLinkClick(int linkIdx)
-    {
-        string linkId = GetHexInfoLinkId(linkIdx);
-        if (linkId == null) return;
-        if (linkId.Length > 0 && linkId[0] == 't') return;   // terrain/feature tooltip — not clickable
-        if (!int.TryParse(linkId, out int charLink)) return;
-        if (charLink < 0 || charLink >= _hexInfoCharacters.Count) return;
-        Character ch = _hexInfoCharacters[charLink];
-        if (ch == null || ch.killed) return;
-        if (board == null) board = Board.Instance;
-        if (board != null) board.SelectCharacter(ch);
-    }
-
-    private void ShowTerrainTooltip(string description)
-    {
-        if (string.IsNullOrWhiteSpace(description)) { HideTerrainTooltip(); return; }
-        TextMeshPro tip = GetOrCreateTerrainTooltip();
-        if (tip == null) return;
-        tip.text = description;
-        SetActiveFast(_terrainTooltipInstance, true);
-        _terrainTooltipActive = true;
-        Camera cam = Camera.main;
-        if (cam != null) PositionTerrainTooltip(cam);
-    }
-
-    private void HideTerrainTooltip()
-    {
-        _terrainTooltipActive = false;
-        if (_terrainTooltipInstance != null) SetActiveFast(_terrainTooltipInstance, false);
-    }
-
-    private TextMeshPro GetOrCreateTerrainTooltip()
-    {
-        if (_terrainTooltip != null) return _terrainTooltip;
-        if (terrainTooltipPrefab == null) return null;
-
-        _terrainTooltipInstance = Instantiate(terrainTooltipPrefab);
-        _terrainTooltip = _terrainTooltipInstance.GetComponentInChildren<TextMeshPro>(true);
-        if (_terrainTooltip == null)
-        {
-            Destroy(_terrainTooltipInstance);
-            _terrainTooltipInstance = null;
-            return null;
-        }
-        ApplyCurrentFont(_terrainTooltip);
-        _terrainTooltipInstance.SetActive(false);
-        return _terrainTooltip;
-    }
-
-    private void PositionTerrainTooltip(Camera cam)
-    {
-        if (_terrainTooltipInstance == null || cam == null || hexInfoText == null) return;
-        Vector3 screen = Input.mousePosition;
-        screen.y += 40f;   // sit just above the cursor
-        screen.z = hexInfoText.transform.position.z - cam.transform.position.z;
-        _terrainTooltipInstance.transform.position = cam.ScreenToWorldPoint(screen);
-    }
-
-    private void ApplyHexInfoLinkHighlight(int hoveredLinkIdx)
-    {
-        if (hexInfoText == null) return;
-        hexInfoText.ForceMeshUpdate();
-        TMP_TextInfo ti = hexInfoText.textInfo;
-        Color32 defaultCol = colors.GetColorByName("HoverLinkDefault");
-        Color32 hoverCol = colors.GetColorByName("HoverLinkHover");
-
-        for (int i = 0; i < ti.linkCount; i++)
-        {
-            Color32 col = i == hoveredLinkIdx ? hoverCol : defaultCol;
-            TMP_LinkInfo link = ti.linkInfo[i];
-            for (int j = 0; j < link.linkTextLength; j++)
-            {
-                int ci = link.linkTextfirstCharacterIndex + j;
-                if (ci >= ti.characterCount) break;
-                TMP_CharacterInfo ch = ti.characterInfo[ci];
-                if (!ch.isVisible) continue;
-                int vi = ch.vertexIndex;
-                int mi = ch.materialReferenceIndex;
-                ti.meshInfo[mi].colors32[vi]     = col;
-                ti.meshInfo[mi].colors32[vi + 1] = col;
-                ti.meshInfo[mi].colors32[vi + 2] = col;
-                ti.meshInfo[mi].colors32[vi + 3] = col;
-            }
-        }
-        hexInfoText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-    }
-
-    [Tooltip("Extends each hover link's hit box by this fraction of its own text height on every side, so thin single-line links (a single card name) aren't pixel-precise to hit.")]
-    [SerializeField] private float hexInfoLinkHoverPadding = 0.35f;
-
-    private int GetHoveredHexInfoLinkIndex(Camera cam)
-    {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        Plane textPlane = new Plane(hexInfoText.transform.forward, hexInfoText.transform.position);
-        if (!textPlane.Raycast(ray, out float dist)) return -1;
-
-        Vector3 localHit = hexInfoText.transform.InverseTransformPoint(ray.GetPoint(dist));
-        TMP_TextInfo info = hexInfoText.textInfo;
-        for (int i = 0; i < info.linkCount; i++)
-        {
-            TMP_LinkInfo link = info.linkInfo[i];
-            float minX = float.MaxValue, maxX = float.MinValue;
-            float minY = float.MaxValue, maxY = float.MinValue;
-            float maxCharHeight = 0f;
-            bool hasVisible = false;
-            for (int j = 0; j < link.linkTextLength; j++)
-            {
-                int ci = link.linkTextfirstCharacterIndex + j;
-                if (ci >= info.characterCount) break;
-                TMP_CharacterInfo ch = info.characterInfo[ci];
-                if (!ch.isVisible) continue;
-                hasVisible = true;
-                minX = Mathf.Min(minX, ch.bottomLeft.x);
-                maxX = Mathf.Max(maxX, ch.topRight.x);
-                minY = Mathf.Min(minY, ch.bottomLeft.y);
-                maxY = Mathf.Max(maxY, ch.topRight.y);
-                maxCharHeight = Mathf.Max(maxCharHeight, ch.topRight.y - ch.bottomLeft.y);
-            }
-            if (!hasVisible) continue;
-
-            // Pad outward proportionally to the text's own size (world units vary with font
-            // scale), so the extra tolerance stays sensible whatever the hex label is sized at.
-            float pad = maxCharHeight * hexInfoLinkHoverPadding;
-            if (localHit.x >= minX - pad && localHit.x <= maxX + pad &&
-                localHit.y >= minY - pad && localHit.y <= maxY + pad)
-                return i;
-        }
-        return -1;
-    }
 
     private bool IsMouseOverHexOrPanel()
     {
@@ -1563,28 +1138,8 @@ public class Hex : MonoBehaviour
             }
         }
 
-        // Check hexInfo and hexInfoArrow sprite bounds (no collider required)
-        Vector3 mouseWorld = cam.ScreenToWorldPoint(new Vector3(
-            Input.mousePosition.x, Input.mousePosition.y,
-            transform.position.z - cam.transform.position.z));
-        if (IsMouseOverSprites(hexInfo, mouseWorld)) return true;
-        if (IsMouseOverSprites(hexInfoArrow, mouseWorld)) return true;
-
-        return false;
-    }
-
-    private static bool IsMouseOverSprites(GameObject go, Vector3 mouseWorld)
-    {
-        if (go == null || !go.activeSelf) return false;
-        var renderers = go.GetComponentsInChildren<SpriteRenderer>();
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            Bounds b = renderers[i].bounds;
-            if (mouseWorld.x >= b.min.x && mouseWorld.x <= b.max.x &&
-                mouseWorld.y >= b.min.y && mouseWorld.y <= b.max.y)
-                return true;
-        }
-        return false;
+        HexUIHover hover = board != null ? board.UIHover : null;
+        return hover != null && hover.ContainsScreenPoint(Input.mousePosition);
     }
 
     public void Select(bool lookAt = true, float duration = 1.0f, float delay = 0.0f)

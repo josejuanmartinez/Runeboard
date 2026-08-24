@@ -290,14 +290,9 @@ MonoBehaviour:
   artifactBg: {fileID: 1548661320021129584}
   artifactHover: {fileID: 3726000899118390701}
   encounterHover: {fileID: 7712363299886386194}
-  hexInfoArrow: {fileID: 0}
-  hexInfo: {fileID: 0}
-  hexInfoText: {fileID: 0}
   hexInfoHoverDelay: 0.5
-  pcCardPreviewHoverDelay: 5
-  terrainTooltipPrefab: {fileID: 0}
+  pcCardPreviewHoverDelay: 0.5
   sharedParticlesPrefab: {fileID: 6210844020258483811, guid: 99428609042c54b899bfdc9fbfe95760, type: 3}
-  hoverPanelPrefab: {fileID: 6901699456132456031, guid: 9af264c1c9f024051fcc53c9dbf0b944, type: 3}
   messageNoUITextPrefab: {fileID: 0}
   characterLayerPrefab: {fileID: 7160575874330514415, guid: 744a3975880d47458e4786e41443de15, type: 3}
   pcTextPrefab: {fileID: 9000000000000001, guid: 359f1cbd8bc14f9283111f83ecec7fd8, type: 3}
@@ -339,7 +334,6 @@ MonoBehaviour:
   characters: []
   hiddenObjects: []
   isSelected: 0
-  hexInfoLinkHoverPadding: 0.35
 --- !u!114 &8419863931886288814
 MonoBehaviour:
   m_ObjectHideFlags: 0

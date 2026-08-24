@@ -628,47 +628,42 @@ public class CardBloomWheel : MonoBehaviour
         return c.worldCamera;
     }
 
+    // Whether the mouse is anywhere inside the bloom's overall footprint — not just exactly
+    // over the trigger sprite, a single token, or one of the thin connecting lines. Previously
+    // each of those was checked as its own tight hit region, so drifting a few pixels off a
+    // line (or into a gap between tokens) between the trigger and the fanned-out tokens would
+    // collapse the wheel; now the whole fan reads as one shape and only closes once the mouse
+    // leaves it entirely (with lineHitTolerance as a small outward pad).
     private bool IsMouseInsideBloomArea(Camera cam, Camera triggerCam)
     {
-        for (int i = 0; i < cardRects.Count; i++)
+        bool any = false;
+        float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
+
+        void Expand(RectTransform rt, Camera rtCam)
         {
-            if (cardRects[i] == null) continue;
-            if (RectTransformUtility.RectangleContainsScreenPoint(cardRects[i], Input.mousePosition, cam))
-                return true;
+            if (rt == null) return;
+            Vector3[] worldCorners = new Vector3[4];
+            rt.GetWorldCorners(worldCorners);
+            for (int c = 0; c < 4; c++)
+            {
+                Vector2 screen = RectTransformUtility.WorldToScreenPoint(rtCam, worldCorners[c]);
+                if (screen.x < minX) minX = screen.x;
+                if (screen.x > maxX) maxX = screen.x;
+                if (screen.y < minY) minY = screen.y;
+                if (screen.y > maxY) maxY = screen.y;
+                any = true;
+            }
         }
 
-        if (hoverTriggerRect != null &&
-            RectTransformUtility.RectangleContainsScreenPoint(hoverTriggerRect, Input.mousePosition, triggerCam))
-            return true;
+        Expand(hoverTriggerRect, triggerCam);
+        Expand(rectTransform, cam);
+        for (int i = 0; i < cardRects.Count; i++) Expand(cardRects[i], cam);
 
-        if (IsMouseNearLines(cam, triggerCam)) return true;
+        if (!any) return false;
 
-        return rectTransform != null &&
-               RectTransformUtility.RectangleContainsScreenPoint(rectTransform, Input.mousePosition, cam);
-    }
-
-    private bool IsMouseNearLines(Camera cam, Camera triggerCam)
-    {
-        if (hoverTriggerRect == null || cardRects.Count == 0) return false;
-        Vector2 triggerScreen = RectTransformUtility.WorldToScreenPoint(triggerCam,
-            hoverTriggerRect.TransformPoint(hoverTriggerRect.rect.center));
         Vector2 mouse = Input.mousePosition;
-        for (int i = 0; i < cardRects.Count; i++)
-        {
-            if (cardRects[i] == null) continue;
-            Vector2 cardScreen = RectTransformUtility.WorldToScreenPoint(cam, cardRects[i].position);
-            if (DistanceToSegment(mouse, triggerScreen, cardScreen) <= lineHitTolerance)
-                return true;
-        }
-        return false;
-    }
-
-    private static float DistanceToSegment(Vector2 p, Vector2 a, Vector2 b)
-    {
-        Vector2 ab = b - a;
-        if (ab.sqrMagnitude < 0.001f) return Vector2.Distance(p, a);
-        float t = Mathf.Clamp01(Vector2.Dot(p - a, ab) / ab.sqrMagnitude);
-        return Vector2.Distance(p, a + t * ab);
+        return mouse.x >= minX - lineHitTolerance && mouse.x <= maxX + lineHitTolerance
+            && mouse.y >= minY - lineHitTolerance && mouse.y <= maxY + lineHitTolerance;
     }
 
 #if UNITY_EDITOR

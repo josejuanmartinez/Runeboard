@@ -59,6 +59,10 @@ public class SelectedCharacterIcon : MonoBehaviour
     [SerializeField] private Vector2 loadingIconCursorOffset = new(26f, -26f);
     [SerializeField] private float loadingIconSize = 30f;
 
+    [Header("Card Gallery")]
+    [Tooltip("Shows the selected/hovered character's army troops. Drag the gallery object here directly in the scene.")]
+    [SerializeField] private CardGallery cardGallery;
+
     // private Videos videos;
     private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
 
@@ -122,41 +126,24 @@ public class SelectedCharacterIcon : MonoBehaviour
         }
     }
 
+    // Troop cards used to also be hoverable here via "army:" links inside descriptionWidget;
+    // that text is gone now (see RefreshArmyCardGallery), so this only covers the character's
+    // own name label. The gallery's own Card instances handle their own hover preview.
     private void UpdateCardHoverPreview()
     {
-        if (CurrentCharacter == null || nameWidget == null || descriptionWidget == null) return;
+        if (CurrentCharacter == null || nameWidget == null) return;
         if (CardCenterPreview.Instance == null) return;
 
-        string cardName = null;
-        if (RectTransformUtility.RectangleContainsScreenPoint(
-            nameWidget.rectTransform, Input.mousePosition, ResolveTriggerCamera(nameWidget.rectTransform)))
-        {
-            cardName = CurrentCharacter.characterName;
-        }
-        else
-        {
-            Canvas canvas = descriptionWidget.canvas;
-            Camera camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
-                ? canvas.worldCamera
-                : null;
-            int linkIndex = TMP_TextUtilities.FindIntersectingLink(descriptionWidget, Input.mousePosition, camera);
-            if (linkIndex >= 0)
-            {
-                string linkId = descriptionWidget.textInfo.linkInfo[linkIndex].GetLinkID();
-                const string armyPrefix = "army:";
-                if (linkId.StartsWith(armyPrefix, System.StringComparison.Ordinal))
-                    cardName = linkId.Substring(armyPrefix.Length);
-            }
-        }
+        bool hoveringName = RectTransformUtility.RectangleContainsScreenPoint(
+            nameWidget.rectTransform, Input.mousePosition, ResolveTriggerCamera(nameWidget.rectTransform));
+        string cardName = hoveringName ? CurrentCharacter.characterName : null;
 
         if (string.Equals(cardName, hoveredPreviewCardName, System.StringComparison.OrdinalIgnoreCase)) return;
         HideCardHoverPreview();
         if (string.IsNullOrWhiteSpace(cardName)) return;
 
         DeckManager deckManager = DeckManager.Instance;
-        CardData card = string.Equals(cardName, CurrentCharacter.characterName, System.StringComparison.OrdinalIgnoreCase)
-            ? deckManager?.FindAnyCardByName(cardName)
-            : deckManager?.FindArmyCardByName(cardName);
+        CardData card = deckManager != null ? deckManager.FindAnyCardByName(cardName) : null;
         if (card == null) return;
 
         hoveredPreviewCardName = cardName;
@@ -322,15 +309,12 @@ public class SelectedCharacterIcon : MonoBehaviour
         SetBannerImage(c);
         SetCardsImage(c.GetOwner());
         SetCharacterVisuals(GetIllustrationByName(!string.IsNullOrWhiteSpace(c.illustrationName) ? c.illustrationName : c.characterName));
-        string nameText = BuildSelectedCharacterTitle(c, true, false);
-        string armyText = BuildSelectedCharacterTitle(c, false, true);
-        string quoteText = BuildSelectedCharacterTitle(c, false, false, true);
-        string descriptionText = string.IsNullOrWhiteSpace(quoteText)
-            ? armyText
-            : $"{quoteText}\n\n{armyText}";
+        string nameText = BuildSelectedCharacterTitle(c, returnName: true);
+        string quoteText = BuildSelectedCharacterTitle(c, returnName: false, returnQuote: true);
         string kidnappingText = BuildKidnappingStatusText(c);
         nameWidget.text = nameText;
-        descriptionWidget.text = $"<mark=#000000bb>{kidnappingText}\n{descriptionText}</mark>";
+        descriptionWidget.text = $"<mark=#000000bb>{kidnappingText}\n{quoteText}</mark>";
+        RefreshArmyCardGallery(c);
         levelsGameObject.SetActive(true);
         actioned.SetActive(true);
         moved.SetActive(true);
@@ -347,6 +331,48 @@ public class SelectedCharacterIcon : MonoBehaviour
 
         RefreshMovementLeft(c);
         if (!isHover) RefreshOtherCharacters(c);
+    }
+
+    // Replaces the old "1 line per troop type, with a link" army text: one gallery card per
+    // troop type, captioned with just its count, its type icon, and the army's overall XP
+    // (XP is tracked per-Army, not per troop group, so the same value repeats on every card).
+    private void RefreshArmyCardGallery(Character c)
+    {
+        if (cardGallery == null) return;
+
+        Army army = c != null ? c.GetArmy() : null;
+        List<ArmyTroopAbilityGroup> troopGroups = army?.GetTroopGroups();
+        if (army == null || troopGroups == null || troopGroups.Count == 0)
+        {
+            cardGallery.SetCards(new List<CardData>());
+            return;
+        }
+
+        // GetLinkableTroopHoverLines() resolves each group's display name (falling back to the
+        // troop type's default name when troopName wasn't authored) in the same order as
+        // GetTroopGroups(), so the two lists line up index-for-index without duplicating that
+        // fallback logic here (Army's version of it is private).
+        List<(string troopName, string line)> linkableLines = army.GetLinkableTroopHoverLines();
+        DeckManager deckManager = DeckManager.Instance;
+        string xpColor = army.xp < 25 ? "#ff4d4d" : army.xp < 50 ? "#ffb347" : army.xp < 75 ? "#8fd14f" : "#00c853";
+
+        var captionsByCardName = new Dictionary<string, string>(System.StringComparer.OrdinalIgnoreCase);
+        var troopCards = new List<CardData>();
+
+        for (int i = 0; i < troopGroups.Count && i < linkableLines.Count; i++)
+        {
+            ArmyTroopAbilityGroup group = troopGroups[i];
+            CardData card = deckManager != null ? deckManager.FindArmyCardByName(linkableLines[i].troopName) : null;
+            if (card == null) continue;
+
+            string spriteName = group.troopType.ToString().ToLowerInvariant();
+            captionsByCardName[card.name] = $"{group.amount} x <sprite name=\"{spriteName}\">\nXP <color={xpColor}>{army.xp}</color>";
+            troopCards.Add(card);
+        }
+
+        cardGallery.SetCards(troopCards);
+        cardGallery.SetLabelSelector(data =>
+            data != null && captionsByCardName.TryGetValue(data.name, out string caption) ? caption : string.Empty);
     }
 
     private string BuildKidnappingStatusText(Character c)
@@ -384,23 +410,21 @@ public class SelectedCharacterIcon : MonoBehaviour
         SetBannerImage(c);
         SetCardsImage(c.GetOwner());
         SetCharacterVisuals(GetIllustrationByName(!string.IsNullOrWhiteSpace(c.illustrationName) ? c.illustrationName : c.characterName));
-        nameWidget.text = BuildSelectedCharacterTitle(c, returnName: true, returnArmy: false);
+        nameWidget.text = BuildSelectedCharacterTitle(c, returnName: true);
         string detailText = hoverText ?? string.Empty;
         if (detailText.StartsWith(c.characterName, System.StringComparison.OrdinalIgnoreCase))
             detailText = detailText.Substring(c.characterName.Length).TrimStart();
 
-        // Match the selected-character panel's flavor content: quote is harmless public
-        // flavor text so it always shows, same as when selected. Army/"(wandering)" status
-        // can reveal troop composition, so — same as health/artifacts below — it's gated
-        // behind showArtifacts (both parameters are driven by the same isScouted check at
-        // the call sites, so an unscouted enemy still won't leak that here either).
-        string quoteText = BuildSelectedCharacterTitle(c, returnName: false, returnArmy: false, returnQuote: true);
-        string armyText = showArtifacts ? BuildSelectedCharacterTitle(c, returnName: false, returnArmy: true) : string.Empty;
+        string quoteText = BuildSelectedCharacterTitle(c, returnName: false, returnQuote: true);
         List<string> descriptionParts = new();
         if (!string.IsNullOrWhiteSpace(quoteText)) descriptionParts.Add(quoteText);
-        if (!string.IsNullOrWhiteSpace(armyText)) descriptionParts.Add(armyText);
         if (!string.IsNullOrWhiteSpace(detailText)) descriptionParts.Add(detailText);
         descriptionWidget.text = $"<mark=#000000bb>{string.Join("\n\n", descriptionParts)}</mark>";
+
+        // If you can hover it, you can see it: TryGetPreviewTextForCharacter already gated
+        // whether this preview fires at all, so the troop gallery no longer applies a second,
+        // stricter "scouted" check on top of that.
+        RefreshArmyCardGallery(c);
 
         actioned.SetActive(false);
         moved.SetActive(false);
@@ -485,6 +509,7 @@ public class SelectedCharacterIcon : MonoBehaviour
         CurrentCharacter = null;
         animatedSourceCharacter = null;
         if (animatedCharacter != null) animatedCharacter.enabled = false;
+        if (cardGallery != null) cardGallery.SetCards(new List<CardData>());
         RefreshOtherCharacters(null);
     }
 
@@ -680,53 +705,20 @@ public class SelectedCharacterIcon : MonoBehaviour
         }
     }
 
-    private string BuildSelectedCharacterTitle(Character c, bool returnName = true, bool returnArmy = true, bool returnQuote = false)
+    // Army/troop text used to be built here too (with "army:" TMP links for hover-preview),
+    // but that's now shown as gallery cards instead — see RefreshArmyCardGallery.
+    private string BuildSelectedCharacterTitle(Character c, bool returnName = true, bool returnQuote = false)
     {
-        if (c == null || (!returnName && !returnArmy && !returnQuote)) return string.Empty;
+        if (c == null || (!returnName && !returnQuote)) return string.Empty;
 
-        DeckManager deckManager = DeckManager.Instance;
         if (returnQuote)
         {
-            CardData characterCard = deckManager?.FindAnyCardByName(c.characterName);
+            DeckManager deckManager = DeckManager.Instance;
+            CardData characterCard = deckManager != null ? deckManager.FindAnyCardByName(c.characterName) : null;
             return characterCard?.quote ?? string.Empty;
         }
 
-        string result = "";
-        if(returnName)
-        {
-            result += $"<u>{c.characterName}</u>";
-        }
-
-        if(returnArmy)
-        {
-            Army army = c.GetArmy();
-            if (army != null && army.GetSize() > 0)
-            {
-                string armyText = army.GetHoverTextHexInfo();
-                List<string> linkedArmyNames = army.GetTroopGroups()
-                    .Where(group => group != null && !string.IsNullOrWhiteSpace(group.troopName))
-                    .Select(group => group.troopName)
-                    .Distinct(System.StringComparer.OrdinalIgnoreCase)
-                    .Where(name => deckManager?.FindArmyCardByName(name) != null)
-                    .OrderByDescending(name => name.Length)
-                    .ToList();
-                if (linkedArmyNames.Count > 0)
-                {
-                    string pattern = string.Join("|", linkedArmyNames.Select(System.Text.RegularExpressions.Regex.Escape));
-                    armyText = System.Text.RegularExpressions.Regex.Replace(
-                        armyText,
-                        pattern,
-                        match => $"<link=\"army:{match.Value}\"><u>{match.Value}</u></link>",
-                        System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                }
-                result += armyText;
-            } else
-            {
-                result += " (wandering)";
-            }
-        }
-
-        return result;
+        return returnName ? $"<u>{c.characterName}</u>" : string.Empty;
     }
 
 }

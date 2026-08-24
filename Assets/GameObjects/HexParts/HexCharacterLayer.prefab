@@ -505,7 +505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hex: {fileID: 0}
-  cardPreviewHoverDelay: 5
+  cardPreviewHoverDelay: 0.5
   hoveredScale: {x: 0.3, y: 0.3, z: 0.3}
   unhoveredScale: {x: 0.1, y: 0.1, z: 0.1}
 --- !u!61 &7871425984198383737

@@ -180,6 +180,9 @@ public class Game : MonoBehaviour
     public void StartGame()
     {
         FindFirstObjectByType<LeaderSelector>()?.ApplyCurrentSelection();
+        // Must play before any other startup popup, camera pan, or tutorial step — SelectLeader
+        // (driven by the carousel) has already finalized player's chosen variant by this point.
+        VideoPopupManager.ShowForLeader(player);
         PruneUnselectedLeaderVariants();
         RandomizeCompetitorVariants();
         // Every playable leader's variant (human pick + AI randomization above) is final now, so
@@ -239,6 +242,10 @@ public class Game : MonoBehaviour
     // NewTurn(), etc.), matching every subsequent turn's flow.
     private IEnumerator BeginTurnZeroSequence()
     {
+        // The leader intro video (shown at the top of StartGame()) must finish/close before the
+        // Turn 0 banner, tutorial instructions, or the resource-gathering NewTurn() effects appear.
+        while (VideoPopupManager.IsShowing) yield return null;
+
         yield return new WaitForSeconds(2f);
 
         TutorialInstructionsManager instructions = TutorialInstructionsManager.Instance;

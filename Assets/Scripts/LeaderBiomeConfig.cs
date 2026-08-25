@@ -17,6 +17,7 @@ public class LeaderVariantConfig
     public string deckIdentity;
     public string subdeckId;
     public string banner;
+    public string introVideoText;
 }
 
 // Fields that only govern the procedural (non-scenario) starting setup: where a leader's
@@ -46,6 +47,7 @@ public class LeaderBiomeConfig: BiomeConfig
     public string deckIdentity;
     public string subdeckId;
     public string banner;
+    public string introVideoText;
     public List<LeaderVariantConfig> variants = new();
     public LeaderNoScenarioStart noScenarioStart = new();
     public FeaturesEnum feature = FeaturesEnum.noFeature;

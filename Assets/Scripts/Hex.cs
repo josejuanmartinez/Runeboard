@@ -170,6 +170,12 @@ public class Hex : MonoBehaviour
     private const int SharedOneShotParticlePoolSize = 3;
     private bool isCharacterHovered = false;
     private bool isPcTextHovered = false;
+    // Whether this hex's character sprite was on-camera last frame — compared every frame in
+    // UpdateEnemyAlertVisibility() against Renderer.isVisible so the enemy-alert pulse fires
+    // exactly on the false->true transition (freshly revealed on-screen, or panned back onto
+    // after being off-screen), never for an enemy sitting in already-explored territory the
+    // camera simply isn't pointed at right now.
+    private bool _wasCharacterSpriteVisibleLastFrame;
     // Counts hexes whose character sprite is currently hovered (should only ever be 0 or 1, but a
     // counter sidesteps any transient overlap between one OnMouseExit and the next OnMouseEnter).
     // Lets every hex's UpdateCharacterSpriteAlpha tell "someone else is hovered" apart from
@@ -238,6 +244,7 @@ public class Hex : MonoBehaviour
     void Update()
     {
         UpdateCharacterSpriteAlpha();
+        UpdateEnemyAlertVisibility();
         if (s_hexInfoActiveHex == this)
         {
             if (!IsMouseOverHexOrPanel() || BoardNavigator.IsPointerOverVisibleUIElement())
@@ -759,7 +766,10 @@ public class Hex : MonoBehaviour
         if (seen && hasCharacter) EnsureCharacterLayer();
 
         // Pre-apply the outline colour before the renderer becomes visible so there
-        // is no one-frame flash of the previous (possibly white/cleared) colour.
+        // is no one-frame flash of the previous (possibly white/cleared) colour. The enemy-alert
+        // pulse itself is NOT triggered here — it's driven purely by the sprite entering the
+        // camera's view (see UpdateEnemyAlertVisibility), not by board-data reveals the human
+        // may not currently be looking at.
         Character known = null;
         bool hasKnown = seen && hasCharacter && TryGetKnownCharacterForIcon(out known);
         if (hasKnown)
@@ -1049,15 +1059,17 @@ public class Hex : MonoBehaviour
         // card preview (see CharacterSpriteHover) — don't let the hex's PC/region cards
         // show underneath/behind it while it's the thing actually under the cursor.
         if (isCharacterHovered) { CancelPcCardPreview(); return; }
-        if (!ShouldShowPcVisual()) { CancelPcCardPreview(); return; }
-        PC pcData = GetPC();
-        if (pcData == null || CardCenterPreview.Instance == null) { CancelPcCardPreview(); return; }
+        // ShouldShowPcVisual() is the same check that decided the Band/label should be shown
+        // and hoverable in the first place (including the NPC-owned-PC-revealed-to-viewer
+        // branch) — re-deriving PC data via GetPC()'s narrower pc.IsRevealed() check here could
+        // disagree with it and silently drop the card for a PC the player can see hovering.
+        if (!ShouldShowPcVisual() || pc == null || CardCenterPreview.Instance == null) { CancelPcCardPreview(); return; }
 
         // Already shown, or already counting down — nothing to do (Hover() can be re-invoked
         // while the cursor sits still, e.g. by other per-frame hover updates).
         if (_showingPcCardPreview || pcCardPreviewCoroutine != null) return;
 
-        pcCardPreviewCoroutine = StartCoroutine(ShowPcCardPreviewAfterDelay(pcData));
+        pcCardPreviewCoroutine = StartCoroutine(ShowPcCardPreviewAfterDelay(pc));
     }
 
     private IEnumerator ShowPcCardPreviewAfterDelay(PC pcData)
@@ -3087,6 +3099,25 @@ public class Hex : MonoBehaviour
 
         if (hovered) TryShowPcCardPreview();
         else CancelPcCardPreview();
+    }
+
+    // Renderer.isVisible reflects whether THIS sprite was actually drawn by any camera last
+    // frame (i.e. on-screen and unculled) — exactly the "in the player's current view" signal
+    // the alert needs, as opposed to "revealed on the board" which characterSpriteRenderer's
+    // active state alone would give us regardless of where the camera happens to be pointed.
+    private void UpdateEnemyAlertVisibility()
+    {
+        bool visibleNow = characterSpriteRenderer != null
+            && characterSpriteRenderer.gameObject.activeInHierarchy
+            && characterSpriteRenderer.isVisible;
+
+        if (visibleNow && !_wasCharacterSpriteVisibleLastFrame
+            && characterAnimationController != null && characterAnimationController.IsShowingEnemyOutline)
+        {
+            characterAnimationController.PlayEnemyAlertPulse();
+        }
+
+        _wasCharacterSpriteVisibleLastFrame = visibleNow;
     }
 
     private void UpdateCharacterSpriteAlpha()

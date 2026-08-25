@@ -1072,6 +1072,12 @@ public class Board : MonoBehaviour
         ActionsManager actionsManager;
         Hex currentHex = character.hex; // Store initial hex
         bool showPlayerUi = ShouldShowPlayerUi(character);
+        // Camera should glance at where an AI/enemy walk becomes visible once, not re-center on
+        // every hop of a long march. A single-element box (rather than a plain bool) so the flag
+        // can be threaded through the per-hop MoveCharacterOneHex calls below and mutated by
+        // reference inside it — other (single-hex teleport) callers of MoveCharacterOneHex pass
+        // no box and keep their original always-eligible-to-focus behavior.
+        bool[] walkCameraFocused = new bool[1];
 
         try
         {
@@ -1117,16 +1123,21 @@ public class Board : MonoBehaviour
             Hex newHex = hexes[path[i + 1]];
             currentHex = previousHex;
 
-            // Nobody sees this hop (see ShouldShowPlayerUi) — skip sprite lookups and
-            // tweening entirely, just apply the data-model move. Per-hop tweening (0.35s) plus
-            // the walk's own 0.5s settle delay was real wall-clock time burned for every AI
-            // character's every hex of movement, every AI turn, for an animation the human
-            // never sees — a dominant contributor to a full AI turn's total duration.
-            if (!showPlayerUi)
+            // An AI character's hop still animates when the human can actually see it — either
+            // end of the hop currently visible on-screen — so AI movement through visible
+            // territory reads as a real walk instead of just teleporting between reveals.
+            bool visualizeHop = showPlayerUi || ShouldAnimateHopForSpectator(previousHex, newHex);
+
+            // Nobody sees this hop — skip sprite lookups and tweening entirely, just apply the
+            // data-model move. Per-hop tweening (0.35s) plus the walk's own 0.5s settle delay was
+            // real wall-clock time burned for every AI character's every hex of movement, every
+            // AI turn, for an animation the human never sees — a dominant contributor to a full
+            // AI turn's total duration.
+            if (!visualizeHop)
             {
                 try
                 {
-                    MoveCharacterOneHex(character, previousHex, newHex, false, false, deferVisibilityRefresh: true);
+                    MoveCharacterOneHex(character, previousHex, newHex, false, false, deferVisibilityRefresh: true, walkCameraFocused: walkCameraFocused);
                     currentHex = newHex;
                 }
                 catch (Exception e)
@@ -1233,7 +1244,7 @@ public class Board : MonoBehaviour
                 // finishMovement stays false even on the last hop: it would drain the
                 // character's remaining movement (no more moves this turn). Arrival effects
                 // (hex selection, situation cards) run after the loop instead.
-                MoveCharacterOneHex(character, previousHex, newHex, false, false, deferVisibilityRefresh: true);
+                MoveCharacterOneHex(character, previousHex, newHex, false, false, deferVisibilityRefresh: true, walkCameraFocused: walkCameraFocused);
                 currentHex = newHex;
                 if (showPlayerUi) selected?.RefreshMovementLeft(character);
             }
@@ -1307,7 +1318,12 @@ public class Board : MonoBehaviour
         }
     }
 
-    public void MoveCharacterOneHex(Character character, Hex previousHex, Hex newHex, bool finishMovement = false, bool lookAt = true, bool rememberPreviousHex = true, bool deferVisibilityRefresh = false) {
+    // walkCameraFocused: optional single-element box shared across every hop of one multi-hex
+    // MoveCoroutine walk, so the "camera glances at a newly-visible AI move" focus below fires
+    // once per walk instead of re-centering on every hop. Left null (the default) by every
+    // other, single-hex-teleport caller of this method, which leaves them at their original
+    // always-eligible-to-focus behavior since they only ever call this once anyway.
+    public void MoveCharacterOneHex(Character character, Hex previousHex, Hex newHex, bool finishMovement = false, bool lookAt = true, bool rememberPreviousHex = true, bool deferVisibilityRefresh = false, bool[] walkCameraFocused = null) {
         int movedBefore = character.moved;
         bool actionedBefore = character.hasActionedThisTurn;
         bool wasWater = previousHex != null && previousHex.IsWaterTerrain();
@@ -1437,12 +1453,14 @@ public class Board : MonoBehaviour
                 RefreshCardInteractions();
             }
 
-            if (g != null && g.player != null && character.GetOwner() != g.player)
+            bool alreadyFocusedThisWalk = walkCameraFocused != null && walkCameraFocused[0];
+            if (g != null && g.player != null && character.GetOwner() != g.player && !alreadyFocusedThisWalk)
             {
                 bool playerCanSee = g.player.visibleHexes.Contains(newHex) && newHex.IsHexSeen();
                 if (playerCanSee)
                 {
                     BoardNavigator.Instance?.EnqueueEnemyFocus(newHex, character.GetOwner());
+                    if (walkCameraFocused != null) walkCameraFocused[0] = true;
                 }
             }
 
@@ -1583,6 +1601,20 @@ public class Board : MonoBehaviour
     {
         Game g = GetGame();
         return g != null && g.IsPlayerCurrentlyPlaying() && g.player == character?.GetOwner();
+    }
+
+    // Whether an AI-controlled hop is worth animating for the human spectating: true when
+    // either end of the hop is a hex currently ON-SCREEN for the human right now (IsHexSeen —
+    // full fog-of-war visibility), not merely IsScouted (a lingering few-turn "was scouted"
+    // flag that can stay true well after the hex has faded back to dimmed/remembered). A hop
+    // between two hexes that are revealed-but-dimmed (mapOnlyRevealed/isCurrentlyUnseen) or
+    // wholly unrevealed is invisible to the human either way, so it's safe to teleport through
+    // it and only resume tweened movement once a hop touches a truly visible hex again. Doesn't
+    // apply to the human's own moves (ShouldShowPlayerUi already covers those unconditionally).
+    private bool ShouldAnimateHopForSpectator(Hex previousHex, Hex newHex)
+    {
+        return (previousHex != null && previousHex.IsHexSeen())
+            || (newHex != null && newHex.IsHexSeen());
     }
 
     private bool ShouldRefreshCardInteractionsFor(Character character)

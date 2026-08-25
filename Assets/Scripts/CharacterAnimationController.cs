@@ -50,6 +50,19 @@ public class CharacterAnimationController : MonoBehaviour
     // Opposing alignment to the human player.
     [SerializeField] private Material enemyOutlineMaterial;
 
+    [Header("Enemy Alert")]
+    [Tooltip("How long the outline pulses after an enemy character is first spotted on a hex.")]
+    [SerializeField] private float enemyAlertDuration = 2f;
+    [Tooltip("Pulses per second during the enemy-reveal alert.")]
+    [SerializeField] private float enemyAlertPulseSpeed = 3f;
+    [Tooltip("Outline size multiplier at each pulse's peak, relative to outlineSize.")]
+    [SerializeField] private float enemyAlertPeakMultiplier = 2.5f;
+
+    private Coroutine enemyAlertCoroutine;
+    // While true, SetOutlineSize's normal per-frame calls (Hex.UpdateCharacterSpriteAlpha) are
+    // ignored so the pulse coroutine below has exclusive control of the outline size.
+    private bool enemyAlertActive;
+
     // Playback speed multiplier applied only to the Turn Left/Right in-place spin (baked atlas
     // fps otherwise makes it play at the same pace as walk/idle, which reads as sluggish when a
     // character turns to face its next hex mid-move). Doesn't affect any other animation kind.
@@ -326,15 +339,63 @@ public class CharacterAnimationController : MonoBehaviour
         if (spriteRenderer.sharedMaterial != resolvedMaterial) spriteRenderer.sharedMaterial = resolvedMaterial;
     }
 
+    // True whenever the outline currently applied is the enemy (red) one — read by
+    // Hex.UpdateEnemyAlertVisibility to decide whether a sprite entering the camera's view is
+    // worth an alert pulse, without that call site re-deriving the alignment resolution below.
+    public bool IsShowingEnemyOutline { get; private set; }
+
     // Sets the outline color by the character's alignment relative to the human player: if either
     // side is neutral there is no ally/enemy relationship to show, so it always reads as neutral;
     // otherwise same-alignment-as-viewer vs. opposing-alignment picks the ally/enemy look. Called
-    // by Hex whenever the character this controller is showing changes.
-    public void SetOutlineForCharacter(Character character)
+    // by Hex whenever the character this controller is showing changes. Returns whether the
+    // resolved outline is the enemy (red) one, so callers can decide whether this is worth an
+    // alert pulse (see PlayEnemyAlertPulse) without duplicating the alignment resolution above.
+    public bool SetOutlineForCharacter(Character character)
     {
         Material material = ResolveOutlineMaterial(character);
         ApplyOutlineMaterial(material);
         ApplyOutlineSettings(GetMaterialOutlineColor(material), outlineSize);
+        IsShowingEnemyOutline = material == enemyOutlineMaterial;
+        return IsShowingEnemyOutline;
+    }
+
+    // Brief "alarm" pulse on the outline — played the moment an enemy character first becomes
+    // visible on a hex, so a newly-spotted threat reads as more than a static red outline.
+    public void PlayEnemyAlertPulse()
+    {
+        if (!isActiveAndEnabled) return;
+        if (enemyAlertCoroutine != null) StopCoroutine(enemyAlertCoroutine);
+        enemyAlertCoroutine = StartCoroutine(EnemyAlertPulseRoutine());
+    }
+
+    private IEnumerator EnemyAlertPulseRoutine()
+    {
+        enemyAlertActive = true;
+        float t = 0f;
+        while (t < enemyAlertDuration)
+        {
+            t += Time.deltaTime;
+            // Ping-pongs between the base size and an enlarged "ring" size, with the pulse's
+            // amplitude fading out as the alert winds down so it settles rather than stopping abruptly.
+            float wave = 0.5f + 0.5f * Mathf.Sin(t * enemyAlertPulseSpeed * Mathf.PI * 2f);
+            float fade = 1f - Mathf.Clamp01(t / enemyAlertDuration);
+            float size = Mathf.Lerp(outlineSize, outlineSize * enemyAlertPeakMultiplier, wave * fade);
+            ApplyOutlineSizeImmediate(size);
+            yield return null;
+        }
+
+        enemyAlertActive = false;
+        enemyAlertCoroutine = null;
+        ApplyOutlineSizeImmediate(outlineSize);
+    }
+
+    private void ApplyOutlineSizeImmediate(float size)
+    {
+        if (!spriteRenderer) return;
+        EnsureOutlinePropertyBlock();
+        spriteRenderer.GetPropertyBlock(outlinePropertyBlock);
+        outlinePropertyBlock.SetFloat(OutlineSizeShaderId, size);
+        spriteRenderer.SetPropertyBlock(outlinePropertyBlock);
     }
 
     private Material ResolveOutlineMaterial(Character character)
@@ -361,6 +422,7 @@ public class CharacterAnimationController : MonoBehaviour
     {
         ApplyOutlineMaterial();
         ApplyOutlineSettings(Color.white, outlineSize);
+        IsShowingEnemyOutline = false;
     }
 
     private void ApplyOutlineSettings(Color outlineColor, float size)
@@ -395,6 +457,9 @@ public class CharacterAnimationController : MonoBehaviour
     public void SetOutlineSize(float size)
     {
         if (!spriteRenderer) return;
+        // The enemy-alert pulse owns outline size for its duration — Hex.UpdateCharacterSpriteAlpha
+        // calls this every frame regardless, and would otherwise fight the pulse for control.
+        if (enemyAlertActive) return;
 
         EnsureOutlinePropertyBlock();
         spriteRenderer.GetPropertyBlock(outlinePropertyBlock);
@@ -575,6 +640,13 @@ public class CharacterAnimationController : MonoBehaviour
         // Restore the default cursor if this gets disabled mid-hover (e.g. the character
         // dies or the hex redraws while the pointer is still over it).
         if (cursorHovering) SetHoverCursor(false);
+
+        // This slot may be reused for a different character on re-enable — never leave
+        // SetOutlineSize permanently locked out because a pulse's coroutine got killed early,
+        // and never let a stale "was showing enemy" flag survive into the next occupant.
+        enemyAlertCoroutine = null;
+        enemyAlertActive = false;
+        IsShowingEnemyOutline = false;
     }
 
 }

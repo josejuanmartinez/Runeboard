@@ -15,7 +15,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> The grey wanderer walks every road — <sprite name=\"commander\"><sprite name=\"agent\"><sprite name=\"emmissary\"><sprite name=\"mage\"> all grown deep, and his host many-armed: Elves, scouts, and fleets. <sprite name=\"gold\"> runs swift; the price of every open road is steep.",
                     "subdeckId": "gandalf",
                     "banner": "banner_gandalf_mithrandir",
-                    "characterName": "Mithrandir"
+                    "characterName": "Mithrandir",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "stormcrow",
@@ -24,7 +25,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> The Stormcrow's web of lands <sprite name=\"pc\"> and roads produces <sprite name=\"mounts\"><sprite name=\"leather\"> in abundance — needing no supply line. His armies are thin and sorcery <sprite name=\"mage\"> slight; he wins by presence, not force.",
                     "subdeckId": "stormcrow",
                     "banner": "banner_gandalf_stormcrow",
-                    "characterName": "Stormcrow"
+                    "characterName": "Stormcrow",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "disturber_of_the_peace",
@@ -33,7 +35,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> A mischief deck: <sprite name=\"agent\"> saturates every shadow, archers <sprite name=\"bow\"> ready where blades would be heard. Hobbits and wanderers turn Bree-land into disruption. No sorcery <sprite name=\"mage\">, no heavy arms — only the deed done before it is suspected.",
                     "subdeckId": "disturber_of_the_peace",
                     "banner": "banner_gandalf_disturber_of_the_peace",
-                    "characterName": "Disturber of the Peace"
+                    "characterName": "Disturber of the Peace",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "tharkun",
@@ -42,7 +45,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> Gandalf as dwarf-friend: <sprite name=\"commander\"> towers high, <sprite name=\"mithril\"> flows self-sustaining from deep veins, Dwarven axemen grinding hard endurance under stone. No sorcery <sprite name=\"mage\"> — what he builds, he builds with toil.",
                     "subdeckId": "tharkun",
                     "banner": "banner_gandalf_tharkun",
-                    "characterName": "Tharkun"
+                    "characterName": "Tharkun",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "gandalf_the_white",
@@ -51,10 +55,12 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> Returned white authority: <sprite name=\"commander\"> dominant, heavy horse and fleets of Gondor and Rohan at his back, lords rallied wide <sprite name=\"pc\">. The mage's art <sprite name=\"mage\"> is spent — he leads now by command, not craft.",
                     "subdeckId": "gandalf_the_white",
                     "banner": "banner_gandalf_gandalf_the_white",
-                    "characterName": "Gandalf the White"
+                    "characterName": "Gandalf the White",
+                    "introVideoText": ""
                 }
             ],
             "subdeckId": "gandalf",
+            "introVideoText": "",
             "noScenarioStart": {
                 "terrain": 3,
                 "startingArmySize": 0,
@@ -86,7 +92,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> Voice, art, and argument — <sprite name=\"agent\"><sprite name=\"emmissary\"><sprite name=\"mage\"> all keen, with events reshaping the board. His host is numerous but common-born <sprite name=\"leather\">, and his territories <sprite name=\"pc\"> spread thin.",
                     "subdeckId": "saruman_the_white",
                     "banner": "banner_saruman_saruman_the_white",
-                    "characterName": "Saruman the White"
+                    "characterName": "Saruman the White",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "of_many_colours",
@@ -95,7 +102,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> The widest host and richest harvest — cavalry <sprite name=\"mounts\"> no other master fields so deep, <sprite name=\"leather\"><sprite name=\"gold\"> in flood, grand sorcery <sprite name=\"mage\"> and many colours. <sprite name=\"iron\"> is scarce; the forge runs cold.",
                     "subdeckId": "of_many_colours",
                     "banner": "banner_saruman_of_many_colours",
-                    "characterName": "Saruman Multicoloured"
+                    "characterName": "Saruman Multicoloured",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "the_white_hand",
@@ -104,7 +112,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> Isengard's forged war machine: <sprite name=\"commander\"><sprite name=\"agent\"> drive iron-will infantry, furnaces thunder, Uruk discipline makes aggression systematic. No sorcery <sprite name=\"mage\">; what he lacks in art, he pays in <sprite name=\"leather\">.",
                     "subdeckId": "the_white_hand",
                     "banner": "banner_saruman_the_white_hand",
-                    "characterName": "The White Hand"
+                    "characterName": "The White Hand",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "sharkey",
@@ -113,10 +122,12 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> No towers, no spells <sprite name=\"mage\">, no cavalry <sprite name=\"mounts\"> — Sharkey rules through <sprite name=\"agent\"><sprite name=\"emmissary\"> and the fear they carry. <sprite name=\"gold\"><sprite name=\"leather\"> flow from an occupied Shire; his ruffians are cheap and mean.",
                     "subdeckId": "sharkey",
                     "banner": "banner_sharkey",
-                    "characterName": "Sharkey"
+                    "characterName": "Sharkey",
+                    "introVideoText": ""
                 }
             ],
             "subdeckId": "saruman_the_white",
+            "introVideoText": "",
             "noScenarioStart": {
                 "terrain": 1,
                 "startingArmySize": 0,
@@ -148,7 +159,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> Nothing hidden survives — <sprite name=\"commander\"> towers above all peers, captains answer as one across twenty domains <sprite name=\"pc\">. Heavy infantry holds every field; he is slow to mount <sprite name=\"mounts\">.",
                     "subdeckId": "the_dark_eye",
                     "banner": "banner_sauron_the_dark_eye",
-                    "characterName": "Sauron"
+                    "characterName": "Sauron",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "the_deceiver",
@@ -157,7 +169,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> The Deceiver's tongue <sprite name=\"emmissary\"> outpaces every sword; <sprite name=\"gold\"> and armies flood from his dominion, PCs <sprite name=\"pc\"> spanning wide. Little sorcery <sprite name=\"mage\"> and few great events — his power is bought, not conjured.",
                     "subdeckId": "the_deceiver",
                     "banner": "banner_sauron_the_deceiver",
-                    "characterName": "Annatar"
+                    "characterName": "Annatar",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "the_necromancer",
@@ -166,7 +179,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> From Dol Guldur, <sprite name=\"mithril\"> seeps endlessly; dark art <sprite name=\"mage\"> and heavy infantry grind the forest to shadow. No agents <sprite name=\"agent\"> and no emissaries <sprite name=\"emmissary\"> — he does not parley; he waits.",
                     "subdeckId": "the_necromancer",
                     "banner": "banner_sauron_the_necromancer",
-                    "characterName": "The Necromancer"
+                    "characterName": "The Necromancer",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "shadow_of_the_east",
@@ -175,7 +189,8 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> The shadow rides east on tireless horse <sprite name=\"mounts\"> — cavalry and agents <sprite name=\"agent\"> spreading darkness before armies know it has arrived. No spells <sprite name=\"mage\"> and no envoys <sprite name=\"emmissary\">; he moves too fast for councils.",
                     "subdeckId": "shadow_of_the_east",
                     "banner": "banner_shadow_of_the_east",
-                    "characterName": "Shadow of the East"
+                    "characterName": "Shadow of the East",
+                    "introVideoText": ""
                 },
                 {
                     "variantId": "the_iron_crown",
@@ -184,10 +199,12 @@
                     "deckIdentity": "<sprite name=\"deck\"> <i>Deck identity:</i> The Iron Crown forges strength in iron <sprite name=\"iron\"> and commands columns that do not break <sprite name=\"fortified\">. No spy <sprite name=\"agent\"> and few diplomats <sprite name=\"emmissary\">; it does not negotiate — it occupies.",
                     "subdeckId": "the_iron_crown",
                     "banner": "banner_the_iron_crown",
-                    "characterName": "The Iron Crown"
+                    "characterName": "The Iron Crown",
+                    "introVideoText": ""
                 }
             ],
             "subdeckId": "the_dark_eye",
+            "introVideoText": "",
             "noScenarioStart": {
                 "terrain": 10,
                 "startingArmySize": 0,

@@ -207,7 +207,7 @@ public class PalantirOfOrthancAction : EventAction
             DeckManager deckManager = DeckManager.Instance;
             Board board = Board.Instance;
             if (game == null || deckManager == null || board == null || game.player == null) return false;
-            if (character.GetOwner() != game.player || !deckManager.HasDeckFor(game.player) || deckManager.GetHand(game.player).Count >= deckManager.GetHandSize()) return false;
+            if (character.GetOwner() != game.player || !deckManager.HasDeckFor(game.player)) return false;
 
             CardData peek = deckManager.GetDrawPile(game.player).Take(3).FirstOrDefault(card => card != null);
             if (peek == null) return false;
@@ -240,7 +240,6 @@ public class PalantirOfOrthancAction : EventAction
             return character != null && game != null && deckManager != null && game.player != null
                 && character.GetOwner() == game.player
                 && deckManager.HasDeckFor(game.player)
-                && deckManager.GetHand(game.player).Count < deckManager.GetHandSize()
                 && deckManager.GetDrawPile(game.player).Take(3).Any(card => card != null);
         };
 
@@ -618,8 +617,8 @@ public class VeinOfTrueSilverAction : EventAction
             PlayableLeader player = game.player;
             if (player == null || owner != player || !deckManager.HasDeckFor(player)) return false;
 
-            var hand = deckManager.GetHand(player);
-            CardData discardTarget = hand.FirstOrDefault(card => card != null && !card.IsEncounterCard() && !string.Equals(card.name, "Vein of True Silver", StringComparison.OrdinalIgnoreCase));
+            var fullDeck = deckManager.GetFullDeck(player);
+            CardData discardTarget = fullDeck.FirstOrDefault(card => card != null && !card.IsEncounterCard() && !string.Equals(card.name, "Vein of True Silver", StringComparison.OrdinalIgnoreCase));
             if (discardTarget == null) return false;
 
             CardData balrog = deckManager.FindCardByNameForLeader(player, "Balrog");
@@ -644,7 +643,7 @@ public class VeinOfTrueSilverAction : EventAction
             if (owner == null || game == null || deckManager == null || game.player == null) return false;
             if (owner != game.player || !deckManager.HasDeckFor(game.player)) return false;
 
-            bool hasReplaceableCard = deckManager.GetHand(game.player)
+            bool hasReplaceableCard = deckManager.GetFullDeck(game.player)
                 .Any(card => card != null && !card.IsEncounterCard() && !string.Equals(card.name, "Vein of True Silver", StringComparison.OrdinalIgnoreCase));
             CardData balrog = deckManager.FindCardByNameForLeader(game.player, "Balrog");
             return hasReplaceableCard && balrog != null && balrog.IsEncounterCard();
@@ -1142,13 +1141,7 @@ public class TheHiddenScriptAction : EventAction
 
             artifactHex.RevealArtifact();
 
-            int drawn = 0;
-            if (character.GetOwner() == game.player && deckManager.TryDrawCard(game.player, out _))
-            {
-                drawn = 1;
-            }
-
-            MessageDisplayNoUI.ShowMessage(character.hex, character, $"The Hidden Script reveals an artifact site{(drawn > 0 ? " and draws 1 card." : ".")}", Color.magenta);
+            MessageDisplayNoUI.ShowMessage(character.hex, character, "The Hidden Script reveals an artifact site.", Color.magenta);
             return true;
         };
 
@@ -1437,7 +1430,6 @@ public class CouncilInAShutteredHallAction : EventAction
             DeckManager deckManager = DeckManager.Instance;
             if (game == null || deckManager == null || game.player == null) return false;
             if (character.GetOwner() != game.player || !deckManager.HasDeckFor(game.player)) return false;
-            if (deckManager.GetHand(game.player).Count >= deckManager.GetHandSize()) return false;
 
             CardData peek = deckManager.GetDrawPile(game.player).Take(3).FirstOrDefault(card => card != null);
             if (peek == null) return false;
@@ -1462,7 +1454,6 @@ public class CouncilInAShutteredHallAction : EventAction
             DeckManager deckManager = DeckManager.Instance;
             return character != null && game != null && deckManager != null && game.player != null && character.GetOwner() == game.player
                 && deckManager.HasDeckFor(game.player)
-                && deckManager.GetHand(game.player).Count < deckManager.GetHandSize()
                 && deckManager.GetDrawPile(game.player).Take(3).Any(card => card != null);
         };
 
@@ -2444,7 +2435,6 @@ public class PipeweedMonopolyAction : EventAction
             {
                 foreach (string cardName in DrawCardNames)
                 {
-                    if (deckManager.GetHand(playerLeader).Count >= deckManager.GetHandSize()) break;
                     CardData card = deckManager.FindCardByNameForLeader(playerLeader, cardName);
                     if (card != null && deckManager.TryAddCardToHand(playerLeader, card)) drawn++;
                 }

@@ -70,26 +70,9 @@ public class CounselToElrond : CharacterAction
             int missingHealth = Mathf.Max(0, 100 - target.health);
             target.Heal(missingHealth);
 
-            string drawText = string.Empty;
-            if (missingHealth > 50)
-            {
-                Game game = Game.Instance;
-                DeckManager deckManager = DeckManager.Instance;
-                if (game != null && deckManager != null && character.GetOwner() == game.player && deckManager.HasDeckFor(game.player))
-                {
-                    if (deckManager.GetHand(game.player).Count < deckManager.GetHandSize())
-                    {
-                        if (deckManager.TryDrawCard(game.player, out _))
-                        {
-                            drawText = " Drew 1 card for deep wounds.";
-                        }
-                    }
-                }
-            }
-
             target.ApplyStatusEffect(StatusEffectEnum.Hope, 2);
 
-            MessageDisplayNoUI.ShowMessage(character.hex, character, $"{target.characterName} is fully healed.{drawText} Hope (2).", Color.cyan);
+            MessageDisplayNoUI.ShowMessage(character.hex, character, $"{target.characterName} is fully healed. Hope (2).", Color.cyan);
             return true;
         }
 

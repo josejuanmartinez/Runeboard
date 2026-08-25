@@ -364,7 +364,6 @@ public class Game : MonoBehaviour
         if (deckManager == null) yield break;
 
         deckManager.InitializeHandsForCurrentGame();
-        deckManager.RefreshHumanPlayerHandUI();
         FindFirstObjectByType<ActionsManager>()?.RefreshInteractableState();
     }
 
@@ -644,8 +643,6 @@ public class Game : MonoBehaviour
                 yield return AITurnController.ExecuteLeaderTurn(npl);
                 if (currentlyPlaying == player)
                 {
-                    DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
-                    deckManager?.RefreshHumanPlayerHandUI();
                     FindFirstObjectByType<ActionsManager>()?.RefreshInteractableState();
                 }
                 // Explicit frame boundary between leaders in addition to the AI scoring budget.
@@ -822,16 +819,12 @@ public class Game : MonoBehaviour
     {
         SetCanvasGroupVisible(selectedCharacterIconCanvasGroup, false);
         SetCanvasGroupVisible(actionsCanvasGroup, false);
-        DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
-        deckManager?.SetHumanHandVisible(false);
         nextTurnButton.enabled = false;
     }
     private void ShowHumanPlayerWidgetsWidgets()
     {
         SetCanvasGroupVisible(selectedCharacterIconCanvasGroup, true);
         SetCanvasGroupVisible(actionsCanvasGroup, true);
-        DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
-        deckManager?.SetHumanHandVisible(true);
         nextTurnButton.enabled = true;
     }
 
@@ -1065,7 +1058,7 @@ public class Game : MonoBehaviour
         DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
         if (deckManager == null || player == null) return false;
 
-        IReadOnlyList<CardData> hand = deckManager.GetHand(player);
+        IReadOnlyList<CardData> hand = deckManager.GetFullDeck(player);
         if (hand == null || hand.Count == 0) return false;
 
         List<Character> unactioned = player.controlledCharacters

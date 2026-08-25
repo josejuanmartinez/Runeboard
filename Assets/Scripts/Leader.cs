@@ -132,7 +132,7 @@ public class Leader : Character
         DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : DeckManager.Instance;
         if (deckManager != null && this is PlayableLeader playable)
         {
-            deckManager.ReplenishHandForTurn(playable);
+            deckManager.RecycleDiscardPileIfExhausted(playable);
         }
 
         RunTurnStartResourceGrants();

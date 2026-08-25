@@ -136,7 +136,7 @@ public static class AITurnController
         Character actor = leader.controlledCharacters.FirstOrDefault(c => c != null && !c.killed);
         if (actor == null) return;
 
-        List<CardData> resourceCards = deckManager.GetHand(leader)
+        List<CardData> resourceCards = deckManager.GetFullDeck(leader)
             .Where(card => card != null && (card.GetCardType() == CardTypeEnum.Land || card.GetCardType() == CardTypeEnum.PC))
             .ToList();
 
@@ -144,7 +144,7 @@ public static class AITurnController
         {
             if (card == null) continue;
             if (!card.EvaluatePlayability(actor)) continue;
-            if (!deckManager.TryConsumeCard(leader, card.name, drawReplacement: false, out CardData consumedCard)) continue;
+            if (!deckManager.TryConsumeCard(leader, card.name, out CardData consumedCard)) continue;
             if (presentChosenCards) await PresentChosenCardAsync(leader, actor, consumedCard ?? card);
             bool succeeded = await ExecuteCardEffectForAiAsync(consumedCard, actor, actionsManager);
             if (succeeded)

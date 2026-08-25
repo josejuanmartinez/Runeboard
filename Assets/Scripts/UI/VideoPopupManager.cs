@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -28,7 +27,7 @@ public class VideoPopupManager : MonoBehaviour
     public CanvasGroup canvasGroup;
     public VideoPlayer videoPlayer;
     public RawImage videoDisplay;
-    public TextMeshProUGUI textWidget;
+    public TypewriterEffect scrollableText;
     public Button closeButton;
 
     [Header("Videos - Generic (no variant chosen)")]
@@ -93,9 +92,9 @@ public class VideoPopupManager : MonoBehaviour
         currentKey = key;
         Game.Instance?.NotifyStartupPopupShown();
 
-        if (textWidget != null)
+        if (scrollableText != null)
         {
-            textWidget.text = introText ?? string.Empty;
+            scrollableText.StartWriting(introText ?? string.Empty);
         }
 
         if (videoPlayer != null)
@@ -152,6 +151,8 @@ public class VideoPopupManager : MonoBehaviour
             videoPlayer.Stop();
             videoPlayer.clip = null;
         }
+
+        scrollableText?.Clear();
 
         SetContainerVisible(false);
         IsShowing = false;

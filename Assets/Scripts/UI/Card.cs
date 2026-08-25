@@ -1133,7 +1133,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         CardData playedCard = cardData;
         IsPlayInProgress = true;
 
-        if (!deckManager.TryConsumeCard(playerLeader, playedCard.name, false, out CardData consumedCard))
+        if (!deckManager.TryConsumeCard(playerLeader, playedCard.name, out CardData consumedCard))
         {
             Debug.LogWarning($"[CardPlay/Environmental] '{cardData.name}': deckManager.TryConsumeCard failed.");
             IsPlayInProgress = false;
@@ -1354,7 +1354,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             }
             UpdateInteractableState();
             IsPlayInProgress = false;
-            deckManager?.RefreshHumanPlayerHandUI();
             if (gameObject != null) Destroy(gameObject);
         }
     }
@@ -1832,12 +1831,10 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             return (false, false);
         }
 
-        // Try to consume the card from hand first
         // We use the card name now as the ID
-        bool drawReplacementCard = false;
-        if (!deckManager.TryConsumeActionCard(playerLeader, actionRef, drawReplacementCard, out _, cardData.name))
+        if (!deckManager.TryConsumeActionCard(playerLeader, actionRef, out _, cardData.name))
         {
-            Debug.LogWarning($"[CardPlay/Action] '{cardData.name}': deckManager.TryConsumeActionCard failed (actionRef='{actionRef}') — card not found in hand under that ref/name, or DeckManager rejected the consume.");
+            Debug.LogWarning($"[CardPlay/Action] '{cardData.name}': deckManager.TryConsumeActionCard failed (actionRef='{actionRef}') — card not found in the leader's deck under that ref/name, or DeckManager rejected the consume.");
             return (false, false);
         }
 
@@ -1887,7 +1884,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             return Task.FromResult(false);
         }
 
-        if (!deckManager.TryConsumeCard(playerLeader, cardData.name, false, out _))
+        if (!deckManager.TryConsumeCard(playerLeader, cardData.name, out _))
         {
             Debug.LogWarning($"[CardPlay/Environmental] '{cardData.name}': deckManager.TryConsumeCard failed.");
             return Task.FromResult(false);
@@ -1932,8 +1929,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             return false;
         }
 
-        bool drawReplacementCard = false;
-        if (!deckManager.TryConsumeCard(playerLeader, cardData.name, drawReplacementCard, out _))
+        if (!deckManager.TryConsumeCard(playerLeader, cardData.name, out _))
         {
             Debug.LogWarning($"[CardPlay/Encounter] '{cardData.name}': deckManager.TryConsumeCard failed.");
             return false;
@@ -2055,8 +2051,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             return Task.FromResult(false);
         }
 
-        bool drawReplacementCard = false;
-        if (!deckManager.TryConsumeCard(playerLeader, cardData.name, drawReplacementCard, out _))
+        if (!deckManager.TryConsumeCard(playerLeader, cardData.name, out _))
         {
             Debug.LogWarning($"[CardPlay/Character] '{cardData.name}': deckManager.TryConsumeCard failed.");
             return Task.FromResult(false);

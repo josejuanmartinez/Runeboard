@@ -772,7 +772,7 @@ public class SituationCardsUI : MonoBehaviour
                 bool consumedEnv = offer.Source == SituationCardOfferSource.AI
                     ? DeckManager.Instance.TryConsumeActionCardFromFullDeck(leader, envActionRef, cardData, out _)
                     : DeckManager.Instance.TryAddCardToHand(leader, cardData)
-                        && DeckManager.Instance.TryConsumeCard(leader, cardData.name, false, out _);
+                        && DeckManager.Instance.TryConsumeCard(leader, cardData.name, out _);
                 if (!consumedEnv)
                 {
                     Debug.Log($"[SituationCards] click aborted — could not consume environmental card '{cardData.name}' from {offer.Source} source");
@@ -808,13 +808,12 @@ public class SituationCardsUI : MonoBehaviour
                 return;
             }
 
-            // Route through the normal hand-consume path so resource costs, discard-pile
-            // bookkeeping, and card history are applied exactly as they are for a card
-            // played straight out of hand.
+            // Route through the normal consume path so resource costs, discard-pile bookkeeping,
+            // and card history are applied exactly as they are for a card played directly.
             bool consumed = offer.Source == SituationCardOfferSource.AI
                 ? DeckManager.Instance.TryConsumeActionCardFromFullDeck(leader, actionRef, cardData, out _)
                 : DeckManager.Instance.TryAddCardToHand(leader, cardData)
-                    && DeckManager.Instance.TryConsumeActionCard(leader, actionRef, false, out _, cardData.name);
+                    && DeckManager.Instance.TryConsumeActionCard(leader, actionRef, out _, cardData.name);
             if (!consumed)
             {
                 Debug.Log($"[SituationCards] click aborted — could not consume '{cardData.name}' from {offer.Source} source (actionRef={actionRef})");

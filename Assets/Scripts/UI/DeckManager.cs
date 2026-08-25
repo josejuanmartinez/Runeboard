@@ -962,11 +962,15 @@ public class DeckManager : MonoBehaviour
     private class PlayerDeckState
     {
         public string deckId;
+        // Every card the leader currently holds or could still play this game. There used to be
+        // a separate hand/drawPile split (a fixed-size "hand" you drew into, gated behind a
+        // handSize cap) but nothing ever rendered it as a UI tray — every consumer (AI scoring,
+        // human card play, opportunity cards) already treated the two lists as one combined pool.
+        // Merged into a single list to drop the replenish/guarantee machinery that only existed
+        // to keep that now-invisible split populated.
         public readonly List<CardData> drawPile = new();
-        public readonly List<CardData> hand = new();
         public readonly List<CardData> discardPile = new();
         public readonly List<CardData> situationPool = new List<CardData>();
-        public int turnsWithoutRegionCard;
     }
 
     public static DeckManager Instance { get; private set; }
@@ -1138,13 +1142,6 @@ public class DeckManager : MonoBehaviour
 
         InitializeHands(leaders);
         InitializeNonPlayableLeaderHands(game.npcs);
-        if (game.player != null && playerDecks.TryGetValue(game.player, out PlayerDeckState humanState))
-        {
-            EnsureRegionCardInHand(humanState);
-            humanState.turnsWithoutRegionCard = HandHasRegionCard(humanState) ? 0 : 1;
-            EnsureSharedBaseCardInHand(humanState);
-        }
-        RefreshHumanPlayerHandUI();
         return true;
     }
 
@@ -1181,22 +1178,17 @@ public class DeckManager : MonoBehaviour
         }
     }
 
-    public IReadOnlyList<CardData> GetHand(Leader leader)
-    {
-        if (leader == null) return Array.Empty<CardData>();
-        return playerDecks.TryGetValue(leader, out PlayerDeckState state) ? state.hand : Array.Empty<CardData>();
-    }
-
-    // Every card this leader currently holds or could still draw this game — the live,
-    // per-instance pool TryConsumeActionCardFromFullDeck actually operates on. Used by AI
-    // full-deck scoring (AITurnController), unlike GetHand which is what the human hand UI
-    // uses. Deliberately excludes discardPile (already played, not consumable again until a
-    // reshuffle moves it back into drawPile) and situationPool (a separate non-drawable
+    // Every card this leader currently holds or could still play this game — the live,
+    // per-instance pool both AI full-deck scoring (AITurnController) and human card play
+    // operate on. Deliberately excludes discardPile (already played, not consumable again until
+    // a reshuffle moves it back into drawPile) and situationPool (a separate non-drawable
     // opportunity-card pool).
     public IReadOnlyList<CardData> GetFullDeck(Leader leader)
     {
         if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return Array.Empty<CardData>();
-        return state.drawPile.Concat(state.hand).ToList();
+        // Snapshot rather than the live list — callers (AI scoring) hold this across yields
+        // while consumption elsewhere can mutate state.drawPile concurrently.
+        return state.drawPile.ToList();
     }
 
     // Score for ranking player-facing Opportunity Cards. Deliberately not a reuse of
@@ -1436,60 +1428,31 @@ public class DeckManager : MonoBehaviour
         return handSize;
     }
 
-    public bool TryDrawCard(Leader leader, out CardData card)
-    {
-        card = null;
-        if (leader == null) return false;
-        if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
-
-        if (state.drawPile.Count == 0 && state.discardPile.Count > 0)
-        {
-            state.drawPile.AddRange(state.discardPile);
-            state.discardPile.Clear();
-            ApplyBalancedDrawOrdering(state.drawPile);
-        }
-
-        if (state.drawPile.Count == 0) return false;
-
-        EnsureSubdeckCardIfNeeded(state);
-        card = state.drawPile[0];
-        card.hasShownHandAnimation = false;
-        state.drawPile.RemoveAt(0);
-
-        // Encounters are world content now (Board.SpawnEncounters) — ShouldIncludeCardInDeck
-        // already keeps them out of drawPile entirely, so no diversion is needed here anymore.
-
-        state.hand.Add(card);
-        RefreshHumanPlayerHandUIIfHuman(leader);
-        return true;
-    }
-
     public bool TryPlayCard(PlayableLeader leader, string cardName, out CardData card)
     {
         card = null;
         if (leader == null || string.IsNullOrWhiteSpace(cardName)) return false;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        int index = state.hand.FindIndex(x => x != null && CardNameUtility.Equals(x.name, cardName));
+        int index = state.drawPile.FindIndex(x => x != null && CardNameUtility.Equals(x.name, cardName));
         if (index < 0) return false;
 
-        card = state.hand[index];
-        state.hand.RemoveAt(index);
+        card = state.drawPile[index];
+        state.drawPile.RemoveAt(index);
         state.discardPile.Add(card);
-        RefreshHumanPlayerHandUIIfHuman(leader);
         return true;
     }
 
-    public bool TryConsumeCard(Leader leader, string cardName, bool drawReplacement, out CardData consumedCard)
+    public bool TryConsumeCard(Leader leader, string cardName, out CardData consumedCard)
     {
         consumedCard = null;
         if (leader == null || string.IsNullOrWhiteSpace(cardName)) return false;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        int index = state.hand.FindIndex(x => x != null && CardNameUtility.Equals(x.name, cardName));
+        int index = state.drawPile.FindIndex(x => x != null && CardNameUtility.Equals(x.name, cardName));
         if (index < 0) return false;
 
-        consumedCard = state.hand[index];
+        consumedCard = state.drawPile[index];
         if (consumedCard == null) return false;
         if (!consumedCard.MeetsResourceRequirements(leader))
         {
@@ -1497,19 +1460,9 @@ public class DeckManager : MonoBehaviour
             return false;
         }
 
-        state.hand.RemoveAt(index);
+        state.drawPile.RemoveAt(index);
         state.discardPile.Add(consumedCard);
         ApplyCardCosts(leader, consumedCard);
-
-        if (drawReplacement)
-        {
-            TryDrawCard(leader, out _);
-        }
-        else
-        {
-            RefreshHumanPlayerHandUIIfHuman(leader);
-        }
-
         return true;
     }
 
@@ -1519,15 +1472,14 @@ public class DeckManager : MonoBehaviour
         if (leader == null || string.IsNullOrWhiteSpace(cardName)) return false;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        int index = state.hand.FindIndex(x => x != null && CardNameUtility.Equals(x.name, cardName));
+        int index = state.drawPile.FindIndex(x => x != null && CardNameUtility.Equals(x.name, cardName));
         if (index < 0) return false;
 
-        discardedCard = state.hand[index];
+        discardedCard = state.drawPile[index];
         if (discardedCard == null || discardedCard.IsEncounterCard()) return false;
 
-        state.hand.RemoveAt(index);
+        state.drawPile.RemoveAt(index);
         state.discardPile.Add(discardedCard);
-        RefreshHumanPlayerHandUIIfHuman(leader);
         return true;
     }
 
@@ -1536,8 +1488,7 @@ public class DeckManager : MonoBehaviour
         if (leader == null || card == null) return false;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        state.hand.Add(CloneCard(card));
-        RefreshHumanPlayerHandUIIfHuman(leader);
+        state.drawPile.Add(CloneCard(card));
         return true;
     }
 
@@ -1560,8 +1511,7 @@ public class DeckManager : MonoBehaviour
                 string.Equals(cardRef, actionClassName, StringComparison.OrdinalIgnoreCase);
         }
 
-        return state.hand.Any(Matches)
-            || state.drawPile.Any(Matches)
+        return state.drawPile.Any(Matches)
             || state.discardPile.Any(Matches);
     }
 
@@ -1569,7 +1519,7 @@ public class DeckManager : MonoBehaviour
     {
         if (leader == null) return true;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
-        return FindMatchingActionCardIndex(state.hand, actionClassName, selectedCharacter, resourceCheck, conditionCheck) >= 0;
+        return FindMatchingActionCardIndex(state.drawPile, actionClassName, selectedCharacter, resourceCheck, conditionCheck) >= 0;
     }
 
     public bool TryGetActionCardInHand(Leader leader, string actionClassName, out CardData card, Character selectedCharacter = null, Func<Character, bool> resourceCheck = null, Func<Character, bool> conditionCheck = null)
@@ -1578,9 +1528,9 @@ public class DeckManager : MonoBehaviour
         if (leader == null) return false;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        int handIndex = FindMatchingActionCardIndex(state.hand, actionClassName, selectedCharacter, resourceCheck, conditionCheck);
-        if (handIndex < 0) return false;
-        card = state.hand[handIndex];
+        int index = FindMatchingActionCardIndex(state.drawPile, actionClassName, selectedCharacter, resourceCheck, conditionCheck);
+        if (index < 0) return false;
+        card = state.drawPile[index];
         return card != null;
     }
 
@@ -1593,32 +1543,27 @@ public class DeckManager : MonoBehaviour
         return 0;
     }
 
-    public bool TryConsumeActionCard(Leader leader, string actionClassName, bool drawReplacement, out CardData consumedCard, string preferredCardName = null)
+    public bool TryConsumeActionCard(Leader leader, string actionClassName, out CardData consumedCard, string preferredCardName = null)
     {
         consumedCard = null;
         if (leader == null) return true;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        return TryConsumeActionCardFromList(leader, state, state.hand, actionClassName, preferredCardName, drawReplacement, out consumedCard);
+        return TryConsumeActionCardFromDeck(leader, state, actionClassName, preferredCardName, out consumedCard);
     }
 
-    // AI full-deck scoring (see GetFullDeck/AITurnController) can select a card that hasn't
-    // been drawn into hand yet — this generalizes consumption to also search drawPile.
-    // TryConsumeActionCard above stays hand-only, since the human's play-from-hand path
-    // must never reach into an undrawn pile.
     public bool TryConsumeActionCardFromFullDeck(Leader leader, string actionClassName, CardData preferredCard, out CardData consumedCard)
     {
         consumedCard = null;
         if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
-        string preferredCardName = preferredCard != null ? preferredCard.name : null;
-        if (TryConsumeActionCardFromList(leader, state, state.hand, actionClassName, preferredCardName, drawReplacement: false, out consumedCard)) return true;
-        return TryConsumeActionCardFromList(leader, state, state.drawPile, actionClassName, preferredCardName, drawReplacement: false, out consumedCard);
+        return TryConsumeActionCardFromDeck(leader, state, actionClassName, preferredCard != null ? preferredCard.name : null, out consumedCard);
     }
 
-    private bool TryConsumeActionCardFromList(Leader playableLeader, PlayerDeckState state, List<CardData> sourceList, string actionClassName, string preferredCardName, bool drawReplacement, out CardData consumedCard)
+    private bool TryConsumeActionCardFromDeck(Leader playableLeader, PlayerDeckState state, string actionClassName, string preferredCardName, out CardData consumedCard)
     {
         consumedCard = null;
+        List<CardData> sourceList = state.drawPile;
 
         int index = -1;
         if (!string.IsNullOrWhiteSpace(preferredCardName))
@@ -1636,8 +1581,8 @@ public class DeckManager : MonoBehaviour
         {
             Debug.LogWarning($"[DeckManager] TryConsumeActionCard: no card matching actionRef='{actionClassName}'" +
                 (string.IsNullOrWhiteSpace(preferredCardName) ? string.Empty : $" preferredCardName='{preferredCardName}'") +
-                $" found in source list of {sourceList.Count} card(s) for '{playableLeader?.characterName}'." +
-                " Check the card is actually in that list, and that IsConsumableEffectCard() covers its CardTypeEnum.");
+                $" found in deck of {sourceList.Count} card(s) for '{playableLeader?.characterName}'." +
+                " Check the card is actually in that leader's deck, and that IsConsumableEffectCard() covers its CardTypeEnum.");
             return false;
         }
 
@@ -1659,16 +1604,6 @@ public class DeckManager : MonoBehaviour
         sourceList.RemoveAt(index);
         state.discardPile.Add(consumedCard);
         ApplyCardCosts(playableLeader, consumedCard);
-
-        if (drawReplacement)
-        {
-            TryDrawCard(playableLeader, out _);
-        }
-        else
-        {
-            RefreshHumanPlayerHandUIIfHuman(playableLeader);
-        }
-
         return true;
     }
 
@@ -1735,8 +1670,7 @@ public class DeckManager : MonoBehaviour
 
         CardData returnedCard = state.discardPile[discardIndex];
         state.discardPile.RemoveAt(discardIndex);
-        state.hand.Add(returnedCard);
-        RefreshHumanPlayerHandUIIfHuman(leader);
+        state.drawPile.Add(returnedCard);
         return true;
     }
 
@@ -1751,81 +1685,23 @@ public class DeckManager : MonoBehaviour
 
         CardData returnedCard = state.discardPile[discardIndex];
         state.discardPile.RemoveAt(discardIndex);
-        state.hand.Add(returnedCard);
-        RefreshHumanPlayerHandUIIfHuman(leader);
+        state.drawPile.Add(returnedCard);
         return true;
     }
 
-    public bool TryReshuffleHandIntoDeckAndRedraw(PlayableLeader leader, int targetHandSize)
+    // Recycles the discard pile back into the draw pile once it's exhausted, so cards already
+    // played eventually become available again instead of the deck shrinking to nothing over a
+    // long game. Called once per leader turn (see Leader.RefreshForNewTurn).
+    public bool RecycleDiscardPileIfExhausted(PlayableLeader leader)
     {
         if (leader == null) return false;
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
+        if (state.drawPile.Count > 0 || state.discardPile.Count == 0) return false;
 
-        state.drawPile.AddRange(state.hand);
-        state.hand.Clear();
         state.drawPile.AddRange(state.discardPile);
         state.discardPile.Clear();
-
         ApplyBalancedDrawOrdering(state.drawPile);
-        RefillHandToCount(state, targetHandSize, leader);
-        EnsureSharedBaseCardInHand(state);
-        RefreshHumanPlayerHandUIIfHuman(leader);
         return true;
-    }
-
-    public bool ReplenishHandForTurn(PlayableLeader leader)
-    {
-        if (leader == null) return false;
-        if (!loaded && !InitializeFromResources()) return false;
-        if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
-
-        RefillHandToCount(state, handSize, leader);
-        ApplyRegionCardGuarantee(state);
-        EnsureSharedBaseCardInHand(state);
-        RefreshHumanPlayerHandUIIfHuman(leader);
-        return true;
-    }
-
-    // There is no hand-of-cards tray anymore — the player's hand is game state only
-    // (drawn/played/discarded via the Try*Card methods below) and is never rendered as a
-    // standing UI widget. cardBloomWheel is reserved exclusively for SituationCardsUI's
-    // opportunity-card presentation (see SituationCardsUI.ShowBloomCoroutine). These three
-    // methods are kept as no-op hooks so the many hand-mutation call sites below don't need
-    // to be touched if a hand display is ever reintroduced.
-    public void RefreshHumanPlayerHandUI() { }
-
-    public void ClearHumanPlayerHandUI() { }
-
-    public void SetHumanHandVisible(bool visible) { }
-
-    private void RefillHandToCount(PlayerDeckState state, int targetCount, Leader leader = null)
-    {
-        if (state == null) return;
-
-        while (state.hand.Count > targetCount)
-        {
-            CardData last = state.hand[state.hand.Count - 1];
-            state.hand.RemoveAt(state.hand.Count - 1);
-            state.drawPile.Add(last);
-        }
-
-        while (state.hand.Count < targetCount)
-        {
-        if (state.drawPile.Count == 0 && state.discardPile.Count > 0)
-        {
-            state.drawPile.AddRange(state.discardPile);
-            state.discardPile.Clear();
-            ApplyBalancedDrawOrdering(state.drawPile);
-        }
-
-            if (state.drawPile.Count == 0) break;
-            EnsureSubdeckCardIfNeeded(state);
-            CardData card = state.drawPile[0];
-            state.drawPile.RemoveAt(0);
-            // Encounters are world content now (Board.SpawnEncounters) — ShouldIncludeCardInDeck
-            // already keeps them out of drawPile entirely, so no diversion is needed here anymore.
-            state.hand.Add(card);
-        }
     }
 
     public static void NotifyEncounterPlaced(Hex targetHex)
@@ -1853,104 +1729,6 @@ public class DeckManager : MonoBehaviour
         LogManager.Log(LogCategory.Event, Game.Instance?.currentlyPlaying?.characterName, null, text);
     }
 
-    private static bool HandHasRegionCard(PlayerDeckState state)
-    {
-        for (int i = 0; i < state.hand.Count; i++)
-        {
-            if (state.hand[i] != null && state.hand[i].GetCardType() == CardTypeEnum.Land) return true;
-        }
-        return false;
-    }
-
-    private void EnsureRegionCardInHand(PlayerDeckState state)
-    {
-        if (state == null || HandHasRegionCard(state)) return;
-
-        int landIndex = state.drawPile.FindIndex(c => c != null && c.GetCardType() == CardTypeEnum.Land);
-        if (landIndex < 0)
-        {
-            int discardLandIndex = state.discardPile.FindIndex(c => c != null && c.GetCardType() == CardTypeEnum.Land);
-            if (discardLandIndex < 0) return;
-            CardData fromDiscard = state.discardPile[discardLandIndex];
-            state.discardPile.RemoveAt(discardLandIndex);
-            state.drawPile.Insert(0, fromDiscard);
-            landIndex = 0;
-        }
-
-        CardData land = state.drawPile[landIndex];
-        state.drawPile.RemoveAt(landIndex);
-
-        if (state.hand.Count >= handSize)
-        {
-            int returnIndex = state.hand.FindLastIndex(c => c != null && c.GetCardType() != CardTypeEnum.Land);
-            if (returnIndex < 0) returnIndex = state.hand.Count - 1;
-            CardData returnCard = state.hand[returnIndex];
-            state.hand.RemoveAt(returnIndex);
-            state.drawPile.Insert(0, returnCard);
-        }
-
-        state.hand.Add(land);
-    }
-
-    private void ApplyRegionCardGuarantee(PlayerDeckState state)
-    {
-        if (state == null) return;
-        if (HandHasRegionCard(state))
-        {
-            state.turnsWithoutRegionCard = 0;
-        }
-        else
-        {
-            state.turnsWithoutRegionCard++;
-            if (state.turnsWithoutRegionCard >= 2)
-            {
-                EnsureRegionCardInHand(state);
-                state.turnsWithoutRegionCard = 0;
-            }
-        }
-    }
-
-    private static bool HandHasSharedBaseCard(PlayerDeckState state)
-    {
-        if (state == null) return false;
-        return state.hand.Any(c => c != null
-            && string.Equals(c.deckId, "shared_base", StringComparison.OrdinalIgnoreCase));
-    }
-
-    private void EnsureSharedBaseCardInHand(PlayerDeckState state)
-    {
-        if (state == null || HandHasSharedBaseCard(state)) return;
-
-        int drawIndex = state.drawPile.FindIndex(c => c != null
-            && string.Equals(c.deckId, "shared_base", StringComparison.OrdinalIgnoreCase));
-
-        if (drawIndex < 0)
-        {
-            int discardIndex = state.discardPile.FindIndex(c => c != null
-                && string.Equals(c.deckId, "shared_base", StringComparison.OrdinalIgnoreCase));
-            if (discardIndex < 0) return;
-            CardData fromDiscard = state.discardPile[discardIndex];
-            state.discardPile.RemoveAt(discardIndex);
-            state.drawPile.Insert(0, fromDiscard);
-            drawIndex = 0;
-        }
-
-        CardData sharedCard = state.drawPile[drawIndex];
-        state.drawPile.RemoveAt(drawIndex);
-
-        if (state.hand.Count >= handSize)
-        {
-            // Make room by returning a non-shared-base card to the top of the draw pile.
-            int returnIndex = state.hand.FindLastIndex(c => c != null
-                && !string.Equals(c.deckId, "shared_base", StringComparison.OrdinalIgnoreCase));
-            if (returnIndex < 0) returnIndex = state.hand.Count - 1;
-            CardData returnCard = state.hand[returnIndex];
-            state.hand.RemoveAt(returnIndex);
-            state.drawPile.Insert(0, returnCard);
-        }
-
-        state.hand.Add(sharedCard);
-    }
 
     public CardData FindCardByNameForLeader(PlayableLeader leader, string cardName)
     {
@@ -2446,7 +2224,9 @@ public class DeckManager : MonoBehaviour
             || cardType == CardTypeEnum.Land
             || cardType == CardTypeEnum.PC
             || cardType == CardTypeEnum.Environmental
-            || cardType == CardTypeEnum.Spell;
+            || cardType == CardTypeEnum.Spell
+            || cardType == CardTypeEnum.Army
+            || cardType == CardTypeEnum.Object;
         if (!supportedType) return false;
 
         return !string.IsNullOrWhiteSpace(card.GetActionRef());
@@ -2802,12 +2582,11 @@ public class DeckManager : MonoBehaviour
         }
 
         ApplyBalancedDrawOrdering(state.drawPile);
-        RefillHandToCount(state, handSize, leader);
 
         PopulateSituationPool(state, deckId);
 
-        // Snapshot the deck's required-material distribution now, while drawPile+hand together
-        // still equal the complete composed deck (nothing has been played/discarded yet) — see
+        // Snapshot the deck's required-material distribution now, while drawPile still equals
+        // the complete composed deck (nothing has been played/discarded yet) — see
         // NationBlackboard. Doing this later (e.g. lazily on first AI turn) would risk
         // computing it from a partial deck if cards had already moved to the discard pile.
         NationBlackboard.SetDeckResourceShare(leader, ComputeDeckResourceShare(state));
@@ -2831,7 +2610,7 @@ public class DeckManager : MonoBehaviour
             [ProducesEnum.mithril] = 0f,
         };
 
-        foreach (CardData card in state.drawPile.Concat(state.hand))
+        foreach (CardData card in state.drawPile)
         {
             if (card == null) continue;
             totals[ProducesEnum.leather] += card.leatherRequired;
@@ -2876,28 +2655,6 @@ public class DeckManager : MonoBehaviour
         if (leafPool != null) merged.AddRange(leafPool);
         Shuffle(merged);
         destination.AddRange(merged);
-    }
-
-    private void EnsureSubdeckCardIfNeeded(PlayerDeckState state)
-    {
-        if (state == null || state.drawPile.Count == 0) return;
-        if (string.IsNullOrWhiteSpace(state.deckId)) return;
-        if (!deckManifestById.TryGetValue(state.deckId, out DeckManifestEntry entry)) return;
-        if (string.IsNullOrWhiteSpace(entry.parentDeckId)) return;
-
-        bool hasSubdeckCard = state.hand.Any(c => c != null
-            && string.Equals(c.deckId, state.deckId, StringComparison.OrdinalIgnoreCase));
-        if (hasSubdeckCard) return;
-
-        for (int i = 1; i < state.drawPile.Count; i++)
-        {
-            CardData candidate = state.drawPile[i];
-            if (candidate == null) continue;
-            if (!string.Equals(candidate.deckId, state.deckId, StringComparison.OrdinalIgnoreCase)) continue;
-            state.drawPile.RemoveAt(i);
-            state.drawPile.Insert(0, candidate);
-            return;
-        }
     }
 
     private static CardData TakeRandomCard(List<CardData> cards)
@@ -3187,13 +2944,6 @@ public class DeckManager : MonoBehaviour
             .ToList();
     }
 
-    private void RefreshHumanPlayerHandUIIfHuman(Leader leader)
-    {
-        if (leader == null) return;
-        Game game = FindFirstObjectByType<Game>();
-        if (game == null || game.player == null || leader != game.player) return;
-        RefreshHumanPlayerHandUI();
-    }
 
     private GameObject ResolveCardPrefab()
     {

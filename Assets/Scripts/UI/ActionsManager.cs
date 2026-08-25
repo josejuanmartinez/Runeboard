@@ -99,9 +99,10 @@ public class ActionsManager : MonoBehaviour
         currentCharacter = null;
     }
 
-    // No-op: there is no action-button panel in the scene right now (RefreshHumanPlayerHandUI's
-    // card-hand UI replaced it, see DeckManager). Kept because Board/Game/PopupManager still call
-    // it on turn/popup changes; remove those call sites too if this stays permanently unused.
+    // No-op: there is no action-button panel in the scene right now (card play routes through
+    // SituationCardsUI's opportunity-card bloom instead, see DeckManager). Kept because
+    // Board/Game/PopupManager still call it on turn/popup changes; remove those call sites too
+    // if this stays permanently unused.
     public void RefreshInteractableState()
     {
     }

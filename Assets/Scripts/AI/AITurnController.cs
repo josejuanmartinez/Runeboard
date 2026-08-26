@@ -34,7 +34,7 @@ public static class AITurnController
                 yield break;
             }
 
-        Task economyCardsTask = ConsumeAiResourceCardsAsync(leader, actionsManager, presentChosenCards);
+        Task economyCardsTask = ConsumeAiResourceCardsAsync(leader, actionsManager);
         while (!economyCardsTask.IsCompleted) yield return null;
         if (economyCardsTask.IsFaulted && economyCardsTask.Exception != null)
         {
@@ -124,7 +124,11 @@ public static class AITurnController
         return true;
     }
 
-    private static async Task ConsumeAiResourceCardsAsync(Leader leader, ActionsManager actionsManager, bool presentChosenCards)
+    // Never spotlighted through PresentChosenCardAsync, even when the human's own turn is
+    // autoplaying — this is bulk housekeeping that can clear the leader's entire backlog of
+    // Land/PC cards in one pass, and a ~1.2s popup per card would otherwise flood the screen
+    // with resource cards before any real character action gets a turn to show.
+    private static async Task ConsumeAiResourceCardsAsync(Leader leader, ActionsManager actionsManager)
     {
         if (leader == null || actionsManager == null) return;
 
@@ -145,12 +149,11 @@ public static class AITurnController
             if (card == null) continue;
             if (!card.EvaluatePlayability(actor)) continue;
             if (!deckManager.TryConsumeCard(leader, card.name, out CardData consumedCard)) continue;
-            if (presentChosenCards) await PresentChosenCardAsync(leader, actor, consumedCard ?? card);
-            bool succeeded = await ExecuteCardEffectForAiAsync(consumedCard, actor, actionsManager);
-            if (succeeded)
-            {
-                deckManager.ApplyMapRevealForPlayedCard(leader, consumedCard);
-            }
+            // No ApplyMapRevealForPlayedCard here: turn-start PC/region grants (see
+            // Board.TriggerTurnStartResourceGrants) already cover the leader's own controlled
+            // PCs and any region a character currently occupies — those aren't new discoveries,
+            // so nothing should reveal on the map when this pass plays them.
+            await ExecuteCardEffectForAiAsync(consumedCard, actor, actionsManager);
         }
     }
 
@@ -445,6 +448,11 @@ public static class AITurnController
         foreach (CardData card in fullDeck ?? deckManager.GetFullDeck(leader))
         {
             if (card == null || card.IsEncounterCard()) continue;
+            // Land/PC resource cards are handled exclusively by ConsumeAiResourceCardsAsync's
+            // guaranteed pre-pass, not by this per-character strategic pick — including them
+            // here would let the scorer redundantly re-pick (or starve out) what the pre-pass
+            // already decided.
+            if (card.GetCardType() == CardTypeEnum.Land || card.GetCardType() == CardTypeEnum.PC) continue;
             if (excluded != null && excluded.Contains(card)) continue;
             (CardData card, float score)? cardScore = ScoreCard(
                 leader, character, card, actionsManager, precomputed, preferredParameters, requirePlayable: true);
@@ -475,6 +483,11 @@ public static class AITurnController
         foreach (CardData card in fullDeck ?? deckManager.GetFullDeck(leader))
         {
             if (card == null || card.IsEncounterCard()) continue;
+            // Land/PC resource cards are handled exclusively by ConsumeAiResourceCardsAsync's
+            // guaranteed pre-pass, not by this per-character strategic pick — including them
+            // here would let the scorer redundantly re-pick (or starve out) what the pre-pass
+            // already decided.
+            if (card.GetCardType() == CardTypeEnum.Land || card.GetCardType() == CardTypeEnum.PC) continue;
             if (excluded != null && excluded.Contains(card)) continue;
             (CardData card, float score)? cardScore = ScoreCard(
                 leader, character, card, actionsManager, precomputed, preferredParameters, requirePlayable: true);

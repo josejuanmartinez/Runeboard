@@ -19,7 +19,6 @@ public class LogManager : MonoBehaviour
     public RectTransform content;
     public GameObject entryTemplate;
     public RectTransform collapsibleArea;
-    public Button collapseToggleButton;
     public ScrollRect scrollRect;
 
     [Header("Config")]
@@ -45,30 +44,13 @@ public class LogManager : MonoBehaviour
         Instance = this;
 
         colors = FindFirstObjectByType<Colors>();
-        if (entryTemplate != null) entryTemplate.SetActive(false);
-        if (collapseToggleButton != null) collapseToggleButton.onClick.AddListener(Toggle);
+        if (entryTemplate != null) entryTemplate.SetActive(false);     
     }
 
     public static void Log(LogCategory category, string nation, string character, string text)
     {
         if (Instance == null || string.IsNullOrWhiteSpace(text)) return;
         Instance.AddEntry(category, nation, character, text);
-    }
-
-    public void Show()
-    {
-        SetCollapsed(false);
-    }
-
-    public void Toggle()
-    {
-        SetCollapsed(!collapsed);
-    }
-
-    private void SetCollapsed(bool value)
-    {
-        collapsed = value;
-        if (collapsibleArea != null) collapsibleArea.gameObject.SetActive(!collapsed);
     }
 
     private void AddEntry(LogCategory category, string nation, string character, string text)

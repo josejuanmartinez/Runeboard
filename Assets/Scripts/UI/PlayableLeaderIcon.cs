@@ -142,9 +142,4 @@ public class PlayableLeaderIcon : MonoBehaviour
         }    
         
     }
-
-    public void ShowRumours()
-    {
-        LogManager.Instance?.Show();
-    }
 }

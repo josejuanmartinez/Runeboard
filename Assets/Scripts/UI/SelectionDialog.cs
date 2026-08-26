@@ -832,7 +832,7 @@ public class SelectionDialog : MonoBehaviour
     public Sprite GetCharacterIllustration(Character character)
     {
         if (character == null || string.IsNullOrWhiteSpace(character.characterName)) return null;
-        return illustrations != null ? illustrations.GetIllustrationByName(character.characterName) : null;
+        return illustrations != null ? illustrations.GetIllustrationByName(character) : null;
     }
 
 #if UNITY_EDITOR

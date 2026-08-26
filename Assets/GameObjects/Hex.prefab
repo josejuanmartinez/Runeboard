@@ -554,7 +554,7 @@ GameObject:
   - component: {fileID: 6035115553161494476}
   - component: {fileID: 6503754683226231157}
   m_Layer: 6
-  m_Name: hexBlackBackground
+  m_Name: hexFogAndBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -569,7 +569,7 @@ RectTransform:
   m_GameObject: {fileID: 5092193043244742623}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.95922315, y: 0.9499998, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8748821259972329801}
@@ -605,7 +605,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 04f33fce15d54cbd933231f31a56e89c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -854,7 +854,7 @@ RectTransform:
   m_GameObject: {fileID: 6502290787670773785}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.03, y: 1.04, z: 1}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6035115553161494476}
@@ -1475,11 +1475,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3255782884132336503, guid: 4270183a6ada5cb43873800d88eec097, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0.26030004
+      value: 0.0611
       objectReference: {fileID: 0}
     - target: {fileID: 3255782884132336503, guid: 4270183a6ada5cb43873800d88eec097, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0.39458752
+      value: 0.0541
       objectReference: {fileID: 0}
     - target: {fileID: 3255782884132336503, guid: 4270183a6ada5cb43873800d88eec097, type: 3}
       propertyPath: m_LocalScale.x
@@ -1523,11 +1523,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3255782884132336503, guid: 4270183a6ada5cb43873800d88eec097, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.008800417
+      value: -0.0013
       objectReference: {fileID: 0}
     - target: {fileID: 3255782884132336503, guid: 4270183a6ada5cb43873800d88eec097, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.136
+      value: -0.013
       objectReference: {fileID: 0}
     - target: {fileID: 3255782884132336503, guid: 4270183a6ada5cb43873800d88eec097, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

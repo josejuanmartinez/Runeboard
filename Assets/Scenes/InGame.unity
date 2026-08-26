@@ -1849,7 +1849,11 @@ MonoBehaviour:
   defaultCursor: {fileID: 2800000, guid: ab04032724a00754c842e3943b504645, type: 3}
   waitingCursor: {fileID: 0}
   disableCursor: {fileID: 2800000, guid: ba0e0e34f6a27c246b63b7c565d893b3, type: 3}
-  hotSpot: {x: 0, y: 0}
+  clickableHotSpot: {x: 82, y: 54}
+  draggableHotSpot: {x: 200, y: 260}
+  defaultHotSpot: {x: 82, y: 54}
+  waitingHotSpot: {x: 0, y: 0}
+  disableHotSpot: {x: 82, y: 54}
 --- !u!4 &97839868
 Transform:
   m_ObjectHideFlags: 0
@@ -25246,7 +25250,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1958652494
 RectTransform:
   m_ObjectHideFlags: 0

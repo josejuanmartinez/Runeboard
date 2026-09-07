@@ -29,29 +29,29 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Brightness: 0.332
+    - _Brightness: 0.8
     - _BrushGrain: 0
     - _ColorMask: 15
-    - _Contrast: 1.59
-    - _Density: 0.273
-    - _Distortion: 2
-    - _PaintBands: 6.95
-    - _Saturation: 1
-    - _Scale: 12
-    - _SourceInfluence: 1
-    - _SpeedX: 0.187
-    - _SpeedY: 0.203
+    - _Contrast: 0.52
+    - _Density: 0.48
+    - _Distortion: 0.4
+    - _PaintBands: 12
+    - _Saturation: 0.42
+    - _Scale: 2.1
+    - _SourceInfluence: 0.08
+    - _SpeedX: 0.008
+    - _SpeedY: 0.002
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _UseUIAlphaClip: 0
-    - _Vignette: 1
+    - _Vignette: 0.16
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _FogColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
-    - _HighlightColor: {r: 0, g: 0, b: 0, a: 1}
-    - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FogColor: {r: 0.125, g: 0.15, b: 0.18, a: 1}
+    - _HighlightColor: {r: 0.23, g: 0.25, b: 0.28, a: 1}
+    - _ShadowColor: {r: 0.042, g: 0.051, b: 0.065, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

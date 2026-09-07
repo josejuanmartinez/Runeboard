@@ -54,11 +54,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _AspectY: 1.3
-    - _BlendBand: 1
+    - _BlendBand: 0.2
     - _BlendStrength: 0.5
     - _EdgeCrop: 1
     - _EdgeTrim: 0.08
-    - _FogFade: 0.5
+    - _FogFade: 0.16
     - _GammaOut: 0
     - _GridGlowWidth: 0.01
     - _GridHueScale: 0.12

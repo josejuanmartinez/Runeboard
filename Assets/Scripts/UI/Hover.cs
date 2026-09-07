@@ -8,155 +8,89 @@ public class Hover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public GameObject tooltipPanel;
     public TextMeshProUGUI textWidget;
     public Vector2 offset;
-    public float exitCheckFrequency = 0.1f; // How often to check for exit
-
+    public float exitCheckFrequency = .1f;
+    public float readingSize = 20f;
+    public float maximumWidth = 440f;
     private RectTransform tooltipRectTransform;
-    private float lastExitCheckTime = 0f;
-    private bool initialized = false;
+    private float lastExitCheckTime;
+    private readonly System.Collections.Generic.List<RaycastResult> hits = new();
 
-    void Awake()
+    private void Awake()
     {
-        if (tooltipPanel != null)
-        {
-            tooltipRectTransform = tooltipPanel.GetComponent<RectTransform>();
-            tooltipPanel.SetActive(false);
-        }
+        if (tooltipPanel == null) return;
+        tooltipRectTransform = tooltipPanel.GetComponent<RectTransform>();
+        tooltipPanel.SetActive(false);
     }
-
-    void Update()
+    private void OnDisable() { if (tooltipPanel != null) tooltipPanel.SetActive(false); }
+    private void Update()
     {
-        if (!initialized) return;
-
-        if (tooltipPanel.activeSelf)
-        {
-            // Always update position when tooltip is active
-            UpdateTooltipPosition();
-
-            // Perform more frequent manual checks for mouse exit
-            if (Time.time - lastExitCheckTime > exitCheckFrequency)
-            {
-                lastExitCheckTime = Time.time;
-
-                // Force check if mouse is still over the element
-                if (!IsPointOverUI()) tooltipPanel.SetActive(false);
-            }
-        }
+        if (tooltipPanel == null || !tooltipPanel.activeSelf) return;
+        if (ModalOpen()) { tooltipPanel.SetActive(false); return; }
+        UpdateTooltipPosition();
+        if (Time.unscaledTime - lastExitCheckTime < exitCheckFrequency) return;
+        lastExitCheckTime = Time.unscaledTime;
+        if (!IsPointOverUI()) tooltipPanel.SetActive(false);
     }
-
+    private static bool ModalOpen() => PopupManager.IsShowing || SelectionDialog.IsShowing || ConfirmationDialog.IsShowing || VideoPopupManager.IsShowing;
+    private void Fit()
+    {
+        if (tooltipPanel == null || textWidget == null) return;
+        tooltipRectTransform ??= tooltipPanel.GetComponent<RectTransform>();
+        Canvas canvas = tooltipPanel.GetComponentInParent<Canvas>();
+        float scale = canvas != null ? Mathf.Max(.01f, canvas.scaleFactor) : 1f;
+        float width = Mathf.Min(maximumWidth, (Screen.width - 32) / scale);
+        textWidget.enableAutoSizing = false;
+        textWidget.fontSize = readingSize;
+        textWidget.alignment = TextAlignmentOptions.TopLeft;
+        textWidget.textWrappingMode = TextWrappingModes.Normal;
+        textWidget.overflowMode = TextOverflowModes.Overflow;
+        textWidget.color = new Color(.92f,.91f,.85f);
+        textWidget.raycastTarget = false;
+        Vector2 preferred = textWidget.GetPreferredValues(textWidget.text, Mathf.Max(80,width-36), Mathf.Infinity);
+        tooltipRectTransform.sizeDelta = new Vector2(Mathf.Min(width,Mathf.Max(100,preferred.x+36)),preferred.y+28);
+        tooltipRectTransform.pivot = new Vector2(0,1);
+        var rect = textWidget.rectTransform;
+        if(rect!=tooltipRectTransform)
+        {
+            rect.anchorMin=Vector2.zero;rect.anchorMax=Vector2.one;rect.pivot=new Vector2(.5f,.5f);
+            rect.offsetMin=new Vector2(18,14);rect.offsetMax=new Vector2(-18,-14);rect.localScale=Vector3.one;
+        }
+        else textWidget.margin=new Vector4(18,14,18,14);
+        foreach(var graphic in tooltipPanel.GetComponentsInChildren<Graphic>(true))graphic.raycastTarget=false;
+    }
     private void UpdateTooltipPosition()
     {
-        if (tooltipRectTransform == null || tooltipPanel == null) return;
-        // Get mouse position in screen space
-        Vector2 mousePosition = Input.mousePosition;
-
-        // Get the tooltip dimensions in screen space
-        Vector2 tooltipSize = tooltipRectTransform.rect.size;
-        Canvas canvas = tooltipPanel.GetComponentInParent<Canvas>();
-        float scaleFactor = canvas.scaleFactor;
-        tooltipSize *= scaleFactor;
-
-        // Default position (mouse position + offset)
-        Vector2 tooltipPosition = mousePosition + offset;
-
-        // Check if tooltip would go off-screen and adjust accordingly
-        // Account for the tooltip's pivot point
-        Vector2 pivotOffset = (tooltipRectTransform.pivot - new Vector2(0.5f, 0.5f)) * tooltipSize;
-
-        // Left edge check
-        if (tooltipPosition.x - (tooltipSize.x * 0.5f) + pivotOffset.x < 0) tooltipPosition.x = (tooltipSize.x * 0.5f) - pivotOffset.x;
-
-        // Right edge check
-        if (tooltipPosition.x + (tooltipSize.x * 0.5f) + pivotOffset.x > Screen.width) tooltipPosition.x = Screen.width - (tooltipSize.x * 0.5f) - pivotOffset.x;
-
-        // Bottom edge check
-        if (tooltipPosition.y - (tooltipSize.y * 0.5f) + pivotOffset.y < 0) tooltipPosition.y = (tooltipSize.y * 0.5f) - pivotOffset.y;
-
-        // Top edge check
-        if (tooltipPosition.y + (tooltipSize.y * 0.5f) + pivotOffset.y > Screen.height) tooltipPosition.y = Screen.height - (tooltipSize.y * 0.5f) - pivotOffset.y;
-
-        // Set the final position
-        tooltipRectTransform.position = tooltipPosition;
+        if (tooltipRectTransform == null) return;
+        var canvas=tooltipPanel.GetComponentInParent<Canvas>();if(canvas==null)return;
+        Vector2 mouse=Input.mousePosition;
+        Vector2 size=tooltipRectTransform.rect.size*canvas.scaleFactor;
+        Vector2 position=mouse+new Vector2(20,-20);
+        if(position.x+size.x>Screen.width-12)position.x=mouse.x-size.x-20;
+        position.x=Mathf.Clamp(position.x,12,Mathf.Max(12,Screen.width-size.x-12));
+        position.y=Mathf.Clamp(position.y,Mathf.Min(Screen.height-12,size.y+12),Screen.height-12);
+        Camera camera=canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera;
+        if(tooltipRectTransform.parent is RectTransform parent && RectTransformUtility.ScreenPointToWorldPointInRectangle(parent,position,camera,out var world))tooltipRectTransform.position=world;
     }
-
-    public void Initialize(string text, Vector2 offset, int fontSize, TextAlignmentOptions textAlignment)
-    {
-        if (textWidget == null || tooltipRectTransform == null) return;
-        this.offset = offset;
-        textWidget.text = CreateTextWithBackground(text);
-        textWidget.fontSize = fontSize;
-        textWidget.alignment = textAlignment;
-        
-        // Force layout rebuild to ensure correct size calculation
-        LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRectTransform);
-
-        initialized = true;
-    }
-
-    public void Initialize(string text, int fontSize)
-    {
-        if (textWidget == null || tooltipRectTransform == null) return;
-        this.offset = Vector2.zero;
-        textWidget.text = CreateTextWithBackground(text);
-        textWidget.fontSize = fontSize;
-        textWidget.alignment = TextAlignmentOptions.MidlineLeft;
-        
-        // Force layout rebuild to ensure correct size calculation
-        LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRectTransform);
-
-        initialized = true;
-    }
-    
+    public void Initialize(string text, Vector2 offset, int fontSize, TextAlignmentOptions textAlignment) => Initialize(text);
+    public void Initialize(string text, int fontSize) => Initialize(text);
     public void Initialize(string text)
     {
-        if (textWidget == null || tooltipRectTransform == null) return;
-        this.offset = Vector2.zero;
-        textWidget.text = CreateTextWithBackground(text);
-        textWidget.fontSize = 12;
-        textWidget.alignment = TextAlignmentOptions.MidlineGeoAligned;
-        
-        // Force layout rebuild to ensure correct size calculation
-        LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRectTransform);
-
-        initialized = true;
+        if(textWidget==null)return;
+        textWidget.text=CreateTextWithBackground(text);Fit();
     }
-
-    public string CreateTextWithBackground(string text)
-    {
-        return $"<mark=#ffffff>{text}</mark>";
-    }
-
+    public string CreateTextWithBackground(string text) => System.Text.RegularExpressions.Regex.Replace(text??string.Empty,@"</?mark\b[^>]*>",string.Empty);
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (PopupManager.IsShowing) return;
-        if (tooltipPanel == null || tooltipRectTransform == null) return;
-        Sounds.Instance?.PlayUiHover();
-        tooltipPanel.SetActive(true);
-
-        // Force layout rebuild before positioning
-        LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipRectTransform);
-
-        UpdateTooltipPosition();
+        if(ModalOpen()||tooltipPanel==null||textWidget==null||string.IsNullOrWhiteSpace(textWidget.text))return;
+        Fit();tooltipPanel.SetActive(true);UpdateTooltipPosition();Sounds.Instance?.PlayUiHover();
     }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Sounds.Instance?.PlayUiExit();
-        if (tooltipPanel != null) tooltipPanel.SetActive(false);
-    }
-
+    public void OnPointerExit(PointerEventData eventData) { if(tooltipPanel!=null)tooltipPanel.SetActive(false); }
     private bool IsPointOverUI()
     {
-        // Raycast against all UI elements
-        PointerEventData eventDataCurrentPosition = new(EventSystem.current);
-        eventDataCurrentPosition.position = Input.mousePosition;
-        System.Collections.Generic.List<RaycastResult> results = new System.Collections.Generic.List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-
-        // Check if any of the hit objects is this one
-        foreach (RaycastResult result in results)
-            if (result.gameObject == gameObject)
-                return true;
-
-        return false;
+        if(EventSystem.current==null)return false;
+        hits.Clear();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=Input.mousePosition},hits);
+        if(hits.Count==0)return false;
+        var first=hits[0].gameObject;
+        return first==gameObject||first.transform.IsChildOf(transform);
     }
 }

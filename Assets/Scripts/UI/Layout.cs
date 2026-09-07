@@ -10,6 +10,7 @@ public class Layout : MonoBehaviour
     private HexNumberManager hexNumberManager;
     [SerializeField]
     private Card environmentalCard;
+    [SerializeField] private TextMeshProUGUI environmentalName;
     [SerializeField]
     private TextMeshProUGUI nationName;
     [SerializeField]
@@ -22,6 +23,7 @@ public class Layout : MonoBehaviour
 
     public void SetEnvironmentalCard(CardData card)
     {
+        if (environmentalName != null) environmentalName.text = card != null ? card.name : "No active effect";
         if (environmentalCard == null)
         {
             Debug.LogWarning("[EnvCardToken] Layout.SetEnvironmentalCard — environmentalCard field is unassigned on this Layout instance.");

@@ -6,6 +6,7 @@ public class MovementCostManager : MonoBehaviour
 {
     public TextMeshPro movementText;
     public SpriteRenderer dot;
+    public TextMeshPro terrainText;
     private Color dotBaseColor = Color.white;
     private static Colors sharedColors;
 
@@ -46,17 +47,14 @@ public class MovementCostManager : MonoBehaviour
         if (dot != null && !dot.gameObject.activeSelf) dot.gameObject.SetActive(true);
         // terrainSpriteTags are inline TMP <sprite> tags for the hex terrain (+ chasm marker), shown beside the cost.
         Color costColor = GetMovementCostColor(movementLeft, character);
-        string coloredCost = $"<color=#{ColorUtility.ToHtmlStringRGBA(costColor)}>{movementLeft}</color>";
-        movementText.text = string.IsNullOrEmpty(terrainSpriteTags)
-            ? movementLeft.ToString()
-            : $"{terrainSpriteTags}\n{coloredCost}";
-        
-
-        /*if (dot != null)
+        movementText.text = movementLeft.ToString();
+        movementText.color = movementLeft > 0 ? new Color(0.97f, 0.92f, 0.78f) : new Color(1f, 0.64f, 0.43f);
+        if (terrainText != null)
         {
-            dot.color = costColor;
+            terrainText.text = terrainSpriteTags;
+            terrainText.gameObject.SetActive(!string.IsNullOrEmpty(terrainSpriteTags));
         }
-        */
+        if (dot != null) dot.color = Color.Lerp(dotBaseColor, costColor, 0.12f);
     }
 
     public void Hide()

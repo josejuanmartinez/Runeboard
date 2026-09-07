@@ -329,7 +329,7 @@ PrefabInstance:
     - target: {fileID: 770448366492745785, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
       propertyPath: tooltipPanel
       value: 
-      objectReference: {fileID: 7450412143914048753}
+      objectReference: {fileID: 4817521048357677984}
     - target: {fileID: 2329783396477944536, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
       propertyPath: m_Name
       value: Hover
@@ -430,9 +430,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3490291887412612800, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
+      propertyPath: m_text
+      value: ' Ring of power <sprite name="commander"/>+1'
+      objectReference: {fileID: 0}
     - target: {fileID: 3510126416859382573, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
       propertyPath: m_SortingLayerID
       value: -769728005
+      objectReference: {fileID: 0}
+    - target: {fileID: 3510126416859382573, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5629601422605000548, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
       propertyPath: m_Pivot.x
@@ -539,8 +547,8 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3255782884132336503, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
   m_PrefabInstance: {fileID: 98582345630449514}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7450412143914048753 stripped
+--- !u!1 &4817521048357677984 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 7366501681718993819, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4865428840085640394, guid: 1deaf7611c37dff48bd6122efd8dc2a6, type: 3}
   m_PrefabInstance: {fileID: 98582345630449514}
   m_PrefabAsset: {fileID: 0}

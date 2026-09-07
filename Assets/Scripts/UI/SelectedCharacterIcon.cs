@@ -311,9 +311,11 @@ public class SelectedCharacterIcon : MonoBehaviour
         SetCharacterVisuals(GetIllustrationByName(!string.IsNullOrWhiteSpace(c.illustrationName) ? c.illustrationName : c.characterName));
         string nameText = BuildSelectedCharacterTitle(c, returnName: true);
         string quoteText = BuildSelectedCharacterTitle(c, returnName: false, returnQuote: true);
+        if (string.IsNullOrWhiteSpace(quoteText))
+            quoteText = $"{c.GetAlignment()}\n{(c.hasActionedThisTurn ? "Action completed" : "Ready to act")}  ·  Health {c.health:0}%";
         string kidnappingText = BuildKidnappingStatusText(c);
         nameWidget.text = nameText;
-        descriptionWidget.text = $"<mark=#000000bb>{kidnappingText}\n{quoteText}</mark>";
+        descriptionWidget.text = string.IsNullOrWhiteSpace(kidnappingText) ? quoteText : $"{kidnappingText}\n{quoteText}";
         RefreshArmyCardGallery(c);
         levelsGameObject.SetActive(true);
         actioned.SetActive(true);

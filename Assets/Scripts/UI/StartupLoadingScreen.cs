@@ -54,28 +54,27 @@ public sealed class StartupLoadingScreen : MonoBehaviour
         SetVisible(true);
         SetContinuePromptVisible(false);
         if (progressBar != null) progressBar.value = 0.02f;
-        SetStatus("> Preparing the Runeboard <");
+        SetStatus("Preparing your journey");
 
         // Ensure this canvas is actually presented before synchronous deck parsing begins.
         yield return null;
 
         cardRotationCoroutine = cardSlots != null && cardSlots.Count > 0 ? StartCoroutine(RotateCardArt()) : null;
 
-        float waitStartedAt = Time.realtimeSinceStartup;
-        while (!StartupReady() && Time.realtimeSinceStartup - waitStartedAt < 30f)
+        while (!StartupReady())
         {
             float deckProgress = DeckManager.Instance != null && DeckManager.Instance.IsLoaded ? 1f : 0.08f;
             float artProgress = illustrations != null ? illustrations.LoadProgress : 0.02f;
             float combined = Mathf.Clamp01(deckProgress * 0.25f + artProgress * 0.75f);
             if (progressBar != null) progressBar.value = combined;
             SetStatus(deckProgress < 1f
-                ? $"Reading the Decks ..."
-                : $"Illuminating the Cards ...");
+                ? "Preparing the decks"
+                : "Loading the painted world");
             yield return null;
         }
 
         if (progressBar != null) progressBar.value = 1f;
-        SetStatus("Done!");
+        SetStatus("Your journey awaits");
         SetContinuePromptVisible(true);
 
         // Keep cycling card art and wait for the player to press a key or click, rather than

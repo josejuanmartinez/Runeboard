@@ -136,6 +136,24 @@ namespace RetroLOTR.Scenarios
                 return;
             }
 
+            // The polished chooser has an authored art window. Fill it directly rather than
+            // nesting a token's second mask, which cropped the representative art twice.
+            Image artwork = button.transform.Find("Polish Artwork")?.GetComponent<Image>();
+            if (artwork != null)
+            {
+                Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+                Sprite sprite = null;
+                if (illustrations != null)
+                {
+                    illustrations.TryGetCardArtByName(cardData.spriteName, out sprite);
+                    if (sprite == null) illustrations.TryGetCardArtByName(cardData.name, out sprite);
+                    if (sprite == null) illustrations.TryGetIllustrationByName(cardName, out sprite);
+                }
+                artwork.sprite = sprite;
+                artwork.enabled = sprite != null;
+                return;
+            }
+
             if (cardTemplate == null) return;
 
             RectTransform host = FindTokenHost(button);
@@ -201,6 +219,12 @@ namespace RetroLOTR.Scenarios
             GameConfig.ScenarioChosen = true;
             if (enableAfterSelection != null)
                 enableAfterSelection.SetActive(true);
+            gameObject.SetActive(false);
+        }
+
+        public void CloseSelection()
+        {
+            Sounds.Instance?.PlayUiExit();
             gameObject.SetActive(false);
         }
     }

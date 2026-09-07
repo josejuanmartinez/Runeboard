@@ -566,7 +566,7 @@ public class SelectionDialog : MonoBehaviour
         {
             RectTransform containerRect = optionButtonsContainer.GetComponent<RectTransform>();
             if (containerRect != null)
-                containerRect.pivot = new Vector2(containerRect.pivot.x, 0f);
+                containerRect.pivot = new Vector2(containerRect.pivot.x, 1f);
 
             ContentSizeFitter csf = optionButtonsContainer.GetComponent<ContentSizeFitter>()
                 ?? optionButtonsContainer.gameObject.AddComponent<ContentSizeFitter>();
@@ -576,8 +576,8 @@ public class SelectionDialog : MonoBehaviour
             VerticalLayoutGroup vlg = optionButtonsContainer.GetComponent<VerticalLayoutGroup>()
                 ?? optionButtonsContainer.gameObject.AddComponent<VerticalLayoutGroup>();
             vlg.spacing = 6f;
-            vlg.childAlignment = TextAnchor.LowerLeft;
-            vlg.reverseArrangement = true;
+            vlg.childAlignment = TextAnchor.UpperLeft;
+            vlg.reverseArrangement = false;
             vlg.childForceExpandWidth = true;
             vlg.childForceExpandHeight = false;
             vlg.childControlWidth = true;
@@ -735,7 +735,7 @@ public class SelectionDialog : MonoBehaviour
         // "Icon" child); shrinking the button below that spills the icon into neighboring
         // buttons, so the button height must stay at least icon-sized regardless of hasDesc.
         LayoutElement le = obj.GetComponent<LayoutElement>() ?? obj.AddComponent<LayoutElement>();
-        le.preferredHeight = hasDesc ? 78f : 70f;
+        le.preferredHeight = hasDesc ? 108f : 64f;
         le.minHeight       = 68f;
 
         prefabManager.Setup(labelText, iconOverride ?? text);
@@ -755,6 +755,14 @@ public class SelectionDialog : MonoBehaviour
 
         Button btn = obj.GetComponent<Button>();
         btn.targetGraphic = background;
+        RuneboardPanel surface = obj.transform.Find("Polish Surface")?.GetComponent<RuneboardPanel>();
+        if (surface != null)
+        {
+            background.enabled = false;
+            background.raycastTarget = false;
+            surface.raycastTarget = true;
+            btn.targetGraphic = surface;
+        }
 
         // The "Icon" child ships with its own (listener-less) Button. Unity's event bubbling
         // stops at the nearest ancestor implementing IPointerClickHandler, so clicks landing

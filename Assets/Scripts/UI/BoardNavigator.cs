@@ -26,6 +26,8 @@ public class BoardNavigator : MonoBehaviour
     private Camera boardCamera;
     private Coroutine lookAtCoroutine;
     private float targetZoom;
+    private Vector3 zoomAnchor;
+    private bool zoomAtPointer;
     private static readonly List<RaycastResult> raycastResults = new(16);
     private static PointerEventData sharedPED;
     private readonly Queue<FocusRequest> focusQueue = new();
@@ -82,7 +84,14 @@ public class BoardNavigator : MonoBehaviour
             return;
         }
 
-        if (IsPointerOverVisibleUIElement()) return;
+        // Release panning even if the pointer crosses a panel or the window loses focus.
+        if (isMouseWheelHeld && !Input.GetMouseButton(2))
+        {
+            isMouseWheelHeld = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        if (!isMouseWheelHeld && IsPointerOverVisibleUIElement()) return;
 
         // Middle mouse button (wheel) pans the board
         if (Input.GetMouseButtonDown(2))
@@ -185,21 +194,40 @@ public class BoardNavigator : MonoBehaviour
             {
                 targetZoom -= scroll * zoomSpeed;
                 targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
+                zoomAnchor = Input.mousePosition;
+                zoomAtPointer = true;
             }
 
+            Vector3 before = boardCamera.ScreenToWorldPoint(zoomAnchor);
             boardCamera.orthographicSize = Mathf.Lerp(
                 boardCamera.orthographicSize,
                 targetZoom,
-                Time.deltaTime * smoothTime
+                1f - Mathf.Exp(-Time.unscaledDeltaTime * smoothTime)
             );
 
             // Absolute safeguard
             boardCamera.orthographicSize = Mathf.Clamp(boardCamera.orthographicSize, minZoom, maxZoom);
+            if (zoomAtPointer && lookAtCoroutine == null)
+            {
+                Vector3 after = boardCamera.ScreenToWorldPoint(zoomAnchor);
+                transform.position += new Vector3(before.x - after.x, before.y - after.y, 0);
+                if (Mathf.Abs(boardCamera.orthographicSize - targetZoom) < 0.001f) zoomAtPointer = false;
+            }
         }
+    }
+
+    private void OnApplicationFocus(bool focused)
+    {
+        if (focused) return;
+        isMouseWheelHeld = false;
+        zoomAtPointer = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void LookAt(Vector3 targetPosition, float duration = 1.0f, float delay = 0.0f)
     {
+        zoomAtPointer = false;
         if (lookAtCoroutine != null)
             StopCoroutine(lookAtCoroutine);
 

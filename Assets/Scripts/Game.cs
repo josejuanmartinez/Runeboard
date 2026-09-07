@@ -231,7 +231,7 @@ public class Game : MonoBehaviour
         // SelectFirstPlayerCharacter() just re-enabled it as part of revealing the human's
         // widgets — hold it off until the turn actually starts below, otherwise the player
         // could end turn 0 while the game is supposed to be fully paused for the wait/instructions.
-        if (nextTurnButton != null) nextTurnButton.enabled = false;
+        if (nextTurnButton != null) nextTurnButton.interactable = false;
         StartCoroutine(BeginTurnZeroSequence());
     }
 
@@ -276,7 +276,7 @@ public class Game : MonoBehaviour
         }
 
         ShowHumanPlayerWidgetsWidgets();
-        if (nextTurnButton != null) nextTurnButton.enabled = true;
+        if (nextTurnButton != null) nextTurnButton.interactable = true;
         playerTurnAcceptingInput = true;
         MessageDisplay.ClearPersistent();
     }
@@ -525,7 +525,7 @@ public class Game : MonoBehaviour
 
     public async void NextPlayer()
     {
-        if (leaderTransitionRunning) return;
+        if (leaderTransitionRunning || endTurnConfirmationPending) return;
         PopupManager.CloseAll();
         ConfirmationDialog.CloseAll();
         SelectionDialog.CloseAll();
@@ -546,9 +546,14 @@ public class Game : MonoBehaviour
                 ? "Some characters have not actioned yet. End turn?"
                 : "End turn?";
 
+            endTurnConfirmationPending = true;
+            if (nextTurnButton != null) nextTurnButton.interactable = false;
             bool finishTurn = await ConfirmationDialog.AskImmediate(message, "Finish Turn", "Cancel");
+            endTurnConfirmationPending = false;
             if (!finishTurn)
             {
+                playerTurnAcceptingInput = true;
+                if (nextTurnButton != null) nextTurnButton.interactable = true;
                 Character nextCharacter = player.controlledCharacters.Find(x => !x.killed && !x.hasActionedThisTurn);
                 if (nextCharacter != null)
                 {
@@ -583,6 +588,8 @@ public class Game : MonoBehaviour
         HideHumanPlayerWidgetsWidgets();
         StartCoroutine(TransitionToLeader(next));
     }
+
+    private bool endTurnConfirmationPending;
 
     // Finish any alignment-matched NPL work before another playable AI begins. This lets a
     // human end their turn immediately without allowing shared AI/action state to overlap.
@@ -819,13 +826,13 @@ public class Game : MonoBehaviour
     {
         SetCanvasGroupVisible(selectedCharacterIconCanvasGroup, false);
         SetCanvasGroupVisible(actionsCanvasGroup, false);
-        nextTurnButton.enabled = false;
+        nextTurnButton.interactable = false;
     }
     private void ShowHumanPlayerWidgetsWidgets()
     {
         SetCanvasGroupVisible(selectedCharacterIconCanvasGroup, true);
         SetCanvasGroupVisible(actionsCanvasGroup, true);
-        nextTurnButton.enabled = true;
+        nextTurnButton.interactable = true;
     }
 
     private static void SetCanvasGroupVisible(CanvasGroup canvasGroup, bool visible)

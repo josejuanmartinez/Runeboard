@@ -170,7 +170,7 @@ public class CalendarWidget : MonoBehaviour
         if (calendar == null) calendar = DateEventManager.Instance ?? FindFirstObjectByType<DateEventManager>();
 
         if (headerText != null) headerText.text = $"{today.MonthName}  {today.Year} {MiddleEarthCalendar.EraSuffix}";
-        if (footerText != null) footerText.text = "Tap the date to close. Hover a marked day for its tale.";
+        if (footerText != null) footerText.text = "Today is highlighted in gold. Hover a marked day to read its story.";
 
         // No live DateEventManager exists outside Play mode, so fall back to reading the real
         // Calendar.json entries directly - lets the "Refresh Preview" checkbox show actual marked
@@ -304,7 +304,7 @@ public class CalendarWidget : MonoBehaviour
             AddTrigger(trigger, EventTriggerType.PointerExit, _ =>
             {
                 if (footerText != null)
-                    footerText.text = "Tap the date to close. Hover a marked day for its tale.";
+                    footerText.text = "Today is highlighted in gold. Hover a marked day to read its story.";
             });
         }
     }

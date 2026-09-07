@@ -39,7 +39,9 @@ public class FontManager : SearcherByName
     public void ApplyCurrentFont(TMP_Text text)
     {
         TMP_FontAsset font = GetCurrentFont();
-        if (text != null && font != null) text.font = font;
+        // Authored body and numeric fonts are deliberate; only swap skin display faces.
+        if (text != null && font != null && (text.font == null || skinFonts.Any(entry => entry.font == text.font)))
+            text.font = font;
     }
 
     public void ApplyFont(TMP_FontAsset font)

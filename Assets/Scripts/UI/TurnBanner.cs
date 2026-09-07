@@ -39,16 +39,16 @@ public class TurnBanner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
 
     private const float BarHeight = 88f;
-    private const float LineThickness = 3f;
+    private const float LineThickness = 1.5f;
     private const float LineMaxHalfWidth = 320f;
     private const float BannerRestX = 460f;
     private const float BannerStartX = 700f;
     private const float EnterDuration = 0.38f;
-    private const float FlashDuration = 0.45f;
+    private const float FlashDuration = 0.22f;
     private const float HoldDuration = 1.1f;
     private const float ExitDuration = 0.28f;
 
-    private static readonly Color GoldColor = new(1f, 0.82f, 0.1f);
+    private static readonly Color GoldColor = new(0.83f, 0.70f, 0.46f);
 
     // Whether PlayAnimation currently holds CenterDisplayLock. Show() below calls
     // StopAllCoroutines() to interrupt any run already in flight, which abandons that

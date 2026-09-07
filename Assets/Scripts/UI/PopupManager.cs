@@ -20,6 +20,7 @@ public class PopupManager : MonoBehaviour
     public TextMeshProUGUI titleWidget;
     public TypewriterEffect typeWriterEffect;
     public int referenceHeight = 600;
+    public bool useFramedLayout;
 
     private readonly List<PopupData> queue = new();
     private int currentIndex = -1;
@@ -218,6 +219,26 @@ public class PopupManager : MonoBehaviour
         
         SetActorVisuals(actor1, data.spriteActor1);
         SetActorVisuals(actor2, data.spriteActor2);
+        if (useFramedLayout)
+        {
+            bool first = data.spriteActor1 != null;
+            if (actor1 != null) actor1.transform.parent.gameObject.SetActive(first);
+            if (actor2 != null) actor2.transform.parent.gameObject.SetActive(hasActor2);
+            GridLayoutGroup portraits = actor1 != null ? actor1.GetComponentInParent<GridLayoutGroup>(true) : null;
+            if (portraits != null)
+            {
+                portraits.startCorner = GridLayoutGroup.Corner.UpperLeft;
+                portraits.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                portraits.constraintCount = 1;
+                portraits.cellSize = new Vector2(204, first && hasActor2 ? 174 : 352);
+            }
+            var textScroll = textWidget != null ? textWidget.GetComponentInParent<ScrollRect>() : null;
+            if (textScroll != null)
+            {
+                var scrollRect = (RectTransform)textScroll.transform;
+                scrollRect.offsetMin = new Vector2(first || hasActor2 ? 281 : 35, scrollRect.offsetMin.y);
+            }
+        }
         if (!ShowContainer())
         {
             // A modal that cannot render must not retain IsShowing/startup input locks.
@@ -234,13 +255,16 @@ public class PopupManager : MonoBehaviour
 
             if (data.restrictHeight > 0)
             {
-                size.y = referenceHeight - data.restrictHeight;
+                // Compact messages still need space for their title, artwork and controls.
+                size.y = Mathf.Max(initialSize.y * 0.82f, referenceHeight - data.restrictHeight);
             }
 
             rectTransform.sizeDelta = size;
         }
 
         UpdateArrows();
+        var scroll = textWidget != null ? textWidget.GetComponentInParent<ScrollRect>() : null;
+        if (scroll != null) { Canvas.ForceUpdateCanvases(); scroll.verticalNormalizedPosition = 1f; }
     }
 
     private bool ShouldDelayPopup()
@@ -355,7 +379,7 @@ public class PopupManager : MonoBehaviour
     {
         if (image != null)
         {
-            image.enabled = true;
+            image.enabled = fallbackSprite != null;
             image.sprite = fallbackSprite;
         }
     }

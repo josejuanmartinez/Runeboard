@@ -281,7 +281,7 @@ MonoBehaviour:
   characterSpriteRenderer: {fileID: 0}
   bannerSpriteRenderer: {fileID: 0}
   characterAnimationController: {fileID: 0}
-  armyStackOffset: {x: 0.08, y: 0.08}
+  armyStackOffset: {x: 0.08, y: 0}
   armyStackSizeThresholds: 960000005e0100008a0200004c040000
   pcName: {fileID: 0}
   revealDuration: 1

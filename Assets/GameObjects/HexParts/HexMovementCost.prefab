@@ -146,7 +146,7 @@ MonoBehaviour:
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -56.45
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -269,7 +269,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 0.57, y: 0.51}
+  m_Size: {x: 1.19, y: 1.15}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -287,7 +287,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteRendererFitToTMP
   label: {fileID: 5030998841836402603}
-  padding: {x: 0.2, y: 0}
+  padding: {x: 0.66, y: 0.75}
   growRight: 0
   hoverCollider: {fileID: 0}
   anchorSet: 1

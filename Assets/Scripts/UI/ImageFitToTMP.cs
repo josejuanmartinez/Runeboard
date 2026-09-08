@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,14 +17,40 @@ public class ImageFitToTMP : MonoBehaviour
 
     private Image _image;
     private RectTransform _rt;
+    // Decoration drawn on top of (or instead of) the fitted Image itself - e.g. the message
+    // widget's "Polish Surface" RuneboardPanel child, which is what actually paints the pill
+    // now that the Image is only a sizing rect. These have to follow the Image's own
+    // enabled state, otherwise an empty label leaves a naked background floating on screen.
+    private Graphic[] _decorations;
 
     private void Awake()
     {
         _image = GetComponent<Image>();
         _rt = _image.rectTransform;
+        CacheDecorations();
     }
 
     private void OnEnable() => Fit();
+
+    private void CacheDecorations()
+    {
+        Transform labelTransform = label != null ? label.transform : null;
+        _decorations = GetComponentsInChildren<Graphic>(true)
+            .Where(g => g != _image && (labelTransform == null || !g.transform.IsChildOf(labelTransform)))
+            .ToArray();
+    }
+
+    // Single place that decides whether the backing plate is drawn at all, so the Image and
+    // every decorative child can never disagree.
+    private void SetBackgroundVisible(bool visible)
+    {
+        if (_image != null) _image.enabled = visible;
+        if (_decorations == null) CacheDecorations();
+        for (int i = 0; i < _decorations.Length; i++)
+        {
+            if (_decorations[i] != null) _decorations[i].enabled = visible;
+        }
+    }
 
 #if UNITY_EDITOR
     private void Update() => Fit();
@@ -40,7 +67,7 @@ public class ImageFitToTMP : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(label.text))
         {
-            _image.enabled = false;
+            SetBackgroundVisible(false);
             return;
         }
 
@@ -50,14 +77,14 @@ public class ImageFitToTMP : MonoBehaviour
         // preferredWidth is position-independent — avoids feedback loops from textBounds.
         float textWidth  = label.preferredWidth;
         float textHeight = label.preferredHeight;
-        if (textWidth < 0.001f) { _image.enabled = false; return; }
+        if (textWidth < 0.001f) { SetBackgroundVisible(false); return; }
 
         float newWidth  = textWidth  + padding.x;
         float newHeight = textHeight + padding.y;
 
         _image.type = Image.Type.Sliced;
         _rt.sizeDelta = new Vector2(newWidth, newHeight);
-        _image.enabled = true;
+        SetBackgroundVisible(true);
 
         if (!growRight) return;
 

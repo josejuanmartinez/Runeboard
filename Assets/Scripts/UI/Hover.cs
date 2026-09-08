@@ -13,13 +13,33 @@ public class Hover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public float maximumWidth = 440f;
     private RectTransform tooltipRectTransform;
     private float lastExitCheckTime;
+    private bool warnedMissingRect;
     private readonly System.Collections.Generic.List<RaycastResult> hits = new();
 
     private void Awake()
     {
         if (tooltipPanel == null) return;
-        tooltipRectTransform = tooltipPanel.GetComponent<RectTransform>();
+        EnsureTooltipRect();
         tooltipPanel.SetActive(false);
+    }
+
+    // Resolves (and re-resolves) the tooltip's RectTransform. Never use `??=` / `??` here: those
+    // use real C# null, so a Unity "fake null" (destroyed object, or a lookup that already failed
+    // once) would be kept and every later sizeDelta write would throw. Editor tooling such as
+    // StartupLoadingScreenEditor's preload bake calls Initialize() without Awake ever running, so
+    // this has to cope with the field being unresolved and with a tooltipPanel that carries no
+    // RectTransform at all.
+    private bool EnsureTooltipRect()
+    {
+        if (tooltipPanel == null) return false;
+        if (tooltipRectTransform == null) tooltipRectTransform = tooltipPanel.GetComponent<RectTransform>();
+        if (tooltipRectTransform != null) return true;
+        if (!warnedMissingRect)
+        {
+            warnedMissingRect = true;
+            Debug.LogWarning($"Hover on '{name}': tooltipPanel '{tooltipPanel.name}' has no RectTransform, so the tooltip cannot be laid out.", this);
+        }
+        return false;
     }
     private void OnDisable() { if (tooltipPanel != null) tooltipPanel.SetActive(false); }
     private void Update()
@@ -34,8 +54,7 @@ public class Hover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     private static bool ModalOpen() => PopupManager.IsShowing || SelectionDialog.IsShowing || ConfirmationDialog.IsShowing || VideoPopupManager.IsShowing;
     private void Fit()
     {
-        if (tooltipPanel == null || textWidget == null) return;
-        tooltipRectTransform ??= tooltipPanel.GetComponent<RectTransform>();
+        if (textWidget == null || !EnsureTooltipRect()) return;
         Canvas canvas = tooltipPanel.GetComponentInParent<Canvas>();
         float scale = canvas != null ? Mathf.Max(.01f, canvas.scaleFactor) : 1f;
         float width = Mathf.Min(maximumWidth, (Screen.width - 32) / scale);
@@ -81,7 +100,7 @@ public class Hover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public string CreateTextWithBackground(string text) => System.Text.RegularExpressions.Regex.Replace(text??string.Empty,@"</?mark\b[^>]*>",string.Empty);
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(ModalOpen()||tooltipPanel==null||textWidget==null||string.IsNullOrWhiteSpace(textWidget.text))return;
+        if(ModalOpen()||textWidget==null||string.IsNullOrWhiteSpace(textWidget.text)||!EnsureTooltipRect())return;
         Fit();tooltipPanel.SetActive(true);UpdateTooltipPosition();Sounds.Instance?.PlayUiHover();
     }
     public void OnPointerExit(PointerEventData eventData) { if(tooltipPanel!=null)tooltipPanel.SetActive(false); }

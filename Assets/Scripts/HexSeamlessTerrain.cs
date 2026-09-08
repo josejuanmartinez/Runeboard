@@ -14,10 +14,6 @@ using UnityEngine;
 /// </summary>
 public class HexSeamlessTerrain : MonoBehaviour
 {
-    // Terrain sprites are drawn this much larger than the hex cell so the alpha feather has
-    // opaque neighbor art underneath to fade over. Must match ScenarioCreatorWindow.TileOverdraw.
-    public const float TileOverdraw = 1.10f;
-
     private static HexSeamlessTerrain instance;
     private static Material material;
     private static Material skinTerrainSource;

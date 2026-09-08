@@ -53,11 +53,11 @@ nav a:hover, nav a:focus-visible { color: var(--gold-bright); }
 
 .hero { position: relative; min-height: 100svh; display: grid; align-items: end; overflow: hidden; }
 .hero-image, .hero-shade, .hero-slideshow { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero-image { object-fit: cover; object-position: 54% center; filter: saturate(.75) contrast(1.08); }
+.hero-image { object-fit: cover; object-position: 54% center; filter: saturate(1.08) contrast(1.18) brightness(1.05); }
 .hero-slide { opacity: 0; transition: opacity 1.8s ease; }
 .hero-slide.active { opacity: 1; animation: hero-ken-burns 12s ease-out forwards; }
 @keyframes hero-ken-burns { from { transform: scale(1.07); } to { transform: scale(1); } }
-.hero-shade { background: linear-gradient(90deg, rgba(5, 5, 4, .94) 0%, rgba(5, 5, 4, .72) 35%, rgba(5, 5, 4, .18) 70%), linear-gradient(0deg, var(--ink) 0%, transparent 32%); }
+.hero-shade { background: linear-gradient(90deg, rgba(5, 5, 4, .93) 0%, rgba(5, 5, 4, .58) 35%, rgba(5, 5, 4, .06) 70%), linear-gradient(0deg, var(--ink) 0%, transparent 32%); }
 .hero-content { position: relative; z-index: 1; width: min(47rem, 90%); padding: 12rem clamp(1.25rem, 7vw, 8rem) 8rem; }
 .eyebrow { margin: 0 0 1.2rem; color: var(--gold-bright); text-transform: uppercase; letter-spacing: .24em; font-size: .68rem; font-weight: 600; }
 h1, h2, h3, p { margin-top: 0; }
@@ -86,11 +86,11 @@ h2 { margin-bottom: 1.5rem; color: var(--paper); font-size: clamp(3rem, 5.8vw, 5
 
 .factions { display: grid; grid-template-columns: repeat(3, 1fr); max-width: 1440px; margin: 0 auto; }
 .faction { min-height: 29rem; display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(2rem, 4vw, 4rem); border-right: 1px solid var(--line); background-color: #11100d; background-size: cover; background-position: center; position: relative; overflow: hidden; }
-.faction::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(7, 7, 6, .96), rgba(7, 7, 6, .22)); }
+.faction::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(7, 7, 6, .94) 0%, rgba(7, 7, 6, .72) 32%, rgba(7, 7, 6, .08) 100%); }
 .faction > * { position: relative; }
-.faction-free { background-image: linear-gradient(rgba(12,17,18,.35), rgba(12,17,18,.35)), url('https://raw.githubusercontent.com/josejuanmartinez/RetroLOTR/main/output/dev-diary-game-screenshots/retrolotr-white-city-siege.png'); }
-.faction-shadow { background-image: linear-gradient(rgba(30,7,5,.4), rgba(30,7,5,.4)), url('https://raw.githubusercontent.com/josejuanmartinez/RetroLOTR/main/dev-diary-assets/retrolotr-campaign-hero.png'); }
-.faction-hand { background-image: linear-gradient(rgba(18,18,16,.35), rgba(18,18,16,.35)), url('https://raw.githubusercontent.com/josejuanmartinez/RetroLOTR/main/output/dev-diary-game-screenshots/retrolotr-rohan-field-battle.png'); }
+.faction-free { background-image: linear-gradient(rgba(12,17,18,.15), rgba(12,17,18,.15)), url('https://raw.githubusercontent.com/josejuanmartinez/RetroLOTR/main/output/dev-diary-game-screenshots/retrolotr-white-city-siege.png'); }
+.faction-shadow { background-image: linear-gradient(rgba(30,7,5,.18), rgba(30,7,5,.18)), url('https://raw.githubusercontent.com/josejuanmartinez/RetroLOTR/main/dev-diary-assets/retrolotr-campaign-hero.png'); }
+.faction-hand { background-image: linear-gradient(rgba(18,18,16,.15), rgba(18,18,16,.15)), url('https://raw.githubusercontent.com/josejuanmartinez/RetroLOTR/main/output/dev-diary-game-screenshots/retrolotr-rohan-field-battle.png'); }
 .faction .sigil { margin-bottom: auto; color: var(--gold-bright); font-size: 2rem; }
 .faction p { margin-bottom: .5rem; color: var(--gold-bright); text-transform: uppercase; letter-spacing: .18em; font-size: .63rem; }
 .faction h3 { margin-bottom: .75rem; color: var(--paper); font-size: 2.7rem; }
@@ -99,7 +99,7 @@ h2 { margin-bottom: 1.5rem; color: var(--paper); font-size: clamp(3rem, 5.8vw, 5
 .features { display: grid; grid-template-columns: 1.1fr .9fr; gap: clamp(3rem, 8vw, 8rem); align-items: center; padding-block: clamp(6rem, 11vw, 10rem); }
 .feature-image-wrap { position: relative; }
 .feature-image-wrap::before { content: ''; position: absolute; inset: -1rem 1rem 1rem -1rem; border: 1px solid var(--line); z-index: -1; }
-.feature-image-wrap img { aspect-ratio: 4 / 5; width: 100%; object-fit: cover; filter: saturate(.65) sepia(.1); }
+.feature-image-wrap img { aspect-ratio: 4 / 5; width: 100%; object-fit: cover; filter: saturate(1.06) contrast(1.16) brightness(1.08); }
 .image-caption { margin-top: 1rem; color: rgba(216, 201, 167, .5); text-transform: uppercase; letter-spacing: .14em; font-size: .58rem; }
 .feature-copy h2 { font-size: clamp(3rem, 5vw, 5rem); }
 .feature-list { list-style: none; margin: 2.5rem 0 0; padding: 0; border-top: 1px solid var(--line); }
@@ -118,8 +118,8 @@ h2 { margin-bottom: 1.5rem; color: var(--paper); font-size: clamp(3rem, 5.8vw, 5
 .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
 .gallery-grid figure { margin: 0; }
 .gallery-wide { grid-column: 1 / -1; }
-.gallery-grid img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid rgba(181, 138, 66, .2); filter: saturate(.72); transition: filter .25s ease, transform .25s ease; }
-.gallery-grid figure:hover img { filter: saturate(.95); transform: translateY(-3px); }
+.gallery-grid img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid rgba(181, 138, 66, .2); filter: saturate(1.06) contrast(1.16) brightness(1.06); transition: filter .25s ease, transform .25s ease; }
+.gallery-grid figure:hover img { filter: saturate(1.22) contrast(1.22) brightness(1.12); transform: translateY(-3px); }
 .gallery-grid figcaption { display: flex; gap: 1rem; padding-top: .8rem; color: rgba(216, 201, 167, .72); font: 500 1rem var(--serif); }
 .gallery-grid figcaption span { color: var(--gold); font-family: var(--sans); font-size: .58rem; letter-spacing: .1em; }
 
@@ -149,7 +149,7 @@ footer .brand-mark { width: 1.6rem; }
   .site-header { padding-block: 1rem; }
   .nav-cta { padding: .6rem .7rem; }
   .hero-image { object-position: 60% center; }
-  .hero-shade { background: linear-gradient(0deg, rgba(5,5,4,.97) 8%, rgba(5,5,4,.55) 72%, rgba(5,5,4,.65)); }
+  .hero-shade { background: linear-gradient(0deg, rgba(5,5,4,.96) 8%, rgba(5,5,4,.42) 72%, rgba(5,5,4,.5)); }
   .hero-content { width: 100%; padding-inline: 1.25rem; }
   h1 { font-size: clamp(3.4rem, 17vw, 5rem); }
   .gallery-grid { grid-template-columns: 1fr; }

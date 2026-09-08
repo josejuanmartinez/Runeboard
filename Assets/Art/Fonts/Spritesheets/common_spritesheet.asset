@@ -19811,7 +19811,7 @@ MonoBehaviour:
     m_Metrics:
       m_Width: 24
       m_Height: 23
-      m_HorizontalBearingX: -12
+      m_HorizontalBearingX: 0
       m_HorizontalBearingY: 18
       m_HorizontalAdvance: 24
     m_GlyphRect:

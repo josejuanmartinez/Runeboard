@@ -91,6 +91,9 @@ public class CardBloomWheel : MonoBehaviour
     // SelectedCharacterIcon draws at the cursor while the bloom is pending.
     public float HoverProgress => isOpen ? 1f : (hoverDelay > 0f ? Mathf.Clamp01(hoverTimer / hoverDelay) : 1f);
     public float LinesAlpha { get; private set; }
+    public int HoveredCardIndex => hoveredCardIndex;
+    public float CardVisibility(int index) => isVisible && index >= 0 && index < cardGroups.Count && cardGroups[index] != null
+        ? cardGroups[index].alpha : 0f;
     public Vector2 LineEndOffset => lineEndOffset;
     public IReadOnlyList<RectTransform> CardRects => cardRects;
     public IReadOnlyList<Color> CardLineColors => cardLineColors;
@@ -513,6 +516,7 @@ public class CardBloomWheel : MonoBehaviour
     private void AnimateCards()
     {
         float speed = isOpen ? bloomSpeed : collapseSpeed;
+        float blend = 1f - Mathf.Exp(-speed * Time.unscaledDeltaTime);
 
         for (int i = 0; i < cardRects.Count; i++)
         {
@@ -525,7 +529,9 @@ public class CardBloomWheel : MonoBehaviour
             // Position
             Vector2 posTarget = isOpen && i < bloomTargets.Count ? bloomTargets[i] : Vector2.zero;
             cardRects[i].anchoredPosition = Vector2.Lerp(
-                cardRects[i].anchoredPosition, posTarget, Time.deltaTime * speed);
+                cardRects[i].anchoredPosition, posTarget, blend);
+            float focusScale = isOpen && i == hoveredCardIndex ? 1.10f : 1f;
+            cardRects[i].localScale = Vector3.Lerp(cardRects[i].localScale, Vector3.one * focusScale, blend);
 
             // Cards in the wheel are always tokens; the hovered card is mirrored as a
             // real card in the center preview instead of flipping in place.
@@ -541,8 +547,8 @@ public class CardBloomWheel : MonoBehaviour
                 {
                     float dimTarget = isOpen && hoveredCardIndex >= 0 && i != hoveredCardIndex ? UnhoveredDim : 0f;
                     float redTarget = isOpen && !card.LastKnownPlayable ? UnplayableRedness : 0f;
-                    cardDims[i] = Mathf.Lerp(cardDims[i], dimTarget, Time.deltaTime * speed);
-                    cardRedness[i] = Mathf.Lerp(cardRedness[i], redTarget, Time.deltaTime * speed);
+                    cardDims[i] = Mathf.Lerp(cardDims[i], dimTarget, blend);
+                    cardRedness[i] = Mathf.Lerp(cardRedness[i], redTarget * .55f, blend);
                     card.SetTokenTint(cardDims[i], cardRedness[i]);
                 }
             }
@@ -551,7 +557,7 @@ public class CardBloomWheel : MonoBehaviour
             if (i < cardGroups.Count && cardGroups[i] != null)
             {
                 float alphaTarget = isOpen ? 1f : 0f;
-                cardGroups[i].alpha = Mathf.Lerp(cardGroups[i].alpha, alphaTarget, Time.deltaTime * speed * 1.5f);
+                cardGroups[i].alpha = Mathf.Lerp(cardGroups[i].alpha, alphaTarget, 1f - Mathf.Exp(-speed * 1.5f * Time.unscaledDeltaTime));
             }
         }
 

@@ -36,7 +36,7 @@ public class CardBloomLinesGraphic : Graphic
         if (wheel == null) return;
 
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
+        if (!Application.isPlaying && wheel.CardRects.Count == 0)
         {
             DrawEditorLines(vh);
             return;
@@ -54,7 +54,7 @@ public class CardBloomLinesGraphic : Graphic
         RectTransform trigger = wheel.HoverTriggerRect;
         Vector2 startLocal = trigger != null
             ? (Vector2)rectTransform.InverseTransformPoint(trigger.TransformPoint(trigger.rect.center))
-            : Vector2.zero;
+            : (Vector2)rectTransform.InverseTransformPoint(wheel.transform.position);
 
         Vector2 off = wheel.LineEndOffset;
 
@@ -62,10 +62,13 @@ public class CardBloomLinesGraphic : Graphic
         {
             if (cards[i] == null || !cards[i].gameObject.activeSelf) continue;
             Color baseColor = (cardColors != null && i < cardColors.Count) ? cardColors[i] : Color.white;
-            Color lineColor = new Color(baseColor.r, baseColor.g, baseColor.b, alpha);
+            bool focused = wheel.HoveredCardIndex == i;
+            Color brass = new(.79f, .64f, .40f);
+            Color lineColor = Color.Lerp(brass, baseColor, .25f);
+            lineColor.a = alpha * wheel.CardVisibility(i) * (focused ? .85f : wheel.HoveredCardIndex >= 0 ? .12f : .3f);
             Vector2 cardLocal = rectTransform.InverseTransformPoint(
                 cards[i].TransformPoint(new Vector3(off.x, off.y, 0f)));
-            AddLine(vh, startLocal, cardLocal, lineWidth, lineColor);
+            AddLine(vh, startLocal, cardLocal, focused ? lineWidth : lineWidth * .65f, lineColor);
         }
     }
 
@@ -80,7 +83,7 @@ public class CardBloomLinesGraphic : Graphic
             ? (Vector2)rectTransform.InverseTransformPoint(trigger.TransformPoint(trigger.rect.center))
             : Vector2.zero;
 
-        Color lineColor = new Color(1f, 1f, 1f, 0.7f);
+        Color lineColor = new Color(.79f, .64f, .40f, .3f);
         Vector2 off = wheel.LineEndOffset;
 
         foreach (var rt in previewRects)

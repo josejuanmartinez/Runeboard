@@ -40,8 +40,7 @@ public class CharacterAnimationController : MonoBehaviour
     // component itself.
     public float selectionPulseSpeed = 1f;
 
-    // Outline size Hex.UpdateCharacterSpriteAlpha applies for the hover/selection/idle states —
-    // the outline no longer pulses, so this is just a steady size.
+    // Base width; the presentation adds a narrow rim and a softer breathing halo.
     public float outlineSize = 10f;
     // Same alignment as the human player (or no character/owner at all) — the plain default look.
     [SerializeField] private Material outlineMaterial;
@@ -51,17 +50,24 @@ public class CharacterAnimationController : MonoBehaviour
     [SerializeField] private Material enemyOutlineMaterial;
 
     [Header("Enemy Alert")]
-    [Tooltip("How long the outline pulses after an enemy character is first spotted on a hex.")]
+    [Tooltip("How long the aura swells after an enemy character is first spotted on a hex.")]
     [SerializeField] private float enemyAlertDuration = 2f;
     [Tooltip("Pulses per second during the enemy-reveal alert.")]
     [SerializeField] private float enemyAlertPulseSpeed = 3f;
-    [Tooltip("Outline size multiplier at each pulse's peak, relative to outlineSize.")]
+    [Tooltip("Extra aura expansion at each reveal pulse's peak, relative to outlineSize.")]
     [SerializeField] private float enemyAlertPeakMultiplier = 2.5f;
 
     private Coroutine enemyAlertCoroutine;
-    // While true, SetOutlineSize's normal per-frame calls (Hex.UpdateCharacterSpriteAlpha) are
-    // ignored so the pulse coroutine below has exclusive control of the outline size.
-    private bool enemyAlertActive;
+    private float enemyAlertStrength;
+    private float requestedOutlineSize = -1f;
+    private float outlineAlpha = 1f;
+    private float focusTarget;
+    private float focusAmount;
+    private Sprite outlineSprite;
+    private Vector4 outlineUvRect = new Vector4(0, 0, 1, 1);
+    [Header("Character Aura")]
+    [SerializeField, Range(0.3f, 1.5f)] private float enemyHeartbeatSpeed = 0.75f;
+    [SerializeField, Range(0f, 1f)] private float auraStrength = 0.65f;
 
     // Playback speed multiplier applied only to the Turn Left/Right in-place spin (baked atlas
     // fps otherwise makes it play at the same pace as walk/idle, which reads as sluggish when a
@@ -152,8 +158,13 @@ public class CharacterAnimationController : MonoBehaviour
     // cached so SetOutlineAlpha() can dim the outline's alpha in step with the sprite's, without
     // needing to re-resolve the alignment/material lookup itself.
     private Color outlineBaseColor = Color.white;
+    private Color auraBaseColor = Color.white;
     private static readonly int OutlineColorShaderId = Shader.PropertyToID("_OutlineColor");
     private static readonly int OutlineSizeShaderId = Shader.PropertyToID("_OutlineSize");
+    private static readonly int AuraSizeShaderId = Shader.PropertyToID("_AuraSize");
+    private static readonly int AuraStrengthShaderId = Shader.PropertyToID("_AuraStrength");
+    private static readonly int AuraColorShaderId = Shader.PropertyToID("_AuraColor");
+    private static readonly int OutlineUvRectShaderId = Shader.PropertyToID("_OutlineUVRect");
 
     // Set only when a Show() call fails because CharacterSpritesheets' Addressables load
     // hadn't finished yet (as opposed to a genuine no-match) — callers like Hex.RedrawCharacters
@@ -355,7 +366,10 @@ public class CharacterAnimationController : MonoBehaviour
         Material material = ResolveOutlineMaterial(character);
         ApplyOutlineMaterial(material);
         ApplyOutlineSettings(GetMaterialOutlineColor(material), outlineSize);
-        IsShowingEnemyOutline = material == enemyOutlineMaterial;
+        auraBaseColor = material != null && material == neutralOutlineMaterial
+            ? new Color(0.64f, 0.69f, 0.75f) : new Color(0.43f, 0.76f, 0.61f);
+        IsShowingEnemyOutline = enemyOutlineMaterial != null && material == enemyOutlineMaterial;
+        if (!IsShowingEnemyOutline) ResetEnemyAlert();
         return IsShowingEnemyOutline;
     }
 
@@ -363,38 +377,88 @@ public class CharacterAnimationController : MonoBehaviour
     // visible on a hex, so a newly-spotted threat reads as more than a static red outline.
     public void PlayEnemyAlertPulse()
     {
-        if (!isActiveAndEnabled) return;
+        if (!isActiveAndEnabled || !IsShowingEnemyOutline) return;
         if (enemyAlertCoroutine != null) StopCoroutine(enemyAlertCoroutine);
         enemyAlertCoroutine = StartCoroutine(EnemyAlertPulseRoutine());
     }
 
     private IEnumerator EnemyAlertPulseRoutine()
     {
-        enemyAlertActive = true;
         float t = 0f;
         while (t < enemyAlertDuration)
         {
             t += Time.deltaTime;
-            // Ping-pongs between the base size and an enlarged "ring" size, with the pulse's
-            // amplitude fading out as the alert winds down so it settles rather than stopping abruptly.
+            // Add a brief swelling halo that settles into the persistent heartbeat.
             float wave = 0.5f + 0.5f * Mathf.Sin(t * enemyAlertPulseSpeed * Mathf.PI * 2f);
             float fade = 1f - Mathf.Clamp01(t / enemyAlertDuration);
-            float size = Mathf.Lerp(outlineSize, outlineSize * enemyAlertPeakMultiplier, wave * fade);
-            ApplyOutlineSizeImmediate(size);
+            enemyAlertStrength = wave * fade;
             yield return null;
         }
 
-        enemyAlertActive = false;
         enemyAlertCoroutine = null;
-        ApplyOutlineSizeImmediate(outlineSize);
+        enemyAlertStrength = 0f;
     }
 
-    private void ApplyOutlineSizeImmediate(float size)
+    public void SetOutlineFocus(bool hovered, bool selected)
     {
-        if (!spriteRenderer) return;
+        focusTarget = selected ? 1f : hovered ? 0.65f : 0f;
+    }
+
+    private void ResetEnemyAlert()
+    {
+        if (enemyAlertCoroutine != null) StopCoroutine(enemyAlertCoroutine);
+        enemyAlertCoroutine = null;
+        enemyAlertStrength = 0f;
+    }
+
+    private void LateUpdate()
+    {
+        UpdateOutlinePresentation(Time.time, Time.deltaTime);
+    }
+
+    private void UpdateOutlinePresentation(float time, float deltaTime)
+    {
+        if (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite) return;
+        focusAmount = Mathf.MoveTowards(focusAmount, focusTarget, deltaTime * 5f);
+        // Two rounded beats followed by a rest: a heartbeat rather than a flashing alarm.
+        float phase = Mathf.Repeat(time * enemyHeartbeatSpeed, 1f);
+        float first = Mathf.Exp(-Mathf.Pow((phase - 0.18f) / 0.075f, 2f));
+        float second = 0.65f * Mathf.Exp(-Mathf.Pow((phase - 0.40f) / 0.09f, 2f));
+        float breath = 0.5f + 0.5f * Mathf.Sin(time * 1.8f);
+        float pulse = IsShowingEnemyOutline ? first + second : breath * 0.18f;
+        float size = Mathf.Max(0f, requestedOutlineSize < 0f ? outlineSize : requestedOutlineSize);
+        Color aura = IsShowingEnemyOutline ? new Color(0.9f, 0.025f, 0.055f, 1f) : auraBaseColor;
+        Color rim = IsShowingEnemyOutline
+            ? Color.Lerp(new Color(0.72f, 0.055f, 0.075f), new Color(1f, 0.32f, 0.19f), pulse)
+            : Color.Lerp(outlineBaseColor, Color.white, 0.2f + focusAmount * 0.3f);
+        rim.a = outlineBaseColor.a * outlineAlpha * (0.8f + 0.2f * Mathf.Max(pulse, focusAmount));
+
+        // Restrict halo sampling to the current animation cell, avoiding adjacent atlas frames.
+        if (outlineSprite != spriteRenderer.sprite)
+        {
+            outlineSprite = spriteRenderer.sprite;
+            if (!outlineSprite.packed || outlineSprite.packingMode == SpritePackingMode.Rectangle)
+            {
+                Rect rect = outlineSprite.textureRect;
+                Texture texture = outlineSprite.texture;
+                outlineUvRect = new Vector4((rect.xMin + 0.5f) / texture.width, (rect.yMin + 0.5f) / texture.height,
+                    (rect.xMax - 0.5f) / texture.width, (rect.yMax - 0.5f) / texture.height);
+            }
+            else outlineUvRect = new Vector4(0, 0, 1, 1);
+        }
         EnsureOutlinePropertyBlock();
         spriteRenderer.GetPropertyBlock(outlinePropertyBlock);
-        outlinePropertyBlock.SetFloat(OutlineSizeShaderId, size);
+        outlinePropertyBlock.SetColor(OutlineColorShaderId, rim);
+        outlinePropertyBlock.SetFloat(OutlineSizeShaderId, size * (0.5f + 0.18f * pulse + 0.12f * focusAmount));
+        outlinePropertyBlock.SetColor(AuraColorShaderId, aura);
+        outlinePropertyBlock.SetFloat(AuraSizeShaderId, size * (1.4f + 0.7f * pulse + 0.35f * focusAmount
+            + enemyAlertStrength * Mathf.Clamp(enemyAlertPeakMultiplier - 1f, 0f, 2f)));
+        float haloIntensity = auraStrength
+            * (IsShowingEnemyOutline ? 0.45f + pulse * 0.5f + enemyAlertStrength * 0.3f : 0.3f + pulse)
+            + focusAmount * 0.22f;
+        outlinePropertyBlock.SetFloat(AuraStrengthShaderId, size <= 0f ? 0f
+            : Mathf.Clamp01(haloIntensity) * outlineAlpha * outlineBaseColor.a);
+        outlinePropertyBlock.SetVector(OutlineUvRectShaderId, outlineUvRect);
         spriteRenderer.SetPropertyBlock(outlinePropertyBlock);
     }
 
@@ -420,6 +484,8 @@ public class CharacterAnimationController : MonoBehaviour
 
     public void ClearOutline()
     {
+        ResetEnemyAlert();
+        auraBaseColor = Color.white;
         ApplyOutlineMaterial();
         ApplyOutlineSettings(Color.white, outlineSize);
         IsShowingEnemyOutline = false;
@@ -430,6 +496,7 @@ public class CharacterAnimationController : MonoBehaviour
         if (!spriteRenderer) return;
 
         outlineBaseColor = outlineColor;
+        requestedOutlineSize = size;
 
         EnsureOutlinePropertyBlock();
         spriteRenderer.GetPropertyBlock(outlinePropertyBlock);
@@ -442,29 +509,13 @@ public class CharacterAnimationController : MonoBehaviour
     // a dimmed non-selected character doesn't keep a fully opaque outline around a half-see-through body.
     public void SetOutlineAlpha(float alpha)
     {
-        if (!spriteRenderer) return;
-
-        EnsureOutlinePropertyBlock();
-        spriteRenderer.GetPropertyBlock(outlinePropertyBlock);
-        Color c = outlineBaseColor;
-        c.a = outlineBaseColor.a * alpha;
-        outlinePropertyBlock.SetColor(OutlineColorShaderId, c);
-        spriteRenderer.SetPropertyBlock(outlinePropertyBlock);
+        outlineAlpha = Mathf.Clamp01(alpha);
     }
 
-    // Overrides just the outline's size (leaving its color alone) — drives the not-selected pulse
-    // in Hex.UpdateCharacterSpriteAlpha() independently of the alpha setter above.
+    // Hex provides the baseline; LateUpdate combines it with focus and heartbeat animation.
     public void SetOutlineSize(float size)
     {
-        if (!spriteRenderer) return;
-        // The enemy-alert pulse owns outline size for its duration — Hex.UpdateCharacterSpriteAlpha
-        // calls this every frame regardless, and would otherwise fight the pulse for control.
-        if (enemyAlertActive) return;
-
-        EnsureOutlinePropertyBlock();
-        spriteRenderer.GetPropertyBlock(outlinePropertyBlock);
-        outlinePropertyBlock.SetFloat(OutlineSizeShaderId, size);
-        spriteRenderer.SetPropertyBlock(outlinePropertyBlock);
+        requestedOutlineSize = Mathf.Max(0f, size);
     }
 
     private void EnsureOutlinePropertyBlock()
@@ -614,6 +665,8 @@ public class CharacterAnimationController : MonoBehaviour
 
     public void Clear()
     {
+        ClearOutline();
+        focusTarget = focusAmount = 0f;
         isShowing = false;
         resolvedForCharacter = null;
         resolvedRaceOrName = null;
@@ -641,11 +694,9 @@ public class CharacterAnimationController : MonoBehaviour
         // dies or the hex redraws while the pointer is still over it).
         if (cursorHovering) SetHoverCursor(false);
 
-        // This slot may be reused for a different character on re-enable — never leave
-        // SetOutlineSize permanently locked out because a pulse's coroutine got killed early,
-        // and never let a stale "was showing enemy" flag survive into the next occupant.
-        enemyAlertCoroutine = null;
-        enemyAlertActive = false;
+        // This slot may be reused for a different character on re-enable.
+        ResetEnemyAlert();
+        focusTarget = focusAmount = 0f;
         IsShowingEnemyOutline = false;
     }
 

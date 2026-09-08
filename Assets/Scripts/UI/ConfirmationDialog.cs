@@ -33,6 +33,12 @@ public class ConfirmationDialog : MonoBehaviour
     private readonly List<DialogRequest> queuedRequests = new();
     private int activeIndex = -1;
     private Coroutine waitForMessagesRoutine;
+    private Image requestImage;
+    private RectTransform imageFrame;
+    private RectTransform dialogPanel;
+    private Vector2 textOnlyPanelSize;
+    private Vector2 textOnlyMessagePosition;
+    private Vector2 textOnlyMessageSize;
 
     private void Awake()
     {
@@ -103,7 +109,7 @@ public class ConfirmationDialog : MonoBehaviour
     /// <summary>
     /// Opens a Yes/No dialog using the default button texts.
     /// </summary>
-    public static Task<bool> AskYesNo(string message, Action onClose = null)
+    public static Task<bool> AskYesNo(string message, Action onClose = null, Sprite image = null, string imageName = null)
     {
         if (Instance == null)
         {
@@ -111,7 +117,7 @@ public class ConfirmationDialog : MonoBehaviour
             return Task.FromResult(false);
         }
 
-        return Instance.Show(message, Instance.defaultYesLabel, Instance.defaultNoLabel, false, false, onClose);
+        return Instance.Show(message, Instance.defaultYesLabel, Instance.defaultNoLabel, false, false, onClose, image, imageName);
     }
 
     /// <summary>
@@ -129,7 +135,7 @@ public class ConfirmationDialog : MonoBehaviour
         return Instance.Show(message, okLabel, string.Empty, true, false, onClose);
     }
 
-    private Task<bool> Show(string message, string yesString, string noString, bool singleButton = false, bool forceImmediate = false, Action onClose = null)
+    private Task<bool> Show(string message, string yesString, string noString, bool singleButton = false, bool forceImmediate = false, Action onClose = null, Sprite image = null, string imageName = null)
     {
         var request = new DialogRequest
         {
@@ -138,6 +144,8 @@ public class ConfirmationDialog : MonoBehaviour
             noString = noString,
             singleButton = singleButton,
             onClose = onClose,
+            image = image,
+            imageName = imageName,
             tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously)
         };
 
@@ -201,6 +209,7 @@ public class ConfirmationDialog : MonoBehaviour
 
     private void HideInstant()
     {
+        if (requestImage != null) requestImage.sprite = null;
         content.SetActive(false);
         IsShowing = false;
     }
@@ -230,6 +239,7 @@ public class ConfirmationDialog : MonoBehaviour
         IsShowing = true;
 
         messageLabel.text = string.IsNullOrWhiteSpace(activeRequest.message) ? fallbackMessage : activeRequest.message;
+        ApplyRequestImage(activeRequest);
         yesButtonText.text = string.IsNullOrWhiteSpace(activeRequest.yesString) ? defaultYesLabel : activeRequest.yesString;
         yesButton.gameObject.SetActive(true);
 
@@ -292,6 +302,7 @@ public class ConfirmationDialog : MonoBehaviour
         IsShowing = true;
 
         messageLabel.text = string.IsNullOrWhiteSpace(activeRequest.message) ? fallbackMessage : activeRequest.message;
+        ApplyRequestImage(activeRequest);
         yesButtonText.text = string.IsNullOrWhiteSpace(activeRequest.yesString) ? defaultYesLabel : activeRequest.yesString;
         yesButton.gameObject.SetActive(true);
 
@@ -306,6 +317,52 @@ public class ConfirmationDialog : MonoBehaviour
         bool canNext = activeIndex < queuedRequests.Count - 1;
         if (previousButton != null) previousButton.gameObject.SetActive(canPrev);
         if (nextButton != null) nextButton.gameObject.SetActive(canNext);
+    }
+
+    private void ApplyRequestImage(DialogRequest request)
+    {
+        Sprite sprite = request.image;
+        if (sprite == null && !string.IsNullOrWhiteSpace(request.imageName))
+            sprite = FindFirstObjectByType<Illustrations>()?.GetIllustrationByName(request.imageName, false);
+
+        if (dialogPanel == null)
+        {
+            dialogPanel = messageLabel.transform.parent as RectTransform;
+            textOnlyPanelSize = dialogPanel.sizeDelta;
+            textOnlyMessagePosition = messageLabel.rectTransform.anchoredPosition;
+            textOnlyMessageSize = messageLabel.rectTransform.sizeDelta;
+        }
+
+        if (sprite != null && requestImage == null)
+        {
+            var frame = new GameObject("Confirmation artwork frame", typeof(RectTransform), typeof(Image), typeof(ImageUnaffectedBySkin));
+            imageFrame = frame.GetComponent<RectTransform>();
+            imageFrame.SetParent(dialogPanel, false);
+            imageFrame.anchorMin = imageFrame.anchorMax = new Vector2(.5f, 1f);
+            imageFrame.pivot = new Vector2(.5f, 1f);
+            imageFrame.anchoredPosition = new Vector2(0, -28);
+            imageFrame.sizeDelta = new Vector2(224, 224);
+            var border = frame.GetComponent<Image>();
+            border.color = new Color(.65f, .51f, .29f);
+            border.raycastTarget = false;
+            var art = new GameObject("Artwork", typeof(RectTransform), typeof(Image), typeof(ImageUnaffectedBySkin));
+            art.transform.SetParent(imageFrame, false);
+            requestImage = art.GetComponent<Image>();
+            requestImage.raycastTarget = false;
+            requestImage.preserveAspect = true;
+            requestImage.rectTransform.anchorMin = Vector2.zero;
+            requestImage.rectTransform.anchorMax = Vector2.one;
+            requestImage.rectTransform.offsetMin = new Vector2(2, 2);
+            requestImage.rectTransform.offsetMax = new Vector2(-2, -2);
+        }
+
+        bool hasImage = sprite != null;
+        if (imageFrame != null) imageFrame.gameObject.SetActive(hasImage);
+        if (requestImage != null) requestImage.sprite = sprite;
+        float extraHeight = hasImage ? 248 : 0;
+        dialogPanel.sizeDelta = textOnlyPanelSize + new Vector2(0, extraHeight);
+        messageLabel.rectTransform.sizeDelta = textOnlyMessageSize - new Vector2(0, extraHeight);
+        messageLabel.rectTransform.anchoredPosition = textOnlyMessagePosition - new Vector2(0, extraHeight / 2);
     }
 
     private void ShowPrevious()
@@ -329,6 +386,8 @@ public class ConfirmationDialog : MonoBehaviour
         public string noString;
         public bool singleButton;
         public Action onClose;
+        public Sprite image;
+        public string imageName;
         public TaskCompletionSource<bool> tcs;
     }
 

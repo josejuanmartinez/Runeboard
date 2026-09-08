@@ -7,7 +7,7 @@ public class HexPcTextHover : MonoBehaviour
 {
     // Baseline (unhovered) alpha the Band sprite is authored with — restored on mouse-exit
     // rather than snapping to full opacity so it settles back to its normal dimmed look.
-    private const float UnhoveredAlpha = 0.5f;
+    private const float UnhoveredAlpha = 0.88f;
     private const float HoveredAlpha = 1f;
 
     public Hex hex;

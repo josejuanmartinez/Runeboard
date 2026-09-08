@@ -12,6 +12,10 @@ public class MessageDisplay : MonoBehaviour
     private static bool displayPaused;
     private CanvasGroup canvasGroup;
     [SerializeField] private TextMeshProUGUI messageText;
+    // The backing pill sizes itself to the label. Its Fit() only self-runs from OnEnable (and,
+    // in the editor, Update), so every text change here has to drive it explicitly - otherwise
+    // a build shows the pill at whatever width the previous message happened to need.
+    private ImageFitToTMP backgroundFit;
     [SerializeField] private float displayDuration = 0.08f;
     [SerializeField] private float fadeDuration = 0.02f;
 
@@ -31,10 +35,14 @@ public class MessageDisplay : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+        backgroundFit = GetComponentInChildren<ImageFitToTMP>(true);
 
         // messageText itself stays enabled permanently; the canvas group governs visibility
         // (alpha for the fade, interactable/blocksRaycasts for hit-testing) instead.
         messageText.enabled = true;
+        // Whatever placeholder the prefab/scene carries, the widget starts with nothing to say -
+        // and an empty label is what keeps its backing pill hidden until the first message.
+        SetText(string.Empty, messageText.color);
         canvasGroup.alpha = 0f;
         SetCanvasGroupVisible(false);
     }
@@ -43,6 +51,15 @@ public class MessageDisplay : MonoBehaviour
     {
         canvasGroup.interactable = visible;
         canvasGroup.blocksRaycasts = visible;
+    }
+
+    // Every write to the label goes through here so the pill behind it is always re-fitted -
+    // including to nothing at all, which is what hides it when the text is cleared.
+    private void SetText(string message, Color textColor)
+    {
+        messageText.text = message;
+        messageText.color = textColor;
+        backgroundFit?.Fit();
     }
 
     /// <summary>
@@ -60,6 +77,9 @@ public class MessageDisplay : MonoBehaviour
         Leader aiActor = AITurnController.CurrentExecutingLeader;
         if (aiActor != null && aiActor != game.player) return;
         string formattedMessage = FormatMessageForDisplay(ResourceSpriteFormatter.ReplaceResourceWordsWithSprites(message));
+        // A message that formats down to nothing has no business claiming the display: it would
+        // fade the empty pill in and out, and play a cue, with nothing to read inside it.
+        if (string.IsNullOrWhiteSpace(formattedMessage)) return;
         Color resolved = color ?? Color.white;
         // playSound: false lets a caller that already plays its own cue (see
         // PlayableLeader.ApplyVariantTransformation, which follows this with
@@ -110,6 +130,7 @@ public class MessageDisplay : MonoBehaviour
     public static void ShowPersistent(string message, Color? color = null)
     {
         if (instance == null) return;
+        if (string.IsNullOrWhiteSpace(message)) return;
         instance.SetPersistent(message, color ?? Color.white);
     }
 
@@ -238,8 +259,7 @@ public class MessageDisplay : MonoBehaviour
         SetCanvasGroupVisible(true);
 
         // Set up the message
-        messageText.text = message;
-        messageText.color = textColor;
+        SetText(message, textColor);
 
         // Fade in
         yield return FadeCanvasGroup(canvasGroup, 0f, 1f, fadeDuration);
@@ -253,6 +273,9 @@ public class MessageDisplay : MonoBehaviour
         yield return FadeCanvasGroup(canvasGroup, 1f, 0f, fadeDuration);
 
         SetCanvasGroupVisible(false);
+        // Leave nothing behind: with the label empty the backing pill hides itself, so a stray
+        // alpha change from anywhere else can't surface an empty background.
+        SetText(string.Empty, textColor);
 
         Debug.Log($"[MsgDisplay] DisplayCoroutine END '{message}' (frame={Time.frameCount})");
         // Process the next message in the queue if there is one
@@ -315,8 +338,7 @@ public class MessageDisplay : MonoBehaviour
         isDisplayingMessage = false;
         persistentActive = true;
 
-        messageText.text = message;
-        messageText.color = textColor;
+        SetText(message, textColor);
         canvasGroup.alpha = 1f;
         SetCanvasGroupVisible(true);
     }
@@ -329,7 +351,7 @@ public class MessageDisplay : MonoBehaviour
             waitForSyncRoutine = null;
         }
         persistentActive = false;
-        messageText.text = "";
+        SetText(string.Empty, messageText.color);
         canvasGroup.alpha = 0f;
         SetCanvasGroupVisible(false);
 

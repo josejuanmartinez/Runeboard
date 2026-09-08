@@ -4,8 +4,7 @@ using UnityEngine.Video;
 public enum Skins
 {
     Bakshi,
-    Default,
-    Naive
+    Default
 }
 
 public class SkinManager : MonoBehaviour
@@ -72,8 +71,8 @@ public class SkinManager : MonoBehaviour
         return videos.GetClipForSkin(currentSkin);
     }
 
-    // Cycles Default -> Bakshi -> Naive -> Default ... in enum declaration order, so UI toggle
-    // buttons reach every skin without hardcoding the set.
+    // Cycles through the skins in enum declaration order, so UI toggle buttons reach every skin
+    // without hardcoding the set.
     public Skins GetNextSkin()
     {
         Skins[] values = (Skins[])System.Enum.GetValues(typeof(Skins));

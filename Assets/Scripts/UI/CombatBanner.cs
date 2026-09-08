@@ -50,7 +50,7 @@ public class CombatBanner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI defenderStatusText;
 
     private const float BarHeight = 88f;
-    private const float LineThickness = 3f;
+    private const float LineThickness = 1f;
     private const float LineMaxHalfWidth = 320f;
     private const float ActorRestX = 460f;
     private const float ActorStartX = 700f;
@@ -67,7 +67,7 @@ public class CombatBanner : MonoBehaviour
     private const float StatusCalloutFadeDuration = 0.2f;
     private const float StatusCalloutHoldDuration = 1.4f;
 
-    private static readonly Color GoldColor = new(1f, 0.82f, 0.1f);
+    private static readonly Color GoldColor = new(.79f, .64f, .40f);
     private static readonly Color PositiveModifierColor = new(0.45f, 0.85f, 0.45f);
     private static readonly Color NegativeModifierColor = new(0.9f, 0.35f, 0.35f);
 
@@ -131,6 +131,76 @@ public class CombatBanner : MonoBehaviour
         }
         attackerAnimator = new ActorAnimator(attackerImage);
         defenderAnimator = new ActorAnimator(defenderImage);
+        ApplyPresentation();
+    }
+
+    private void ApplyPresentation()
+    {
+        Color paper = new(.91f, .89f, .81f);
+        void Place(RectTransform rect, Vector2 position, Vector2 size)
+        {
+            if (rect == null) return;
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+        }
+        void TextStyle(TMP_Text label, float size, Color tint)
+        {
+            if (label == null) return;
+            label.fontSize = label.fontSizeMax = size;
+            label.fontSizeMin = size * .65f;
+            label.enableAutoSizing = true;
+            label.color = tint;
+            label.alignment = TextAlignmentOptions.Center;
+            label.fontStyle = FontStyles.Normal;
+            label.overrideColorTags = false;
+            label.enableVertexGradient = false;
+            label.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0f);
+            label.fontMaterial.SetColor(ShaderUtilities.ID_FaceColor, Color.white);
+            label.fontMaterial.DisableKeyword("UNDERLAY_ON");
+            label.outlineColor = new Color(.025f, .03f, .035f, 1f);
+            label.outlineWidth = .06f;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.raycastTarget = false;
+        }
+        Image backdrop = transform.Find("Bg")?.GetComponent<Image>();
+        if (backdrop != null) backdrop.color = new Color(.018f, .024f, .03f, .82f);
+        var surfaceObject = new GameObject("Combat Surface", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel));
+        surfaceObject.transform.SetParent(transform, false);
+        surfaceObject.transform.SetSiblingIndex(backdrop != null ? backdrop.transform.GetSiblingIndex() + 1 : 0);
+        Place(surfaceObject.GetComponent<RectTransform>(), Vector2.zero, new Vector2(1320, 780));
+        var panel = surfaceObject.GetComponent<RuneboardPanel>();
+        panel.topColor = new Color(.10f, .115f, .125f, .98f);
+        panel.bottomColor = new Color(.028f, .037f, .044f, .98f);
+        panel.edgeColor = new Color(GoldColor.r, GoldColor.g, GoldColor.b, .65f);
+        panel.corner = 12;
+        panel.raycastTarget = false;
+
+        Place(textRect, new Vector2(0, 307), new Vector2(1160, 76));
+        TextStyle(titleText, 48, GoldColor);
+        Place(subtitleRect, new Vector2(0, -260), new Vector2(1160, 56));
+        TextStyle(subtitleText, 29, paper);
+        Place(nationsRect, new Vector2(0, -312), new Vector2(1140, 42));
+        TextStyle(nationsText, 21, new Color(.66f, .69f, .67f));
+        Place(noticeText.rectTransform, new Vector2(0, 5), new Vector2(560, 290));
+        TextStyle(noticeText, 23, paper);
+        noticeText.lineSpacing = 8;
+        TextStyle(attackerStatusText, 22, paper);
+        TextStyle(defenderStatusText, 22, paper);
+        attackerImage.preserveAspect = defenderImage.preserveAspect = true;
+        attackerBannerImage.preserveAspect = defenderBannerImage.preserveAspect = true;
+        foreach (RectTransform line in new[] { lineLeftRect, lineRightRect })
+        {
+            if (line == null) continue;
+            line.anchoredPosition = new Vector2(line.anchoredPosition.x, 252);
+            if (line.TryGetComponent(out Image image)) image.color = GoldColor;
+        }
+        // These decorative images should never receive skin replacement textures or pointer input.
+        foreach (Image image in GetComponentsInChildren<Image>(true))
+        {
+            image.raycastTarget = false;
+            if (image.GetComponent<ImageUnaffectedBySkin>() == null) image.gameObject.AddComponent<ImageUnaffectedBySkin>();
+        }
     }
 
     // Enter Play mode, select this GameObject, then right-click the CombatBanner component
@@ -241,7 +311,7 @@ public class CombatBanner : MonoBehaviour
         titleText.text = $"{request.title} at {request.locationLabel}";
         titleText.color = GoldColor;
         subtitleText.text = $"{request.attacker.characterName} {request.verb} {request.defender.characterName}";
-        nationsText.text = $"from {attackerNation}    vs    from {defenderNation}";
+        nationsText.text = $"{attackerNation}    /    {defenderNation}";
 
         // Attacker faces screen-right (baked "Left" atlas — see CharacterAnimationController.
         // ResolveDirectionOrientation's comment: facing names are inverted from the on-screen

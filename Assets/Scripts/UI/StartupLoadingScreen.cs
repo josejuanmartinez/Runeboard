@@ -36,6 +36,9 @@ public sealed class StartupLoadingScreen : MonoBehaviour
     [SerializeField] private float rotationSeconds = 3f;
     [Tooltip("Total duration of the flip animation played when a card slot changes card.")]
     [SerializeField] private float cardFlipSeconds = 0.4f;
+    [Tooltip("How much of its share of the Cards row each card fills. 1 = as large as the row allows.")]
+    [Range(0.1f, 1f)]
+    [SerializeField] private float cardFillFraction = 1f;
 
     private readonly Dictionary<CardRotationSlot, List<CardDataProvider>> slotGroups = new();
     private readonly Dictionary<CardRotationSlot, int> slotActiveIndex = new();
@@ -55,6 +58,12 @@ public sealed class StartupLoadingScreen : MonoBehaviour
         SetContinuePromptVisible(false);
         if (progressBar != null) progressBar.value = 0.02f;
         SetStatus("Preparing your journey");
+
+        // Must happen before the first yield: the frame rendered at that yield is the one left
+        // on screen for as long as the synchronous deck parse blocks the main thread, so
+        // building the in-game card face any later means the player watches the legacy prefab
+        // frame for seconds and then sees it pop into the real design mid-load.
+        EnsureGroupsInitialized();
 
         // Ensure this canvas is actually presented before synchronous deck parsing begins.
         yield return null;
@@ -100,6 +109,8 @@ public sealed class StartupLoadingScreen : MonoBehaviour
     {
         if (cardSlots == null) return;
 
+        Vector2 footprint = ResolveCardFootprint();
+
         foreach (CardRotationSlot slot in cardSlots)
         {
             if (slot?.provider == null || slotGroups.ContainsKey(slot)) continue;
@@ -107,11 +118,61 @@ public sealed class StartupLoadingScreen : MonoBehaviour
             List<CardDataProvider> group = new() { slot.provider };
             if (slot.bakedAlternates != null) group.AddRange(slot.bakedAlternates.Where(p => p != null));
 
-            for (int i = 0; i < group.Count; i++) group[i].gameObject.SetActive(i == 0);
+            for (int i = 0; i < group.Count; i++)
+            {
+                ApplyInGameCardPresentation(group[i], footprint);
+                group[i].gameObject.SetActive(i == 0);
+            }
 
             slotGroups[slot] = group;
             slotActiveIndex[slot] = 0;
         }
+    }
+
+    // "Bake Preload Cards" only bakes the card's data and artwork; the face it leaves behind is
+    // the one authored in Card.prefab, which is the legacy card frame. The card the player sees in
+    // game is built at runtime by Card.ApplyCenterPreviewPresentation (that is what
+    // CardCenterPreview instantiates), so rebuild the same face here, scaled into the footprint
+    // ResolveCardFootprint measured off the Cards row, and the loading screen stops showing an
+    // older card design than the game. Cheap enough to do once per baked sibling at startup, and
+    // it keeps the two in step automatically whenever the in-game card design changes.
+    private void ApplyInGameCardPresentation(CardDataProvider provider, Vector2 footprint)
+    {
+        Card card = provider != null ? provider.Card : null;
+        if (card == null) return;
+
+        // TMP only creates the per-label fontMaterial the presentation restyles once the object
+        // has been enabled, and every sibling past the first is baked inactive.
+        bool wasActive = card.gameObject.activeSelf;
+        card.gameObject.SetActive(true);
+        card.ApplyCenterPreviewPresentationScaledTo(footprint);
+        card.gameObject.SetActive(wasActive);
+    }
+
+    // How much room one slot's card gets. Deriving this from the slot's own authored rect is
+    // what made the cards read as tiny: those rects are the legacy 200x250 card frame, and
+    // fitting the much taller 340x570 in-game face inside one is height-limited, so the card
+    // ended up well short of the row it lives in. Measure the row instead — every slot's card
+    // shares one HorizontalLayoutGroup — so cards fill the band's height and simply share its
+    // width, and adding or removing a slot re-fits them automatically.
+    private Vector2 ResolveCardFootprint()
+    {
+        int slotCount = cardSlots?.Count(slot => slot?.provider != null) ?? 0;
+        if (slotCount == 0) return Card.CenterPreviewSize;
+
+        RectTransform row = cardSlots.First(slot => slot?.provider != null).provider.transform.parent as RectTransform;
+        if (row == null) return Card.CenterPreviewSize;
+
+        HorizontalLayoutGroup layout = row.GetComponent<HorizontalLayoutGroup>();
+        float spacing = layout != null ? layout.spacing : 0f;
+        float horizontalPadding = layout != null ? layout.padding.horizontal : 0f;
+        float verticalPadding = layout != null ? layout.padding.vertical : 0f;
+
+        float width = (row.rect.width - horizontalPadding - spacing * (slotCount - 1)) / slotCount;
+        float height = row.rect.height - verticalPadding;
+        return new Vector2(
+            Mathf.Max(1f, width) * Mathf.Clamp01(cardFillFraction),
+            Mathf.Max(1f, height) * Mathf.Clamp01(cardFillFraction));
     }
 
     // Switches one slot to the given index within its pre-baked group via the flip animation.

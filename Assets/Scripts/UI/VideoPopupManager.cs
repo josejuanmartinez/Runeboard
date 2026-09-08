@@ -89,12 +89,18 @@ public class VideoPopupManager : MonoBehaviour
         VideoClip clip = FindClip(key);
         if (clip == null) return;
 
+        // Clip and intro text are authored in two different places — the clip lists on this
+        // component, the text in PlayableLeaderBiomes.json — so either half can be missing on
+        // its own. A clip without text played as a video over a permanently blank text panel;
+        // treat the pair as one unit and skip the popup until both halves exist.
+        if (string.IsNullOrWhiteSpace(introText)) return;
+
         currentKey = key;
         Game.Instance?.NotifyStartupPopupShown();
 
         if (scrollableText != null)
         {
-            scrollableText.StartWriting(introText ?? string.Empty);
+            scrollableText.StartWriting(introText);
         }
 
         if (videoPlayer != null)

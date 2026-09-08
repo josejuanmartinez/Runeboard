@@ -60,11 +60,12 @@ public class CardCenterPreview : MonoBehaviour
     private float previewSpeedMultiplier = 1f;
     private bool hoverDrivenActive;
     private Vector2 hoverAnchorMousePos;
+    private float exitProgress;
 
     // Resolved at runtime so newly-added serialized fields left at 0 still animate instead
     // of leaving the preview stuck invisible at alpha 0.
     private float TransitionSpeed => (previewTransitionSpeed > 0.01f ? previewTransitionSpeed : 9f) * previewSpeedMultiplier;
-    private float BackdropMax => backdropMaxAlpha > 0.001f ? Mathf.Clamp01(backdropMaxAlpha) : 0.85f;
+    private float BackdropMax => Mathf.Min(backdropMaxAlpha > 0.001f ? backdropMaxAlpha : 0.55f, hoverDrivenActive ? 0.38f : 0.62f);
     private float IntroStartScale => previewIntroStartScale > 0.001f ? previewIntroStartScale : 0.55f;
 
     public RectTransform CurrentPreviewRect => centerPreviewRects.Count > 0 ? centerPreviewRects[0] : null;
@@ -79,12 +80,13 @@ public class CardCenterPreview : MonoBehaviour
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        parentCanvas = GetComponentInParent<Canvas>();
+        parentCanvas = GetComponentInParent<Canvas>()?.rootCanvas;
 
         Canvas previewCanvas = GetComponent<Canvas>();
         if (previewCanvas == null) previewCanvas = gameObject.AddComponent<Canvas>();
         previewCanvas.overrideSorting = true;
         previewCanvas.sortingOrder = PreviewSortingOrder;
+        if (GetComponent<GraphicRaycaster>() == null) gameObject.AddComponent<GraphicRaycaster>();
     }
 
     private void OnDestroy()
@@ -176,6 +178,7 @@ public class CardCenterPreview : MonoBehaviour
             {
                 Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(sceneCam, worldAnchor.Value);
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect, screenPoint, uiCam, out anchorOffset);
+                anchorOffset -= parentRect.rect.center;
             }
         }
 
@@ -183,18 +186,24 @@ public class CardCenterPreview : MonoBehaviour
         GameObject template = deckManager != null ? deckManager.GetCardPrefabTemplate() : null;
         if (template == null) return;
 
-        float cardWidth = template.TryGetComponent(out RectTransform templateRect) ? templateRect.rect.width : 0f;
-        if (cardWidth <= 0f) cardWidth = 1f;
+        float cardWidth = Card.CenterPreviewSize.x;
 
         int count = validCards.Count;
         float step = cardWidth + multiCardSpacing;
         float contentWidth = count > 1 ? (count - 1) * step + cardWidth : cardWidth;
 
-        float availableWidth = ResolveAvailableWidth() * multiCardMaxWidthFraction;
+        Rect viewport = ResolveViewport(parent as RectTransform);
+        float availableWidth = viewport.width * multiCardMaxWidthFraction;
         float scale = centerPreviewScale;
         if (availableWidth > 0f && contentWidth * scale > availableWidth)
             scale = availableWidth / contentWidth;
+        scale = Mathf.Min(scale, viewport.height * .84f / Card.CenterPreviewSize.y);
+        scale = Mathf.Max(.01f, scale);
         centerPreviewFinalScale = scale;
+        float halfWidth = contentWidth * scale * .5f;
+        float halfHeight = Card.CenterPreviewSize.y * scale * .5f;
+        anchorOffset.x = Mathf.Clamp(anchorOffset.x, viewport.xMin + halfWidth, viewport.xMax - halfWidth);
+        anchorOffset.y = Mathf.Clamp(anchorOffset.y, viewport.yMin + halfHeight, viewport.yMax - halfHeight);
 
         for (int i = 0; i < count; i++)
         {
@@ -222,9 +231,11 @@ public class CardCenterPreview : MonoBehaviour
                 // sprite from the UI/Animation/Characters/Decks folders ResolveCardArtwork also
                 // searches by default (see Illustrations.IllustrationsAddressRoots).
                 previewCard.UseCardArtFolderOnly = true;
+                previewCard.TypewriterEffect = false;
                 previewCard.InitializePreview(validCards[i]);
                 previewCard.SuppressHoverEffects = true;
                 previewCard.ShowRealCard();
+                previewCard.ApplyCenterPreviewPresentation();
             }
 
             CanvasGroup group = instance.GetComponent<CanvasGroup>();
@@ -240,6 +251,7 @@ public class CardCenterPreview : MonoBehaviour
         }
 
         previewActive = true;
+        exitProgress = 0f;
         previewIntroT = 0f;
         ApplyPreviewPose(0f);
         PlaceBackdropBehindPreview(parent);
@@ -251,7 +263,9 @@ public class CardCenterPreview : MonoBehaviour
     {
         if (!previewActive) return;
         previewActive = false;
-        ClearPreview();
+        exitProgress = 0f;
+        foreach (CanvasGroup group in centerPreviewGroups)
+            if (group != null) { group.blocksRaycasts = false; group.interactable = false; }
     }
 
     // Hard teardown: kills all current preview instances instantly and snaps the backdrop off.
@@ -259,13 +273,18 @@ public class CardCenterPreview : MonoBehaviour
     {
         for (int i = 0; i < centerPreviewInstances.Count; i++)
         {
-            if (centerPreviewInstances[i] != null) Destroy(centerPreviewInstances[i]);
+            if (centerPreviewInstances[i] != null)
+            {
+                centerPreviewInstances[i].SetActive(false);
+                Destroy(centerPreviewInstances[i]);
+            }
         }
         centerPreviewInstances.Clear();
         centerPreviewRects.Clear();
         centerPreviewGroups.Clear();
         centerPreviewTargetPositions.Clear();
         previewIntroT = 0f;
+        previewActive = false;
         backdropAlpha = 0f;
         if (centerPreviewBackdrop != null)
         {
@@ -283,7 +302,7 @@ public class CardCenterPreview : MonoBehaviour
         bool wantPreview = previewActive;
 
         float backdropTarget = wantPreview ? BackdropMax : 0f;
-        backdropAlpha = Mathf.MoveTowards(backdropAlpha, backdropTarget, Time.deltaTime * TransitionSpeed * BackdropMax);
+        backdropAlpha = Mathf.MoveTowards(backdropAlpha, backdropTarget, Time.unscaledDeltaTime * TransitionSpeed * BackdropMax);
         if (centerPreviewBackdrop != null)
         {
             bool shouldBeActive = backdropAlpha > 0.001f;
@@ -295,7 +314,15 @@ public class CardCenterPreview : MonoBehaviour
         }
 
         if (centerPreviewRects.Count == 0) return;
-        previewIntroT = Mathf.MoveTowards(previewIntroT, 1f, Time.deltaTime * TransitionSpeed);
+        if (!previewActive)
+        {
+            exitProgress = Mathf.MoveTowards(exitProgress, 1f, Time.unscaledDeltaTime / .14f);
+            foreach (CanvasGroup group in centerPreviewGroups)
+                if (group != null) group.alpha = Mathf.Min(group.alpha, 1f - exitProgress);
+            if (exitProgress >= 1f) ClearPreview();
+            return;
+        }
+        previewIntroT = Mathf.MoveTowards(previewIntroT, 1f, Time.unscaledDeltaTime * TransitionSpeed);
         ApplyPreviewPose(previewIntroT);
     }
 
@@ -305,10 +332,10 @@ public class CardCenterPreview : MonoBehaviour
     {
         if (centerPreviewRects.Count == 0) return;
 
-        float eased = EaseOutBack(Mathf.Clamp01(t));
-        float startScale = centerPreviewFinalScale * IntroStartScale;
+        float eased = 1f - Mathf.Pow(1f - Mathf.Clamp01(t), 3f);
+        float startScale = centerPreviewFinalScale * Mathf.Max(.88f, IntroStartScale);
         float scale = Mathf.LerpUnclamped(startScale, centerPreviewFinalScale, eased);
-        float rotation = Mathf.LerpUnclamped(previewIntroTilt, 0f, eased);
+        float rotation = Mathf.LerpUnclamped(Mathf.Clamp(previewIntroTilt, -3f, 3f), 0f, eased);
         float alpha = Mathf.Clamp01(t * 1.6f);
 
         for (int i = 0; i < centerPreviewRects.Count; i++)
@@ -317,7 +344,7 @@ public class CardCenterPreview : MonoBehaviour
             if (rect == null) continue;
 
             Vector2 target = centerPreviewTargetPositions[i];
-            Vector2 introPos = target + previewIntroOffset;
+            Vector2 introPos = target + Vector2.ClampMagnitude(previewIntroOffset, 28f);
             rect.anchoredPosition = Vector2.LerpUnclamped(introPos, target, eased);
             rect.localScale = Vector3.one * scale;
             rect.localRotation = Quaternion.Euler(0f, 0f, rotation);
@@ -327,13 +354,18 @@ public class CardCenterPreview : MonoBehaviour
         }
     }
 
-    // Canvas-local width available for the preview row, before multiCardMaxWidthFraction is applied.
-    private float ResolveAvailableWidth()
+    // Safe screen bounds expressed in the preview parent's anchored coordinate system.
+    private Rect ResolveViewport(RectTransform parent)
     {
-        RectTransform reference = centerPreviewAnchor != null
-            ? centerPreviewAnchor
-            : transform as RectTransform;
-        return reference != null ? reference.rect.width : 0f;
+        if (parent == null) return new Rect(-960, -540, 1920, 1080);
+        Camera camera = parentCanvas != null && parentCanvas.renderMode != RenderMode.ScreenSpaceOverlay
+            ? parentCanvas.worldCamera : null;
+        Rect safeArea = Screen.safeArea;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, safeArea.min, camera, out Vector2 min);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, safeArea.max, camera, out Vector2 max);
+        // anchoredPosition is relative to the parent's center, even with an off-center pivot.
+        return Rect.MinMaxRect(min.x - parent.rect.center.x, min.y - parent.rect.center.y,
+            max.x - parent.rect.center.x, max.y - parent.rect.center.y);
     }
 
     // Relocates the user-assigned backdrop to sit as a full-screen sibling immediately
@@ -356,14 +388,6 @@ public class CardCenterPreview : MonoBehaviour
         }
 
         bg.SetAsLastSibling();
-    }
-
-    private static float EaseOutBack(float x)
-    {
-        const float c1 = 1.70158f;
-        const float c3 = c1 + 1f;
-        float xm1 = x - 1f;
-        return 1f + c3 * xm1 * xm1 * xm1 + c1 * xm1 * xm1;
     }
 
     // The clone's own Card component (SuppressHoverEffects=true) would otherwise handle a

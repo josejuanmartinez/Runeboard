@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -130,10 +130,7 @@ public class Hex : MonoBehaviour
     private readonly Dictionary<Leader, int> anchoredWarships = new();
     private int anchoredWarshipsTotal = 0;
     private Coroutine revealPulseCoroutine;
-    private Vector3 terrainBaseScale;
-    private bool terrainBaseScaleCaptured;
     private Coroutine pcRevealPulseCoroutine;
-    private bool terrainOverdrawApplied;
     // Last reveal state pushed to the seamless-blend rebuild queue; neighbors must re-blend
     // whenever this flips (their rims either fade into fog toward us or blend our art).
     private bool seamlessRevealedLast;
@@ -324,6 +321,9 @@ public class Hex : MonoBehaviour
 
         Transform characterBg = Instantiate(characterLayerPrefab, transform, false).transform;
         characterBg.name = "CharacterLayer";
+        // Leave the lower edge of the tile clear for its name and compact status line.
+        characterBg.localPosition = new Vector3(0f, .13f, characterBg.localPosition.z);
+        characterBg.localScale *= .9f;
 
         characterSpriteRenderer = FindPart<SpriteRenderer>(characterBg, "character");
         bannerSpriteRenderer = FindPart<SpriteRenderer>(characterBg, "banner");
@@ -374,6 +374,9 @@ public class Hex : MonoBehaviour
         // explicitly whenever pcName.text is set (see HideHexLabel/RefreshHexLabel) or the Band
         // sprite is left showing its last size/visibility after the text that sized it is gone.
         pcTextBandFit = pcTextRoot.Find("Band")?.GetComponent<SpriteRendererFitToTMP>();
+        pcTextBandFit?.ConfigureSettlementPresentation();
+        pcName.fontStyle = FontStyles.Normal;
+        pcName.lineSpacing = 0f;
 
         // Starts hidden; each caller applies the state it needs right after.
         // Band (the hover target) is deliberately left active — see comment above.
@@ -523,7 +526,6 @@ public class Hex : MonoBehaviour
         terrainTexture.sortingOrder = -1 - (rowsBelow * 2) - (col & 1);
         if (pcTexture != null) pcTexture.sortingOrder = terrainTexture.sortingOrder + 1;
         if (terrainTexture != null) terrainTexture.gameObject.SetActive(true);
-        ApplyTerrainOverdraw();
 
         // Placed on the board now — apply the fog/visibility visuals Awake skipped
         // (also covers particles; the minimap variant is currently a no-op).
@@ -726,7 +728,8 @@ public class Hex : MonoBehaviour
 
         if(hasArmiesOrCharacters)
         {
-            if(shouldShowPc) builder.Append("<br>");
+            if (shouldShowPc) builder.Append("  <color=#95866C>·</color> ");
+            builder.Append("<size=75%>");
             void AppendGroup(string spriteName, int count)
             {
                 if (count <= 0) return;
@@ -740,12 +743,12 @@ public class Hex : MonoBehaviour
             AppendGroup("freePeopleCharacter", characterCounts[(int)AlignmentEnum.freePeople]);
             AppendGroup("darkServantsCharacter", characterCounts[(int)AlignmentEnum.darkServants]);
             AppendGroup("neutralCharacter", characterCounts[(int)AlignmentEnum.neutral]);
+            builder.Append("</size>");
     
         }
         
-        if(!shouldShowPc) builder.Append($" @ {v2.x},{v2.y}");        
         pcName.text = builder.ToString();
-        pcName.color = shouldShowPc && pc.owner != null ? pc.owner.nationColor : Color.white;
+        pcName.color = new Color(.94f, .92f, .84f);
         SetActiveFast(pcName.gameObject, true);
         pcTextBandFit?.Fit();
     }
@@ -822,7 +825,7 @@ public class Hex : MonoBehaviour
             extra.sortingLayerID = characterSpriteRenderer.sortingLayerID;
             // Stacked behind the main sprite, but never below the terrain art beneath it —
             // terrainTexture/characterSpriteRenderer's own sortingOrder is assigned at runtime
-            // (see Hex.ApplyTerrainOverdraw), so this can't just assume fixed prefab numbers.
+            // (see Hex.Initialize), so this can't just assume fixed prefab numbers.
             int desiredOrder = characterSpriteRenderer.sortingOrder - (i + 1);
             if (hexRegion != null) desiredOrder = Mathf.Max(desiredOrder, hexRegion.sortingOrder + 1);
             extra.sortingOrder = desiredOrder;
@@ -2045,19 +2048,9 @@ public class Hex : MonoBehaviour
             yield break;
         }
 
-        Transform terrainTransform = terrainTexture.transform;
-        if (!terrainBaseScaleCaptured)
-        {
-            // capture the prefab-defined scale before the first pulse touches
-            // it, so interrupted pulses can't bake a mid-animation value
-            terrainBaseScale = terrainTransform.localScale;
-            terrainBaseScaleCaptured = true;
-        }
-        Vector3 endScale = terrainBaseScale;
-        float scaleEffect = UnityEngine.Random.Range(0.3f, 0.9f);
-        Vector3 startScale = new(endScale.x * scaleEffect, endScale.y * scaleEffect, endScale.z);
-
-        terrainTransform.localScale = startScale;
+        // The prefab owns terrain and PC geometry, including during reveal.
+        // Fade the painting without resizing its footprint or its PC child.
+        SetSpriteAlpha(terrainTexture, 0f);
         yield return null;
 
         float elapsed = 0f;
@@ -2072,13 +2065,13 @@ public class Hex : MonoBehaviour
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / revealDuration);
             float eased = Mathf.SmoothStep(0f, 1f, t);
-            terrainTransform.localScale = Vector3.Lerp(startScale, endScale, eased);
+            SetSpriteAlpha(terrainTexture, eased * (isCurrentlyUnseen ? 0.1f : 1f));
             yield return null;
         }
 
         if (terrainTexture != null)
         {
-            terrainTransform.localScale = endScale;
+            SetSpriteAlpha(terrainTexture, isCurrentlyUnseen ? 0.1f : 1f);
         }
 
         revealPulseCoroutine = null;
@@ -2499,6 +2492,11 @@ public class Hex : MonoBehaviour
     // movement cost. Reuses the environment_terrain_features spritesheet wired on the movement text.
     private string BuildTerrainFeatureSpriteTags()
     {
+        // A path may be plotted straight through unexplored ground, and the bubble is drawn on
+        // every hex it crosses - but naming the terrain there would hand the player the one
+        // thing the fog is hiding. Undiscovered hexes get the bare cost circle, nothing else.
+        if (!IsHexRevealed()) return string.Empty;
+
         StringBuilder sb = new();
         sb.Append(SpriteTag(TerrainData.GetDisplayName(terrainType)));
         if (isChasm) sb.Append(SpriteTag("Chasm"));
@@ -2972,30 +2970,12 @@ public class Hex : MonoBehaviour
         HexSeamlessTerrain.MarkDirty(this);
     }
 
-    // Terrain sprites draw slightly larger than their cell so the seamless-blend feather fades
-    // over opaque neighbor art instead of exposing baked tile borders. Applied once per hex
-    // (Initialize re-runs on pooled reuse); the captured base scale keeps the reveal pulse from
-    // baking a pre-overdraw value back in.
-    private void ApplyTerrainOverdraw()
-    {
-        if (terrainOverdrawApplied || terrainTexture == null) return;
-        terrainOverdrawApplied = true;
-        Transform terrainTransform = terrainTexture.transform;
-        Vector3 scale = terrainTransform.localScale;
-        scale.x *= HexSeamlessTerrain.TileOverdraw;
-        scale.y *= HexSeamlessTerrain.TileOverdraw;
-        terrainTransform.localScale = scale;
-        terrainBaseScale = scale;
-        terrainBaseScaleCaptured = true;
-    }
-
-    // Drawn terrain size in world units (overdraw included), measured from the captured base
-    // scale so a running reveal-pulse animation can't skew the seamless-blend geometry.
+    // Read the prefab-authored size for the material; runtime never adjusts terrain scale.
     public Vector2 GetTerrainDrawnWorldSize()
     {
         if (terrainTexture == null || terrainTexture.sprite == null) return Vector2.zero;
         Transform terrainTransform = terrainTexture.transform;
-        Vector3 scale = terrainBaseScaleCaptured ? terrainBaseScale : terrainTransform.localScale;
+        Vector3 scale = terrainTransform.localScale;
         Vector3 parentScale = terrainTransform.parent != null ? terrainTransform.parent.lossyScale : Vector3.one;
         Vector3 spriteSize = terrainTexture.sprite.bounds.size;
         return new Vector2(spriteSize.x * scale.x * parentScale.x, spriteSize.y * scale.y * parentScale.y);
@@ -3020,15 +3000,16 @@ public class Hex : MonoBehaviour
         }
     }
 
-    // Content only — the visual format (bold white text over a dark backing band, matching the
-    // Scenario Creator's hex captions) lives in the HexPcText prefab (font style + Band child).
+    // The name and one compact status row share a fitted, feathered label at the tile's foot.
     private string BuildPcNameLabel()
     {
         if (pc == null) return string.Empty;
 
         StringBuilder builder = new();
+        Color labelColor = pc.owner != null ? Color.Lerp(pc.owner.nationColor, Color.white, .6f) : new Color(.86f, .73f, .49f);
+        builder.Append("<b><color=#").Append(ColorUtility.ToHtmlStringRGB(labelColor)).Append('>');
         builder.Append(pc.pcName ?? string.Empty);
-        if (pc.pcName != null) builder.Append("<br>");
+        builder.Append("</color></b><br><size=85%>");
 
         if (pc.citySize != PCSizeEnum.NONE)
         {
@@ -3049,7 +3030,7 @@ public class Hex : MonoBehaviour
             builder.Append("</color>");
         }
 
-        builder.Append("<sprite name=\"loyalty\"><color=");
+        builder.Append("  <sprite name=\"loyalty\"><color=");
         builder.Append(GetLoyaltyColorHex(pc.loyalty));
         builder.Append('>');
         builder.Append(Math.Max(0, pc.loyalty));
@@ -3057,6 +3038,7 @@ public class Hex : MonoBehaviour
 
         if (pc.hasPort) builder.Append(" <sprite name=\"port\">");
         if (pc.isHidden) builder.Append(" <sprite name=\"hidden\">");
+        builder.Append("</size>");
 
         return builder.ToString();
     }
@@ -3126,12 +3108,15 @@ public class Hex : MonoBehaviour
 
         CharacterAnimationController controller = characterAnimationController;
         float outlineSize = controller != null ? controller.outlineSize : 10f;
+        if (board == null) board = Board.Instance;
+        controller?.SetOutlineFocus(isCharacterHovered, board != null && board.selectedCharacter != null
+            && board.selectedCharacter.hex == this);
         Color color;
 
         if (isCharacterHovered)
         {
             color = controller != null ? controller.hoveredColor : Color.white;
-            controller?.SetOutlineAlpha(1f);
+            controller?.SetOutlineAlpha(color.a);
             controller?.SetOutlineSize(outlineSize);
             ApplyCharacterAndStackColor(color);
             return;
@@ -3148,8 +3133,7 @@ public class Hex : MonoBehaviour
 
         if (selected != null && selected.hex == this && characterSpriteRenderer.sprite != null)
         {
-            // The selected character's outline stays steady like everyone else's — instead its
-            // sprite color pulses between the idle color above and white to show it's the selection.
+            // Keep the existing sprite pulse; the controller adds a smooth focus halo.
             float pulseSpeed = controller != null ? controller.selectionPulseSpeed : 1f;
             float colorT = Mathf.PingPong(Time.time * pulseSpeed, 1f);
             color = Color.Lerp(idleColor, Color.white, colorT);
@@ -3160,7 +3144,7 @@ public class Hex : MonoBehaviour
             color = idleColor;
             controller?.SetOutlineSize(outlineSize);
         }
-        controller?.SetOutlineAlpha(1f);
+        controller?.SetOutlineAlpha(color.a);
         ApplyCharacterAndStackColor(color);
     }
 

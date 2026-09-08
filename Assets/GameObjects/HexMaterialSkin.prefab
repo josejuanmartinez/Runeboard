@@ -51,6 +51,3 @@ MonoBehaviour:
   - skin: 0
     terrainMaterial: {fileID: 2100000, guid: c83a5a33c0aa45ed82ba605ddf8ab467, type: 2}
     gridMaterial: {fileID: 2100000, guid: 2cdc6f5ccd3c412ca7bca0ba316d3f26, type: 2}
-  - skin: 2
-    terrainMaterial: {fileID: 2100000, guid: eef7638ba10e86f45a57df7fc4ad3d8e, type: 2}
-    gridMaterial: {fileID: 2100000, guid: da9669ded9d748ad8956e1a53361cb4c, type: 2}

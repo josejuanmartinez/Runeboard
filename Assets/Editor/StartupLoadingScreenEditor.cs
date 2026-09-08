@@ -89,6 +89,13 @@ public sealed class StartupLoadingScreenEditor : Editor
                     CardEditorArtworkBaker.ApplyArtwork(template.Card);
                     CardEditorArtworkBaker.ApplyDeckArtwork(template.Card);
                 }
+                else
+                {
+                    Debug.LogError(
+                        $"StartupLoadingScreenEditor: slot {s + 1}'s first card name '{firstName}' matches no " +
+                        "card in any deck, so it keeps whatever was baked into it last. Fix the name and re-bake.",
+                        template);
+                }
             }
             template.gameObject.SetActive(true);
             EditorUtility.SetDirty(template);
@@ -127,11 +134,22 @@ public sealed class StartupLoadingScreenEditor : Editor
                 provider.showCloseIcon = template.showCloseIcon;
                 if (template.GetComponent<CardShineEffect>() != null) instance.AddComponent<CardShineEffect>();
 
-                if (provider.Apply())
+                // An unresolvable name (a typo, or a card since renamed) leaves a sibling with no
+                // card data, no artwork and the raw Card.prefab defaults. Registering it anyway
+                // means the loading screen eventually rotates onto a blank card, which reads as a
+                // rendering bug rather than as the bad name it actually is — so drop it here and
+                // name it in the console instead.
+                if (!provider.Apply())
                 {
-                    CardEditorArtworkBaker.ApplyArtwork(provider.Card);
-                    CardEditorArtworkBaker.ApplyDeckArtwork(provider.Card);
+                    Debug.LogError(
+                        $"StartupLoadingScreenEditor: slot {s + 1}'s card name '{cardName}' matches no card in " +
+                        "any deck — skipping it. Fix the name in Card Names and re-bake.",
+                        screen);
+                    Undo.DestroyObjectImmediate(instance);
+                    continue;
                 }
+                CardEditorArtworkBaker.ApplyArtwork(provider.Card);
+                CardEditorArtworkBaker.ApplyDeckArtwork(provider.Card);
 
                 // Only the template (cardNames[0]) stays visible until the game rotates to this one.
                 instance.SetActive(false);

@@ -52,8 +52,8 @@ Shader "RetroLOTR/HexSeamlessBlend"
         _BlendBand ("Blend Band (fraction of center-to-edge)", Range(0.05,1)) = 0.4
         // Must complete inside the overdraw overhang (art edge ~1.10 with TileOverdraw 1.10).
         _EdgeTrim ("Edge Trim (feather width past the seam)", Range(0.01,0.1)) = 0.08
-        // Width of the fade-to-transparent band toward fog-of-war neighbors (valid = -1).
-        _FogFade ("Fog Fade (band before the seam)", Range(0.05,0.5)) = 0.25
+        // Zero preserves the sprite's own outline beside fog; positive values fade at the seam.
+        _FogFade ("Fog Fade (0 = preserve sprite edges)", Range(0,0.5)) = 0.25
         // 1 = editor GUI target (drawn with GL.sRGBWrite off, needs manual linear->gamma);
         // 0 = in-game camera (pipeline does the conversion itself).
         _GammaOut ("Editor gamma output", Float) = 0
@@ -201,7 +201,10 @@ Shader "RetroLOTR/HexSeamlessBlend"
                 // usual double-translucency worry doesn't apply since only this side renders.
                 if (valid < -0.5)
                 {
-                    alphaMask = min(alphaMask, 1.0 - smoothstep(1.0 - _FogFade, 1.0, t));
+                    // Do not use smoothstep(1, 1, t) for a disabled fade: that would
+                    // still hard-clip the sprite, exposing its region underlay.
+                    if (_FogFade > 0.0)
+                        alphaMask = min(alphaMask, 1.0 - smoothstep(1.0 - _FogFade, 1.0, t));
                     return;
                 }
                 if (valid < 0.5) return;

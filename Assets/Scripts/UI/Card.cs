@@ -336,6 +336,15 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 descriptionText.text = baseDescription;
                 data.hasShownHandAnimation = true;
             }
+            else if (!Application.isPlaying || !gameObject.activeInHierarchy)
+            {
+                // Coroutines need a live, active GameObject. StartupLoadingScreenEditor's preload
+                // bake initializes cards at edit time while they sit inactive under the disabled
+                // loading screen, where the hand-draw animation is meaningless anyway. Bake the
+                // finished text and leave hasShownHandAnimation alone, so the card still types
+                // itself out the first time it is really drawn in play mode.
+                descriptionText.text = baseDescription;
+            }
             else
             {
                 string quoteBlock = data.GetQuoteBlock();
@@ -355,8 +364,123 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
     }
 
-    // Centered hover previews must be fully initialized without starting the one-time
-    // hand-draw typewriter coroutine or mutating that animation flag on the real CardData.
+    public static readonly Vector2 CenterPreviewSize = new(340f, 570f);
+
+    // Applied only to the large inspection clone; hand and gallery cards keep their layout.
+    public void ApplyCenterPreviewPresentation()
+    {
+        if (realCardCanvasGroup == null) return;
+        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
+        if (layoutElement == null) layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
+        RectTransform face = (RectTransform)realCardCanvasGroup.transform;
+        rectTransform.sizeDelta = CenterPreviewSize;
+        face.anchorMin = Vector2.zero;
+        face.anchorMax = Vector2.one;
+        face.offsetMin = face.offsetMax = Vector2.zero;
+        foreach (Image decoration in face.GetComponentsInChildren<Image>(true))
+            if (decoration != cardArtImage && decoration != deckTypeImage && decoration != encounterArtOverlay)
+                decoration.enabled = false;
+
+        var surfaceObject = new GameObject("Preview Surface", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel));
+        var surface = surfaceObject.GetComponent<RectTransform>();
+        surface.SetParent(face, false);
+        surface.anchorMin = Vector2.zero;
+        surface.anchorMax = Vector2.one;
+        surface.offsetMin = surface.offsetMax = Vector2.zero;
+        surface.SetAsFirstSibling();
+        var panel = surfaceObject.GetComponent<RuneboardPanel>();
+        panel.raycastTarget = false;
+        panel.topColor = new Color(.105f, .12f, .13f, .99f);
+        panel.bottomColor = new Color(.035f, .045f, .052f, .99f);
+        panel.edgeColor = new Color(.79f, .64f, .40f, .85f);
+
+        void PlacePreview(RectTransform r, Vector2 position, Vector2 size)
+        {
+            if (r == null) return;
+            r.SetParent(face, false);
+            r.anchorMin = r.anchorMax = r.pivot = new Vector2(.5f, .5f);
+            r.anchoredPosition = position;
+            r.sizeDelta = size;
+            r.localScale = Vector3.one;
+            r.localRotation = Quaternion.identity;
+        }
+        void StylePreviewText(TMP_Text label, float size, Color tint)
+        {
+            if (label == null) return;
+            label.color = tint;
+            label.fontStyle = FontStyles.Normal;
+            label.overrideColorTags = false;
+            label.enableVertexGradient = false;
+            label.fontSize = label.fontSizeMax = size;
+            label.fontSizeMin = size * .75f;
+            label.enableAutoSizing = true;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.overflowMode = TextOverflowModes.Overflow;
+            label.margin = Vector4.zero;
+            label.raycastTarget = false;
+            label.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0f);
+            label.fontMaterial.SetColor(ShaderUtilities.ID_FaceColor, Color.white);
+            label.fontMaterial.DisableKeyword("UNDERLAY_ON");
+            label.outlineColor = new Color(.025f, .03f, .035f, 1f);
+            label.outlineWidth = .06f;
+        }
+        Color paper = new(.91f, .89f, .81f);
+        if (titleText != null)
+        {
+            PlacePreview(titleText.rectTransform, new Vector2(0, 258), new Vector2(300, 40));
+            StylePreviewText(titleText, 22, new Color(.86f, .73f, .49f));
+            titleText.alignment = TextAlignmentOptions.Center;
+        }
+        if (cardArtImage != null)
+        {
+            PlacePreview(cardArtImage.rectTransform, new Vector2(0, 80), new Vector2(300, 300));
+            cardArtImage.preserveAspect = true;
+            cardArtImage.color = Color.white;
+        }
+        if (descriptionText != null)
+        {
+            PlacePreview(descriptionText.rectTransform, new Vector2(0, -153), new Vector2(298, 142));
+            StylePreviewText(descriptionText, 16, paper);
+            descriptionText.alignment = TextAlignmentOptions.TopLeft;
+            descriptionText.lineSpacing = 3;
+        }
+        if (requirementsText != null)
+        {
+            PlacePreview(requirementsText.rectTransform, new Vector2(0, -249), new Vector2(298, 42));
+            StylePreviewText(requirementsText, 13, paper);
+            requirementsText.alignment = TextAlignmentOptions.Center;
+        }
+        if (deckTypeImage != null)
+        {
+            PlacePreview(deckTypeImage.rectTransform, new Vector2(137, 207), new Vector2(24, 32));
+            deckTypeImage.enabled = deckTypeImage.sprite != null;
+        }
+        ShowCloseIcon = false;
+        layoutElement.ignoreLayout = true;
+    }
+
+    // The same runtime-built face as ApplyCenterPreviewPresentation, fitted into an existing
+    // layout slot instead of taking over the screen. The face's children are placed at absolute
+    // coordinates inside a CenterPreviewSize rect, so the rect has to stay that size: the card is
+    // uniformly scaled down instead, and its LayoutElement reports the scaled footprint so a
+    // parent layout group still reserves the right amount of room for it. Used by
+    // StartupLoadingScreen, whose baked cards would otherwise show the prefab's legacy frame
+    // rather than the card the player actually sees in game.
+    public void ApplyCenterPreviewPresentationScaledTo(Vector2 footprint)
+    {
+        ApplyCenterPreviewPresentation();
+        if (realCardCanvasGroup == null || layoutElement == null) return;
+
+        float scale = Mathf.Min(footprint.x / CenterPreviewSize.x, footprint.y / CenterPreviewSize.y);
+        if (!(scale > 0f)) scale = 1f;
+
+        transform.localScale = new Vector3(scale, scale, 1f);
+        layoutElement.ignoreLayout = false;
+        layoutElement.preferredWidth = CenterPreviewSize.x * scale;
+        layoutElement.preferredHeight = CenterPreviewSize.y * scale;
+    }
+
+    // Preserve the original card's hand-draw animation flag when creating inspection clones.
     public void InitializePreview(CardData data)
     {
         if (data == null) return;

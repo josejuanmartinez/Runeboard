@@ -614,7 +614,9 @@ public class LeaderSelector : SearcherByName
         bool confirmed;
         try
         {
-            confirmed = await ConfirmationDialog.AskYesNo($"Do you want to start as {selectedName}?");
+            Sprite portrait = selectedIndex < carouselItems.Count && carouselItems[selectedIndex] != null
+                ? carouselItems[selectedIndex].GetComponent<CarouselItem>()?.image?.sprite : null;
+            confirmed = await ConfirmationDialog.AskYesNo($"Do you want to start as {selectedName}?", image: portrait);
         }
         finally
         {
@@ -648,7 +650,7 @@ public class LeaderSelector : SearcherByName
             return $"{alignmentSprite} {selection.baseLeaderName}";
         }
 
-        return $"{alignmentSprite} {selection.baseLeaderName}<br>({selection.variantName})";
+        return $"{alignmentSprite} {selection.baseLeaderName}<br><size=75%><color=#BEB6A2>{selection.variantName}</color></size>";
     }
 
     public void SelectLeader(int value)

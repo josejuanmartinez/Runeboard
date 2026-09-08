@@ -205,7 +205,7 @@ public sealed class UIAnimatedCharacter : MonoBehaviour
 
         if (changedCharacter)
         {
-            SetAnimation(CharacterAnimationController.AnimationKind.StandingIdle);
+            // SetAnimation(CharacterAnimationController.AnimationKind.StandingIdle);
             currentStateName = null;
             frameIndex = 0;
             frameTimer = 0f;

@@ -48,7 +48,7 @@ public class TurnBanner : MonoBehaviour
     private const float HoldDuration = 1.1f;
     private const float ExitDuration = 0.28f;
 
-    private static readonly Color GoldColor = new(0.83f, 0.70f, 0.46f);
+    public Color GoldColor = new(0.83f, 0.70f, 0.46f);
 
     // Whether PlayAnimation currently holds CenterDisplayLock. Show() below calls
     // StopAllCoroutines() to interrupt any run already in flight, which abandons that

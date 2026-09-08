@@ -60,7 +60,7 @@ Every character doubles as a card — hover a leader's name to see their full st
 
 <div align="center">
 <img src="docs/images/gameplay/20-card-bloom.png" width="720"><br>
-<sub>Gandalf the White, deep in enemy territory</sub>
+<sub>Orthanc, the Gap of Rohan, Arthedain, Fangorn's Camp — every place is a card too</sub>
 </div>
 
 ## Gallery

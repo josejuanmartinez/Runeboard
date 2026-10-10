@@ -125,8 +125,7 @@ public class AutoTourRunner : MonoBehaviour
         string p = path.Length == 0 ? rt.name : path + "/" + rt.name;
         string comps = string.Join(",", System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(rt.GetComponents<Component>(), c => c != null && !(c is RectTransform) && !(c is CanvasRenderer)), c => c.GetType().Name));
         var tmp = rt.GetComponent<TMPro.TMP_Text>();
-        string text = tmp != null ? $" text='{tmp.text.Replace('
-', ' ').Substring(0, Mathf.Min(30, tmp.text.Length))}' font={tmp.font?.name} size={tmp.fontSize}" : "";
+        string text = tmp != null ? $" text='{tmp.text.Replace('\n', ' ').Substring(0, Mathf.Min(30, tmp.text.Length))}' font={tmp.font?.name} size={tmp.fontSize}" : "";
         sb.AppendLine($"{new string(' ', depth * 2)}{p} | aMin={rt.anchorMin} aMax={rt.anchorMax} piv={rt.pivot} pos={rt.anchoredPosition} size={rt.sizeDelta} rect={rt.rect.size} scl={rt.localScale.x:0.##} [{comps}]{text}");
         foreach (Transform child in rt)
             if (child is RectTransform c) DumpNode(c, p, depth + 1, sb);

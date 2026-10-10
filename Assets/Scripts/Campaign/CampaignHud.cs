@@ -23,6 +23,8 @@ public class CampaignHud : MonoBehaviour
 
     private CampaignObjectives objectives;
     private RectTransform canvasRoot;
+    // Panels are authored in 1080p pixels and scaled to the HUD canvas (≈2 units per pixel).
+    private float K => canvasRoot != null ? Mathf.Max(0.5f, canvasRoot.rect.height / 1080f) : 1f;
     private RectTransform trackerRect;
     private TextMeshProUGUI trackerText;
     private bool trackerPlaced;
@@ -97,10 +99,11 @@ public class CampaignHud : MonoBehaviour
         trackerRect.SetSiblingIndex(0);
         trackerRect.anchorMin = trackerRect.anchorMax = new Vector2(0f, 1f);
         trackerRect.pivot = new Vector2(0f, 1f);
-        trackerRect.sizeDelta = new Vector2(300f, 0f);
+        trackerRect.sizeDelta = new Vector2(250f, 0f);
+        trackerRect.localScale = new Vector3(K, K, 1f);
 
         var layoutGroup = panelGo.GetComponent<VerticalLayoutGroup>();
-        layoutGroup.padding = new RectOffset(14, 14, 10, 12);
+        layoutGroup.padding = new RectOffset(10, 10, 8, 10);
         layoutGroup.childControlWidth = true;
         layoutGroup.childControlHeight = true;
         layoutGroup.childForceExpandHeight = false;
@@ -112,7 +115,7 @@ public class CampaignHud : MonoBehaviour
         button.transition = Selectable.Transition.None;
         button.onClick.AddListener(() => { expanded = !expanded; Refresh(); });
 
-        trackerText = CreateText(trackerRect, "Text", 15f, TextAlignmentOptions.TopLeft);
+        trackerText = CreateText(trackerRect, "Text", 13f, TextAlignmentOptions.TopLeft);
         trackerText.richText = true;
         PlaceTracker();
     }
@@ -128,12 +131,12 @@ public class CampaignHud : MonoBehaviour
             anchor.GetWorldCorners(corners); // 0 = bottom-left
             Vector3 local = canvasRoot.InverseTransformPoint(corners[0]);
             Rect r = canvasRoot.rect;
-            trackerRect.anchoredPosition = new Vector2(local.x - r.xMin, local.y - r.yMax - 10f);
+            trackerRect.anchoredPosition = new Vector2(local.x - r.xMin, local.y - r.yMax - 8f * K);
             trackerPlaced = true;
         }
         else
         {
-            trackerRect.anchoredPosition = new Vector2(20f, -200f);
+            trackerRect.anchoredPosition = new Vector2(20f * K, -200f * K);
         }
     }
 
@@ -204,7 +207,8 @@ public class CampaignHud : MonoBehaviour
         var panel = panelGo.GetComponent<RectTransform>();
         panel.SetParent(root, false);
         panel.anchorMin = panel.anchorMax = panel.pivot = new Vector2(0.5f, 0.5f);
-        panel.sizeDelta = new Vector2(720f, 0f);
+        panel.sizeDelta = new Vector2(620f, 0f);
+        panel.localScale = new Vector3(K, K, 1f);
         var layout = panelGo.GetComponent<VerticalLayoutGroup>();
         layout.padding = new RectOffset(40, 40, 32, 32);
         layout.spacing = 14f;

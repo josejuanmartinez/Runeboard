@@ -217,8 +217,11 @@ public class HexSeamlessTerrain : MonoBehaviour
             if (board.hexes.TryGetValue(hex.v2 + neighbors[d], out Hex neighbor) &&
                 neighbor != null && neighbor.terrainTexture != null)
             {
-                // Unexplored hexes are drawn too (as parchment-tinted map), so blend into them
-                // like any other neighbour.
+                if (!neighbor.IsHexRevealed())
+                {
+                    valid = -1f;
+                }
+                else
                 {
                     Sprite neighborSprite = neighbor.terrainTexture.sprite;
                     if (neighborSprite != null && neighborSprite.texture != null)

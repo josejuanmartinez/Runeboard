@@ -24,10 +24,15 @@ public class HandTray : MonoBehaviour
 
     private RectTransform canvasRoot;
     private RectTransform root;
+    // The HUD canvas runs at roughly 2 units per 1080p pixel; panels are authored in 1080p
+    // pixels and the root is scaled by this so text and cards read at a sensible size.
+    private float K => canvasRoot != null ? Mathf.Max(0.5f, canvasRoot.rect.height / 1080f) : 1f;
     private RectTransform cardsRow;
     private TextMeshProUGUI header;
     private readonly List<GameObject> slots = new();
     private readonly List<SituationCardOffer> opportunities = new();
+    private readonly HashSet<string> playedThisTurn = new();
+    private int playedTurn = -1;
     private Character opportunitiesFor;
     private Hex opportunitiesHex;
     private Character lastSelected;
@@ -56,7 +61,11 @@ public class HandTray : MonoBehaviour
         if (offers != null)
         {
             // Only situational offers: deck cards suggested by the AI would bypass the hand.
-            opportunities.AddRange(offers.Where(o => o?.Card != null && o.Source == SituationCardOfferSource.Situation).Take(MaxOpportunities));
+            // ...and nothing already played this turn (situational cards are re-offerable copies).
+            int turn = Game.Instance != null ? Game.Instance.turn : 0;
+            if (turn != playedTurn) { playedTurn = turn; playedThisTurn.Clear(); }
+            opportunities.AddRange(offers.Where(o => o?.Card != null && o.Source == SituationCardOfferSource.Situation
+                && !playedThisTurn.Contains(o.Card.name)).Take(MaxOpportunities));
         }
         opportunitiesFor = character;
         opportunitiesHex = character != null ? character.hex : null;
@@ -135,7 +144,7 @@ public class HandTray : MonoBehaviour
         vlg.childForceExpandHeight = false;
         vlg.childAlignment = TextAnchor.UpperCenter;
 
-        header = CreateText(root, "Header", 15f, TextAlignmentOptions.Left);
+        header = CreateText(root, "Header", 14f, TextAlignmentOptions.Left);
         header.gameObject.AddComponent<LayoutElement>().preferredHeight = 20f;
 
         var rowGo = new GameObject("Cards", typeof(RectTransform), typeof(HorizontalLayoutGroup));
@@ -157,8 +166,9 @@ public class HandTray : MonoBehaviour
         RectTransform leftPanel = FindFirstObjectByType<SelectedCharacterIcon>()?.transform as RectTransform;
         if (leftPanel != null && leftPanel.gameObject.activeInHierarchy) left = Mathf.Max(left * 0.8f, CanvasX(leftPanel, right: true) + 12f);
         float width = Mathf.Max(200f, right - left);
-        root.anchoredPosition = new Vector2(left + width * 0.5f, 8f);
-        root.sizeDelta = new Vector2(width, slotHeight + 52f);
+        root.localScale = new Vector3(K, K, 1f);
+        root.anchoredPosition = new Vector2(left + width * 0.5f, 6f * K);
+        root.sizeDelta = new Vector2(width / K, slotHeight + 40f);
     }
 
     private float CanvasX(RectTransform rt, bool right)
@@ -182,8 +192,8 @@ public class HandTray : MonoBehaviour
         int count = hand.Count + opportunities.Count;
 
         Rect r = canvasRoot.rect;
-        float available = r.width * 0.5f - 40f - (opportunities.Count > 0 ? 30f : 0f);
-        float slotWidth = Mathf.Clamp(available / Mathf.Max(6, count) - 6f, 62f, 96f);
+        float available = (r.width * 0.52f) / K - 40f - (opportunities.Count > 0 ? 30f : 0f);
+        float slotWidth = Mathf.Clamp(available / Mathf.Max(6, count) - 6f, 58f, 92f);
         float slotHeight = slotWidth * TokenHeight / TokenWidth;
         PlaceRoot(slotWidth, slotHeight + 26f);
 
@@ -284,6 +294,9 @@ public class HandTray : MonoBehaviour
         }
 
         TextMeshProUGUI name = CreateText(slotRect, "Name", 11f, TextAlignmentOptions.Top);
+        name.enableAutoSizing = true;
+        name.fontSizeMin = 8f;
+        name.fontSizeMax = 11f;
         name.text = DisplayNames.Format(offer.Card.name);
         name.overflowMode = TextOverflowModes.Ellipsis;
         name.gameObject.AddComponent<LayoutElement>().preferredHeight = 24f;
@@ -359,7 +372,11 @@ public class HandTray : MonoBehaviour
         finally
         {
             playing = false;
-            if (slot.Offer.Source == SituationCardOfferSource.Situation) opportunities.Remove(opportunities.FirstOrDefault(o => o.Card == slot.Offer.Card));
+            if (slot.Offer.Source == SituationCardOfferSource.Situation)
+            {
+                opportunities.Remove(opportunities.FirstOrDefault(o => o.Card == slot.Offer.Card));
+                playedThisTurn.Add(slot.Offer.Card.name);
+            }
             dirty = true;
             // Board refreshes the situational offers for the new state (resources, position).
             if (selected != null && !selected.killed) Board.Instance?.CheckSituationCardsForSelectedCharacter(selected);

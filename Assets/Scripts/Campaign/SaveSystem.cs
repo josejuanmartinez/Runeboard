@@ -82,13 +82,15 @@ public static class SaveSystem
             savedAtUtc = DateTime.UtcNow.ToString("u"),
             scenario = GameConfig.ScenarioToLoad,
             turn = game.turn,
-            playerLeader = game.player.characterName,
+            // Base leader names ("Sauron"), not the variant-transformed character name, because
+            // loading matches them against leaders before the variant transformation runs.
+            playerLeader = CampaignObjectives.LeaderKey(game.player),
             playerVariant = game.player.GetSelectedVariantName(),
             commandPoints = game.player.CommandPoints,
         };
 
         foreach (PlayableLeader competitor in game.competitors.Where(c => c != null))
-            data.competitorVariants.Add(new LeaderVariantSave { leader = competitor.characterName, variant = competitor.GetSelectedVariantName() });
+            data.competitorVariants.Add(new LeaderVariantSave { leader = CampaignObjectives.LeaderKey(competitor), variant = competitor.GetSelectedVariantName() });
 
         List<Leader> leaders = AllLeaders(game).ToList();
         foreach (Leader leader in leaders)

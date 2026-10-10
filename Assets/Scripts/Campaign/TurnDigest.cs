@@ -133,8 +133,10 @@ public class TurnDigest : MonoBehaviour
         rt.SetParent(root, false);
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f);
         rt.pivot = new Vector2(0.5f, 1f);
-        rt.anchoredPosition = new Vector2(0f, -190f);
-        rt.sizeDelta = new Vector2(460f, 0f);
+        float k = Mathf.Max(0.5f, root.rect.height / 1080f);
+        rt.localScale = new Vector3(k, k, 1f);
+        rt.anchoredPosition = new Vector2(0f, -190f * k);
+        rt.sizeDelta = new Vector2(420f, 0f);
         var vlg = panel.GetComponent<VerticalLayoutGroup>();
         vlg.padding = new RectOffset(18, 18, 12, 14);
         vlg.childControlWidth = vlg.childControlHeight = true;

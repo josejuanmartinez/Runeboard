@@ -144,7 +144,7 @@ public class LeaderSelector : SearcherByName
         SaveGame pending = SaveSystem.PendingLoad;
         if (pending == null || autoStartForLoadDone || !loadedFirst || startConfirmationPending) return;
         int index = selectionEntries.FindIndex(e => e != null
-            && string.Equals(e.leaderInstance != null ? e.leaderInstance.characterName : e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase)
+            && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase)
             && string.Equals(e.variantName ?? string.Empty, pending.playerVariant ?? string.Empty, System.StringComparison.OrdinalIgnoreCase));
         if (index < 0)
             index = selectionEntries.FindIndex(e => e != null && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase));

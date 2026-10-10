@@ -13,6 +13,9 @@ public static class DevLog
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void ConfigureStackTraces()
     {
+        // AI turns are coroutine-driven; without this they freeze whenever the player
+        // alt-tabs away, which reads as the AI taking minutes.
+        Application.runInBackground = true;
         if (Application.isEditor) return;
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);

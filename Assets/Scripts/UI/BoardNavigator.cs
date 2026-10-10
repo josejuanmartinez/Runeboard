@@ -91,7 +91,16 @@ public class BoardNavigator : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        if (!isMouseWheelHeld && IsPointerOverVisibleUIElement()) return;
+        // Zoom only yields to UI that scrolls itself (log, lists, sliders); a full-screen HUD
+        // image under the cursor used to swallow every wheel tick, making zoom look disabled.
+        if (!isMouseWheelHeld && IsPointerOverVisibleUIElement())
+        {
+            if (Mathf.Abs(Input.GetAxis("Mouse ScrollWheel")) > 0.001f && !IsPointerOverScrollableUI(out string blocker))
+            {
+                HandleZoom();
+            }
+            return;
+        }
 
         // Middle mouse button (wheel) pans the board
         if (Input.GetMouseButtonDown(2))
@@ -536,6 +545,29 @@ public class BoardNavigator : MonoBehaviour
 
             if (go.TryGetComponent<TextMeshProUGUI>(out var tmp) && tmp.color.a > 0.01f)
                 return true;
+        }
+        return false;
+    }
+
+    private static float nextBlockLog;
+
+    private static bool IsPointerOverScrollableUI(out string blocker)
+    {
+        blocker = null;
+        for (int i = 0, n = raycastResults.Count; i < n; i++)
+        {
+            GameObject go = raycastResults[i].gameObject;
+            if (go.GetComponentInParent<ScrollRect>() != null || go.GetComponentInParent<Scrollbar>() != null
+                || go.GetComponentInParent<Slider>() != null || go.GetComponentInParent<TMP_Dropdown>() != null)
+            {
+                blocker = go.name;
+                if (Time.unscaledTime >= nextBlockLog)
+                {
+                    nextBlockLog = Time.unscaledTime + 2f;
+                    Debug.Log($"[BoardNavigator] wheel kept by scrollable UI '{go.name}'");
+                }
+                return true;
+            }
         }
         return false;
     }

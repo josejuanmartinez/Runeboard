@@ -50,6 +50,23 @@ public class TurnBanner : MonoBehaviour
 
     public Color GoldColor = new(0.83f, 0.70f, 0.46f);
 
+    // Soft dark plate behind the centre text so the date/lore lines read over a busy board.
+    private void EnsureScrim()
+    {
+        if (textRect == null || textRect.parent == null || textRect.parent.Find("BannerScrim") != null) return;
+        var go = new GameObject("BannerScrim", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(textRect.parent, false);
+        rt.SetSiblingIndex(textRect.GetSiblingIndex());
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = textRect.anchoredPosition + new Vector2(0f, -60f);
+        rt.sizeDelta = new Vector2(1500f, 460f);
+        var img = go.GetComponent<Image>();
+        img.sprite = BoardLook.SoftEllipseSprite();
+        img.color = new Color(0f, 0f, 0f, 0.62f);
+        img.raycastTarget = false;
+    }
+
     // Whether PlayAnimation currently holds CenterDisplayLock. Show() below calls
     // StopAllCoroutines() to interrupt any run already in flight, which abandons that
     // coroutine without running its cleanup — this flag lets the next Show() release a
@@ -159,6 +176,7 @@ public class TurnBanner : MonoBehaviour
         dateText.text = subtitle;
         infoText.text = info;
         infoText.gameObject.SetActive(!string.IsNullOrEmpty(infoText.text));
+        EnsureScrim();
         rootGroup.alpha = 1f;
         textRect.localScale = Vector3.zero;
         dateRect.localScale = Vector3.zero;

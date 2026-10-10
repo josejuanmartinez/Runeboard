@@ -78,6 +78,9 @@ public static class BoardLook
         sr.sortingOrder = character.sortingOrder - 1;
     }
 
+    /// <summary>Soft-edged ellipse sprite (also used as a scrim behind banner text).</summary>
+    public static Sprite SoftEllipseSprite() => ShadowSprite();
+
     // Soft-edged ellipse, generated once (no art asset needed).
     private static Sprite ShadowSprite()
     {

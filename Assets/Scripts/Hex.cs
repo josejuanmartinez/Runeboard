@@ -2432,9 +2432,12 @@ public class Hex : MonoBehaviour
     private void ApplyRegionColor()
     {
         if (hexRegion == null) return;
-        bool show = !string.IsNullOrWhiteSpace(assignedLandRegion) && IsHexRevealed() && revealPulseCoroutine == null;
+        bool hasRegion = !string.IsNullOrWhiteSpace(assignedLandRegion);
+        // Under the night shroud the whole continent is drawn on the minimap (this layer is what
+        // the minimap camera renders); unexplored regions are dimmer than known ones.
+        bool show = hasRegion && revealPulseCoroutine == null && (IsHexRevealed() || BoardLook.Shroud);
         hexRegion.enabled = show;
-        if (show) hexRegion.color = RegionColors.GetColor(assignedLandRegion, alpha: 1f);
+        if (show) hexRegion.color = RegionColors.GetColor(assignedLandRegion, alpha: IsHexRevealed() ? 1f : 0.22f);
     }
 
     public string GetLandRegion()

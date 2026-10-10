@@ -719,7 +719,6 @@ public class Game : MonoBehaviour
         board?.ClearAllScouting();
         AnnounceScoutingStatus();
         TurnBanner.Show(turn, ResolveBannerSprite(player));
-        TurnBanner.ShowGatheringResources();
         NewTurnStarted?.Invoke(turn);
         storesManager.AdvanceTurn();
     }

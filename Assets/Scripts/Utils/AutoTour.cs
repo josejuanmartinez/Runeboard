@@ -78,6 +78,11 @@ public class AutoTourRunner : MonoBehaviour
                 AutoTour.Log($"camera '{cam.name}' ortho={cam.orthographic} size={cam.orthographicSize:0.00} depth={cam.depth} target={(cam.targetTexture != null ? cam.targetTexture.name : "screen")} main={(cam == Camera.main)} navCam={(cam.gameObject == nav.gameObject)} enabled={cam.enabled}");
             AutoTour.Log($"navigator enabled={nav.enabled} active={nav.isActiveAndEnabled} min={nav.minZoom} max={nav.maxZoom}");
             yield return Shot("zoomed_out");
+            nav.DebugSetZoom(nav.minZoom);
+            Character selected = Board.Instance != null ? Board.Instance.selectedCharacter : null;
+            if (selected != null && selected.hex != null) nav.LookAt(selected.hex.transform.position, 0.2f);
+            yield return new WaitForSecondsRealtime(1.5f);
+            yield return Shot("closeup");
             nav.DebugSetZoom(before);
             yield return new WaitForSecondsRealtime(1f);
         }

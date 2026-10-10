@@ -63,6 +63,17 @@ public class Game : MonoBehaviour
     private bool leaderTransitionRunning;
     private bool blockLookAtUntilStartupPopupCloses;
     private bool startupPopupShown;
+    public bool IsAcceptingPlayerInput => playerTurnAcceptingInput;
+
+    /// <summary>Re-syncs HUD state after SaveSystem lays a saved game over a fresh start.</summary>
+    public void RefreshAfterLoad()
+    {
+        RefreshPlayableLeaderIconVictoryPoints();
+        BuildPlayerCharacterIcons();
+        SelectFirstPlayerCharacter();
+        storesManager?.RefreshStores();
+    }
+
     public bool IsInitialTurnStarting => started && turn == 0 && !playerTurnAcceptingInput;
     // Same rationale as Board.Instance: dozens of card actions' condition/effect closures were
     // each independently resolving Game via FindFirstObjectByType<Game>() — a scene-wide search
@@ -98,6 +109,12 @@ public class Game : MonoBehaviour
 
             int variantCount = biome.variants?.Count ?? 0;
             int pick = UnityEngine.Random.Range(0, variantCount + 1);
+            if (SaveSystem.PendingLoad != null)
+            {
+                string saved = SaveSystem.PendingVariantFor(competitor.characterName);
+                int savedIndex = biome.variants?.FindIndex(v => string.Equals(v.displayName, saved, StringComparison.OrdinalIgnoreCase)) ?? -1;
+                pick = savedIndex >= 0 ? savedIndex + 1 : 0;
+            }
 
             if (pick == 0 || variantCount == 0)
             {
@@ -157,7 +174,11 @@ public class Game : MonoBehaviour
             List<PlayableLeader> siblings = group.ToList();
             if (siblings.Count <= 1) continue;
 
-            PlayableLeader survivor = siblings.Contains(player) ? player : siblings[UnityEngine.Random.Range(0, siblings.Count)];
+            string savedVariant = SaveSystem.PendingVariantFor(group.Key);
+            PlayableLeader savedSibling = savedVariant != null
+                ? siblings.FirstOrDefault(s => string.Equals(s.GetSelectedVariantName() ?? string.Empty, savedVariant, StringComparison.OrdinalIgnoreCase))
+                : null;
+            PlayableLeader survivor = siblings.Contains(player) ? player : savedSibling ?? siblings[UnityEngine.Random.Range(0, siblings.Count)];
 
             foreach (PlayableLeader sibling in siblings)
             {
@@ -182,7 +203,8 @@ public class Game : MonoBehaviour
         FindFirstObjectByType<LeaderSelector>()?.ApplyCurrentSelection();
         // Must play before any other startup popup, camera pan, or tutorial step — SelectLeader
         // (driven by the carousel) has already finalized player's chosen variant by this point.
-        VideoPopupManager.ShowForLeader(player);
+        bool loadingSave = SaveSystem.PendingLoad != null;
+        if (!loadingSave) VideoPopupManager.ShowForLeader(player);
         PruneUnselectedLeaderVariants();
         RandomizeCompetitorVariants();
         // Every playable leader's variant (human pick + AI randomization above) is final now, so
@@ -225,6 +247,8 @@ public class Game : MonoBehaviour
         HookBoardSelectionRefresh();
         AssignAIandHumans();
         VictoryPoints.RecalculateAndAssign(this);
+        CampaignObjectives.Begin(this);
+        HandTray.Ensure();
         RefreshPlayableLeaderIconVictoryPoints();
         BuildPlayerCharacterIcons();
         SelectFirstPlayerCharacter();
@@ -246,11 +270,15 @@ public class Game : MonoBehaviour
         // Turn 0 banner, tutorial instructions, or the resource-gathering NewTurn() effects appear.
         while (VideoPopupManager.IsShowing) yield return null;
 
-        yield return new WaitForSeconds(2f);
+        bool loadingSave = SaveSystem.PendingLoad != null;
+        if (!loadingSave)
+        {
+            yield return new WaitForSeconds(2f);
 
-        TutorialInstructionsManager instructions = TutorialInstructionsManager.Instance;
-        instructions.OpenNext();
-        while (instructions.IsShowing) yield return null;
+            TutorialInstructionsManager instructions = TutorialInstructionsManager.Instance;
+            instructions.OpenNext();
+            while (instructions.IsShowing) yield return null;
+        }
 
         NewTurnStarted?.Invoke(turn);
         FinalizeCampaignStart();
@@ -266,6 +294,7 @@ public class Game : MonoBehaviour
         // NPLs don't act on turn 0 — they start from turn 1 (see BeginPlayerTurnSequence, which
         // calls StartAlignedNplTurns for every turn after this one).
         yield return RefreshDeckUiAfterStartup();
+        if (loadingSave) SaveSystem.ApplyPendingLoad(this);
         // Recommendations and NPL contexts are optional background work. Never withhold the
         // human turn while the cache processes a large campaign's leaders.
         if (playerAutoplayEnabled)
@@ -429,6 +458,8 @@ public class Game : MonoBehaviour
         // actually read and click it (bloom mode in particular anchors to that character's
         // hex, so panning away mid-offer makes it unreachable).
         if (SituationCardsUI.IsShowing) return false;
+        // With command points spent there is nothing left to point at; keep the selection put.
+        if (player == null || player.CommandPoints <= 0) return false;
 
         // Make sure all characters have actioned
         Character stillNotActioned = player.controlledCharacters.Find(x => !x.hasActionedThisTurn && !x.killed && board.selectedCharacter != x);
@@ -463,15 +494,16 @@ public class Game : MonoBehaviour
             }
         }
 
-        if (nextCharacter != null)
+        if (nextCharacter != null && player.CommandPoints > 0)
         {
             board.SelectCharacter(nextCharacter);
             return;
         }
+        if (player.CommandPoints > 0) return;
 
-        // No characters with free actions; offer to finish turn
+        // Command points spent; offer to finish turn
         bool finish = await ConfirmationDialog.AskImmediate(
-            "No more characters with free actions are available. You may still have movement left. Finish the turn?",
+            "All command points are spent. You may still have movement left. Finish the turn?",
             "Finish Turn",
             "Cancel");
         if (finish)
@@ -525,7 +557,7 @@ public class Game : MonoBehaviour
 
     public async void NextPlayer()
     {
-        if (leaderTransitionRunning || endTurnConfirmationPending) return;
+        if (GameOver || leaderTransitionRunning || endTurnConfirmationPending) return;
         PopupManager.CloseAll();
         ConfirmationDialog.CloseAll();
         SelectionDialog.CloseAll();
@@ -540,10 +572,10 @@ public class Game : MonoBehaviour
 
         if (shouldPrompt)
         {
-            bool hasPendingActions = player.controlledCharacters.Any(x => !x.killed && !x.hasActionedThisTurn);
+            int commandPointsLeft = player.CommandPoints;
             bool hasPlayableCards = HasPlayableCardsInHand();
-            string message = (hasPendingActions && hasPlayableCards)
-                ? "Some characters have not actioned yet. End turn?"
+            string message = (commandPointsLeft > 0 && hasPlayableCards)
+                ? $"You still have {commandPointsLeft} command point{(commandPointsLeft == 1 ? "" : "s")}. End turn?"
                 : "End turn?";
 
             endTurnConfirmationPending = true;
@@ -608,6 +640,7 @@ public class Game : MonoBehaviour
         }
         else
         {
+            SetAiTurnFrameRate(true);
             HideHumanPlayerWidgetsWidgets();
             MessageDisplay.ShowPersistent($"{GetAlignmentDisplayName(currentlyPlaying.alignment)} nations are playing", Color.yellow);
             MessageDisplayNoUI.SetPaused(true);
@@ -683,8 +716,27 @@ public class Game : MonoBehaviour
         npcFocusEntries.Add(new NpcFocusEntry { leader = leader, hex = hex });
     }
 
+    // AI turns are frame-bound (every yield in the AI loop waits for the next frame), so lift the
+    // vsync cap while the human is only waiting, and restore it once their turn begins.
+    private int savedVSyncCount = -1;
+    private void SetAiTurnFrameRate(bool aiTurn)
+    {
+        if (aiTurn)
+        {
+            if (savedVSyncCount < 0) savedVSyncCount = QualitySettings.vSyncCount;
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = -1;
+        }
+        else if (savedVSyncCount >= 0)
+        {
+            QualitySettings.vSyncCount = savedVSyncCount;
+            savedVSyncCount = -1;
+        }
+    }
+
     private IEnumerator BeginPlayerTurnSequence()
     {
+        SetAiTurnFrameRate(false);
         HideHumanPlayerWidgetsWidgets();
         MessageDisplayNoUI.SetPaused(true);
 
@@ -900,13 +952,27 @@ public class Game : MonoBehaviour
     }
 
     // Add this method to handle game ending
-    public void EndGame(bool win)
-    {
-        HideHumanPlayerWidgetsWidgets();
-        if (win) MessageDisplay.ShowMessage("Victory!", Color.green); else MessageDisplay.ShowMessage("Defeat!", Color.red);
+    public bool GameOver { get; private set; }
 
-        Application.Quit();
-        Debug.Log("Game Ended!");
+    public void EndGame(bool win, string reason = null)
+    {
+        if (GameOver) return;
+        GameOver = true;
+        playerTurnAcceptingInput = false;
+        CampaignObjectives.Instance?.MarkResolved();
+        HideHumanPlayerWidgetsWidgets();
+        PopupManager.CloseAll();
+        ConfirmationDialog.CloseAll();
+        SelectionDialog.CloseAll();
+        SituationCardsUI.Instance?.DismissForAutoplay();
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            reason = win
+                ? "Every rival power has fallen before you."
+                : (player != null && player.killed ? "Your leader has fallen, and with them your cause." : "Your cause is lost.");
+        }
+        CampaignHud.ShowEndScreen(win, reason);
+        Debug.Log($"Game Ended! win={win} reason={reason}");
     }
 
     public bool IsPlayerCurrentlyPlaying()
@@ -1057,11 +1123,11 @@ public class Game : MonoBehaviour
         DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
         if (deckManager == null || player == null) return false;
 
-        IReadOnlyList<CardData> hand = deckManager.GetFullDeck(player);
+        IReadOnlyList<CardData> hand = deckManager.GetHand(player);
         if (hand == null || hand.Count == 0) return false;
 
         List<Character> unactioned = player.controlledCharacters
-            .Where(c => c != null && !c.killed && !c.hasActionedThisTurn)
+            .Where(c => c != null && !c.killed && c.CanPlayerActNow())
             .ToList();
 
         if (unactioned.Count == 0) return false;

@@ -108,7 +108,7 @@ public static class AITurnController
 
         string stackDescription = string.Join(">", newStack.Select(f => $"{f.MethodTaskId}[{f.SubtaskIndex}]"));
         string preferredParamsDescription = activePrimitive?.PreferredParameters is { Count: > 0 } ? string.Join(",", activePrimitive.PreferredParameters) : "(none)";
-        Debug.Log($"[HTN] {leader.characterName}/{character.characterName} difficulty={AIDifficultySettings.CurrentDifficulty} turnsOnTask={blackboard.TurnsOnCurrentTask} stack={stackDescription} preferredParams={preferredParamsDescription} targetHex={targetHex?.GetHoverV2()}");
+        if (DevLog.Verbose) Debug.Log($"[HTN] {leader.characterName}/{character.characterName} difficulty={AIDifficultySettings.CurrentDifficulty} turnsOnTask={blackboard.TurnsOnCurrentTask} stack={stackDescription} preferredParams={preferredParamsDescription} targetHex={targetHex?.GetHoverV2()}");
 
         return (activePrimitive?.TaskId, activePrimitive?.PreferredParameters, targetHex);
     }
@@ -298,7 +298,7 @@ public static class AITurnController
             : (UtilityAIContextCacheManager.Instance != null ? UtilityAIContextCacheManager.Instance.GetCached(leader, character) : null);
         precomputed ??= UtilityAIContextDataBuilder.Build(leader, character);
 
-        int picksRemaining = (int)AIDifficultySettings.CurrentDifficulty;
+        int picksRemaining = AIDifficultySettings.PicksPerCharacter;
         HashSet<CardData> playedThisCharacter = new();
         UtilityAIContext lastContext = null;
 
@@ -466,6 +466,10 @@ public static class AITurnController
     // technique UtilityAIContextCacheManager.PrecomputeLoop uses for the player-facing
     // recommendation cache, applied here to the AI's own live turn scoring.
     private const float ScoringFrameBudgetMs = 6f;
+    // When the human is just waiting for AI leaders (not background NPLs during their own turn),
+    // there's no player UI to keep smooth, so spend far more of each frame on scoring: every
+    // yield costs a whole (vsync'd) frame, which is what made AI turns take close to a minute.
+    private const float WaitingScoringFrameBudgetMs = 40f;
 
     // Async twin of ScoreFullDeck used by the live AI turn loop (ExecuteCharacterAsync).
     // Scoring a full deck (~100-150 cards) synchronously in one call blocks the main thread
@@ -479,6 +483,9 @@ public static class AITurnController
 
         precomputed ??= UtilityAIContextDataBuilder.Build(leader, character);
 
+        float frameBudgetMs = IsBackgroundAiDuringHumanTurn(leader) || leader == Game.Instance?.player
+            ? ScoringFrameBudgetMs
+            : WaitingScoringFrameBudgetMs;
         System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
         foreach (CardData card in fullDeck ?? deckManager.GetFullDeck(leader))
         {
@@ -493,7 +500,7 @@ public static class AITurnController
                 leader, character, card, actionsManager, precomputed, preferredParameters, requirePlayable: true);
             if (cardScore.HasValue) scored.Add(cardScore.Value);
 
-            if (stopwatch.Elapsed.TotalMilliseconds >= ScoringFrameBudgetMs)
+            if (stopwatch.Elapsed.TotalMilliseconds >= frameBudgetMs)
             {
                 await Task.Yield();
                 stopwatch.Restart();
@@ -573,12 +580,12 @@ public static class AITurnController
 
         board.Move(character, target.v2);
 
-        // Wait until movement finishes
-        int safety = 0;
-        while (board.moving && safety < 200)
+        // Wait until movement finishes. Fogged walks complete synchronously, so this usually
+        // doesn't wait at all; visible hops are polled once per frame rather than every 50ms.
+        float deadline = Time.realtimeSinceStartup + 10f;
+        while (board.moving && Time.realtimeSinceStartup < deadline)
         {
-            await Task.Delay(50);
-            safety++;
+            await Task.Yield();
         }
     }
 

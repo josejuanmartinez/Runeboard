@@ -46,7 +46,9 @@ public class DeckData
 public enum SituationCardOfferSource
 {
     Situation,
-    AI
+    AI,
+    // Drawn into the human leader's visible hand (see HandTray).
+    Hand
 }
 
 public sealed class SituationCardOffer
@@ -675,14 +677,13 @@ public class CardData
             return false;
         }
 
-        // Human characters get one card action per turn. Keep this at the shared CardData
-        // playability boundary so every presentation path (hand, bloom, and situation cards)
-        // disables the complete card set consistently after the selected character acts.
-        // AI characters deliberately bypass this gate; AITurnController limits their orders
-        // according to difficulty instead.
+        // Human play is budgeted by the leader's command points (and status blocks such as
+        // Kidnapped/Fear). Keep this at the shared CardData playability boundary so every
+        // presentation path disables consistently. AI characters deliberately bypass this gate;
+        // AITurnController limits their orders according to difficulty instead.
         if (selectedCharacter != null
             && selectedCharacter.isPlayerControlled
-            && selectedCharacter.hasActionedThisTurn)
+            && !selectedCharacter.CanPlayerActNow())
         {
             playability.failsActionConditions = true;
             playability.failsAlreadyActioned = true;
@@ -971,6 +972,10 @@ public class DeckManager : MonoBehaviour
         public readonly List<CardData> drawPile = new();
         public readonly List<CardData> discardPile = new();
         public readonly List<CardData> situationPool = new List<CardData>();
+        // The human player's visible hand (HandTray). Cards are moved here out of drawPile, so
+        // AI scoring over drawPile never sees them; AI leaders never draw a hand.
+        public readonly List<CardData> hand = new();
+        public int lastHandDrawTurn = -1;
     }
 
     public static DeckManager Instance { get; private set; }
@@ -1427,6 +1432,66 @@ public class DeckManager : MonoBehaviour
     {
         return handSize;
     }
+
+    public IReadOnlyList<CardData> GetHand(PlayableLeader leader)
+    {
+        if (leader == null) return Array.Empty<CardData>();
+        return playerDecks.TryGetValue(leader, out PlayerDeckState state) ? state.hand : Array.Empty<CardData>();
+    }
+
+    public bool HasDeckFor(PlayableLeader leader) => leader != null && playerDecks.ContainsKey(leader);
+
+    /// <summary>
+    /// Tops the leader's hand up to <paramref name="size"/> once per turn, recycling the discard
+    /// pile when the draw pile runs dry. Encounter and Object cards stay in the deck: encounters
+    /// are placed on the map and objects are lookup records, neither is played from hand.
+    /// Returns true if this call performed the turn's draw.
+    /// </summary>
+    public bool DrawHandForTurn(PlayableLeader leader, int turn, int size)
+    {
+        if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
+        if (state.lastHandDrawTurn == turn) return false;
+        state.lastHandDrawTurn = turn;
+        state.hand.RemoveAll(c => c == null);
+        int guard = state.drawPile.Count + state.discardPile.Count + 1;
+        while (state.hand.Count < size && guard-- > 0)
+        {
+            if (state.drawPile.Count == 0) RecycleDiscardPileIfExhausted(leader);
+            int index = state.drawPile.FindIndex(IsHandCard);
+            if (index < 0) break;
+            state.hand.Add(state.drawPile[index]);
+            state.drawPile.RemoveAt(index);
+        }
+        return true;
+    }
+
+    private static bool IsHandCard(CardData card) =>
+        card != null && card.GetCardType() != CardTypeEnum.Encounter && card.GetCardType() != CardTypeEnum.Object;
+
+    public bool RemoveFromHand(PlayableLeader leader, CardData card)
+    {
+        if (leader == null || card == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
+        return state.hand.Remove(card);
+    }
+
+    /// <summary>Discards a hand card unplayed (e.g. a dead card swapped for a resource).</summary>
+    public bool DiscardFromHand(PlayableLeader leader, CardData card)
+    {
+        if (!RemoveFromHand(leader, card)) return false;
+        playerDecks[leader].discardPile.Add(card);
+        return true;
+    }
+
+    public void RestoreHand(PlayableLeader leader, IEnumerable<CardData> cards, int lastDrawTurn)
+    {
+        if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return;
+        state.hand.Clear();
+        if (cards != null) state.hand.AddRange(cards.Where(c => c != null));
+        state.lastHandDrawTurn = lastDrawTurn;
+    }
+
+    public int GetLastHandDrawTurn(PlayableLeader leader) =>
+        leader != null && playerDecks.TryGetValue(leader, out PlayerDeckState state) ? state.lastHandDrawTurn : -1;
 
     public bool TryPlayCard(PlayableLeader leader, string cardName, out CardData card)
     {

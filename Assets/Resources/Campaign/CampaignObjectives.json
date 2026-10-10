@@ -1,0 +1,32 @@
+{
+  "ageLength": 60,
+  "leaders": [
+    {
+      "leader": "Gandalf",
+      "objectives": [
+        { "id": "gandalf_mount_doom", "title": "Into the Fire", "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.", "type": "ReachPC", "pc": "MountDoom", "points": 0, "decisive": true },
+        { "id": "gandalf_minas_tirith", "title": "The White City Stands", "description": "Minas Tirith is held by the Free Peoples when the Age ends.", "type": "HoldPC", "pc": "Minas Tirith", "side": true, "points": 3 },
+        { "id": "gandalf_imladris", "title": "The Last Homely House", "description": "Imladris is held by the Free Peoples when the Age ends.", "type": "HoldPC", "pc": "Imladris", "side": true, "points": 1 },
+        { "id": "gandalf_rally", "title": "Rally the West", "description": "Your own realm holds 5 or more PCs when the Age ends.", "type": "PCCount", "count": 5, "points": 2 }
+      ]
+    },
+    {
+      "leader": "Saruman",
+      "objectives": [
+        { "id": "saruman_master", "title": "Master of the West", "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.", "type": "HoldAllPCs", "pcs": [ "Edoras", "Minas Tirith" ], "points": 0, "decisive": true },
+        { "id": "saruman_edoras", "title": "Lord of the Mark", "description": "You hold Edoras when the Age ends.", "type": "HoldPC", "pc": "Edoras", "points": 3 },
+        { "id": "saruman_orthanc", "title": "Orthanc Unbroken", "description": "You hold Orthanc when the Age ends.", "type": "HoldPC", "pc": "Orthanc", "points": 1 },
+        { "id": "saruman_industry", "title": "Industry of Isengard", "description": "Your own realm holds 6 or more PCs when the Age ends.", "type": "PCCount", "count": 6, "points": 2 }
+      ]
+    },
+    {
+      "leader": "Sauron",
+      "objectives": [
+        { "id": "sauron_minas_tirith", "title": "The White City Falls", "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.", "type": "HoldPC", "pc": "Minas Tirith", "side": true, "points": 0, "decisive": true },
+        { "id": "sauron_osgiliath", "title": "Osgiliath Burns", "description": "Osgiliath is held by the Dark Servants when the Age ends.", "type": "HoldPC", "pc": "Osgiliath", "side": true, "points": 2 },
+        { "id": "sauron_barad_dur", "title": "The Dark Tower Stands", "description": "You hold Barad-dur when the Age ends.", "type": "HoldPC", "pc": "Barad-dur", "points": 1 },
+        { "id": "sauron_darkness", "title": "Darkness Spreads", "description": "Your own realm holds 6 or more PCs when the Age ends.", "type": "PCCount", "count": 6, "points": 3 }
+      ]
+    }
+  ]
+}

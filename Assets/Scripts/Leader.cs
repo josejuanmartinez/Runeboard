@@ -75,34 +75,126 @@ public class Leader : Character
     public bool TryConsumeCharacterSlot() => true;
     public bool TryConsumePcSlot() => true;
 
-    public int GetLeatherPerTurn()
+    // ---- Economy: owned PCs produce every turn on their own; armies cost gold upkeep.
+    // (Standing a character on an owned PC still triggers its full card grant on top — see
+    // Board.TriggerTurnStartResourceGrants — so visiting your holdings remains worthwhile.)
+    public const int TroopsPerUpkeepGold = 6;
+
+    private IEnumerable<PC> OwnedPcs() => controlledPcs.Where(pc => pc != null && pc.owner == this);
+
+    public int GetGoldPerTurn() => GetGoldIncome() - GetArmyUpkeep();
+
+    public int GetGoldIncome()
     {
-        return 0;
+        int income = 0;
+        foreach (PC pc in OwnedPcs())
+        {
+            income += pc.citySize switch
+            {
+                PCSizeEnum.city => 3,
+                PCSizeEnum.majorTown => 2,
+                PCSizeEnum.town or PCSizeEnum.village => 1,
+                _ => 0
+            };
+            if (pc.isCapital) income += 1;
+        }
+        return income;
     }
 
-    public int GetMountsPerTurn()
+    public int GetArmyUpkeep()
     {
-        return 0;
+        int upkeep = 0;
+        foreach (Character c in controlledCharacters)
+        {
+            if (c == null || c.killed || !c.IsArmyCommander()) continue;
+            Army army = c.GetArmy();
+            if (army == null || army.killed) continue;
+            upkeep += Mathf.CeilToInt(army.GetSize(true) / (float)TroopsPerUpkeepGold);
+        }
+        return upkeep;
     }
 
-    public int GetTimberPerTurn()
+    // One unit of every material an owned PC's card grants (its card lists what it produces).
+    // AI scoring reads these constantly, so the per-PC card lookups are cached until the turn
+    // or the set of owned PCs changes.
+    private readonly int[] materialPerTurn = new int[6];
+    private int materialCacheTurn = -1;
+    private int materialCachePcCount = -1;
+
+    private int MaterialPerTurn(int index)
     {
-        return 0;
+        int turn = Game.Instance != null ? Game.Instance.turn : 0;
+        int pcCount = controlledPcs.Count;
+        if (turn != materialCacheTurn || pcCount != materialCachePcCount)
+        {
+            materialCacheTurn = turn;
+            materialCachePcCount = pcCount;
+            System.Array.Clear(materialPerTurn, 0, materialPerTurn.Length);
+            DeckManager deck = DeckManager.Instance;
+            if (deck != null)
+            {
+                foreach (PC pc in OwnedPcs())
+                {
+                    CardData card = deck.FindPcCardByPcName(pc.pcName);
+                    if (card == null) continue;
+                    if (card.leatherGranted > 0) materialPerTurn[0]++;
+                    if (card.mountsGranted > 0) materialPerTurn[1]++;
+                    if (card.timberGranted > 0) materialPerTurn[2]++;
+                    if (card.ironGranted > 0) materialPerTurn[3]++;
+                    if (card.steelGranted > 0) materialPerTurn[4]++;
+                    if (card.mithrilGranted > 0) materialPerTurn[5]++;
+                }
+            }
+        }
+        return materialPerTurn[index];
     }
 
-    public int GetIronPerTurn()
-    {
-        return 0;
-    }
+    public int GetLeatherPerTurn() => MaterialPerTurn(0);
+    public int GetMountsPerTurn() => MaterialPerTurn(1);
+    public int GetTimberPerTurn() => MaterialPerTurn(2);
+    public int GetIronPerTurn() => MaterialPerTurn(3);
+    public int GetSteelPerTurn() => MaterialPerTurn(4);
+    public int GetMithrilPerTurn() => MaterialPerTurn(5);
 
-    public int GetSteelPerTurn()
-    {
-        return 0;
-    }
+    private int lastEconomyTurn = -1;
 
-    public int GetMithrilPerTurn()
+    private void ApplyTurnEconomy()
     {
-        return 0;
+        int turn = Game.Instance != null ? Game.Instance.turn : 0;
+        if (turn <= 0 || turn == lastEconomyTurn) return;
+        lastEconomyTurn = turn;
+
+        AddLeather(GetLeatherPerTurn(), false);
+        AddMounts(GetMountsPerTurn(), false);
+        AddTimber(GetTimberPerTurn(), false);
+        AddIron(GetIronPerTurn(), false);
+        AddSteel(GetSteelPerTurn(), false);
+        AddMithril(GetMithrilPerTurn(), false);
+
+        int income = GetGoldIncome();
+        int upkeep = GetArmyUpkeep();
+        int net = income - upkeep;
+        if (goldAmount + net >= 0)
+        {
+            AddGold(net, false);
+        }
+        else
+        {
+            // Can't pay the troops: spend what's left and the largest army loses a unit to
+            // desertion, rather than sliding into debt (which eliminates a leader below -10).
+            int shortfall = -(goldAmount + net);
+            goldAmount = Mathf.Max(0, goldAmount + net);
+            Army largest = controlledCharacters
+                .Where(c => c != null && !c.killed && c.IsArmyCommander() && c.GetArmy() != null && c.GetArmy().GetSize(true) > 1)
+                .Select(c => c.GetArmy())
+                .OrderByDescending(a => a.GetSize(true))
+                .FirstOrDefault();
+            largest?.ReceiveCasualties(0f, this, forceOneUnitCasualty: true);
+            if (Game.Instance != null && Game.Instance.player == this)
+                LogManager.Log(LogCategory.Notification, characterName, null, $"Unpaid troops desert ({shortfall} gold short).");
+        }
+        if (Game.Instance != null && Game.Instance.player == this)
+            LogManager.Log(LogCategory.Notification, characterName, null, $"Treasury: +{income} gold from your holdings, -{upkeep} army upkeep.");
     }
 
     new public AlignmentEnum GetAlignment()
@@ -135,6 +227,7 @@ public class Leader : Character
             deckManager.RecycleDiscardPileIfExhausted(playable);
         }
 
+        ApplyTurnEconomy();
         RunTurnStartResourceGrants();
 
         turnsSinceLastPcFoundingOffer++;
@@ -160,7 +253,7 @@ public class Leader : Character
             Debug.LogWarning("[PCGrant] RunTurnStartResourceGrants aborted — no Board found.");
             return;
         }
-        Debug.Log($"[PCGrant] RunTurnStartResourceGrants for {name}, {controlledCharacters.Count(c => c != null && !c.killed)} live character(s).");
+        if (DevLog.Verbose) Debug.Log($"[PCGrant] RunTurnStartResourceGrants for {name}, {controlledCharacters.Count(c => c != null && !c.killed)} live character(s).");
 
         board.TriggerTurnStartResourceGrants(controlledCharacters);
     }

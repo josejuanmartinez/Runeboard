@@ -1719,7 +1719,7 @@ public class Board : MonoBehaviour
         if (character == null || hex == null) { Debug.Log("[SituationCards] null character or hex"); return; }
         Game g = Game.Instance;
         if (g == null) { Debug.Log("[SituationCards] no Game found"); return; }
-        if (!g.IsPlayerCurrentlyPlaying()) { Debug.Log("[SituationCards] not player's turn"); return; }
+        if (!g.IsPlayerCurrentlyPlaying()) { if (DevLog.Verbose) Debug.Log("[SituationCards] not player's turn"); return; }
         if (g.player != character.GetOwner()) { Debug.Log($"[SituationCards] character {character.characterName} not owned by player"); return; }
         if (g.IsPlayerAutoplayEnabledFor(character.GetOwner())) return;
 
@@ -1731,6 +1731,14 @@ public class Board : MonoBehaviour
 
         List<SituationCardOffer> situationCards = deckManager.GetSituationCardOffers(g.player, character, hex);
         Debug.Log($"[SituationCards] offers: {situationCards.Count} — [{string.Join(", ", situationCards.Select(o => $"{o.Card?.name} ({o.Source}{(o.IsPlayable ? "" : ", disabled")})"))}]");
+
+        // The visible hand tray replaces the hidden bloom wheel: opportunities for the selected
+        // character just appear there (no camera pan, no exclusive center-screen lock).
+        if (HandTray.Instance != null)
+        {
+            HandTray.Instance.SetOpportunities(situationCards, character);
+            return;
+        }
 
         if (situationCards == null || situationCards.Count == 0) return;
 
@@ -1892,14 +1900,14 @@ public class Board : MonoBehaviour
     {
         if (character == null || character.killed || hex == null)
         {
-            Debug.Log($"[PCGrant] aborted — character={character != null} killed={character?.killed} hex={hex != null}");
+            if (DevLog.Verbose) Debug.Log($"[PCGrant] aborted — character={character != null} killed={character?.killed} hex={hex != null}");
             return;
         }
 
         PC pc = hex.GetPCData();
         if (pc == null || pc.owner != character.GetOwner())
         {
-            Debug.Log($"[PCGrant] aborted — no PC on {hex.name}, or not owned by {character.characterName}'s leader (pc={pc != null})");
+            if (DevLog.Verbose) Debug.Log($"[PCGrant] aborted — no PC on {hex.name}, or not owned by {character.characterName}'s leader (pc={pc != null})");
             return;
         }
 
@@ -1907,24 +1915,24 @@ public class Board : MonoBehaviour
         CardData pcCard = deckManager?.FindPcCardByPcName(pc.pcName);
         if (pcCard == null)
         {
-            Debug.Log($"[PCGrant] aborted — no PC card found for '{pc.pcName}' (deckManager={deckManager != null})");
+            if (DevLog.Verbose) Debug.Log($"[PCGrant] aborted — no PC card found for '{pc.pcName}' (deckManager={deckManager != null})");
             return;
         }
 
         ActionsManager actionsManager = ActionsManager.Instance;
         if (actionsManager?.ResolveActionByRef(pcCard.GetActionRef(), pcCard) is not PCAction pcAction)
         {
-            Debug.Log($"[PCGrant] aborted — could not resolve PCAction for '{pcCard.name}' (actionsManager={actionsManager != null})");
+            if (DevLog.Verbose) Debug.Log($"[PCGrant] aborted — could not resolve PCAction for '{pcCard.name}' (actionsManager={actionsManager != null})");
             return;
         }
 
         pcAction.Initialize(character, pcCard);
         if (!pcAction.IsAlreadyFoundedAndOwnedBySelf(character))
         {
-            Debug.Log($"[PCGrant] aborted — '{pc.pcName}' not already-founded-and-owned-by-self for {character.characterName}");
+            if (DevLog.Verbose) Debug.Log($"[PCGrant] aborted — '{pc.pcName}' not already-founded-and-owned-by-self for {character.characterName}");
             return;
         }
-        Debug.Log($"[PCGrant] '{pc.pcName}' proceeding for {character.characterName}");
+        if (DevLog.Verbose) Debug.Log($"[PCGrant] '{pc.pcName}' proceeding for {character.characterName}");
 
         Game game = Game.Instance;
         bool showToPlayer = game != null && game.player == character.GetOwner();

@@ -148,6 +148,23 @@ public class PC
     }
 
 
+    /// <summary>Sets the owner when restoring a saved game: no capture side effects (eliminations, messages, loyalty roll).</summary>
+    public void RestoreOwnerForLoad(Leader leader)
+    {
+        if (owner == leader) return;
+        if (owner != null)
+        {
+            owner.controlledPcs.Remove(this);
+            owner.visibleHexes.Remove(hex);
+        }
+        owner = leader;
+        if (owner != null)
+        {
+            if (!owner.controlledPcs.Contains(this)) owner.controlledPcs.Add(this);
+            owner.visibleHexes.Add(hex);
+        }
+    }
+
     public void CapturePC(Leader leader)
     {
         Leader previousOwner = owner;

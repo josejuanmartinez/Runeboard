@@ -932,6 +932,26 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         AppendRequirement(reqs, "steel", data.steelRequired);
         AppendRequirement(reqs, "mithril", data.mithrilRequired);
 
+        // Actions roll against their difficulty when played; say so up front instead of
+        // letting a card silently fizzle.
+        if (data.difficulty > 0 && data.difficulty < 100)
+        {
+            // Show the chance for the currently selected character when there is one: each skill
+            // level above the requirement adds CharacterAction.SkillMasteryPercentPerLevel.
+            Character actor = Board.Instance != null ? Board.Instance.selectedCharacter : null;
+            int mastery = 0;
+            if (actor != null)
+            {
+                if (data.commanderSkillRequired > 0) mastery = Mathf.Max(mastery, actor.GetCommander() - data.commanderSkillRequired);
+                if (data.agentSkillRequired > 0) mastery = Mathf.Max(mastery, actor.GetAgent() - data.agentSkillRequired);
+                if (data.emissarySkillRequired > 0) mastery = Mathf.Max(mastery, actor.GetEmmissary() - data.emissarySkillRequired);
+                if (data.mageSkillRequired > 0) mastery = Mathf.Max(mastery, actor.GetMage() - data.mageSkillRequired);
+            }
+            int success = Mathf.Min(100, 100 - data.difficulty + Mathf.Max(0, mastery) * CharacterAction.SkillMasteryPercentPerLevel);
+            string tint = success >= 75 ? "#9BD37A" : success >= 50 ? "#E8C66A" : "#E07A5F";
+            reqs.Add($"<color={tint}>· {success}% success</color>");
+        }
+
         string situationLabel = FormatSituationLabel(data);
         if (!string.IsNullOrWhiteSpace(situationLabel))
         {
@@ -1779,12 +1799,14 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
             if (cardData.playability.failsAlreadyActioned)
             {
-                messages.Add("<sprite name=\"error\">Character has already acted this turn.");
+                PlayableLeader human = Game.Instance != null ? Game.Instance.player : null;
+                messages.Add(human != null && human.CommandPoints <= 0
+                    ? "<sprite name=\"error\">No command points left this turn."
+                    : "<sprite name=\"error\">This character cannot act this turn.");
             }
             else if (cardData.IsEncounterCard() && cardData.encounterTargetHex != null)
             {
-                string hexCoords = $"{cardData.encounterTargetHex.v2.x}, {cardData.encounterTargetHex.v2.y}";
-                messages.Add($"<sprite name=\"error\">Move your character to hex {hexCoords} to investigate.");
+                messages.Add($"<sprite name=\"error\">Move a character to {cardData.encounterTargetHex.GetPlaceLabel()} to investigate.");
             }
             else if (cardData.IsEncounterCard())
             {

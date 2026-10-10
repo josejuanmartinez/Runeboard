@@ -51,7 +51,34 @@ public class Character : MonoBehaviour
     public bool killed;
 
     [Header("Turn data")]
-    public bool hasActionedThisTurn;
+    [UnityEngine.Serialization.FormerlySerializedAs("hasActionedThisTurn")]
+    [SerializeField] private bool actedThisTurn;
+    // Status effects (Blocked, Kidnapped, Fear) that stop a character acting at all this turn.
+    // Human actions are otherwise budgeted by the leader's command points, not per character.
+    public bool actionBlockedThisTurn;
+
+    /// <summary>
+    /// "Has acted at least once this turn". For human characters, clearing it mid-turn is how
+    /// cards and effects (Hope, rally events) refresh an action, so it hands back a command point.
+    /// </summary>
+    public bool hasActionedThisTurn
+    {
+        get => actedThisTurn;
+        set
+        {
+            if (actedThisTurn && !value && isPlayerControlled && !actionBlockedThisTurn)
+                (GetOwner() as PlayableLeader)?.GrantCommandPoint();
+            actedThisTurn = value;
+        }
+    }
+
+    /// <summary>Whether a human character may play another card now (command points left, not status-blocked).</summary>
+    public bool CanPlayerActNow()
+    {
+        if (killed || actionBlockedThisTurn) return false;
+        PlayableLeader leader = GetOwner() as PlayableLeader;
+        return leader == null || leader.CommandPoints > 0;
+    }
     public Hex previousHex;
     public bool isEmbarked;
     public List<Hex> reachableHexes = new();
@@ -312,7 +339,7 @@ public class Character : MonoBehaviour
 
         owner.GetOwner().controlledCharacters.Add(this);
         this.owner = owner.GetOwner();
-        hasActionedThisTurn = false;
+        actedThisTurn = false; actionBlockedThisTurn = false;
         moved = 0;
         isEmbarked = false;
         army = null;
@@ -541,25 +568,25 @@ public class Character : MonoBehaviour
         if (blocked)
         {
             moved = 0;
-            hasActionedThisTurn = true;
+            actedThisTurn = true; actionBlockedThisTurn = true;
             MessageDisplayNoUI.ShowMessage(hex, this, "Blocked: action lost.", Color.red);
         }
         else if (halted)
         {
             moved = GetMaxMovement();
-            hasActionedThisTurn = false;
+            actedThisTurn = false; actionBlockedThisTurn = false;
             MessageDisplayNoUI.ShowMessage(hex, this, "Halted: movement lost.", Color.yellow);
         }
         else
         {
             moved = 0;
-            hasActionedThisTurn = false;
+            actedThisTurn = false; actionBlockedThisTurn = false;
         }
 
         if (IsKidnapped())
         {
             moved = GetMaxMovement();
-            hasActionedThisTurn = true;
+            actedThisTurn = true; actionBlockedThisTurn = true;
         }
 
         if (HasStatusEffect(StatusEffectEnum.Frozen))
@@ -703,7 +730,7 @@ public class Character : MonoBehaviour
 
         statusEffects = statusEffectTurns.Where(kv => kv.Value > 0).Select(kv => kv.Key).ToList();
         moved = snapshot.moved;
-        hasActionedThisTurn = snapshot.hasActionedThisTurn;
+        actedThisTurn = snapshot.hasActionedThisTurn;
         isEmbarked = snapshot.isEmbarked;
         burningForestTroopLossPending = snapshot.burningForestTroopLossPending;
         poisonedFearTriggered = snapshot.poisonedFearTriggered;
@@ -1021,7 +1048,7 @@ public class Character : MonoBehaviour
         target.kidnappedBy = this;
         target.kidnappedOriginalOwner = originalOwner;
         target.hex = this.hex;
-        target.hasActionedThisTurn = true;
+        target.hasActionedThisTurn = true; target.actionBlockedThisTurn = true;
         target.moved = target.GetMaxMovement();
         if (target.hex != null && !target.hex.characters.Contains(target)) target.hex.characters.Add(target);
 
@@ -1071,7 +1098,7 @@ public class Character : MonoBehaviour
                 capitalHex.RedrawCharacters();
             }
             moved = 0;
-            hasActionedThisTurn = false;
+            actedThisTurn = false; actionBlockedThisTurn = false;
         }
 
         Hex currentHex = hex;
@@ -1280,7 +1307,7 @@ public class Character : MonoBehaviour
         killed = false;
         health = Mathf.Clamp(revivedHealth, 1, 100);
         moved = 0;
-        hasActionedThisTurn = false;
+        actedThisTurn = false; actionBlockedThisTurn = false;
         isEmbarked = false;
         kidnappedBy = null;
         kidnappedOriginalOwner = null;
@@ -1789,7 +1816,7 @@ public class Character : MonoBehaviour
 
         if (UnityEngine.Random.Range(0, 100) < 25)
         {
-            hasActionedThisTurn = true;
+            hasActionedThisTurn = true; actionBlockedThisTurn = true;
             MessageDisplayNoUI.ShowMessage(hex, this, retreated ? "Fear also steals the action." : "Fear steals the action.", Color.red);
         }
         else if (!retreated)

@@ -127,7 +127,8 @@ public class PlayableLeaderIcons : MonoBehaviour
 
         List<PlayableLeaderIcon> ranked = playableLeaderIcons
             .Where(icon => icon != null && icon.playableLeader != null && !icon.playableLeader.killed && icon.victoryPoints != null)
-            .OrderByDescending(icon => icon.playableLeader.victoryPoints != null ? icon.playableLeader.victoryPoints.RelativeScore : int.MinValue)
+            .OrderByDescending(icon => icon.DisplayScore(icon.playableLeader.victoryPoints != null ? icon.playableLeader.victoryPoints.RelativeScore : int.MinValue))
+            .ThenByDescending(icon => icon.playableLeader.victoryPoints != null ? icon.playableLeader.victoryPoints.RelativeScore : int.MinValue)
             .ToList();
 
         if (ranked.Count > 0) ranked[0].victoryPoints.color = new Color(0.12f, 0.55f, 0.23f, 1f);

@@ -136,7 +136,7 @@ public class CharacterAction
                 // limited by AIDifficultySettings in AITurnController instead, so an AI card
                 // must never become unavailable merely because an earlier order was executed.
                 && (!character.isPlayerControlled
-                    || !character.hasActionedThisTurn
+                    || character.CanPlayerActNow()
                     || (!string.IsNullOrWhiteSpace(defaultActionName) && this.actionName == defaultActionName))
                 && (originalCondition == null || originalCondition(character));
             };
@@ -272,6 +272,21 @@ public class CharacterAction
             character.AddMage(1);
     }
 
+    // Each skill level above what the card requires shaves this much off the failure chance,
+    // so seasoned characters are the reliable ones (shown on the card hover as base success).
+    public const int SkillMasteryPercentPerLevel = 5;
+
+    public int GetSkillMastery(Character c)
+    {
+        if (c == null) return 0;
+        int best = 0;
+        if (commanderSkillRequired > 0) best = Mathf.Max(best, c.GetCommander() - commanderSkillRequired);
+        if (agentSkillRequired > 0) best = Mathf.Max(best, c.GetAgent() - agentSkillRequired);
+        if (emissarySkillRequired > 0) best = Mathf.Max(best, c.GetEmmissary() - emissarySkillRequired);
+        if (mageSkillRequired > 0) best = Mathf.Max(best, c.GetMage() - mageSkillRequired);
+        return Mathf.Max(0, best);
+    }
+
     public async Task Execute()
     {
         // Snapshotted once: CharacterAction instances are cached/shared per class by
@@ -298,6 +313,7 @@ public class CharacterAction
             if (!isAI && ConsumesAction)
             {
                 character.hasActionedThisTurn = true;
+                (character.GetOwner() as PlayableLeader)?.SpendCommandPoint();
             }
 
             bool failed = false;
@@ -321,6 +337,7 @@ public class CharacterAction
                 {
                     effectiveDifficulty = Mathf.Max(0, effectiveDifficulty - 50);
                 }
+                effectiveDifficulty = Mathf.Max(0, effectiveDifficulty - GetSkillMastery(character) * SkillMasteryPercentPerLevel);
             }
             bool failedByChance = UnityEngine.Random.Range(0, 100) < effectiveDifficulty;
             character?.ConsumeTemporaryActionDifficultyReduction(GetType().Name, actionHex);
@@ -1359,10 +1376,10 @@ public class CharacterAction
         if (character.killed) parts.Add("Character is dead.");
         string defaultActionName = GetDefaultActionName();
         if (character.isPlayerControlled
-            && character.hasActionedThisTurn
+            && !character.CanPlayerActNow()
             && (string.IsNullOrWhiteSpace(defaultActionName) || actionName != defaultActionName))
         {
-            parts.Add("Already actioned this turn.");
+            parts.Add(character.actionBlockedThisTurn ? "Cannot act this turn." : "No command points left this turn.");
         }
 
         if (owner != null)

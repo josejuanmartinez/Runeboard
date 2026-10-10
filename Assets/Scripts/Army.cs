@@ -136,6 +136,11 @@ public class Army
         AddTroopGroup(troopsType, amount, troopName, specialAbilities);
     }
 
+    // Casualty % = net damage / (own strength x this). It was 10, which capped a fight at
+    // roughly a tenth of an army and made wars long, unreadable attrition; at 3 a clearly
+    // superior force breaks its enemy in two or three battles.
+    public const float CombatLethalityDivisor = 3f;
+
     public int GetSize(bool withoutWs = false)
     {
         int result = ma + ar + li + hi + lc + hc + ca;
@@ -878,8 +883,8 @@ public class Army
         float defenderDamage = Math.Max(0, defenderStrength - attackerDefence);
 
         // Calculate casualty percentages (as decimals)
-        float attackerCasualtyPercent = defenderDamage / (attackerStrength * 10);
-        float defenderCasualtyPercent = attackerDamage / (defenderStrength * 10);
+        float attackerCasualtyPercent = defenderDamage / (attackerStrength * CombatLethalityDivisor);
+        float defenderCasualtyPercent = attackerDamage / (defenderStrength * CombatLethalityDivisor);
 
         // Clamp casualty percentages between 0 and 1
         attackerCasualtyPercent = Math.Clamp(attackerCasualtyPercent, 0, 1);
@@ -1364,7 +1369,7 @@ public class Army
         float defenderDamage = Math.Max(0, defenderStrength - attackerDefence);
 
         // Calculate casualties for attacker (PC can still cause casualties)
-        float attackerCasualtyPercent = defenderDamage / (attackerStrength * 10);
+        float attackerCasualtyPercent = defenderDamage / (attackerStrength * CombatLethalityDivisor);
 
         // Clamp casualty percentage between 0 and 1
         attackerCasualtyPercent = Math.Clamp(attackerCasualtyPercent, 0, 1);
@@ -1377,7 +1382,7 @@ public class Army
         int attackerArtifactDefense = GetArtifactDefenseBonusTotal();
         CasualtyBreakdown attackerLosses = CalculateCasualtyBreakdown(attackerCasualtyPercent, !anyAttackerCasualties);
         string attackerLossesText = BuildLossesShort(attackerLosses);
-        string pcTitle = $"Siege of {targetHex.GetPC().pcName}";
+        string pcTitle = $"Siege of {DisplayNames.Format(targetHex.GetPC().pcName)}";
         string pcText = BuildSiegeDescription(
             targetHex.GetPC().pcName,
             attackerName,

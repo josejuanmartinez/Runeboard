@@ -126,9 +126,14 @@ public class PlayableLeaderIcon : MonoBehaviour
         image.color = new Color(image.color.r, image.color.g, image.color.b, 0.25f);
     }
 
+    // With a campaign running, the badge shows objective points (what actually decides the war);
+    // raw victory points are only the tie-breaker.
+    public int DisplayScore(int fallbackPoints) =>
+        CampaignObjectives.Instance != null && playableLeader != null ? CampaignObjectives.Instance.Score(playableLeader) : fallbackPoints;
+
     public void RefreshVictoryPoints(int points)
     {
-        if (victoryPoints != null) victoryPoints.text = points.ToString();
+        if (victoryPoints != null) victoryPoints.text = DisplayScore(points).ToString();
         PlayableLeaderIcons icons = FindFirstObjectByType<PlayableLeaderIcons>();
         if (icons != null) icons.UpdateVictoryPointColors();
     }

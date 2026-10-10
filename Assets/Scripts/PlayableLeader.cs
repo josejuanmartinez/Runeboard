@@ -30,6 +30,51 @@ public class PlayableLeader : Leader
     // LeaderSelector must show exactly one carousel entry for it instead of the full variant menu.
     public bool scenarioVariantLocked;
 
+    // ---- Command points: the human leader's per-turn action budget (replaces "one card per
+    // character per turn"). Any character may spend them; refreshed lazily whenever the game
+    // turn changes so no turn-start hook ordering matters.
+    public const int BaseCommandPoints = 3;
+    public const int MaxCommandPoints = 6;
+    private int commandPoints;
+    private int commandPointsTurn = -1;
+    public event Action CommandPointsChanged;
+
+    public int CommandPointsMax => Mathf.Clamp(BaseCommandPoints + controlledPcs.Count(pc => pc != null && pc.owner == this) / 4, BaseCommandPoints, MaxCommandPoints);
+
+    public int CommandPoints
+    {
+        get { SyncCommandPoints(); return commandPoints; }
+    }
+
+    private void SyncCommandPoints()
+    {
+        int turn = Game.Instance != null ? Game.Instance.turn : 0;
+        if (turn == commandPointsTurn) return;
+        commandPointsTurn = turn;
+        commandPoints = CommandPointsMax;
+    }
+
+    public void SpendCommandPoint()
+    {
+        SyncCommandPoints();
+        commandPoints = Mathf.Max(0, commandPoints - 1);
+        CommandPointsChanged?.Invoke();
+    }
+
+    public void GrantCommandPoint()
+    {
+        SyncCommandPoints();
+        commandPoints = Mathf.Min(MaxCommandPoints, commandPoints + 1);
+        CommandPointsChanged?.Invoke();
+    }
+
+    public void RestoreCommandPoints(int points, int turn)
+    {
+        commandPoints = points;
+        commandPointsTurn = turn;
+        CommandPointsChanged?.Invoke();
+    }
+
     private static string NormalizeCardName(string cardName)
     {
         if (string.IsNullOrWhiteSpace(cardName)) return string.Empty;

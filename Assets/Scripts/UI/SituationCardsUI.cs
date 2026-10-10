@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -225,6 +226,11 @@ public class SituationCardsUI : MonoBehaviour
     public void Show(List<SituationCardOffer> offers, Character character)
     {
         if (offers == null || offers.Count == 0) return;
+        if (HandTray.Instance != null)
+        {
+            HandTray.Instance.SetOpportunities(offers, character);
+            return;
+        }
         IsShowing = true;
         if (showCoroutine != null) StopCoroutine(showCoroutine);
         showCoroutine = StartCoroutine(bloom ? ShowBloomCoroutine(offers, character) : ShowCoroutine(offers, character));
@@ -509,7 +515,7 @@ public class SituationCardsUI : MonoBehaviour
         Debug.Log($"[SituationCards/Flight] OnBloomCardClicked index={index} '{offer.Card?.name}': previewCenter={(previewCenter.HasValue ? previewCenter.Value.ToString() : "null")}, flightSourceCard={(flightSourceCard != null ? flightSourceCard.name : "null")}, cardInstances.Count(before removal check)={cardInstances.Count}.");
 
         DismissBloom(saveForCharacter: false);
-        ResolveCardAction(offer, character, leader, flightSourceCard, previewCenter, previewWidth);
+        _ = ResolveCardAction(offer, character, leader, flightSourceCard, previewCenter, previewWidth);
     }
 
     // Tears down the bloom presentation: the wheel is exclusively an opportunity-card
@@ -724,7 +730,7 @@ public class SituationCardsUI : MonoBehaviour
         if (offer == null || !offer.IsPlayable) return;
         if (showCoroutine != null) StopCoroutine(showCoroutine);
         showCoroutine = StartCoroutine(FadeOut());
-        ResolveCardAction(offer, character, leader);
+        _ = ResolveCardAction(offer, character, leader);
     }
 
     // Resolves and executes the card's action right away, the same way a hand card
@@ -737,11 +743,41 @@ public class SituationCardsUI : MonoBehaviour
     // CardPlayFlight/CardPlayFailure can still clone its token visuals down here, plus a
     // click-time snapshot of the enlarged center-preview's on-screen position/size to fly
     // out of — see OnBloomCardClicked.
-    private async void ResolveCardAction(SituationCardOffer offer, Character character, PlayableLeader leader, Card flightSourceCard = null, Vector3? previewCenter = null, float? previewWidth = null)
+    /// <summary>Plays an offer (hand card or opportunity) for <paramref name="character"/> through the same path the bloom used.</summary>
+    public Task PlayOffer(SituationCardOffer offer, Character character, Card flightSourceCard = null)
+    {
+        PlayableLeader leader = character != null ? character.GetOwner() as PlayableLeader : null;
+        Vector3? center = flightSourceCard != null ? flightSourceCard.transform.position : (Vector3?)null;
+        return ResolveCardAction(offer, character, leader, flightSourceCard, center, null);
+    }
+
+    public static bool IsOfferPlayable(CardData cardData, Character character) => IsCardPlayable(cardData, character);
+
+    private static bool ConsumeOfferCard(SituationCardOffer offer, PlayableLeader leader, CardData cardData, string actionRef)
+    {
+        DeckManager deck = DeckManager.Instance;
+        if (offer.Source == SituationCardOfferSource.AI)
+            return deck.TryConsumeActionCardFromFullDeck(leader, actionRef, cardData, out _);
+        // Situation and hand cards are both copied into the deck and consumed through the normal
+        // path so costs, discard bookkeeping and card history apply exactly as for any card.
+        bool consumed = deck.TryAddCardToHand(leader, cardData)
+            && (actionRef != null
+                ? deck.TryConsumeActionCard(leader, actionRef, out _, cardData.name)
+                : deck.TryConsumeCard(leader, cardData.name, out _));
+        if (consumed && offer.Source == SituationCardOfferSource.Hand) deck.RemoveFromHand(leader, cardData);
+        return consumed;
+    }
+
+    private async Task ResolveCardAction(SituationCardOffer offer, Character character, PlayableLeader leader, Card flightSourceCard = null, Vector3? previewCenter = null, float? previewWidth = null)
     {
         try
         {
             CardData cardData = offer?.Card;
+            if (character != null && character.isPlayerControlled && !character.CanPlayerActNow())
+            {
+                MessageDisplay.ShowMessage(character.actionBlockedThisTurn ? $"{character.characterName} cannot act this turn" : "No command points left this turn", Color.yellow);
+                return;
+            }
             if (cardData == null || character == null || leader == null || DeckManager.Instance == null)
             {
                 Debug.Log($"[SituationCards] click aborted — cardData={cardData != null} character={character != null} leader={leader != null} deckManager={DeckManager.Instance != null}");
@@ -751,6 +787,11 @@ public class SituationCardsUI : MonoBehaviour
             if (cardData.GetCardType() == CardTypeEnum.Character)
             {
                 bool succeeded = ResolveCharacterOpportunity(cardData, character, leader);
+                if (succeeded)
+                {
+                    if (offer.Source == SituationCardOfferSource.Hand) DeckManager.Instance.RemoveFromHand(leader, cardData);
+                    if (character.isPlayerControlled) leader.SpendCommandPoint();
+                }
                 Debug.Log($"[SituationCards] '{cardData.name}' character opportunity resolved, succeeded={succeeded}");
                 return;
             }
@@ -771,8 +812,7 @@ public class SituationCardsUI : MonoBehaviour
                 string envActionRef = cardData.GetActionRef();
                 bool consumedEnv = offer.Source == SituationCardOfferSource.AI
                     ? DeckManager.Instance.TryConsumeActionCardFromFullDeck(leader, envActionRef, cardData, out _)
-                    : DeckManager.Instance.TryAddCardToHand(leader, cardData)
-                        && DeckManager.Instance.TryConsumeCard(leader, cardData.name, out _);
+                    : ConsumeOfferCard(offer, leader, cardData, null);
                 if (!consumedEnv)
                 {
                     Debug.Log($"[SituationCards] click aborted — could not consume environmental card '{cardData.name}' from {offer.Source} source");
@@ -780,6 +820,7 @@ public class SituationCardsUI : MonoBehaviour
                 }
 
                 if (!environment.TrySetActiveCard(cardData, leader, out _)) return;
+                if (character.isPlayerControlled) leader.SpendCommandPoint();
                 Debug.Log($"[SituationCards] '{cardData.name}' environmental card activated");
                 if (flightSourceCard != null)
                     CardPlayFlight.Launch(flightSourceCard, character.hex, sourceWorldCenter: previewCenter, sourceWorldWidth: previewWidth);
@@ -810,10 +851,7 @@ public class SituationCardsUI : MonoBehaviour
 
             // Route through the normal consume path so resource costs, discard-pile bookkeeping,
             // and card history are applied exactly as they are for a card played directly.
-            bool consumed = offer.Source == SituationCardOfferSource.AI
-                ? DeckManager.Instance.TryConsumeActionCardFromFullDeck(leader, actionRef, cardData, out _)
-                : DeckManager.Instance.TryAddCardToHand(leader, cardData)
-                    && DeckManager.Instance.TryConsumeActionCard(leader, actionRef, out _, cardData.name);
+            bool consumed = ConsumeOfferCard(offer, leader, cardData, actionRef);
             if (!consumed)
             {
                 Debug.Log($"[SituationCards] click aborted — could not consume '{cardData.name}' from {offer.Source} source (actionRef={actionRef})");

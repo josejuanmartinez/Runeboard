@@ -79,8 +79,10 @@ public sealed class PauseMenuController : MonoBehaviour
     {
         if (wired) return;
 
-        saveButton?.onClick.AddListener(() => Sounds.Instance?.PlayUiDenied());
-        loadButton?.onClick.AddListener(() => Sounds.Instance?.PlayUiDenied());
+        saveButton?.onClick.AddListener(SaveCampaign);
+        loadButton?.onClick.AddListener(LoadCampaign);
+        SetButtonLabel(saveButton, "Save campaign");
+        SetButtonLabel(loadButton, "Load campaign");
         configButton?.onClick.AddListener(ToggleConfig);
         autoplayButton?.onClick.AddListener(AutoplayTurn);
         returnToStartButton?.onClick.AddListener(ReturnToStart);
@@ -90,9 +92,48 @@ public sealed class PauseMenuController : MonoBehaviour
         soundSlider?.onValueChanged.AddListener(SetSoundVolume);
         ambienceSlider?.onValueChanged.AddListener(SetAmbienceVolume);
 
-        if (saveButton != null) saveButton.interactable = false;
-        if (loadButton != null) loadButton.interactable = false;
+        RefreshSaveLoadButtons();
         wired = true;
+    }
+
+    private static void SetButtonLabel(Button button, string label)
+    {
+        if (button == null) return;
+        TMPro.TMP_Text text = button.GetComponentInChildren<TMPro.TMP_Text>(true);
+        if (text != null) text.text = label;
+    }
+
+    private void RefreshSaveLoadButtons()
+    {
+        if (saveButton != null) saveButton.interactable = SaveSystem.CanSaveNow(out _);
+        if (loadButton != null) loadButton.interactable = SaveSystem.HasSave;
+    }
+
+    private void SaveCampaign()
+    {
+        if (SaveSystem.Save(out string error))
+        {
+            Sounds.Instance?.PlayUiClick();
+            SetButtonLabel(saveButton, $"Saved (turn {Game.Instance?.turn})");
+            RefreshSaveLoadButtons();
+        }
+        else
+        {
+            Sounds.Instance?.PlayUiDenied();
+            MessageDisplay.ShowMessage(error ?? "Could not save", Color.red);
+        }
+    }
+
+    private async void LoadCampaign()
+    {
+        bool confirm = Game.Instance == null || !Game.Instance.started
+            || await ConfirmationDialog.AskImmediate("Load the saved campaign? Unsaved progress will be lost.", "Load", "Cancel");
+        if (!confirm) return;
+        if (!SaveSystem.BeginLoad(out string error))
+        {
+            Sounds.Instance?.PlayUiDenied();
+            MessageDisplay.ShowMessage(error ?? "Could not load", Color.red);
+        }
     }
 
     private void SetVisible(bool visible, bool playSound = true)
@@ -110,6 +151,8 @@ public sealed class PauseMenuController : MonoBehaviour
         if (visible)
         {
             RefreshVolumeControls();
+            SetButtonLabel(saveButton, "Save campaign");
+            RefreshSaveLoadButtons();
             SkinManager skin = FindFirstObjectByType<SkinManager>();
             if (playSound) Sounds.Instance?.PlayUiClick();
         }

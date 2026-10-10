@@ -171,7 +171,9 @@ public class SelectedCharacterIcon : MonoBehaviour
         RectTransform trigger = bloomWheel != null ? bloomWheel.HoverTriggerRect : null;
         bool isBloomTrigger = trigger != null && trigger.IsChildOf(transform);
 
+        // The hand tray replaced the hover-to-open bloom, so the portrait is no longer a trigger.
         bool available = isBloomTrigger
+            && HandTray.Instance == null
             && CurrentCharacter != null
             && !CurrentCharacter.hasActionedThisTurn
             && canvasGroup != null && canvasGroup.alpha > 0.5f;
@@ -300,6 +302,13 @@ public class SelectedCharacterIcon : MonoBehaviour
         ApplyRefresh(c, isHover: true);
     }
 
+    private static string DescribeReadiness(Character c)
+    {
+        if (!c.isPlayerControlled) return c.hasActionedThisTurn ? "Has acted" : "Ready";
+        if (c.actionBlockedThisTurn) return "Cannot act this turn";
+        return c.CanPlayerActNow() ? "Ready to act" : "No command points left";
+    }
+
     private void ApplyRefresh(Character c, bool isHover = false)
     {
         CurrentCharacter = c;
@@ -312,7 +321,7 @@ public class SelectedCharacterIcon : MonoBehaviour
         string nameText = BuildSelectedCharacterTitle(c, returnName: true);
         string quoteText = BuildSelectedCharacterTitle(c, returnName: false, returnQuote: true);
         if (string.IsNullOrWhiteSpace(quoteText))
-            quoteText = $"{c.GetAlignment().ToDisplayName()}\n{(c.hasActionedThisTurn ? "Action completed" : "Ready to act")}  ·  Health {c.health:0}%";
+            quoteText = $"{c.GetAlignment().ToDisplayName()}\n{DescribeReadiness(c)}  ·  Health {c.health:0}%";
         string kidnappingText = BuildKidnappingStatusText(c);
         nameWidget.text = nameText;
         descriptionWidget.text = string.IsNullOrWhiteSpace(kidnappingText) ? quoteText : $"{kidnappingText}\n{quoteText}";
@@ -324,7 +333,7 @@ public class SelectedCharacterIcon : MonoBehaviour
         agent.text = c.GetAgent().ToString();
         emmissary.text = c.GetEmmissary().ToString();
         mage.text = c.GetMage().ToString();
-        actionedIcon.SetActive(c.hasActionedThisTurn);
+        actionedIcon.SetActive(c.isPlayerControlled ? !c.CanPlayerActNow() : c.hasActionedThisTurn);
         unactionedIcon.SetActive(!actionedIcon.activeSelf);
         health.gameObject.SetActive(true);
         health.fillAmount = c.health / 100f;

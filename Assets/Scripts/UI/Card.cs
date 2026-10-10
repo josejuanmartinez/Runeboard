@@ -952,6 +952,16 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             reqs.Add($"<color={tint}>· {success}% success</color>");
         }
 
+        // Attack/siege cards preview the battle for the selected army where it stands.
+        string actionRef = data.GetActionRef();
+        if (actionRef == nameof(Attack) || actionRef == nameof(SiegePC))
+        {
+            Character actor = Board.Instance != null ? Board.Instance.selectedCharacter : null;
+            Army army = actor != null && actor.IsArmyCommander() ? actor.GetArmy() : null;
+            string prediction = army != null ? army.PredictAttackSummary(actor.hex) : null;
+            if (!string.IsNullOrWhiteSpace(prediction)) reqs.Add("\n" + prediction);
+        }
+
         string situationLabel = FormatSituationLabel(data);
         if (!string.IsNullOrWhiteSpace(situationLabel))
         {

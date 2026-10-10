@@ -28,6 +28,21 @@ public static class SaveSystem
 
     public static bool HasSave => File.Exists(SavePath);
 
+    /// <summary>Reads the save's header for menus; null when there is no compatible save.</summary>
+    public static SaveGame PeekSave()
+    {
+        try
+        {
+            if (!HasSave) return null;
+            SaveGame data = JsonUtility.FromJson<SaveGame>(File.ReadAllText(SavePath));
+            return data != null && data.version == Version ? data : null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
     public static bool CanSaveNow(out string reason)
     {
         Game game = Game.Instance;

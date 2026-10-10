@@ -31,7 +31,29 @@ public sealed class StartScreenController : MonoBehaviour
     {
         if (wired) return;
         if (root == null) root = gameObject;
+        AddContinueButton();
         wired = true;
+    }
+
+    // "Continue campaign" appears above "Begin your journey" when a save exists. Built by
+    // cloning the authored start button so it inherits the menu's look and layout slot.
+    private void AddContinueButton()
+    {
+        SaveGame summary = SaveSystem.PeekSave();
+        if (summary == null || startButton == null) return;
+        GameObject clone = Instantiate(startButton.gameObject, startButton.transform.parent);
+        clone.name = "ContinueButton";
+        clone.transform.SetSiblingIndex(startButton.transform.GetSiblingIndex());
+        Button button = clone.GetComponent<Button>();
+        button.onClick = new Button.ButtonClickedEvent();
+        button.onClick.AddListener(() =>
+        {
+            Sounds.Instance?.PlayUiClick();
+            if (!SaveSystem.BeginLoad(out string error)) Debug.LogWarning($"Continue failed: {error}");
+        });
+        TMP_Text[] labels = clone.GetComponentsInChildren<TMP_Text>(true);
+        if (labels.Length > 0) labels[0].text = "Continue campaign";
+        if (labels.Length > 1) labels[1].text = $"Turn {summary.turn}, as {summary.playerLeader}";
     }
 
     public void StartCampaign()

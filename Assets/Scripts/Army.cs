@@ -658,6 +658,59 @@ public class Army
         army.AddXp(gain, reason);
     }
 
+    /// <summary>
+    /// Approximate outcome of attacking <paramref name="targetHex"/> now, using the same strength,
+    /// defence and casualty formula as ProcessCombat (special abilities and random procs excluded).
+    /// Returns null when there is nothing to fight there.
+    /// </summary>
+    public string PredictAttackSummary(Hex targetHex)
+    {
+        if (targetHex == null || commander == null || killed) return null;
+        AlignmentEnum alignment = commander.GetAlignment();
+        Army defender = targetHex.armies.FirstOrDefault(a => a != null && !a.killed && a.commander != null && !a.commander.killed
+            && a.commander.GetOwner() != commander.GetOwner()
+            && (a.GetAlignment() != alignment || alignment == AlignmentEnum.neutral || a.GetAlignment() == AlignmentEnum.neutral));
+        PC pc = targetHex.GetPC();
+        if (defender == null && (pc == null || pc.owner == commander.GetOwner())) return null;
+
+        int myStrength = defender != null ? GetStrengthAgainst(defender) : GetStrength();
+        int myDefence = defender != null ? GetDefenceAgainst(defender) : GetDefence();
+        int theirStrength = 0, theirDefence = 0;
+        if (defender != null)
+        {
+            theirStrength = defender.GetStrengthAgainst(this);
+            theirDefence = defender.GetDefenceAgainst(this);
+            AlignmentEnum defenderAlignment = defender.GetAlignment();
+            foreach (Army ally in targetHex.armies)
+            {
+                if (ally == null || ally == defender || ally.killed || ally.commander == null) continue;
+                if (ally.GetAlignment() == defenderAlignment && defenderAlignment != AlignmentEnum.neutral)
+                {
+                    theirStrength += ally.GetStrengthAgainst(this);
+                    theirDefence += ally.GetDefenceAgainst(this);
+                }
+            }
+        }
+        if (pc != null && pc.owner != null && (defender == null || pc.owner.GetAlignment() == defender.GetAlignment()))
+        {
+            theirStrength += pc.GetDefense();
+            theirDefence += pc.GetDefense();
+        }
+
+        float myPct = Mathf.Clamp01(Mathf.Max(0, theirStrength - myDefence) / (Mathf.Max(1, myStrength) * CombatLethalityDivisor));
+        float theirPct = defender != null
+            ? Mathf.Clamp01(Mathf.Max(0, myStrength - theirDefence) / (Mathf.Max(1, defender.GetStrengthAgainst(this)) * CombatLethalityDivisor))
+            : 0f;
+        int myLosses = CalculateTotalCasualties(myPct);
+        int theirLosses = defender != null ? defender.CalculateTotalCasualties(theirPct) : 0;
+        float ratio = myStrength / Mathf.Max(1f, theirDefence);
+        string odds = ratio >= 1.5f ? "<color=#9BD37A>favourable</color>" : ratio >= 0.9f ? "<color=#E8C66A>even</color>" : "<color=#E07A5F>poor</color>";
+        string target = defender != null ? defender.commander.characterName : DisplayNames.Format(pc.pcName);
+        return defender != null
+            ? $"Odds vs {target}: {odds}. Expected losses: you ~{myLosses}, them ~{theirLosses}."
+            : $"Odds vs {target}'s walls: {odds}. Expected losses: you ~{myLosses}.";
+    }
+
     public void Attack(Hex targetHex)
     {
         Leader attackerLeader = commander.GetOwner();

@@ -1424,12 +1424,6 @@ public class Hex : MonoBehaviour
         }
     }
 
-    private void SetHexSpriteAlpha(float alpha)
-    {
-        SetSpriteAlpha(terrainTexture, alpha);
-        SetSpriteAlpha(pcTexture, alpha);
-    }
-
     private static void SetSpriteAlpha(SpriteRenderer sr, float alpha)
     {
         if (!sr) return;
@@ -1461,7 +1455,9 @@ public class Hex : MonoBehaviour
         ApplyRegionColor();
         if (terrainTexture != null)
         {
-            SetActiveFast(terrainTexture.gameObject, revealed);
+            // Terrain is always drawn: unexplored hexes read as an old parchment map (see
+            // UpdateTerrainVisualAlpha) instead of grey fog. Units, PCs and labels stay hidden.
+            SetActiveFast(terrainTexture.gameObject, true);
             if (revealed != seamlessRevealedLast)
             {
                 seamlessRevealedLast = revealed;
@@ -2259,7 +2255,7 @@ public class Hex : MonoBehaviour
         // for the vast majority nothing changed, so skip the per-hex visual work. The
         // terrain-sync check keeps the old self-healing behavior: if some code activated
         // this hex's art without revealing it, the next sweep still corrects it.
-        bool terrainOutOfSync = terrainTexture != null && terrainTexture.gameObject.activeSelf != IsHexRevealed();
+        bool terrainOutOfSync = terrainTexture != null && !terrainTexture.gameObject.activeSelf;
         if (!unseenChanged && !scoutingChanged && !terrainOutOfSync) return;
         UpdateVisibilityForFog();
         UpdateMinimapTerrain(IsHexRevealed());
@@ -2703,7 +2699,7 @@ public class Hex : MonoBehaviour
     {
         bool revealed = IsHexRevealed();
         bool isWaterHex = terrainType == TerrainEnum.shallowWater || terrainType == TerrainEnum.deepWater;
-        float frontierAlpha = isCurrentlyUnseen ? 0.1f : 1f;
+        float frontierAlpha = isCurrentlyUnseen ? RememberedTint.a : 1f;
 
         if (!revealed)
         {
@@ -2991,10 +2987,17 @@ public class Hex : MonoBehaviour
         return new Vector2(spriteSize.x * scale.x * parentScale.x, spriteSize.y * scale.y * parentScale.y);
     }
 
+    // Parchment-map look for land the player hasn't laid eyes on: sepia-tinted and faded, so the
+    // shape of Middle-earth is legible without revealing who holds it. Map-only hexes (known but
+    // not currently seen) sit between that and full colour.
+    public static readonly Color UnexploredTint = new(0.80f, 0.68f, 0.50f, 0.55f);
+    public static readonly Color RememberedTint = new(0.86f, 0.78f, 0.62f, 0.85f);
+
     private void UpdateTerrainVisualAlpha()
     {
-        float terrainAlpha = isCurrentlyUnseen ? 0.1f : 1f;
-        SetHexSpriteAlpha(terrainAlpha);
+        Color tint = !IsHexRevealed() ? UnexploredTint : isCurrentlyUnseen ? RememberedTint : Color.white;
+        if (terrainTexture) terrainTexture.color = tint;
+        if (pcTexture) pcTexture.color = IsHexRevealed() ? tint : new Color(1f, 1f, 1f, 0f);
     }
 
     private void SetFrontierRowAlpha(float alpha)

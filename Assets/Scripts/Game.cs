@@ -249,6 +249,7 @@ public class Game : MonoBehaviour
         VictoryPoints.RecalculateAndAssign(this);
         CampaignObjectives.Begin(this);
         HandTray.Ensure();
+        TurnDigest.Attach(this);
         RefreshPlayableLeaderIconVictoryPoints();
         BuildPlayerCharacterIcons();
         SelectFirstPlayerCharacter();
@@ -616,10 +617,15 @@ public class Game : MonoBehaviour
             return;
         }
 
+        if (currentlyPlaying == player) HumanTurnEnded?.Invoke();
         leaderTransitionRunning = true;
         HideHumanPlayerWidgetsWidgets();
         StartCoroutine(TransitionToLeader(next));
     }
+
+    /// <summary>Fired when the human ends their turn / when their next turn opens for input.</summary>
+    public event Action HumanTurnEnded;
+    public event Action HumanTurnStarted;
 
     private bool endTurnConfirmationPending;
 
@@ -768,6 +774,7 @@ public class Game : MonoBehaviour
         ShowHumanPlayerWidgetsWidgets();
         SelectFirstPlayerCharacter();
         playerTurnAcceptingInput = true;
+        HumanTurnStarted?.Invoke();
     }
 
     private IEnumerator PlayNpcFocusSequence()

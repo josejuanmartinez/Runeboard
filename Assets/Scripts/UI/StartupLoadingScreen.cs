@@ -88,7 +88,7 @@ public sealed class StartupLoadingScreen : MonoBehaviour
 
         // Keep cycling card art and wait for the player to press a key or click, rather than
         // auto-advancing the instant assets are ready.
-        while (!Input.anyKeyDown)
+        while (!Input.anyKeyDown && !AutoTour.Active)
         {
             yield return null;
         }

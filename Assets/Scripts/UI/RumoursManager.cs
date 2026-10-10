@@ -100,6 +100,9 @@ public class RumoursManager : MonoBehaviour
         if (!EnsureInstance(nameof(GetRumours)))
             return 0;
 
+        if (Instance.game == null) Instance.game = Game.Instance;
+        // Rumours about leaders that no longer exist can't be attributed or shown.
+        Instance.privateRumours.RemoveAll(r => r.leader == null);
         if (enemyRumoursQty + friendlyRumoursQty <= 0 || Instance.privateRumours.Count == 0)
             return 0;
 
@@ -107,7 +110,7 @@ public class RumoursManager : MonoBehaviour
         int friendlyAvailable = 0;
         foreach (Rumour rumour in Instance.privateRumours)
         {
-            if (rumour.leader == Instance.game.player) continue;
+            if (Instance.game != null && rumour.leader == Instance.game.player) continue;
             bool isFriendly = rumour.leader.alignment == alignment && rumour.leader.alignment != AlignmentEnum.neutral;
             if (isFriendly)
             {
@@ -127,7 +130,7 @@ public class RumoursManager : MonoBehaviour
 
         // The public list and LogWidget are the human player's intelligence view. AI/NPL
         // RevealRumours actions may succeed, but must never promote their discoveries into it.
-        if (requester != Instance.game.player) return totalRumours;
+        if (Instance.game == null || requester != Instance.game.player) return totalRumours;
 
         List<int> toRemove = new();
         for(int i=Instance.privateRumours.Count-1; i>=0;i--)
@@ -140,7 +143,7 @@ public class RumoursManager : MonoBehaviour
                 toRemove.Add(i);
                 enemyRumoursQty--;
             }
-            if(friendlyRumoursQty > 0 && rumour.leader.alignment == alignment && rumour.leader.alignment != AlignmentEnum.neutral)
+            else if(friendlyRumoursQty > 0 && rumour.leader.alignment == alignment && rumour.leader.alignment != AlignmentEnum.neutral)
             {
                 AddRumour(rumour, true);
                 toRemove.Add(i);

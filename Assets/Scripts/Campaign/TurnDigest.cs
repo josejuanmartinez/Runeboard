@@ -111,7 +111,7 @@ public class TurnDigest : MonoBehaviour
                 int now = objectives.Score(l);
                 if (now == before) continue;
                 string who = l == player ? "Your" : $"{CampaignObjectives.DisplayLeader(l)}'s";
-                lines.Add($"{who} objective score {(now > before ? "rose" : "fell")} to <b>{now}</b>.");
+                lines.Add($"{who} objective score {(now > before ? "rose" : "fell")} to <color={UiTheme.GoldHex}>{now}</color>.");
             }
         }
 
@@ -147,13 +147,13 @@ public class TurnDigest : MonoBehaviour
         var textGo = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textGo.GetComponent<RectTransform>().SetParent(rt, false);
         var text = textGo.GetComponent<TextMeshProUGUI>();
-        text.fontSize = 17f;
+        UiTheme.StyleBody(text, 15f);
         text.richText = true;
         text.raycastTarget = false;
-        text.color = new Color(0.93f, 0.89f, 0.80f, 1f);
+        text.lineSpacing = 6f;
         text.textWrappingMode = TextWrappingModes.Normal;
 
-        var sb = new StringBuilder("<size=75%><color=#C9A35A>WHILE YOU WAITED</color></size>\n");
+        var sb = new StringBuilder(UiTheme.Eyebrow("While you waited") + "\n");
         foreach (string line in lines.Take(MaxLines)) sb.Append(line).Append('\n');
         if (lines.Count > MaxLines) sb.Append($"<size=80%><color=#8C8371>…and {lines.Count - MaxLines} more in the log.</color></size>");
         text.text = sb.ToString().TrimEnd();

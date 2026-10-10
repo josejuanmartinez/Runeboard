@@ -225,6 +225,13 @@ public class BoardNavigator : MonoBehaviour
         }
     }
 
+    /// <summary>Jumps the zoom to an orthographic size (used by AutoTour screenshots).</summary>
+    public void DebugSetZoom(float size)
+    {
+        targetZoom = Mathf.Clamp(size, minZoom, maxZoom);
+        if (boardCamera != null) boardCamera.orthographicSize = targetZoom;
+    }
+
     private void OnApplicationFocus(bool focused)
     {
         if (focused) return;

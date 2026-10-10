@@ -142,6 +142,7 @@ public class LeaderSelector : SearcherByName
     private void TryAutoStartSavedCampaign()
     {
         SaveGame pending = SaveSystem.PendingLoad;
+        if (pending == null && AutoTour.Active) pending = new SaveGame { playerLeader = AutoTour.Leader };
         if (pending == null || autoStartForLoadDone || !loadedFirst || startConfirmationPending) return;
         int index = selectionEntries.FindIndex(e => e != null
             && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase)

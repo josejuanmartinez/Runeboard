@@ -115,7 +115,8 @@ public class CampaignHud : MonoBehaviour
         button.transition = Selectable.Transition.None;
         button.onClick.AddListener(() => { expanded = !expanded; Refresh(); });
 
-        trackerText = CreateText(trackerRect, "Text", 13f, TextAlignmentOptions.TopLeft);
+        trackerText = CreateText(trackerRect, "Text", 12.5f, TextAlignmentOptions.TopLeft);
+        trackerText.lineSpacing = 4f;
         trackerText.richText = true;
         PlaceTracker();
     }
@@ -160,26 +161,26 @@ public class CampaignHud : MonoBehaviour
         trackerRect.gameObject.SetActive(endScreen == null && game.started);
 
         var sb = new StringBuilder();
-        sb.Append("<size=75%><color=#C9A35A>THE WAR OF THE RING</color></size>\n");
-        sb.Append($"<b>Turn {game.turn} of {objectives.AgeLength}</b>  <color={MutedColor}><size=85%>· the Age ends in {objectives.TurnsLeft}</size></color>\n");
-        sb.Append($"<size=85%>Your score <b>{objectives.Score(player)}</b>/{objectives.MaxScore(player)}");
+        sb.Append(UiTheme.Eyebrow("The War of the Ring")).Append('\n');
+        sb.Append($"Turn {game.turn} of {objectives.AgeLength}  <color={UiTheme.MutedHex}><size=90%>· Age ends in {objectives.TurnsLeft}</size></color>\n");
+        sb.Append($"<size=92%>Your score <color={UiTheme.GoldHex}>{objectives.Score(player)}</color>/{objectives.MaxScore(player)}");
         foreach (PlayableLeader rival in objectives.AllLeaders().Where(l => l != player))
         {
             string name = CampaignObjectives.DisplayLeader(rival);
-            sb.Append(rival.killed ? $"  <color={MutedColor}><s>{name}</s></color>" : $"  <color={MutedColor}>{name} {objectives.Score(rival)}</color>");
+            sb.Append(rival.killed ? $"   <color={UiTheme.MutedHex}><s>{name}</s></color>" : $"   <color={UiTheme.MutedHex}>{name} {objectives.Score(rival)}</color>");
         }
         sb.Append("</size>\n");
 
         foreach (CampaignObjective o in objectives.GetObjectives(player))
         {
             bool met = objectives.IsMet(player, o);
-            string color = met ? MetColor : UnmetColor;
-            string tag = o.decisive ? "<color=#E8C66A>WIN</color>" : $"+{o.points}";
-            sb.Append($"\n<color={color}><b>{tag}</b>  {o.title}{(met && !o.decisive ? "  <size=80%>(held)</size>" : string.Empty)}</color>");
+            string color = met ? UiTheme.GoodHex : UiTheme.TextHex;
+            string tag = o.decisive ? $"<color={UiTheme.GoldHex}>WIN</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color>";
+            sb.Append($"\n{tag}  <color={color}>{o.title}</color>{(met && !o.decisive ? $"  <size=80%><color={UiTheme.GoodHex}>held</color></size>" : string.Empty)}");
             if (expanded && !string.IsNullOrWhiteSpace(o.description))
-                sb.Append($"\n<size=78%><color={MutedColor}>{o.description}</color></size>");
+                sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{o.description}</color></size>");
         }
-        if (!expanded) sb.Append($"\n<size=70%><color={MutedColor}>Click to show details</color></size>");
+        if (!expanded) sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>Click for details</color></size>");
         trackerText.text = sb.ToString();
 
         FindFirstObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
@@ -217,8 +218,8 @@ public class CampaignHud : MonoBehaviour
         panelGo.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         TextMeshProUGUI title = CreateText(panel, "Title", 54f, TextAlignmentOptions.Center);
+        UiTheme.StyleTitle(title, 54f, win ? UiTheme.Gold : UiTheme.Bad);
         title.text = win ? "Victory" : "Defeat";
-        title.color = win ? Gold : new Color(0.85f, 0.35f, 0.3f, 1f);
 
         TextMeshProUGUI subtitle = CreateText(panel, "Reason", 20f, TextAlignmentOptions.Center);
         subtitle.text = string.IsNullOrWhiteSpace(reason) ? (win ? "The war is won." : "The war is lost.") : reason;
@@ -249,7 +250,7 @@ public class CampaignHud : MonoBehaviour
         {
             string you = game != null && leader == game.player ? " <size=80%>(you)</size>" : string.Empty;
             string status = leader.killed ? $"<color={MutedColor}>fallen</color>" : $"{objectives.Score(leader)}/{objectives.MaxScore(leader)} points";
-            sb.Append($"<b>{CampaignObjectives.DisplayLeader(leader)}</b>{you}  —  {status}\n");
+            sb.Append($"<color={UiTheme.GoldHex}>{CampaignObjectives.DisplayLeader(leader)}</color>{you}  —  {status}\n");
             foreach (CampaignObjective o in objectives.GetObjectives(leader))
             {
                 bool met = !leader.killed && objectives.IsMet(leader, o);
@@ -275,9 +276,8 @@ public class CampaignHud : MonoBehaviour
         var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         go.GetComponent<RectTransform>().SetParent(parent, false);
         var text = go.GetComponent<TextMeshProUGUI>();
-        text.fontSize = size;
+        UiTheme.StyleBody(text, size);
         text.alignment = alignment;
-        text.color = new Color(0.93f, 0.89f, 0.80f, 1f);
         text.raycastTarget = false;
         text.textWrappingMode = TextWrappingModes.Normal;
         return text;
@@ -295,11 +295,11 @@ public class CampaignHud : MonoBehaviour
         button.targetGraphic = graphic;
         button.onClick.AddListener(onClick);
         TextMeshProUGUI text = CreateText(go.GetComponent<RectTransform>(), "Label", 22f, TextAlignmentOptions.Center);
+        UiTheme.StyleTitle(text, 24f);
         RectTransform textRect = text.rectTransform;
         textRect.anchorMin = Vector2.zero;
         textRect.anchorMax = Vector2.one;
         textRect.offsetMin = textRect.offsetMax = Vector2.zero;
         text.text = label;
-        text.color = Gold;
     }
 }

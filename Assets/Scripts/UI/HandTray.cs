@@ -55,6 +55,16 @@ public class HandTray : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
+    /// <summary>Shows the full-card preview for the tray's Nth card (used by AutoTour).</summary>
+    public bool DebugPreview(int index)
+    {
+        if (index < 0 || index >= slots.Count) return false;
+        HandTraySlot slot = slots[index] != null ? slots[index].GetComponent<HandTraySlot>() : null;
+        if (slot == null) return false;
+        OnHover(slot, true);
+        return true;
+    }
+
     public void SetOpportunities(List<SituationCardOffer> offers, Character character)
     {
         opportunities.Clear();
@@ -199,9 +209,9 @@ public class HandTray : MonoBehaviour
 
         string selectedName = selected != null && selected.GetOwner() == player ? selected.characterName : null;
         int cp = player.CommandPoints;
-        header.text = $"<color=#C9A35A>COMMAND</color> <b>{cp}</b>/{player.CommandPointsMax}"
-            + (selectedName != null ? $"   <color=#B9AE98>Playing as</color> <b>{selectedName}</b>" : "   <color=#B9AE98>Select a character to play cards</color>")
-            + "   <size=80%><color=#8C8371>Right-click a hand card to discard it for a resource</color></size>";
+        header.text = $"{UiTheme.Eyebrow("Command")} <color={UiTheme.GoldHex}>{cp}</color>/{player.CommandPointsMax}"
+            + (selectedName != null ? $"    <color={UiTheme.MutedHex}>Playing as</color> {selectedName}" : $"    <color={UiTheme.MutedHex}>Select a character to play cards</color>")
+            + $"    <size=82%><color={UiTheme.MutedHex}>Right-click a hand card to trade it for a resource</color></size>";
 
         foreach (CardData card in hand)
             slots.Add(CreateSlot(new SituationCardOffer(card, SituationCardOfferSource.Hand, IsPlayable(card, selected)), slotWidth, slotHeight, isHand: true));
@@ -242,7 +252,7 @@ public class HandTray : MonoBehaviour
         le.preferredWidth = 24f;
         le.preferredHeight = height;
         TextMeshProUGUI label = CreateText(go.GetComponent<RectTransform>(), "Here", 12f, TextAlignmentOptions.Center);
-        label.text = "<color=#C9A35A>HERE</color>";
+        label.text = UiTheme.Eyebrow("Here");
         label.rectTransform.anchorMin = Vector2.zero;
         label.rectTransform.anchorMax = Vector2.one;
         label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
@@ -407,9 +417,8 @@ public class HandTray : MonoBehaviour
         var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         go.GetComponent<RectTransform>().SetParent(parent, false);
         var text = go.GetComponent<TextMeshProUGUI>();
-        text.fontSize = size;
+        UiTheme.StyleBody(text, size);
         text.alignment = alignment;
-        text.color = new Color(0.93f, 0.89f, 0.80f, 1f);
         text.raycastTarget = false;
         text.richText = true;
         text.textWrappingMode = TextWrappingModes.Normal;
@@ -439,7 +448,7 @@ public class HandTraySlot : MonoBehaviour
     {
         Playable = playable;
         if (Token != null) Token.SetTokenTint(playable ? 0f : 0.55f, 0f);
-        if (label != null) label.color = playable ? new Color(0.93f, 0.89f, 0.80f, 1f) : new Color(0.55f, 0.52f, 0.46f, 1f);
+        if (label != null) label.color = playable ? UiTheme.Text : UiTheme.Muted;
     }
 
     public void Hover(bool enter)

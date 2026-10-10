@@ -65,6 +65,13 @@ public class Game : MonoBehaviour
     private bool startupPopupShown;
     public bool IsAcceptingPlayerInput => playerTurnAcceptingInput;
 
+    /// <summary>Ends the human turn without the confirmation dialog (used by AutoTour).</summary>
+    public void EndTurnWithoutPrompt()
+    {
+        skipNextTurnPrompt = true;
+        NextPlayer();
+    }
+
     /// <summary>Re-syncs HUD state after SaveSystem lays a saved game over a fresh start.</summary>
     public void RefreshAfterLoad()
     {
@@ -204,7 +211,7 @@ public class Game : MonoBehaviour
         // Must play before any other startup popup, camera pan, or tutorial step — SelectLeader
         // (driven by the carousel) has already finalized player's chosen variant by this point.
         bool loadingSave = SaveSystem.PendingLoad != null;
-        if (!loadingSave) VideoPopupManager.ShowForLeader(player);
+        if (!loadingSave && !AutoTour.Active) VideoPopupManager.ShowForLeader(player);
         PruneUnselectedLeaderVariants();
         RandomizeCompetitorVariants();
         // Every playable leader's variant (human pick + AI randomization above) is final now, so
@@ -272,7 +279,7 @@ public class Game : MonoBehaviour
         while (VideoPopupManager.IsShowing) yield return null;
 
         bool loadingSave = SaveSystem.PendingLoad != null;
-        if (!loadingSave)
+        if (!loadingSave && !AutoTour.Active)
         {
             yield return new WaitForSeconds(2f);
 

@@ -16,6 +16,7 @@ public sealed class StartScreenController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI skinValue;
 
     private CampaignSelectionManager campaignSelection;
+    public bool IsShowing => root != null && root.activeInHierarchy;
     private bool wired;
 
     public void Show(CampaignSelectionManager selector)
@@ -31,8 +32,22 @@ public sealed class StartScreenController : MonoBehaviour
     {
         if (wired) return;
         if (root == null) root = gameObject;
-        AddContinueButton();
+        BuildCardMenu();
         wired = true;
+    }
+
+    // Card-menu title (see TitleCardMenu): the authored left column is hidden and replaced.
+    private void BuildCardMenu()
+    {
+        Transform menuBar = root.transform.Find("Menu Bar");
+        if (menuBar != null) menuBar.gameObject.SetActive(false);
+        SaveGame summary = SaveSystem.PeekSave();
+        UnityEngine.Events.UnityAction onContinue = summary == null ? null : () =>
+        {
+            if (!SaveSystem.BeginLoad(out string error)) Debug.LogWarning($"Continue failed: {error}");
+        };
+        TitleCardMenu.Build((RectTransform)root.transform, onContinue, StartCampaign, () => Quit(),
+            summary != null ? $"Turn {summary.turn}, as {summary.playerLeader}" : null);
     }
 
     // "Continue campaign" appears above "Begin your journey" when a save exists. Built by
@@ -58,6 +73,7 @@ public sealed class StartScreenController : MonoBehaviour
 
     public void StartCampaign()
     {
+        if (campaignSelection == null) return;
         Sounds.Instance?.PlayUiClick();
         campaignSelection.gameObject.SetActive(!campaignSelection.gameObject.activeSelf);
     }

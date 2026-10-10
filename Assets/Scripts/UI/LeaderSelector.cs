@@ -139,10 +139,19 @@ public class LeaderSelector : SearcherByName
     // Loading a save restarts the scenario through this screen; pick the saved leader variant
     // as soon as its carousel entry exists and start without asking.
     private bool autoStartForLoadDone;
+    private float autoTourSelectionSince = -1f;
+    public bool SelectionScreenShown => selectionScreenShown;
     private void TryAutoStartSavedCampaign()
     {
         SaveGame pending = SaveSystem.PendingLoad;
-        if (pending == null && AutoTour.Active) pending = new SaveGame { playerLeader = AutoTour.Leader };
+        if (pending == null && AutoTour.Active)
+        {
+            // Let the tour photograph the selection screen before starting.
+            if (!selectionScreenShown) return;
+            if (autoTourSelectionSince < 0f) autoTourSelectionSince = Time.realtimeSinceStartup;
+            if (Time.realtimeSinceStartup - autoTourSelectionSince < 4f) return;
+            pending = new SaveGame { playerLeader = AutoTour.Leader };
+        }
         if (pending == null || autoStartForLoadDone || !loadedFirst || startConfirmationPending) return;
         int index = selectionEntries.FindIndex(e => e != null
             && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase)

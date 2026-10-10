@@ -92,7 +92,7 @@ public class CampaignHud : MonoBehaviour
     {
         if (trackerRect != null || !EnsureCanvas()) return;
 
-        var panelGo = new GameObject("CampaignObjectivesTracker", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel),
+        var panelGo = new GameObject("CampaignObjectivesTracker", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel),
             typeof(VerticalLayoutGroup), typeof(ContentSizeFitter), typeof(Button));
         trackerRect = panelGo.GetComponent<RectTransform>();
         trackerRect.SetParent(canvasRoot, false);
@@ -113,7 +113,7 @@ public class CampaignHud : MonoBehaviour
         // Clicking the tracker folds the objective descriptions away.
         var button = panelGo.GetComponent<Button>();
         button.transition = Selectable.Transition.None;
-        button.onClick.AddListener(() => { expanded = !expanded; Refresh(); });
+        button.onClick.AddListener(OnTrackerClicked);
 
         trackerText = CreateText(trackerRect, "Text", 12.5f, TextAlignmentOptions.TopLeft);
         trackerText.lineSpacing = 4f;
@@ -159,6 +159,24 @@ public class CampaignHud : MonoBehaviour
         return null;
     }
 
+    private void OnTrackerClicked()
+    {
+        int link = TMP_TextUtilities.FindIntersectingLink(trackerText, Input.mousePosition, null);
+        if (link >= 0 && objectives != null && Game.Instance?.player != null)
+        {
+            string id = trackerText.textInfo.linkInfo[link].GetLinkID();
+            foreach (CampaignObjective o in objectives.GetObjectives(Game.Instance.player))
+            {
+                if (o.id != id) continue;
+                ObjectiveGuide.Instance?.FocusObjective(o);
+                Sounds.Instance?.PlayUiClick();
+                return;
+            }
+        }
+        expanded = !expanded;
+        Refresh();
+    }
+
     private void Refresh()
     {
         if (trackerText == null || objectives == null) return;
@@ -183,11 +201,11 @@ public class CampaignHud : MonoBehaviour
             bool met = objectives.IsMet(player, o);
             string color = met ? UiTheme.GoodHex : UiTheme.TextHex;
             string tag = o.decisive ? $"<color={UiTheme.GoldHex}>WIN</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color>";
-            sb.Append($"\n{tag}  <color={color}>{o.title}</color>{(met && !o.decisive ? $"  <size=80%><color={UiTheme.GoodHex}>held</color></size>" : string.Empty)}");
+            sb.Append($"\n{tag}  <link=\"{o.id}\"><color={color}><u>{o.title}</u></color></link>{(met && !o.decisive ? $"  <size=80%><color={UiTheme.GoodHex}>held</color></size>" : string.Empty)}");
             if (expanded && !string.IsNullOrWhiteSpace(o.description))
                 sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{o.description}</color></size>");
         }
-        if (!expanded) sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>Click for details</color></size>");
+        sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>Click an objective to see where and how</color></size>");
         trackerText.text = sb.ToString();
 
         FindFirstObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
@@ -211,7 +229,7 @@ public class CampaignHud : MonoBehaviour
         dim.color = new Color(0f, 0f, 0f, 0.78f);
         dim.raycastTarget = true;
 
-        var panelGo = new GameObject("Panel", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
+        var panelGo = new GameObject("Panel", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
         var panel = panelGo.GetComponent<RectTransform>();
         panel.SetParent(root, false);
         panel.anchorMin = panel.anchorMax = panel.pivot = new Vector2(0.5f, 0.5f);
@@ -292,12 +310,12 @@ public class CampaignHud : MonoBehaviour
 
     private static void CreateButton(RectTransform parent, string label, UnityEngine.Events.UnityAction onClick)
     {
-        var go = new GameObject(label, typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel), typeof(Button), typeof(LayoutElement));
+        var go = new GameObject(label, typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel), typeof(Button), typeof(LayoutElement));
         go.GetComponent<RectTransform>().SetParent(parent, false);
         var element = go.GetComponent<LayoutElement>();
         element.preferredWidth = 230f;
         element.preferredHeight = 52f;
-        var graphic = go.GetComponent<RuneboardPanel>();
+        var graphic = go.GetComponent<CinematicPanel>();
         var button = go.GetComponent<Button>();
         button.targetGraphic = graphic;
         button.onClick.AddListener(onClick);

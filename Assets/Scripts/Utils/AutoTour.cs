@@ -20,6 +20,8 @@ public static class AutoTour
     public static string OutDir { get; private set; }
     public static string Leader { get; private set; } = "Gandalf";
     public static int Turns { get; private set; } = 2;
+    /// <summary>-autotour-title: photograph the title/menu screens instead of playing.</summary>
+    public static bool TitleOnly { get; private set; }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Init()
@@ -34,6 +36,15 @@ public static class AutoTour
         if (!Active) return;
 
         Directory.CreateDirectory(OutDir);
+        TitleOnly = System.Array.IndexOf(args, "-autotour-title") >= 0;
+        if (TitleOnly)
+        {
+            AudioListener.volume = 0f;
+            var titleRunner = new GameObject("AutoTourRunner").AddComponent<AutoTourRunner>();
+            UnityEngine.Object.DontDestroyOnLoad(titleRunner.gameObject);
+            Log("started title tour");
+            return;
+        }
         GameConfig.ScenarioToLoad = "2950";
         GameConfig.ScenarioChosen = true;
         GameConfig.SkipIntro = true;
@@ -53,6 +64,22 @@ public class AutoTourRunner : MonoBehaviour
     private IEnumerator Start()
     {
         Stopwatch clock = Stopwatch.StartNew();
+        if (AutoTour.TitleOnly)
+        {
+            yield return WaitFor(() => FindFirstObjectByType<StartScreenController>() is StartScreenController s && s.isActiveAndEnabled && s.IsShowing, 600f, "title screen");
+            yield return new WaitForSecondsRealtime(3f);
+            yield return Shot("title");
+            DumpHud();
+            FindFirstObjectByType<StartScreenController>().StartCampaign();
+            yield return new WaitForSecondsRealtime(2f);
+            yield return Shot("campaign_select");
+            AutoTour.Log("done");
+            Application.Quit();
+            yield break;
+        }
+        yield return WaitFor(() => FindFirstObjectByType<LeaderSelector>() is LeaderSelector ls && ls.SelectionScreenShown, 600f, "leader selection");
+        yield return new WaitForSecondsRealtime(2f);
+        yield return Shot("leader_selection");
         yield return WaitFor(() => Game.Instance != null && Game.Instance.started && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "first human turn");
         AutoTour.Log($"campaign ready after {clock.Elapsed.TotalSeconds:0.0}s");
         yield return new WaitForSecondsRealtime(3f);
@@ -96,6 +123,20 @@ public class AutoTourRunner : MonoBehaviour
             AutoTour.Log($"round {turnBefore}->{Game.Instance.turn} took {turnClock.Elapsed.TotalSeconds:0.0}s");
             yield return new WaitForSecondsRealtime(1.5f);
             yield return Shot($"turn_{Game.Instance.turn}");
+        }
+
+        CampaignObjectives objectivesForShot = CampaignObjectives.Instance;
+        if (objectivesForShot != null && ObjectiveGuide.Instance != null)
+        {
+            foreach (CampaignObjective o in objectivesForShot.GetObjectives(Game.Instance.player))
+            {
+                if (objectivesForShot.GetTargetHexes(o).Count == 0) continue;
+                ObjectiveGuide.Instance.FocusObjective(o);
+                yield return new WaitForSecondsRealtime(1.6f);
+                yield return Shot("objective_focus");
+                break;
+            }
+            yield return new WaitForSecondsRealtime(2f);
         }
 
         if (SaveSystem.Save(out string error)) AutoTour.Log("save ok");

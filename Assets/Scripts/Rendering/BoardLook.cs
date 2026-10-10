@@ -20,13 +20,24 @@ public static class BoardLook
     /// hidden. "-look-classic" on the command line restores the old hidden-terrain look.
     /// </summary>
     public static readonly bool Shroud = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-look-classic") < 0;
-    public static readonly Color ShroudTint = new(0.30f, 0.33f, 0.40f, 1f);
+    public static readonly Color ShroudTint = new(0.24f, 0.26f, 0.31f, 1f);
+
+    /// <summary>Shroud only once a campaign is running (menus and leader selection keep the board hidden).</summary>
+    public static bool ShroudActive => Shroud && Game.Instance != null && Game.Instance.started;
 
     private static Sprite shadowSprite;
 
     public static void Apply()
     {
         ApplyPost();
+        if (Shroud)
+        {
+            // Hexes evaluated their fog state before the game started; re-apply with the shroud on.
+            Board board = Board.Instance;
+            if (board?.hexes != null)
+                foreach (Hex hex in board.hexes.Values) hex?.RefreshFogVisuals();
+            FogOfWarOverlay.Ensure();
+        }
         BoardNavigator nav = BoardNavigator.Instance;
         if (nav != null) nav.DebugSetZoom(DefaultZoom);
     }

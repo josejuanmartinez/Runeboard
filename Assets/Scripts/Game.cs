@@ -259,6 +259,8 @@ public class Game : MonoBehaviour
         CampaignObjectives.Begin(this);
         HandTray.Ensure();
         TurnDigest.Attach(this);
+        ObjectiveGuide.Attach(this);
+        MinimapNavigator.Attach();
         RefreshPlayableLeaderIconVictoryPoints();
         BuildPlayerCharacterIcons();
         SelectFirstPlayerCharacter();
@@ -318,6 +320,7 @@ public class Game : MonoBehaviour
         if (nextTurnButton != null) nextTurnButton.interactable = true;
         playerTurnAcceptingInput = true;
         MessageDisplay.ClearPersistent();
+        HumanTurnStarted?.Invoke();
     }
 
     // There is no tutorial gating game start anymore — every campaign begins with everything

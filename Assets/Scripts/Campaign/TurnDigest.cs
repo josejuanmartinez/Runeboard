@@ -127,7 +127,7 @@ public class TurnDigest : MonoBehaviour
         if (canvas == null) return;
         RectTransform root = canvas.rootCanvas.transform as RectTransform;
 
-        panel = new GameObject("TurnDigest", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel),
+        panel = new GameObject("TurnDigest", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel),
             typeof(VerticalLayoutGroup), typeof(ContentSizeFitter), typeof(Button));
         var rt = panel.GetComponent<RectTransform>();
         rt.SetParent(root, false);

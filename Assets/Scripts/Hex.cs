@@ -1449,6 +1449,13 @@ public class Hex : MonoBehaviour
         */
     }
 
+    /// <summary>Re-applies fog/shroud visuals (e.g. once the campaign starts and the shroud turns on).</summary>
+    public void RefreshFogVisuals()
+    {
+        UpdateVisibilityForFog();
+        HexSeamlessTerrain.MarkDirty(this);
+    }
+
     private void UpdateVisibilityForFog()
     {
         bool revealed = IsHexRevealed();
@@ -1456,7 +1463,7 @@ public class Hex : MonoBehaviour
         ApplyRegionColor();
         if (terrainTexture != null)
         {
-            SetActiveFast(terrainTexture.gameObject, revealed || BoardLook.Shroud);
+            SetActiveFast(terrainTexture.gameObject, revealed || BoardLook.ShroudActive);
             if (revealed != seamlessRevealedLast)
             {
                 seamlessRevealedLast = revealed;
@@ -2250,7 +2257,7 @@ public class Hex : MonoBehaviour
         // for the vast majority nothing changed, so skip the per-hex visual work. The
         // terrain-sync check keeps the old self-healing behavior: if some code activated
         // this hex's art without revealing it, the next sweep still corrects it.
-        bool terrainOutOfSync = terrainTexture != null && terrainTexture.gameObject.activeSelf != (IsHexRevealed() || BoardLook.Shroud);
+        bool terrainOutOfSync = terrainTexture != null && terrainTexture.gameObject.activeSelf != (IsHexRevealed() || BoardLook.ShroudActive);
         if (!unseenChanged && !scoutingChanged && !terrainOutOfSync) return;
         UpdateVisibilityForFog();
         UpdateMinimapTerrain(IsHexRevealed());
@@ -2435,7 +2442,7 @@ public class Hex : MonoBehaviour
         bool hasRegion = !string.IsNullOrWhiteSpace(assignedLandRegion);
         // Under the night shroud the whole continent is drawn on the minimap (this layer is what
         // the minimap camera renders); unexplored regions are dimmer than known ones.
-        bool show = hasRegion && revealPulseCoroutine == null && (IsHexRevealed() || BoardLook.Shroud);
+        bool show = hasRegion && revealPulseCoroutine == null && (IsHexRevealed() || BoardLook.ShroudActive);
         hexRegion.enabled = show;
         if (show) hexRegion.color = RegionColors.GetColor(assignedLandRegion, alpha: IsHexRevealed() ? 1f : 0.22f);
     }
@@ -2956,7 +2963,7 @@ public class Hex : MonoBehaviour
         // Respect fog: SetTerrain runs on every hex during board load, and unconditionally
         // activating the art here used to rely on the first whole-board Hide() sweep to put
         // the fog back — that sweep now early-outs, so apply the correct state directly.
-        SetActiveFast(terrainTexture.gameObject, IsHexRevealed() || BoardLook.Shroud);
+        SetActiveFast(terrainTexture.gameObject, IsHexRevealed() || BoardLook.ShroudActive);
         terrainTexture.sprite = hexTextureMapping != null ? hexTextureMapping.GetTerrainSprite(this) : baseTerrainSprite;
 
         if (pcTexture != null)
@@ -2989,7 +2996,7 @@ public class Hex : MonoBehaviour
 
     private void UpdateTerrainVisualAlpha()
     {
-        if (BoardLook.Shroud && !IsHexRevealed())
+        if (BoardLook.ShroudActive && !IsHexRevealed())
         {
             if (terrainTexture) terrainTexture.color = BoardLook.ShroudTint;
             SetSpriteAlpha(pcTexture, 0f);

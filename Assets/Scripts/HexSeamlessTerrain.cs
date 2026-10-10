@@ -217,7 +217,7 @@ public class HexSeamlessTerrain : MonoBehaviour
             if (board.hexes.TryGetValue(hex.v2 + neighbors[d], out Hex neighbor) &&
                 neighbor != null && neighbor.terrainTexture != null)
             {
-                if (!neighbor.IsHexRevealed() && !BoardLook.Shroud)
+                if (!neighbor.IsHexRevealed() && !BoardLook.ShroudActive)
                 {
                     valid = -1f;
                 }

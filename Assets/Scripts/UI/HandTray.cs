@@ -41,6 +41,7 @@ public class HandTray : MonoBehaviour
     private int handSignature;
     private bool dirty = true;
     private bool playing;
+    private int heldCount;
     private float nextPlayabilityRefresh;
 
     public static void Ensure()
@@ -139,30 +140,28 @@ public class HandTray : MonoBehaviour
         if (canvas == null) return false;
         canvasRoot = canvas.rootCanvas.transform as RectTransform;
 
-        var go = new GameObject("HandTrayPanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel), typeof(VerticalLayoutGroup));
+        // No tray box (cinematic HUD): the hand floats over the bottom gradient.
+        var go = new GameObject("HandTrayPanel", typeof(RectTransform), typeof(VerticalLayoutGroup));
         root = go.GetComponent<RectTransform>();
         root.SetParent(canvasRoot, false);
-        root.SetSiblingIndex(Mathf.Min(1, canvasRoot.childCount - 1));
+        root.SetSiblingIndex(Mathf.Min(3, canvasRoot.childCount - 1));
         root.anchorMin = root.anchorMax = new Vector2(0f, 0f);
         root.pivot = new Vector2(0.5f, 0f);
-        var panel = go.GetComponent<RuneboardPanel>();
-        panel.topColor = new Color(0.08f, 0.085f, 0.08f, 0.92f);
-        panel.bottomColor = new Color(0.02f, 0.025f, 0.025f, 0.95f);
         var vlg = go.GetComponent<VerticalLayoutGroup>();
-        vlg.padding = new RectOffset(12, 12, 6, 8);
-        vlg.spacing = 4f;
+        vlg.padding = new RectOffset(0, 0, 0, 0);
+        vlg.spacing = 6f;
         vlg.childControlWidth = vlg.childControlHeight = true;
         vlg.childForceExpandHeight = false;
-        vlg.childAlignment = TextAnchor.UpperCenter;
+        vlg.childAlignment = TextAnchor.LowerCenter;
 
-        header = CreateText(root, "Header", 14f, TextAlignmentOptions.Left);
+        header = CreateText(root, "Header", 14f, TextAlignmentOptions.Center);
         header.gameObject.AddComponent<LayoutElement>().preferredHeight = 20f;
 
         var rowGo = new GameObject("Cards", typeof(RectTransform), typeof(HorizontalLayoutGroup));
         cardsRow = rowGo.GetComponent<RectTransform>();
         cardsRow.SetParent(root, false);
         var hlg = rowGo.GetComponent<HorizontalLayoutGroup>();
-        hlg.spacing = 6f;
+        hlg.spacing = -14f; // cards overlap like a held hand
         hlg.childAlignment = TextAnchor.LowerCenter;
         hlg.childControlWidth = hlg.childControlHeight = true;
         hlg.childForceExpandWidth = hlg.childForceExpandHeight = false;
@@ -205,27 +204,52 @@ public class HandTray : MonoBehaviour
         int count = hand.Count + opportunities.Count;
 
         Rect r = canvasRoot.rect;
-        float available = (r.width * 0.52f) / K - 40f - (opportunities.Count > 0 ? 30f : 0f);
-        float slotWidth = Mathf.Clamp(available / Mathf.Max(6, count) - 6f, 58f, 92f);
-        float slotHeight = slotWidth * TokenHeight / TokenWidth;
-        PlaceRoot(slotWidth, slotHeight + 26f);
+        float available = (r.width * 0.50f) / K - (opportunities.Count > 0 ? 40f : 0f);
+        float slotWidth = Mathf.Clamp(available / Mathf.Max(6, count) + 14f, 84f, 124f);
+        float slotHeight = slotWidth * 1.42f;
+        PlaceRoot(slotWidth, slotHeight + 30f);
 
         string selectedName = selected != null && selected.GetOwner() == player ? selected.characterName : null;
         int cp = player.CommandPoints;
         header.text = $"{UiTheme.Eyebrow("Command")} <color={UiTheme.GoldHex}>{cp}</color>/{player.CommandPointsMax}"
             + (selectedName != null ? $"    <color={UiTheme.MutedHex}>Playing as</color> {selectedName}" : $"    <color={UiTheme.MutedHex}>Select a character to play cards</color>")
-            + $"    <size=82%><color={UiTheme.MutedHex}>Right-click a hand card to trade it for a resource</color></size>";
+;
 
+        // Only cards the selected character can play right now are shown; the rest stay in hand
+        // (counted in the header) until the situation, character or resources make them live.
+        int held = 0;
         foreach (CardData card in hand)
-            slots.Add(CreateSlot(new SituationCardOffer(card, SituationCardOfferSource.Hand, IsPlayable(card, selected)), slotWidth, slotHeight, isHand: true));
+        {
+            if (!IsPlayable(card, selected)) { held++; continue; }
+            slots.Add(CreateSlot(new SituationCardOffer(card, SituationCardOfferSource.Hand, true), slotWidth, slotHeight, isHand: true));
+        }
+        heldCount = held;
+        if (held > 0) header.text += $"    <size=82%><color={UiTheme.MutedHex}>{held} more in hand, not playable here</color></size>";
+        if (slots.Count == 0 && opportunities.Count == 0)
+            slots.Add(CreateEmptyNote(selected == null ? "Select one of your characters" : "Nothing this character can play here — move, or pick another character"));
 
         if (opportunities.Count > 0)
         {
             slots.Add(CreateDivider(slotHeight));
             foreach (SituationCardOffer offer in opportunities)
-                slots.Add(CreateSlot(new SituationCardOffer(offer.Card, offer.Source, IsPlayable(offer.Card, selected)), slotWidth, slotHeight, isHand: false));
+                if (IsPlayable(offer.Card, selected))
+                    slots.Add(CreateSlot(new SituationCardOffer(offer.Card, offer.Source, true), slotWidth, slotHeight, isHand: false));
         }
+        ApplyFan();
         nextPlayabilityRefresh = Time.unscaledTime + 0.5f;
+    }
+
+    // Gentle arc: outer cards tilt out and sit a little lower, like a hand of cards.
+    private void ApplyFan()
+    {
+        List<HandTraySlot> cards = new();
+        foreach (GameObject s in slots) if (s != null && s.TryGetComponent(out HandTraySlot h)) cards.Add(h);
+        int n = cards.Count;
+        for (int i = 0; i < n; i++)
+        {
+            float t = n <= 1 ? 0f : (i / (float)(n - 1)) * 2f - 1f; // -1 .. 1
+            cards[i].SetRestPose(-t * Mathf.Min(12f, 2.5f * n), -t * t * Mathf.Min(20f, 4f * n));
+        }
     }
 
     private static bool IsPlayable(CardData card, Character selected)
@@ -247,6 +271,21 @@ public class HandTray : MonoBehaviour
         }
     }
 
+    private GameObject CreateEmptyNote(string message)
+    {
+        var go = new GameObject("EmptyNote", typeof(RectTransform), typeof(LayoutElement));
+        go.GetComponent<RectTransform>().SetParent(cardsRow, false);
+        var le = go.GetComponent<LayoutElement>();
+        le.preferredWidth = 520f;
+        le.preferredHeight = 60f;
+        TextMeshProUGUI label = CreateText(go.GetComponent<RectTransform>(), "Note", 13f, TextAlignmentOptions.Center);
+        label.text = $"<color={UiTheme.MutedHex}>{message}</color>";
+        label.rectTransform.anchorMin = Vector2.zero;
+        label.rectTransform.anchorMax = Vector2.one;
+        label.rectTransform.offsetMin = label.rectTransform.offsetMax = Vector2.zero;
+        return go;
+    }
+
     private GameObject CreateDivider(float height)
     {
         var go = new GameObject("Divider", typeof(RectTransform), typeof(LayoutElement));
@@ -265,34 +304,63 @@ public class HandTray : MonoBehaviour
 
     private GameObject CreateSlot(SituationCardOffer offer, float width, float height, bool isHand)
     {
-        var slotGo = new GameObject(offer.Card.name, typeof(RectTransform), typeof(LayoutElement), typeof(VerticalLayoutGroup));
+        var slotGo = new GameObject(offer.Card.name, typeof(RectTransform), typeof(LayoutElement));
         var slotRect = slotGo.GetComponent<RectTransform>();
         slotRect.SetParent(cardsRow, false);
         var le = slotGo.GetComponent<LayoutElement>();
         le.preferredWidth = width;
-        le.preferredHeight = height + 26f;
-        var vlg = slotGo.GetComponent<VerticalLayoutGroup>();
-        vlg.childControlWidth = vlg.childControlHeight = true;
-        vlg.childForceExpandHeight = false;
-        vlg.spacing = 2f;
+        le.preferredHeight = height;
 
-        // Card art frame: hosts the scaled TokenCard instance.
-        var frameGo = new GameObject("Frame", typeof(RectTransform), typeof(LayoutElement));
-        var frame = frameGo.GetComponent<RectTransform>();
-        frame.SetParent(slotRect, false);
-        frameGo.GetComponent<LayoutElement>().preferredHeight = height;
+        // Visual: the rotated/lifted card face (the slot itself stays put for the layout).
+        var visualGo = new GameObject("Visual", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel));
+        var visual = visualGo.GetComponent<RectTransform>();
+        visual.SetParent(slotRect, false);
+        visual.anchorMin = visual.anchorMax = new Vector2(0.5f, 0f);
+        visual.pivot = new Vector2(0.5f, 0f);
+        visual.sizeDelta = new Vector2(width, height);
+        var face = visualGo.GetComponent<CinematicPanel>();
+        face.fillTop = new Color(0.09f, 0.085f, 0.075f, 0.98f);
+        face.fillBottom = new Color(0.035f, 0.033f, 0.03f, 0.99f);
+        face.inset = 3f;
+        face.ornament = 0f;
+        // Hand cards wear gold; situational opportunities for this spot wear green.
+        face.line = isHand ? new Color(0.86f, 0.70f, 0.40f, 0.9f) : new Color(0.55f, 0.80f, 0.55f, 0.9f);
+
+        TextMeshProUGUI name = CreateText(visual, "Name", 11f, TextAlignmentOptions.Center);
+        name.enableAutoSizing = true;
+        name.fontSizeMin = 8f;
+        name.fontSizeMax = 12f;
+        name.textWrappingMode = TextWrappingModes.NoWrap;
+        name.overflowMode = TextOverflowModes.Ellipsis;
+        name.text = DisplayNames.Format(offer.Card.name);
+        name.color = UiTheme.Gold;
+        var nr = name.rectTransform;
+        nr.anchorMin = new Vector2(0f, 1f);
+        nr.anchorMax = new Vector2(1f, 1f);
+        nr.pivot = new Vector2(0.5f, 1f);
+        nr.offsetMin = new Vector2(8f, -24f);
+        nr.offsetMax = new Vector2(-8f, -6f);
+
+        var artGo = new GameObject("Art", typeof(RectTransform), typeof(RectMask2D));
+        var art = artGo.GetComponent<RectTransform>();
+        art.SetParent(visual, false);
+        art.anchorMin = Vector2.zero;
+        art.anchorMax = Vector2.one;
+        art.offsetMin = new Vector2(7f, 7f);
+        art.offsetMax = new Vector2(-7f, -26f);
 
         Card token = null;
         GameObject template = DeckManager.Instance != null ? DeckManager.Instance.GetTokenCardPrefabTemplate() : null;
         if (template != null)
         {
-            GameObject tokenGo = Instantiate(template, frame);
+            GameObject tokenGo = Instantiate(template, art);
             tokenGo.SetActive(true);
             var rt = tokenGo.GetComponent<RectTransform>();
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
             rt.anchoredPosition = Vector2.zero;
             rt.sizeDelta = new Vector2(TokenWidth, TokenHeight);
-            float scale = Mathf.Min(width / TokenWidth, height / TokenHeight);
+            float artW = width - 14f, artH = height - 33f;
+            float scale = Mathf.Max(artW / TokenWidth, artH / TokenHeight);
             rt.localScale = new Vector3(scale, scale, 1f);
             token = tokenGo.GetComponent<Card>();
             if (token != null)
@@ -306,19 +374,9 @@ public class HandTray : MonoBehaviour
             cg.interactable = false;
         }
 
-        TextMeshProUGUI name = CreateText(slotRect, "Name", 11f, TextAlignmentOptions.Top);
-        name.enableAutoSizing = true;
-        name.fontSizeMin = 8f;
-        name.fontSizeMax = 11f;
-        name.text = DisplayNames.Format(offer.Card.name);
-        name.overflowMode = TextOverflowModes.Ellipsis;
-        name.gameObject.AddComponent<LayoutElement>().preferredHeight = 24f;
-
-        // Transparent hit area over the whole slot drives hover/click/right-click.
-        var hitGo = new GameObject("Hit", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(LayoutElement));
+        var hitGo = new GameObject("Hit", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         var hit = hitGo.GetComponent<RectTransform>();
-        hit.SetParent(slotRect, false);
-        hitGo.GetComponent<LayoutElement>().ignoreLayout = true;
+        hit.SetParent(visual, false);
         hit.anchorMin = Vector2.zero;
         hit.anchorMax = Vector2.one;
         hit.offsetMin = hit.offsetMax = Vector2.zero;
@@ -326,6 +384,7 @@ public class HandTray : MonoBehaviour
 
         var handler = slotGo.AddComponent<HandTraySlot>();
         handler.Init(this, offer, token, name, isHand);
+        handler.SetVisual(visual);
         hitGo.AddComponent<HandTrayHitForwarder>().target = handler;
         handler.SetPlayable(offer.IsPlayable);
         return slotGo;
@@ -454,9 +513,30 @@ public class HandTraySlot : MonoBehaviour
         if (label != null) label.color = playable ? UiTheme.Text : UiTheme.Muted;
     }
 
+    private RectTransform visual;
+    private float restAngle, restDrop;
+
+    public void SetVisual(RectTransform v) => visual = v;
+
+    public void SetRestPose(float angle, float drop)
+    {
+        restAngle = angle;
+        restDrop = drop;
+        ApplyPose(false);
+    }
+
+    private void ApplyPose(bool lifted)
+    {
+        if (visual == null) return;
+        visual.localEulerAngles = new Vector3(0f, 0f, lifted ? 0f : restAngle);
+        visual.anchoredPosition = new Vector2(0f, lifted ? 30f : restDrop);
+        visual.localScale = lifted ? new Vector3(1.12f, 1.12f, 1f) : Vector3.one;
+        if (lifted) transform.SetAsLastSibling();
+    }
+
     public void Hover(bool enter)
     {
-        transform.localScale = enter ? new Vector3(1.06f, 1.06f, 1f) : Vector3.one;
+        ApplyPose(enter);
         tray.OnHover(this, enter);
     }
 

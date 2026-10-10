@@ -96,6 +96,37 @@ public class CampaignObjectives : MonoBehaviour
 
     public int MaxScore(PlayableLeader leader) => GetObjectives(leader).Where(o => !o.decisive).Sum(o => o.points);
 
+    /// <summary>Map hexes an objective is about (empty for count objectives).</summary>
+    public System.Collections.Generic.List<Hex> GetTargetHexes(CampaignObjective o)
+    {
+        var result = new System.Collections.Generic.List<Hex>();
+        if (o == null) return result;
+        if (!string.IsNullOrWhiteSpace(o.pc)) { Hex h = FindPcHex(o.pc); if (h != null) result.Add(h); }
+        if (o.pcs != null) foreach (string pc in o.pcs) { Hex h = FindPcHex(pc); if (h != null && !result.Contains(h)) result.Add(h); }
+        return result;
+    }
+
+    /// <summary>One line telling the player how to make progress on an objective.</summary>
+    public string HowTo(PlayableLeader leader, CampaignObjective o)
+    {
+        if (o == null) return string.Empty;
+        bool met = IsMet(leader, o);
+        switch (o.type)
+        {
+            case "ReachPC": return met ? "Reached." : "Move any of your characters onto it.";
+            case "HoldPC":
+            case "HoldAllPCs":
+                if (met) return "Held. Keep an army there to defend it.";
+                return o.side ? "Bring an army to its gates and play Siege — or help the allied realm that holds it." : "Bring an army to its gates and play Siege.";
+            case "PCCount":
+            {
+                int have = leader.controlledPcs.Count(pc => pc != null && pc.owner == leader);
+                return met ? $"Done ({have}/{o.count}). Hold on to them." : $"{have}/{o.count}. Found new PCs from PC cards, or take them with Siege.";
+            }
+            default: return string.Empty;
+        }
+    }
+
     private bool Holds(PlayableLeader leader, string pcName, bool sideCounts)
     {
         PC pc = FindPcHex(pcName)?.GetPC();

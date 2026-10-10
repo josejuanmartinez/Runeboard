@@ -52,7 +52,7 @@ public class OnHoverTile : MonoBehaviour
         {
             try
             {
-                FindFirstObjectByType<Layout>().GetHexNumberManager().Show(hexCoordinates);
+                FindFirstObjectByType<Layout>().GetHexNumberManager().Show(hex);
             }
             catch (Exception e)
             {

@@ -29,19 +29,16 @@ public static class MiddleEarthCalendar
     /// <summary>Absolute day (from the epoch) of the campaign's first turn.</summary>
     public static readonly int StartAbsoluteDay = StartMonthIndex * DaysPerMonth + (StartDayOfMonth - 1); // 262
 
-    /// <summary>Converts a game turn (1-based; turn 0 is treated as turn 1) into a date.</summary>
+    /// <summary>Converts a game turn (turn 0 is the campaign's first day; each turn is one day) into a date.</summary>
     public static MiddleEarthDate GetDateFromTurn(int turnNumber)
     {
-        int dayOffset = turnNumber > 0 ? turnNumber - 1 : 0;
-        return FromAbsoluteDay(StartAbsoluteDay + dayOffset);
+        return FromAbsoluteDay(StartAbsoluteDay + Math.Max(0, turnNumber));
     }
 
-    /// <summary>The first turn on which the given date occurs, or 0 if it is before the campaign start.</summary>
+    /// <summary>The turn on which the given date occurs, clamped to 0 for dates before the campaign start.</summary>
     public static int GetTurnFromDate(MiddleEarthDate date)
     {
-        int absolute = ToAbsoluteDay(date);
-        int turn = absolute - StartAbsoluteDay + 1;
-        return turn < 1 ? 0 : turn;
+        return Math.Max(0, ToAbsoluteDay(date) - StartAbsoluteDay);
     }
 
     public static MiddleEarthDate FromAbsoluteDay(int absoluteDay)

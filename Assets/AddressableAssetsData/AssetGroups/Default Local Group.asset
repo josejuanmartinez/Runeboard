@@ -16,7 +16,7 @@ MonoBehaviour:
   m_GUID: 42ea3338a43de5c4c8efafbbb110e306
   m_SerializeEntries:
   - m_GUID: 00108b45e3d3bc045a0a57d21eccc8e4
-    m_Address: Assets/Art/Cards/Objects/Horse-tamer.png
+    m_Address: Assets/Art/Cards/Objects/Felarof's Goad.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
@@ -2980,7 +2980,7 @@ MonoBehaviour:
     - default
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 25aa2c622cbec6c46a871336a6aea0e3
-    m_Address: "Assets/Art/Cards/Objects/And\xFAril.png"
+    m_Address: Assets/Art/Cards/Objects/Anduril.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
@@ -5044,7 +5044,7 @@ MonoBehaviour:
     - default
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3fe33135b766f5f4cb32498dfedf449e
-    m_Address: "Assets/Art/Cards/Objects/Guthwin\xEB.png"
+    m_Address: Assets/Art/Cards/Objects/Guthwine.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
@@ -6118,7 +6118,7 @@ MonoBehaviour:
     - default
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4c73ca149c1e0724288d85f212730b54
-    m_Address: Assets/Art/Cards/Objects/War Axe.png
+    m_Address: Assets/Art/Cards/Objects/Baruk Khazad.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default

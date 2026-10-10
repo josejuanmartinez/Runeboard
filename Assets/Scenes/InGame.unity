@@ -71821,7 +71821,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7513424218518187714, guid: 1b6ff9b154c7d664d9ba7e7c57002f01, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7513424218518187714, guid: 1b6ff9b154c7d664d9ba7e7c57002f01, type: 3}
+      propertyPath: maxZoom
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2554142171881652156, guid: 1b6ff9b154c7d664d9ba7e7c57002f01, type: 3}

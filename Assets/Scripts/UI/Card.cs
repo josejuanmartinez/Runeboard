@@ -813,24 +813,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         return $"{typePrefix}. {text}";
     }
 
-    private string FormatCardTitle(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value)) return string.Empty;
-
-        List<char> chars = new(value.Length + 4);
-        for (int i = 0; i < value.Length; i++)
-        {
-            char current = value[i];
-            if (ShouldInsertWordSpace(value, i))
-            {
-                chars.Add(' ');
-            }
-            chars.Add(current);
-        }
-
-        string formatted = new string(chars.ToArray()).Trim().ToLowerInvariant();
-        return CultureInfo.InvariantCulture.TextInfo.ToTitleCase(formatted);
-    }
+    private string FormatCardTitle(string value) => DisplayNames.Format(value);
 
     private static bool CanShowFoundingText(CardData data)
     {
@@ -860,32 +843,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         if (string.IsNullOrWhiteSpace(value)) return string.Empty;
         return new string(value.Where(char.IsLetterOrDigit).ToArray()).ToLowerInvariant();
-    }
-
-    private static bool ShouldInsertWordSpace(string value, int index)
-    {
-        if (string.IsNullOrWhiteSpace(value)) return false;
-        if (index <= 0 || index >= value.Length) return false;
-
-        char current = value[index];
-        if (!char.IsUpper(current)) return false;
-
-        char previous = value[index - 1];
-        if (char.IsWhiteSpace(previous)) return false;
-
-        if (char.IsLower(previous) || char.IsDigit(previous))
-        {
-            return true;
-        }
-
-        if (!char.IsUpper(previous)) return false;
-
-        if (index + 1 < value.Length && char.IsLower(value[index + 1]))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     private Color GetCardTypeColor(CardTypeEnum cardType)

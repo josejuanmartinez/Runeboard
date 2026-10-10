@@ -2537,7 +2537,17 @@ public class Hex : MonoBehaviour
     // revealed, otherwise the bare coordinate pair (no "@" prefix, unlike GetHoverV2).
     public string GetBattleLocationLabel()
     {
-        return HasAnyPC() && IsPCRevealed() ? GetPC().pcName : $"{v2.x},{v2.y}";
+        return GetPlaceLabel();
+    }
+
+    /// <summary>Player-facing name for this hex: its revealed PC, else its region and terrain. Never raw coordinates.</summary>
+    public string GetPlaceLabel()
+    {
+        if (!IsHexRevealed()) return "Unexplored lands";
+        if (HasAnyPC() && IsPCRevealed()) return DisplayNames.Format(GetPC().pcName);
+        string terrain = TerrainData.GetDisplayName(terrainType);
+        string region = DisplayNames.Format(GetLandRegion());
+        return string.IsNullOrEmpty(region) ? terrain : $"{region} · {terrain}";
     }
 
     public void RevealArtifact()
@@ -3008,7 +3018,7 @@ public class Hex : MonoBehaviour
         StringBuilder builder = new();
         Color labelColor = pc.owner != null ? Color.Lerp(pc.owner.nationColor, Color.white, .6f) : new Color(.86f, .73f, .49f);
         builder.Append("<b><color=#").Append(ColorUtility.ToHtmlStringRGB(labelColor)).Append('>');
-        builder.Append(pc.pcName ?? string.Empty);
+        builder.Append(DisplayNames.Format(pc.pcName));
         builder.Append("</color></b><br><size=85%>");
 
         if (pc.citySize != PCSizeEnum.NONE)

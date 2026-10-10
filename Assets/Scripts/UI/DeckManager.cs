@@ -645,7 +645,7 @@ public class CardData
 
         if (!string.IsNullOrWhiteSpace(startingPC))
         {
-            lines.Add($"Starts at {startingPC}.");
+            lines.Add($"Starts at {DisplayNames.Format(startingPC)}.");
         }
 
         List<string> classParts = new();
@@ -2432,13 +2432,7 @@ public class DeckManager : MonoBehaviour
         LogManager.Log(LogCategory.Event, Game.Instance?.currentlyPlaying?.characterName, null, revealText);
     }
 
-    private static string FormatDisplayName(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value)) return string.Empty;
-
-        string spaced = Regex.Replace(value.Trim(), @"(?<!^)([A-Z])", " $1");
-        return Regex.Replace(spaced, @"\s+", " ").Trim();
-    }
+    private static string FormatDisplayName(string value) => DisplayNames.Format(value);
 
     private static Hex ChooseFocusHex(List<Hex> hexes)
     {

@@ -618,15 +618,7 @@ public class Game : MonoBehaviour
         leaderTransitionRunning = false;
     }
 
-    private static string GetAlignmentDisplayName(AlignmentEnum alignment)
-    {
-        return alignment switch
-        {
-            AlignmentEnum.freePeople => "Free People",
-            AlignmentEnum.darkServants => "Dark Servants",
-            _ => "Neutral"
-        };
-    }
+    private static string GetAlignmentDisplayName(AlignmentEnum alignment) => alignment.ToDisplayName();
 
     // RefreshForNewTurn() is the WaitUntilEndOfTurn()-free half of Leader.NewTurn(), allowing an
     // NPL to act in its alignment's window without advancing the playable-leader rotation.

@@ -589,10 +589,14 @@ public class LeaderSelector : SearcherByName
             return;
         }
 
-        ConfirmStartGame();
+        StartSelectedLeader(askConfirmation: true);
     }
 
-    public async void ConfirmStartGame()
+    // The explicit "Begin campaign" button is already a deliberate choice, so it starts
+    // immediately; clicking the centred carousel card still asks, since that's easy to hit by accident.
+    public void ConfirmStartGame() => StartSelectedLeader(askConfirmation: false);
+
+    private async void StartSelectedLeader(bool askConfirmation)
     {
         if (startConfirmationPending || selectionEntries.Count == 0)
         {
@@ -616,7 +620,8 @@ public class LeaderSelector : SearcherByName
         {
             Sprite portrait = selectedIndex < carouselItems.Count && carouselItems[selectedIndex] != null
                 ? carouselItems[selectedIndex].GetComponent<CarouselItem>()?.image?.sprite : null;
-            confirmed = await ConfirmationDialog.AskYesNo($"Do you want to start as {selectedName}?", image: portrait);
+            confirmed = !askConfirmation
+                || await ConfirmationDialog.AskYesNo($"Do you want to start as {selectedName}?", image: portrait);
         }
         finally
         {

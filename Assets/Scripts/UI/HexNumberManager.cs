@@ -5,8 +5,8 @@ public class HexNumberManager : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI textWidget;
-    public void Show(Vector2Int v2)
+    public void Show(Hex hex)
     {
-        textWidget.text = $"{v2}";
+        textWidget.text = hex != null ? hex.GetPlaceLabel() : string.Empty;
     }
 }

@@ -326,6 +326,7 @@ public class Hex : MonoBehaviour
         characterBg.localScale *= .9f;
 
         characterSpriteRenderer = FindPart<SpriteRenderer>(characterBg, "character");
+        BoardLook.AttachShadow(characterSpriteRenderer);
         bannerSpriteRenderer = FindPart<SpriteRenderer>(characterBg, "banner");
         // characterClassesIconGrid = FindPart<SpriteRendererGridLayout>(characterBg, "ClassesSpriteRendererLayout");
         CharacterSpriteHover hover = characterBg.GetComponent<CharacterSpriteHover>();
@@ -1455,7 +1456,7 @@ public class Hex : MonoBehaviour
         ApplyRegionColor();
         if (terrainTexture != null)
         {
-            SetActiveFast(terrainTexture.gameObject, revealed);
+            SetActiveFast(terrainTexture.gameObject, revealed || BoardLook.Shroud);
             if (revealed != seamlessRevealedLast)
             {
                 seamlessRevealedLast = revealed;
@@ -2249,7 +2250,7 @@ public class Hex : MonoBehaviour
         // for the vast majority nothing changed, so skip the per-hex visual work. The
         // terrain-sync check keeps the old self-healing behavior: if some code activated
         // this hex's art without revealing it, the next sweep still corrects it.
-        bool terrainOutOfSync = terrainTexture != null && terrainTexture.gameObject.activeSelf != IsHexRevealed();
+        bool terrainOutOfSync = terrainTexture != null && terrainTexture.gameObject.activeSelf != (IsHexRevealed() || BoardLook.Shroud);
         if (!unseenChanged && !scoutingChanged && !terrainOutOfSync) return;
         UpdateVisibilityForFog();
         UpdateMinimapTerrain(IsHexRevealed());
@@ -2952,7 +2953,7 @@ public class Hex : MonoBehaviour
         // Respect fog: SetTerrain runs on every hex during board load, and unconditionally
         // activating the art here used to rely on the first whole-board Hide() sweep to put
         // the fog back — that sweep now early-outs, so apply the correct state directly.
-        SetActiveFast(terrainTexture.gameObject, IsHexRevealed());
+        SetActiveFast(terrainTexture.gameObject, IsHexRevealed() || BoardLook.Shroud);
         terrainTexture.sprite = hexTextureMapping != null ? hexTextureMapping.GetTerrainSprite(this) : baseTerrainSprite;
 
         if (pcTexture != null)
@@ -2985,6 +2986,13 @@ public class Hex : MonoBehaviour
 
     private void UpdateTerrainVisualAlpha()
     {
+        if (BoardLook.Shroud && !IsHexRevealed())
+        {
+            if (terrainTexture) terrainTexture.color = BoardLook.ShroudTint;
+            SetSpriteAlpha(pcTexture, 0f);
+            return;
+        }
+        if (terrainTexture) terrainTexture.color = Color.white;
         SetSpriteAlpha(terrainTexture, CurrentTerrainAlpha());
         SetSpriteAlpha(pcTexture, CurrentTerrainAlpha());
     }

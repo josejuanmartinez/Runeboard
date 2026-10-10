@@ -125,6 +125,13 @@ public class CampaignHud : MonoBehaviour
     private void PlaceTracker()
     {
         if (trackerRect == null) return;
+        if (HudDirector.Applied)
+        {
+            // Docked HUD: the tracker hangs from the top bar on the left edge.
+            trackerRect.anchoredPosition = new Vector2(HudDirector.Margin, -(HudDirector.TopBarHeight + HudDirector.Margin));
+            trackerPlaced = true;
+            return;
+        }
         RectTransform anchor = FindEnvironmentBox();
         if (anchor != null)
         {

@@ -1454,15 +1454,35 @@ public class DeckManager : MonoBehaviour
         state.lastHandDrawTurn = turn;
         state.hand.RemoveAll(c => c == null);
         int guard = state.drawPile.Count + state.discardPile.Count + 1;
+        List<Character> actors = leader.controlledCharacters.Where(c => c != null && !c.killed).ToList();
         while (state.hand.Count < size && guard-- > 0)
         {
             if (state.drawPile.Count == 0) RecycleDiscardPileIfExhausted(leader);
-            int index = state.drawPile.FindIndex(IsHandCard);
+            // Prefer the next card someone could actually play now (looking a few cards ahead),
+            // so a fresh hand isn't mostly dead cards; otherwise take the next card as dealt.
+            int index = FindPlayableHandCard(state.drawPile, actors, lookahead: 12);
+            if (index < 0) index = state.drawPile.FindIndex(IsHandCard);
             if (index < 0) break;
             state.hand.Add(state.drawPile[index]);
             state.drawPile.RemoveAt(index);
         }
         return true;
+    }
+
+    private static int FindPlayableHandCard(List<CardData> pile, List<Character> actors, int lookahead)
+    {
+        int seen = 0;
+        for (int i = 0; i < pile.Count && seen < lookahead; i++)
+        {
+            CardData card = pile[i];
+            if (!IsHandCard(card)) continue;
+            seen++;
+            foreach (Character actor in actors)
+            {
+                if (card.EvaluatePlayability(actor)) return i;
+            }
+        }
+        return -1;
     }
 
     private static bool IsHandCard(CardData card) =>

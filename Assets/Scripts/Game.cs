@@ -254,6 +254,8 @@ public class Game : MonoBehaviour
         HookBoardSelectionRefresh();
         AssignAIandHumans();
         VictoryPoints.RecalculateAndAssign(this);
+        HudDirector.Apply();
+        BoardLook.Apply();
         CampaignObjectives.Begin(this);
         HandTray.Ensure();
         TurnDigest.Attach(this);

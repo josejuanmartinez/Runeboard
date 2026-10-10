@@ -138,6 +138,20 @@ public class PlayableLeaderIcon : MonoBehaviour
         if (icons != null) icons.UpdateVictoryPointColors();
     }
 
+    /// <summary>Re-resolves a portrait that wasn't available at Initialize (art still streaming in).</summary>
+    public void EnsurePortrait()
+    {
+        if (image == null || image.sprite != null || playableLeader == null) return;
+        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) return;
+        Sprite sprite = illustrations.GetCharacterArtByName(playableLeader.characterName);
+        string baseName = playableLeader.GetBiome()?.characterName;
+        if (sprite == null && !string.IsNullOrWhiteSpace(baseName)) sprite = illustrations.GetCharacterArtByName(baseName);
+        if (sprite == null) return;
+        leaderSprite = sprite;
+        SetLeaderVisuals(sprite);
+    }
+
     private void SetLeaderVisuals(Sprite fallbackSprite)
     {        
         if (image != null)

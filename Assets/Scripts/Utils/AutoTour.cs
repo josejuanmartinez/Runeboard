@@ -63,7 +63,9 @@ public class AutoTourRunner : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(1f);
             yield return Shot("card_preview");
+            HandTray.Instance.DebugPreview(-1);
             CardCenterPreview.Instance?.HidePreview();
+            yield return new WaitForSecondsRealtime(1f);
         }
 
         BoardNavigator nav = BoardNavigator.Instance;

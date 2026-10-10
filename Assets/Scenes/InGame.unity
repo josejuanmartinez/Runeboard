@@ -71392,15 +71392,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000007, guid: f9751b5a3f2d4a2b8266d3fa6c28236e, type: 3}
       propertyPath: GoldColor.b
-      value: 0
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 1000007, guid: f9751b5a3f2d4a2b8266d3fa6c28236e, type: 3}
       propertyPath: GoldColor.g
-      value: 0.6421053
+      value: 0.71
       objectReference: {fileID: 0}
     - target: {fileID: 1000007, guid: f9751b5a3f2d4a2b8266d3fa6c28236e, type: 3}
       propertyPath: GoldColor.r
-      value: 1
+      value: 0.86
       objectReference: {fileID: 0}
     - target: {fileID: 1000041, guid: f9751b5a3f2d4a2b8266d3fa6c28236e, type: 3}
       propertyPath: m_SizeDelta.x

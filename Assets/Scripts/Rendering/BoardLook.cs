@@ -1,0 +1,105 @@
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+/// <summary>
+/// The board's overall rendering look, applied once a campaign starts:
+///  • post: a soft vignette to frame the play area, gentle bloom so gold rings, sparkles and lit
+///    windows glow, slightly richer colour, and no motion blur (camera pans used to smear the map)
+///  • grounding: a soft contact shadow under every unit so figures stand on the tile instead of
+///    floating over it
+///  • framing: the camera opens a little further out so a starting realm reads as a place
+/// </summary>
+public static class BoardLook
+{
+    public const float DefaultZoom = 6.2f;
+
+    /// <summary>
+    /// "Night shroud" for unexplored land: terrain is drawn as dark, cool silhouettes instead of
+    /// a black void, so the continent's shape reads under the fog. Units, PCs and labels stay
+    /// hidden. "-look-classic" on the command line restores the old hidden-terrain look.
+    /// </summary>
+    public static readonly bool Shroud = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-look-classic") < 0;
+    public static readonly Color ShroudTint = new(0.30f, 0.33f, 0.40f, 1f);
+
+    private static Sprite shadowSprite;
+
+    public static void Apply()
+    {
+        ApplyPost();
+        BoardNavigator nav = BoardNavigator.Instance;
+        if (nav != null) nav.DebugSetZoom(DefaultZoom);
+    }
+
+    private static void ApplyPost()
+    {
+        Volume volume = null;
+        foreach (Volume v in Object.FindObjectsByType<Volume>(FindObjectsSortMode.None))
+        {
+            if (v.isGlobal && v.sharedProfile != null && v.gameObject.layer != LayerMask.NameToLayer("UI")) { volume = v; break; }
+        }
+        if (volume == null) return;
+        VolumeProfile profile = volume.profile; // instance copy; the asset stays untouched
+
+        if (profile.TryGet(out MotionBlur motionBlur)) motionBlur.active = false;
+
+        Vignette vignette = profile.TryGet(out Vignette existingVignette) ? existingVignette : profile.Add<Vignette>(true);
+        vignette.active = true;
+        vignette.intensity.Override(0.3f);
+        vignette.smoothness.Override(0.55f);
+        vignette.color.Override(new Color(0.02f, 0.02f, 0.03f));
+
+        Bloom bloom = profile.TryGet(out Bloom existingBloom) ? existingBloom : profile.Add<Bloom>(true);
+        bloom.active = true;
+        bloom.threshold.Override(0.95f);
+        bloom.intensity.Override(0.45f);
+        bloom.scatter.Override(0.6f);
+
+        if (profile.TryGet(out ColorAdjustments color))
+        {
+            color.saturation.Override(10f);
+        }
+    }
+
+    /// <summary>Adds a soft contact shadow under a unit sprite (child of its renderer, under the ring).</summary>
+    public static void AttachShadow(SpriteRenderer character)
+    {
+        if (character == null || character.transform.Find("ContactShadow") != null) return;
+        var go = new GameObject("ContactShadow", typeof(SpriteRenderer));
+        go.transform.SetParent(character.transform, false);
+        // Same spot as the prefab's GoldRing (character-local units), nudged up a hair so the
+        // ring still sorts in front of it on the Y sort axis.
+        go.transform.localPosition = new Vector3(0.04f, -1.64f, 0f);
+        go.transform.localScale = new Vector3(4.6f, 4.6f, 1f);
+        var sr = go.GetComponent<SpriteRenderer>();
+        sr.sprite = ShadowSprite();
+        sr.color = new Color(0f, 0f, 0f, 0.55f);
+        sr.sortingLayerID = character.sortingLayerID;
+        sr.sortingOrder = character.sortingOrder - 1;
+    }
+
+    // Soft-edged ellipse, generated once (no art asset needed).
+    private static Sprite ShadowSprite()
+    {
+        if (shadowSprite != null) return shadowSprite;
+        const int w = 128, h = 64;
+        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+        var px = new Color32[w * h];
+        for (int y = 0; y < h; y++)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                float dx = (x + 0.5f) / w * 2f - 1f;
+                float dy = (y + 0.5f) / h * 2f - 1f;
+                float d = Mathf.Sqrt(dx * dx + dy * dy);
+                float a = Mathf.Clamp01(1f - Mathf.SmoothStep(0.35f, 1f, d));
+                px[y * w + x] = new Color32(255, 255, 255, (byte)(a * 255));
+            }
+        }
+        tex.SetPixels32(px);
+        tex.Apply(false, true);
+        shadowSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), w);
+        shadowSprite.name = "ContactShadow";
+        return shadowSprite;
+    }
+}

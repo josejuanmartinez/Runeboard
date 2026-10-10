@@ -58,7 +58,8 @@ public class HandTray : MonoBehaviour
     /// <summary>Shows the full-card preview for the tray's Nth card (used by AutoTour).</summary>
     public bool DebugPreview(int index)
     {
-        if (index < 0 || index >= slots.Count) return false;
+        if (index < 0) { CardCenterPreview.Instance?.HidePreview(); return false; }
+        if (index >= slots.Count) return false;
         HandTraySlot slot = slots[index] != null ? slots[index].GetComponent<HandTraySlot>() : null;
         if (slot == null) return false;
         OnHover(slot, true);
@@ -173,11 +174,13 @@ public class HandTray : MonoBehaviour
     {
         Rect r = canvasRoot.rect;
         float left = r.width * 0.33f, right = r.width * 0.855f;
+        float dockRight = HudDirector.DockRightColumnLeft(canvasRoot);
+        if (dockRight > 0f) right = dockRight - 12f;
         RectTransform leftPanel = FindFirstObjectByType<SelectedCharacterIcon>()?.transform as RectTransform;
         if (leftPanel != null && leftPanel.gameObject.activeInHierarchy) left = Mathf.Max(left * 0.8f, CanvasX(leftPanel, right: true) + 12f);
         float width = Mathf.Max(200f, right - left);
         root.localScale = new Vector3(K, K, 1f);
-        root.anchoredPosition = new Vector2(left + width * 0.5f, 6f * K);
+        root.anchoredPosition = new Vector2(left + width * 0.5f, 12f);
         root.sizeDelta = new Vector2(width / K, slotHeight + 40f);
     }
 
@@ -447,7 +450,7 @@ public class HandTraySlot : MonoBehaviour
     public void SetPlayable(bool playable)
     {
         Playable = playable;
-        if (Token != null) Token.SetTokenTint(playable ? 0f : 0.55f, 0f);
+        if (Token != null) Token.SetTokenTint(playable ? 0f : 0.18f, 0f);
         if (label != null) label.color = playable ? UiTheme.Text : UiTheme.Muted;
     }
 

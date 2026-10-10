@@ -101,6 +101,7 @@ public class PlayableLeaderIcons : MonoBehaviour
     public void RefreshVictoryPointsForAll()
     {
         EnsurePlayableLeaderIcons();
+        foreach (PlayableLeaderIcon icon in playableLeaderIcons) if (icon != null) icon.EnsurePortrait();
         for (int i = 0; i < playableLeaderIcons.Count; i++)
         {
             PlayableLeaderIcon icon = playableLeaderIcons[i];

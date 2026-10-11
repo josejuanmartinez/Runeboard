@@ -151,7 +151,7 @@ public class ObjectiveGuide : MonoBehaviour
     private void ShowCaption(CampaignObjective o, CampaignObjectives objectives)
     {
         HideCaption();
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         Canvas canvas = layout != null ? layout.GetComponentInParent<Canvas>() : null;
         if (canvas == null) return;
         RectTransform root = canvas.rootCanvas.transform as RectTransform;

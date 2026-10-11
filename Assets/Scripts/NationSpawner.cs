@@ -80,14 +80,14 @@ public class NationSpawner : MonoBehaviour
         featuresHexCache = new Dictionary<FeaturesEnum, List<Vector2Int>>();
         cubeCoordinateCache = new Dictionary<Vector2Int, Vector3Int>();
 
-        characterInstantiator = FindFirstObjectByType<CharacterInstantiator>();
+        characterInstantiator = FindAnyObjectByType<CharacterInstantiator>();
         if (characterInstantiator == null)
         {
             Debug.LogError("CharacterInstantiator not found!");
             return;
         }
 
-        playableLeaders = FindFirstObjectByType<PlayableLeaders>();
+        playableLeaders = FindAnyObjectByType<PlayableLeaders>();
         if (playableLeaders == null)
         {
             Debug.LogError("PlayableLeaders not found!");
@@ -95,7 +95,7 @@ public class NationSpawner : MonoBehaviour
         }
         playableLeaders.Initialize();
 
-        nonPlayableLeaders = FindFirstObjectByType<NonPlayableLeaders>();
+        nonPlayableLeaders = FindAnyObjectByType<NonPlayableLeaders>();
         if (nonPlayableLeaders == null)
         {
             Debug.LogError("NonPlayableLeaders not found!");
@@ -732,7 +732,7 @@ public class NationSpawner : MonoBehaviour
             if (cell == null || string.IsNullOrWhiteSpace(cell.spriteName)) continue;
             if (!board.hexes.TryGetValue(new Vector2Int(cell.row, cell.col), out Hex hex) || hex == null) continue;
             if (mapping == null) mapping = hex.GetComponent<HexTextureMapping>();
-            if (mapping == null) mapping = FindFirstObjectByType<HexTextureMapping>();
+            if (mapping == null) mapping = FindAnyObjectByType<HexTextureMapping>();
             if (mapping == null) return;
 
             Sprite sprite = mapping.GetTerrainSpriteByName(cell.spriteName);
@@ -749,11 +749,11 @@ public class NationSpawner : MonoBehaviour
     {
         // Scenario spawning runs during board generation, before the game HUD is necessarily
         // active — the DeckManager may not have Awoken yet (Instance unset) and a default
-        // FindFirstObjectByType skips inactive objects, so search inactive ones too.
+        // FindAnyObjectByType skips inactive objects, so search inactive ones too.
         // InitializeFromResources only touches Resources, so it is safe on an inactive object.
         DeckManager deckManager = DeckManager.Instance != null
             ? DeckManager.Instance
-            : FindFirstObjectByType<DeckManager>(FindObjectsInactive.Include);
+            : FindAnyObjectByType<DeckManager>(FindObjectsInactive.Include);
         if (deckManager != null && (deckManager.cards == null || deckManager.cards.Count == 0))
         {
             deckManager.InitializeFromResources();
@@ -1346,7 +1346,7 @@ public class NationSpawner : MonoBehaviour
     
     private Vector2Int? InstantiateLeaderAndCharacters(LeaderBiomeConfig leaderBiomeConfig, List<Vector2Int> placedPositions, bool isPlayable, Vector2Int? preferredPosition, float minSeparation = 0f, float minDistanceFromPreferred = 0f)
     {
-        /*if (FindObjectsByType<Leader>(FindObjectsSortMode.None).Length >= Game.MAX_LEADERS)
+        /*if (FindObjectsByType<Leader>().Length >= Game.MAX_LEADERS)
         {
             Debug.LogWarning("Max leaders reached. Skipping leader instantiation.");
             return;

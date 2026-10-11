@@ -111,7 +111,7 @@ public class TransferArtifact : CharacterAction
 
             if (!isAI)
             {
-                var layout = FindFirstObjectByType<Layout>();
+                var layout = FindAnyObjectByType<Layout>();
                 layout.GetSelectedCharacterIcon().Refresh(c);
                 layout.GetSelectedCharacterIcon().Refresh(character);
             }

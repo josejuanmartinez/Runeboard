@@ -95,7 +95,7 @@ public static class RuneboardGamePolish
         // The old scaled Bottom canvas pushed right-anchored controls beyond the viewport.
         R(root, "Bottom").localScale = Vector3.one;
         var bottom = root.Find("Bottom");
-        var game = Object.FindFirstObjectByType<Game>(FindObjectsInactive.Include);
+        var game = Object.FindAnyObjectByType<Game>(FindObjectsInactive.Include);
         Button end = game.nextTurnButton;
         Box((RectTransform)end.transform, new Vector2(1, 0), new Vector2(-190, 68), new Vector2(316, 80));
         end.gameObject.SetActive(true); end.enabled = true; ButtonStyle(end, true);

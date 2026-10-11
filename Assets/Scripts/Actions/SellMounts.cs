@@ -14,13 +14,13 @@ public class SellMounts : EmmissaryPCAction
             if (originalEffect != null && !originalEffect(c)) return false;
             Leader playable = c.GetOwner();
             if (playable == null) return false;
-            StoresManager stores = FindFirstObjectByType<StoresManager>();
+            StoresManager stores = FindAnyObjectByType<StoresManager>();
             if (stores == null) return false;
             int quantity = 5;
             int payout = stores.GetSellPrice(ProducesEnum.mounts, quantity);
             playable.AddGold(payout);
             stores.AdjustStock(ProducesEnum.mounts, quantity);
-            if(playable == Game.Instance.player) FindFirstObjectByType<StoresManager>().RefreshStores();
+            if(playable == Game.Instance.player) FindAnyObjectByType<StoresManager>().RefreshStores();
             return true; 
         };
         condition = (c) => {

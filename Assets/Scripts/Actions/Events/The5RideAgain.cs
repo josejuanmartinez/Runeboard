@@ -58,7 +58,7 @@ public class The5RideAgain : EventAction
 
             if (orthancHex == null) return false;
 
-            List<Character> allCharacters = UnityEngine.Object.FindObjectsByType<Character>(FindObjectsSortMode.None)
+            List<Character> allCharacters = UnityEngine.Object.FindObjectsByType<Character>()
                 .Where(ch => ch != null && !ch.killed)
                 .ToList();
 
@@ -92,7 +92,7 @@ public class The5RideAgain : EventAction
             bool hasOrthanc = board.hexes.Values.Any(h => h != null && h.GetPC() != null && h.GetPC().pcName == "Orthanc");
             if (!hasOrthanc) return false;
 
-            return UnityEngine.Object.FindObjectsByType<Character>(FindObjectsSortMode.None)
+            return UnityEngine.Object.FindObjectsByType<Character>()
                 .Any(ch => ch != null && !ch.killed && IstariNames.Contains(ch.characterName) && ch.hex != null);
         };
 

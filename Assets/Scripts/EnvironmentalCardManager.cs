@@ -50,8 +50,8 @@ public class EnvironmentalCardManager : MonoBehaviour
     {
         if (subscribedGame == null) SubscribeToGame();
         ActiveCard = card;
-        Layout layout = FindFirstObjectByType<Layout>();
-        Debug.Log($"[EnvCardToken] SetActiveCard('{card?.name}') — layout found={layout != null}, instanceId={(layout != null ? layout.GetInstanceID().ToString() : "n/a")}");
+        Layout layout = FindAnyObjectByType<Layout>();
+        Debug.Log($"[EnvCardToken] SetActiveCard('{card?.name}') — layout found={layout != null}, instanceId={(layout != null ? layout.GetEntityId().ToString() : "n/a")}");
         layout?.SetEnvironmentalCard(card);
     }
 
@@ -137,7 +137,7 @@ public class EnvironmentalCardManager : MonoBehaviour
     {
         ActiveCard = null;
         ResetModifiers();
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         layout?.SetEnvironmentalCard(null);
     }
 

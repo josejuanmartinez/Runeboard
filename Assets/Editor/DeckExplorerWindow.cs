@@ -2901,7 +2901,7 @@ public class DeckExplorerWindow : EditorWindow
         if (card == null) return string.Empty;
 
         List<string> errors = new();
-        Board board = UnityEngine.Object.FindFirstObjectByType<Board>();
+        Board board = UnityEngine.Object.FindAnyObjectByType<Board>();
         Character selected = board != null ? board.selectedCharacter : null;
         Leader resourceOwner = GetHumanPlayerLeader();
 
@@ -2974,7 +2974,7 @@ public class DeckExplorerWindow : EditorWindow
 
         if (!string.IsNullOrWhiteSpace(card.GetActionRef()) && selected != null)
         {
-            ActionsManager actionsManager = UnityEngine.Object.FindFirstObjectByType<ActionsManager>();
+            ActionsManager actionsManager = UnityEngine.Object.FindAnyObjectByType<ActionsManager>();
             if (actionsManager != null)
             {
                 CharacterAction action = actionsManager.ResolveActionByRef(card.GetActionRef(), card);
@@ -3074,7 +3074,7 @@ public class DeckExplorerWindow : EditorWindow
 
     private static Leader GetHumanPlayerLeader()
     {
-        Game game = UnityEngine.Object.FindFirstObjectByType<Game>();
+        Game game = UnityEngine.Object.FindAnyObjectByType<Game>();
         return game != null ? game.player : null;
     }
 
@@ -3264,7 +3264,7 @@ public class DeckExplorerWindow : EditorWindow
 
     private static Colors GetColorsForEditor()
     {
-        Colors colors = UnityEngine.Object.FindFirstObjectByType<Colors>();
+        Colors colors = UnityEngine.Object.FindAnyObjectByType<Colors>();
         if (colors != null)
         {
             return colors;

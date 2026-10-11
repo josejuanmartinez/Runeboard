@@ -18,8 +18,8 @@ public class KeyManager : MonoBehaviour
     {
         if(!board) board = Board.Instance;
         if(!game) game = Game.Instance;
-        if(!pathRenderer) pathRenderer = FindFirstObjectByType<HexPathRenderer>();
-        if(!boardNavigator) boardNavigator = FindFirstObjectByType<BoardNavigator>();
+        if(!pathRenderer) pathRenderer = FindAnyObjectByType<HexPathRenderer>();
+        if(!boardNavigator) boardNavigator = FindAnyObjectByType<BoardNavigator>();
         if(!actionsManager) actionsManager = ActionsManager.Instance;
         BuildActionHotkeys();
     }
@@ -146,7 +146,7 @@ public class KeyManager : MonoBehaviour
 
     private void ResetAllMovement()
     {
-        Character[] characters = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        Character[] characters = FindObjectsByType<Character>();
         foreach (Character character in characters)
         {
             if (character == null || character.killed) continue;
@@ -173,7 +173,7 @@ public class KeyManager : MonoBehaviour
         player.mithrilAmount += amount;
         player.goldAmount += amount;
 
-        var storesManager = FindFirstObjectByType<StoresManager>();
+        var storesManager = FindAnyObjectByType<StoresManager>();
         if (storesManager != null) storesManager.RefreshStores();
 
         Debug.Log($"CTRL+Shift+S -> Added {amount} to all player stores");
@@ -183,7 +183,7 @@ public class KeyManager : MonoBehaviour
     {
         List<string> entries = new();
 
-        foreach (var c in FindObjectsByType<Character>(FindObjectsSortMode.None))
+        foreach (var c in FindObjectsByType<Character>())
         {
             if (c == null || c.objects == null || c.objects.Count == 0) continue;
             string ownerName = string.IsNullOrWhiteSpace(c.characterName) ? c.name : c.characterName;
@@ -194,7 +194,7 @@ public class KeyManager : MonoBehaviour
             }
         }
 
-        foreach (var hex in FindObjectsByType<Hex>(FindObjectsSortMode.None))
+        foreach (var hex in FindObjectsByType<Hex>())
         {
             if (hex == null || hex.hiddenObjects == null || hex.hiddenObjects.Count == 0) continue;
             string hexLabel = hex.GetHoverV2();

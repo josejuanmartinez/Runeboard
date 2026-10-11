@@ -317,7 +317,7 @@ public static class SaveSystem
 
     private static Character Recruit(CharacterSave cs, Leader owner, Hex hex)
     {
-        CharacterInstantiator instantiator = UnityEngine.Object.FindFirstObjectByType<CharacterInstantiator>();
+        CharacterInstantiator instantiator = UnityEngine.Object.FindAnyObjectByType<CharacterInstantiator>();
         CardData card = DeckManager.Instance?.FindAnyCardByName(cs.name);
         if (instantiator == null) return null;
         BiomeConfig config = new()

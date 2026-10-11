@@ -194,7 +194,7 @@ public class FindArtifact : MageAction
     private static ArtifactTrial BuildRandomTrial()
     {
         List<CardData> cards = GetCardPool();
-        Illustrations illustrations = UnityEngine.Object.FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = UnityEngine.Object.FindAnyObjectByType<Illustrations>();
         ArtifactTrialType[] types = Enum.GetValues(typeof(ArtifactTrialType))
             .Cast<ArtifactTrialType>()
             .OrderBy(_ => UnityEngine.Random.value)

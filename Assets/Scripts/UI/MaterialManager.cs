@@ -45,7 +45,7 @@ public class MaterialManager : SearcherByName
         useSkinMaterials = activeMaterial != null;
         hasAppliedSkin = true;
 
-        Hex[] hexes = FindObjectsByType<Hex>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        Hex[] hexes = FindObjectsByType<Hex>(FindObjectsInactive.Include);
         ApplyToAllRenderers(hexes);
         RestoreHexTerrainMaterials(hexes);
     }
@@ -67,7 +67,7 @@ public class MaterialManager : SearcherByName
 
     private void ApplyToAllRenderers(Hex[] hexes)
     {
-        foreach (Image image in FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (Image image in FindObjectsByType<Image>(FindObjectsInactive.Include))
             ApplyToImage(image);
 
         // HexSeamlessTerrain exclusively owns each hex's terrain SpriteRenderer (runtime-generated
@@ -80,7 +80,7 @@ public class MaterialManager : SearcherByName
         foreach (Hex hex in hexes)
             if (hex.terrainTexture != null) hexTerrainRenderers.Add(hex.terrainTexture);
 
-        foreach (SpriteRenderer spriteRenderer in FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (SpriteRenderer spriteRenderer in FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include))
         {
             if (hexTerrainRenderers.Contains(spriteRenderer)) continue;
             ApplyToSprite(spriteRenderer);

@@ -129,7 +129,7 @@ public class PopupManager : MonoBehaviour
             onClose = queue[currentIndex].onClose;
         }
 
-        FindFirstObjectByType<Sounds>().StopAllSounds();
+        FindAnyObjectByType<Sounds>().StopAllSounds();
         Music.Instance?.StopEventMusic();
         SetContainerVisible(false);
         queue.Clear();

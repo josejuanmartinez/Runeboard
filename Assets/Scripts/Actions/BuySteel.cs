@@ -18,7 +18,7 @@ public class BuySteel : EmmissaryPCAction
             if (originalEffect != null && !originalEffect(c)) return false;
             if (c.GetOwner() is not PlayableLeader) return false;
             Leader playable = c.GetOwner();
-            StoresManager stores = FindFirstObjectByType<StoresManager>();
+            StoresManager stores = FindAnyObjectByType<StoresManager>();
             if (stores == null) return false;
             int quantity = 5;
             int totalCost = stores.GetBuyPrice(ProducesEnum.steel, quantity);
@@ -28,13 +28,13 @@ public class BuySteel : EmmissaryPCAction
             playable.RemoveGold(totalCost, false);
             playable.AddSteel(quantity);
             stores.AdjustStock(ProducesEnum.steel, -quantity);
-            if (playable == Game.Instance.player) FindFirstObjectByType<StoresManager>().RefreshStores();
+            if (playable == Game.Instance.player) FindAnyObjectByType<StoresManager>().RefreshStores();
             return true;
         };
         condition = (c) =>
         {
             if (c == null) return false;
-            StoresManager stores = FindFirstObjectByType<StoresManager>();
+            StoresManager stores = FindAnyObjectByType<StoresManager>();
             if (stores == null) return false;
             Leader playable = c.GetOwner();
             int quantity = 5;

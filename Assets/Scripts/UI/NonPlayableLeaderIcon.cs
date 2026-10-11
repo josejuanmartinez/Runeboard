@@ -30,7 +30,7 @@ public class NonPlayableLeaderIcon : MonoBehaviour, IPointerEnterHandler, IPoint
 
     void Awake()
     {
-        illustrations = FindFirstObjectByType<Illustrations>();
+        illustrations = FindAnyObjectByType<Illustrations>();
     }
 
     public void Initialize(NonPlayableLeader leader)
@@ -49,14 +49,14 @@ public class NonPlayableLeaderIcon : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         if (isUnrevealed || PopupManager.IsShowing || BoardNavigator.IsNavigationInputLocked()) return;
         Sounds.Instance?.PlayUiHover();
-        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>(FindObjectsSortMode.None).First(x => x.alignment == alignment);
+        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>().First(x => x.alignment == alignment);
         if (leader) leader.HighlighNonPlayableLeader(nonPlayableLeader.characterName, text);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         Sounds.Instance?.PlayUiExit();
-        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>(FindObjectsSortMode.None).First(x => x.alignment == alignment);
+        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>().First(x => x.alignment == alignment);
         if (leader) leader.Restore(nonPlayableLeader.characterName);
     }
 
@@ -117,7 +117,7 @@ public class NonPlayableLeaderIcon : MonoBehaviour, IPointerEnterHandler, IPoint
             sb.Append("Only a leader of the same alignment can recruit this nation. You can still attack to weaken their forces.");
         }
         string popupTitle = $"{nonPlayableLeader.characterName} reveals themselves!";
-        Illustrations popupIllustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations popupIllustrations = FindAnyObjectByType<Illustrations>();
         Sprite playerPortrait = popupIllustrations != null ? popupIllustrations.GetIllustrationByName(player) : null;
         Sprite nationPortrait = popupIllustrations != null ? popupIllustrations.GetIllustrationByName(nonPlayableLeader) : null;
         EventIconsManager eventIcons = EventIconsManager.FindManager();

@@ -48,7 +48,7 @@ public class TutorialInstructionsManager : MonoBehaviour
     {
         if (instance != null) return;
 
-        instance = FindFirstObjectByType<TutorialInstructionsManager>();
+        instance = FindAnyObjectByType<TutorialInstructionsManager>();
         if (instance != null) return;
 
         GameObject managerObject = new(nameof(TutorialInstructionsManager));
@@ -99,8 +99,7 @@ public class TutorialInstructionsManager : MonoBehaviour
     {
         instructions.Clear();
         instructions.AddRange(FindObjectsByType<TutorialInstructionPopup>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None));
+            FindObjectsInactive.Include));
 
         instructions.RemoveAll(instruction => instruction == null ||
             instruction.gameObject.scene != SceneManager.GetActiveScene());
@@ -167,7 +166,7 @@ public class TutorialInstructionsManager : MonoBehaviour
 
     public void ResetProgress()
     {
-        Debug.Log($"[DIAG] ResetProgress ENTERED on instance id={GetInstanceID()}, gameObject={name}");
+        Debug.Log($"[DIAG] ResetProgress ENTERED on instance id={GetEntityId()}, gameObject={name}");
         closedInstructionIds.Clear();
         Save();
         RefreshInstructions();
@@ -178,7 +177,7 @@ public class TutorialInstructionsManager : MonoBehaviour
 
     public void ResetFlagsAndShowAll()
     {
-        Debug.Log($"[DIAG] ResetFlagsAndShowAll ENTERED on instance id={GetInstanceID()}, gameObject={name}");
+        Debug.Log($"[DIAG] ResetFlagsAndShowAll ENTERED on instance id={GetEntityId()}, gameObject={name}");
         ResetProgress();
     }
 

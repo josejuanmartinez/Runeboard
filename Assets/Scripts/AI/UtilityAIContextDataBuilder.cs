@@ -14,7 +14,7 @@ public static class UtilityAIContextDataBuilder
         }
 
         Board board = UtilityAIContext.GetSharedBoard();
-        StoresManager stores = Object.FindFirstObjectByType<StoresManager>();
+        StoresManager stores = Object.FindAnyObjectByType<StoresManager>();
         var data = new UtilityAIContext.PrecomputedData
         {
             LiquidWealth = UtilityAIContext.CalculateLiquidWealth(leader, stores),
@@ -88,7 +88,7 @@ public static class UtilityAIContextDataBuilder
         // exploration, while a handful of remote unseen tiles only occasionally pull someone
         // away from normal build behavior. This avoids every character dog-piling the same fog.
         float explorationChance = landHexCount > 0 ? (float)data.UnrevealedLandHexCount / landHexCount : 0f;
-        uint rollSeed = unchecked((uint)(((Game.Instance?.turn ?? 0) * 397) ^ character.GetInstanceID()));
+        uint rollSeed = unchecked((uint)(((Game.Instance?.turn ?? 0) * 397) ^ character.GetEntityId().GetHashCode()));
         float roll = (rollSeed % 10000u) / 10000f;
         if (roll > explorationChance) data.NearestUnrevealedLandHex = null;
     }

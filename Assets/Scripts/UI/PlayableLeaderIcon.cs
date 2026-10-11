@@ -31,7 +31,7 @@ public class PlayableLeaderIcon : MonoBehaviour
         NonPlayableLeaderIcons icons = ResolveNonPlayableLeaderIcons();
         if (icons != null) icons.SetPlayableLeader(leader);
         alignment = leader.alignment;
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         leaderSprite = illustrations != null ? illustrations.GetCharacterArtByName(leader.characterName) : null;
         text = leader.GetHoverText(true, false, false, false, false, false);
         SetLeaderVisuals(leaderSprite);
@@ -100,7 +100,7 @@ public class PlayableLeaderIcon : MonoBehaviour
 
     public void HighlighNonPlayableLeader(string leaderName, string leaderText)
     {
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         highlightedSprite = illustrations != null ? illustrations.GetCharacterArtByName(leaderName) : null;
         SetLeaderVisuals(highlightedSprite);
         textWidget.text = leaderText;
@@ -108,7 +108,7 @@ public class PlayableLeaderIcon : MonoBehaviour
 
     public void Restore(string leaderName)
     {
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         Sprite expectedSprite = illustrations != null ? illustrations.GetCharacterArtByName(leaderName) : null;
         bool restoreFromImage = image != null && image.sprite == expectedSprite;
         if (!restoreFromImage) return;
@@ -134,7 +134,7 @@ public class PlayableLeaderIcon : MonoBehaviour
     public void RefreshVictoryPoints(int points)
     {
         if (victoryPoints != null) victoryPoints.text = DisplayScore(points).ToString();
-        PlayableLeaderIcons icons = FindFirstObjectByType<PlayableLeaderIcons>();
+        PlayableLeaderIcons icons = FindAnyObjectByType<PlayableLeaderIcons>();
         if (icons != null) icons.UpdateVictoryPointColors();
     }
 
@@ -142,7 +142,7 @@ public class PlayableLeaderIcon : MonoBehaviour
     public void EnsurePortrait()
     {
         if (image == null || image.sprite != null || playableLeader == null) return;
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         if (illustrations == null) return;
         Sprite sprite = illustrations.GetCharacterArtByName(playableLeader.characterName);
         string baseName = playableLeader.GetBiome()?.characterName;

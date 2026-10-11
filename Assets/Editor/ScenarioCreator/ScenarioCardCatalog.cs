@@ -475,7 +475,7 @@ namespace RetroLOTR.Scenarios.EditorTools
                 HexTextureMapping mapping = prefab.GetComponentInChildren<HexTextureMapping>(true);
                 if (mapping != null) return mapping;
             }
-            return UnityEngine.Object.FindFirstObjectByType<HexTextureMapping>(FindObjectsInactive.Include);
+            return UnityEngine.Object.FindAnyObjectByType<HexTextureMapping>(FindObjectsInactive.Include);
         }
     }
 }

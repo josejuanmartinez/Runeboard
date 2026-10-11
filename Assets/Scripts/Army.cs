@@ -759,7 +759,7 @@ public class Army
           // First, handle all enemy armies in the hex using a snapshot to avoid collection modification issues
           List<Army> defenderSnapshot = new List<Army>(targetHex.armies);
           Debug.Log($"[AbilityCheck] targetHex.armies at {targetHex.GetBattleLocationLabel()}: " + string.Join(" | ", defenderSnapshot.Select(a =>
-              $"Army#{System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(a)} commander={(a.commander != null ? $"{a.commander.characterName}#{a.commander.GetInstanceID()} (owner={a.commander.GetOwner()?.characterName ?? "null"})" : "null")} killed={a.killed}")));
+              $"Army#{System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(a)} commander={(a.commander != null ? $"{a.commander.characterName}#{a.commander.GetEntityId()} (owner={a.commander.GetOwner()?.characterName ?? "null"})" : "null")} killed={a.killed}")));
           foreach (Army defenderArmy in defenderSnapshot)
           {
             if(defenderArmy == null || defenderArmy.commander == null || defenderArmy.killed || defenderArmy.commander.killed || defenderArmy.killed) continue;
@@ -1448,7 +1448,7 @@ public class Army
             attackerDamage,
             attackerLossesText,
             targetHex.GetPC().fortSize > FortSizeEnum.NONE);
-        Illustrations pcIllustrations = GameObject.FindFirstObjectByType<Illustrations>();
+        Illustrations pcIllustrations = GameObject.FindAnyObjectByType<Illustrations>();
         bool shouldShowPopup = playerInvolved || PlayerCanSeeHex(targetHex);
         List<(string message, Color color)> hudMessages = new();
         if (attackerLosses.Any) hudMessages.Add(($"{attackerName} losses: {attackerLossesText}.", Color.red));

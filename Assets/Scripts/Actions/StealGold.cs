@@ -31,7 +31,7 @@ public class StealGold : AgentPCAction
             if (actorOwner == Game.Instance.player)
             {
                 MessageDisplay.ShowMessage($"+{toSteal} <sprite name=\"gold\"> stolen!", Color.green);
-                FindFirstObjectByType<StoresManager>().RefreshStores();
+                FindAnyObjectByType<StoresManager>().RefreshStores();
             }
             return true;
         };

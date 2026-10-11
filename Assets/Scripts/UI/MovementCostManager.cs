@@ -67,7 +67,7 @@ public class MovementCostManager : MonoBehaviour
         int maxMovement = character != null ? character.GetMaxMovement() : 0;
         float ratio = maxMovement > 0 ? Mathf.Clamp01(movementLeft / (float)maxMovement) : 0f;
 
-        if (sharedColors == null) sharedColors = FindFirstObjectByType<Colors>();
+        if (sharedColors == null) sharedColors = FindAnyObjectByType<Colors>();
         Color low = sharedColors != null ? sharedColors.movementStart : new Color(0.72f, 0.16f, 0.2f, 1f);
         Color high = sharedColors != null ? sharedColors.movementEnd : new Color(0.08f, 0.58f, 0.52f, 1f);
         return Color.Lerp(low, high, ratio);

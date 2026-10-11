@@ -52,7 +52,7 @@ public static class RuneboardUiRepairs
         Loading(Root("StartupLoadingScreen").GetComponent<StartupLoadingScreen>());
         Video(Root("VideoPopupManager").GetComponent<VideoPopupManager>());
         Progress(R(Root("LeaderSelection"),"Wrapper/Progress"));
-        foreach(var h in Object.FindObjectsByType<Hover>(FindObjectsInactive.Include,FindObjectsSortMode.None))StyleHover(h);
+        foreach(var h in Object.FindObjectsByType<Hover>(FindObjectsInactive.Include))StyleHover(h);
         foreach(var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
             foreach(var c in root.GetComponentsInChildren<Component>(true))if(c!=null){EditorUtility.SetDirty(c);if(PrefabUtility.IsPartOfPrefabInstance(c))PrefabUtility.RecordPrefabInstancePropertyModifications(c);if(c is Transform t){EditorUtility.SetDirty(t.gameObject);if(PrefabUtility.IsPartOfPrefabInstance(t.gameObject))PrefabUtility.RecordPrefabInstancePropertyModifications(t.gameObject);}}
         UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());

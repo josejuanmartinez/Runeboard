@@ -125,7 +125,7 @@ public class Board : MonoBehaviour
 
     private Layout GetLayout()
     {
-        if (cachedLayout == null) cachedLayout = FindFirstObjectByType<Layout>();
+        if (cachedLayout == null) cachedLayout = FindAnyObjectByType<Layout>();
         return cachedLayout;
     }
 
@@ -138,7 +138,7 @@ public class Board : MonoBehaviour
         }
         startButton.interactable = false;
 
-        colors = FindFirstObjectByType<Colors>();
+        colors = FindAnyObjectByType<Colors>();
         if (colors == null)
         {
             Debug.LogError("Colors component not found!");
@@ -162,7 +162,7 @@ public class Board : MonoBehaviour
         nationSpawner.Initialize(this);
 
         if (regionLabelManager == null)
-            regionLabelManager = FindFirstObjectByType<RegionLabelManager>();
+            regionLabelManager = FindAnyObjectByType<RegionLabelManager>();
 
         // Subscribe to generation progress events
         boardGenerator.OnGenerationProgress += UpdateGenerationProgress;
@@ -171,7 +171,7 @@ public class Board : MonoBehaviour
     }
 
     // Board is instantiated once at game start and lives for the whole session. Every action
-    // class's condition/effect closures used to resolve it via FindFirstObjectByType<Board>()
+    // class's condition/effect closures used to resolve it via FindAnyObjectByType<Board>()
     // individually — a scene-wide type search — and with ~150 cards in the full deck scored
     // per pick, per character, per AI turn, that was thousands of scene-wide lookups repeated
     // every single AI turn (the same anti-pattern documented as a prior board-load freeze
@@ -238,7 +238,7 @@ public class Board : MonoBehaviour
     {
         yield return null;
         yield return null;
-        IntroVideoManager intro = FindFirstObjectByType<IntroVideoManager>();
+        IntroVideoManager intro = FindAnyObjectByType<IntroVideoManager>();
         if (intro == null || !intro.isActiveAndEnabled)
         {
             boardGenerator.SetVideoPlaying(false);
@@ -691,7 +691,7 @@ public class Board : MonoBehaviour
 
     private void HideSelectionUi()
     {
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         GetActionsManager()?.Hide();
         layout?.GetSelectedCharacterIcon()?.Hide();
     }
@@ -708,7 +708,7 @@ public class Board : MonoBehaviour
         if (character.moved >= character.GetMaxMovement()) return;
         if (character.hex != null && targetHexCoordinates == character.hex.v2)
         {
-            FindFirstObjectByType<HexPathRenderer>()?.HidePath();
+            FindAnyObjectByType<HexPathRenderer>()?.HidePath();
             return;
         }
 
@@ -718,7 +718,7 @@ public class Board : MonoBehaviour
         SituationCardsUI.Instance?.DismissActiveBloomFor(character);
 
         moving = true;
-        HexPathRenderer pathRenderer = FindFirstObjectByType<HexPathRenderer>();
+        HexPathRenderer pathRenderer = FindAnyObjectByType<HexPathRenderer>();
         List<Vector2Int> path = pathRenderer.FindPath(character.hex.v2, targetHexCoordinates, character);
 
         StartCoroutine(MoveCoroutine(character, path));
@@ -1067,7 +1067,7 @@ public class Board : MonoBehaviour
 
     IEnumerator MoveCoroutine(Character character, List<Vector2Int> path)
     {
-        FindFirstObjectByType<HexPathRenderer>().HidePath();
+        FindAnyObjectByType<HexPathRenderer>().HidePath();
         SelectedCharacterIcon selected;
         ActionsManager actionsManager;
         Hex currentHex = character.hex; // Store initial hex

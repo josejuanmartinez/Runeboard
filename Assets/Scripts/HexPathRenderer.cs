@@ -443,7 +443,7 @@ public class HexPathRenderer : MonoBehaviour
 
     public void HidePath()
     {
-        FindObjectsByType<MovementCostManager>(FindObjectsSortMode.None).ToList().ForEach((x) => x.Hide());
+        FindObjectsByType<MovementCostManager>().ToList().ForEach((x) => x.Hide());
         lineRenderer.SetPositions(new Vector3[] { });
         lineRenderer.positionCount = 0;
     }

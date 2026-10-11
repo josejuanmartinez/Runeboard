@@ -104,7 +104,7 @@ public sealed class CardDataProvider : MonoBehaviour
         {
             DeckManager manager = DeckManager.Instance != null
                 ? DeckManager.Instance
-                : FindFirstObjectByType<DeckManager>();
+                : FindAnyObjectByType<DeckManager>();
             CardData runtimeCard = manager?.FindAnyCardByName(requestedCardName);
             if (runtimeCard != null) return runtimeCard;
         }

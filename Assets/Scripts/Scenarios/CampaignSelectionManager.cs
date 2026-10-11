@@ -103,7 +103,7 @@ namespace RetroLOTR.Scenarios
         {
             if (string.IsNullOrWhiteSpace(cardName)) yield break;
 
-            Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+            Illustrations illustrations = FindAnyObjectByType<Illustrations>();
             float deadline = Time.unscaledTime + 15f;
             while (illustrations != null && !illustrations.IsLoaded && Time.unscaledTime < deadline)
                 yield return null;
@@ -121,10 +121,10 @@ namespace RetroLOTR.Scenarios
 
             // The campaign selection screen runs before the game HUD is necessarily active —
             // DeckManager may not have Awoken yet (Instance unset), and a default
-            // FindFirstObjectByType skips inactive objects, so search inactive ones too.
+            // FindAnyObjectByType skips inactive objects, so search inactive ones too.
             DeckManager deckManager = DeckManager.Instance != null
                 ? DeckManager.Instance
-                : FindFirstObjectByType<DeckManager>(FindObjectsInactive.Include);
+                : FindAnyObjectByType<DeckManager>(FindObjectsInactive.Include);
             if (deckManager != null && (deckManager.cards == null || deckManager.cards.Count == 0))
             {
                 deckManager.InitializeFromResources();
@@ -141,7 +141,7 @@ namespace RetroLOTR.Scenarios
             Image artwork = button.transform.Find("Polish Artwork")?.GetComponent<Image>();
             if (artwork != null)
             {
-                Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+                Illustrations illustrations = FindAnyObjectByType<Illustrations>();
                 Sprite sprite = null;
                 if (illustrations != null)
                 {

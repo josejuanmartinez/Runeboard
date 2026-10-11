@@ -172,7 +172,7 @@ public class Character : MonoBehaviour
         temporaryActionDifficultyReductionHex = null;
         killed = false;
         awaken = true;
-        colors = FindFirstObjectByType<Colors>();
+        colors = FindAnyObjectByType<Colors>();
     }
 
     private void InitializeStatusEffects()
@@ -1263,7 +1263,7 @@ public class Character : MonoBehaviour
     {        
         Game game = FindAnyObjectByType<Game>();
         Board board = FindAnyObjectByType<Board>();
-        if(game.IsPlayerCurrentlyPlaying() && board.selectedCharacter == this) FindFirstObjectByType<SelectedCharacterIcon>().Refresh(this);
+        if(game.IsPlayerCurrentlyPlaying() && board.selectedCharacter == this) FindAnyObjectByType<SelectedCharacterIcon>().Refresh(this);
     }
     public void RefreshActionsIfSelected()
     {        
@@ -1940,7 +1940,7 @@ public class Character : MonoBehaviour
 
     private Leader FindSauronLeader()
     {
-        Leader[] leaders = FindObjectsByType<Leader>(FindObjectsSortMode.None);
+        Leader[] leaders = FindObjectsByType<Leader>();
         for (int i = 0; i < leaders.Length; i++)
         {
             Leader leader = leaders[i];
@@ -1993,7 +1993,7 @@ public class Character : MonoBehaviour
 
     public void StoreReachableHexes()
     {
-        reachableHexes = FindFirstObjectByType<HexPathRenderer>().FindAllHexesInRange(this);
+        reachableHexes = FindAnyObjectByType<HexPathRenderer>().FindAllHexesInRange(this);
     }
 
     public void StoreRelevantHexes()

@@ -43,7 +43,7 @@ public class Caravans : CharacterAction
             if (c == null || c.GetOwner() == null) return false;
 
             Leader owner = c.GetOwner();
-            StoresManager stores = FindFirstObjectByType<StoresManager>();
+            StoresManager stores = FindAnyObjectByType<StoresManager>();
             if (stores == null) return false;
 
             ProducesEnum[] sellables = {

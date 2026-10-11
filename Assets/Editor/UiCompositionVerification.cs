@@ -72,7 +72,7 @@ public static class UiCompositionVerification
                 label.GetComponent<Renderer>().sortingOrder = 30;
             }
         });
-        var original = Object.FindFirstObjectByType<ConfirmationDialog>(FindObjectsInactive.Include);
+        var original = Object.FindAnyObjectByType<ConfirmationDialog>(FindObjectsInactive.Include);
         if (original == null) throw new Exception("Open the InGame scene to verify its confirmation dialog.");
         foreach (bool showImage in new[] { true, false })
         {

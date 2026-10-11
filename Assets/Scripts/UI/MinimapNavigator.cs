@@ -14,10 +14,10 @@ public class MinimapNavigator : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public static void Attach()
     {
-        MinimapManager manager = FindFirstObjectByType<MinimapManager>();
+        MinimapManager manager = FindAnyObjectByType<MinimapManager>();
         Camera cam = manager != null ? manager.minimapCamera : null;
         if (cam == null || cam.targetTexture == null) return;
-        foreach (RawImage raw in FindObjectsByType<RawImage>(FindObjectsSortMode.None))
+        foreach (RawImage raw in FindObjectsByType<RawImage>())
         {
             if (raw.texture != cam.targetTexture || raw.GetComponent<MinimapNavigator>() != null) continue;
             var nav = raw.gameObject.AddComponent<MinimapNavigator>();

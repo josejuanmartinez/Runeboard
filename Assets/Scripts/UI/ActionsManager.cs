@@ -18,7 +18,7 @@ public class ActionsManager : MonoBehaviour
     private Game cachedGame;
 
     // Same rationale as Board.Instance/Game.Instance: many card actions' condition/effect
-    // closures resolved this via FindFirstObjectByType<ActionsManager>() individually — a
+    // closures resolved this via FindAnyObjectByType<ActionsManager>() individually — a
     // scene-wide search repeated for every card scored, every pick, every character, every AI
     // turn. Cached here instead.
     public static ActionsManager Instance { get; private set; }
@@ -125,7 +125,7 @@ public class ActionsManager : MonoBehaviour
 
     private Game GetGame()
     {
-        if (cachedGame == null) cachedGame = FindFirstObjectByType<Game>();
+        if (cachedGame == null) cachedGame = FindAnyObjectByType<Game>();
         return cachedGame;
     }
 

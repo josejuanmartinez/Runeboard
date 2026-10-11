@@ -96,7 +96,7 @@ public class LeaderSelector : SearcherByName
         // selection screen is up there are no more leaders left to discover — stop scanning.
         if (!selectionScreenShown)
         {
-            List<PlayableLeader> playableLeaders = FindObjectsByType<PlayableLeader>(FindObjectsSortMode.None).ToList();
+            List<PlayableLeader> playableLeaders = FindObjectsByType<PlayableLeader>().ToList();
             if (loadedLeaders.Count < playableLeaders.Count)
             {
                 for(int i=0; i<playableLeaders.Count; i++)
@@ -477,7 +477,7 @@ public class LeaderSelector : SearcherByName
             return displayName;
         }
 
-        Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = FindAnyObjectByType<Illustrations>();
         string[] candidates =
         {
             $"{baseLeaderName} {displayName}",
@@ -505,7 +505,7 @@ public class LeaderSelector : SearcherByName
 
     void AddSelectionEntry(PlayableLeader playableLeader, AlignmentEnum alignment, string displayName, string baseDescription, string variantDescription, string deckIdentity, string subdeckId, string variantName = null, string assetName = null, string variantCharacterName = null)
     {
-        Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = FindAnyObjectByType<Illustrations>();
         Sprite carouselSprite = illustrations != null ? illustrations.GetIllustrationByName(assetName) ?? illustrations.GetIllustrationByName(playableLeader.characterName) : null;
 
         LeaderSelectionEntry selectionEntry = new()
@@ -743,7 +743,7 @@ public class LeaderSelector : SearcherByName
             return;
         }
 
-        Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = FindAnyObjectByType<Illustrations>();
         Sprite bannerSprite = ResolveBannerSprite(player, illustrations);
         bannerImage.sprite = bannerSprite;
         bannerImage.enabled = bannerSprite != null;

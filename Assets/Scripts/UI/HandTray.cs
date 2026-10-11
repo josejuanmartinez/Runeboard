@@ -135,7 +135,7 @@ public class HandTray : MonoBehaviour
     private bool EnsureBuilt()
     {
         if (root != null) return true;
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         Canvas canvas = layout != null ? layout.GetComponentInParent<Canvas>() : null;
         if (canvas == null) return false;
         canvasRoot = canvas.rootCanvas.transform as RectTransform;
@@ -175,7 +175,7 @@ public class HandTray : MonoBehaviour
         float left = r.width * 0.33f, right = r.width * 0.855f;
         float dockRight = HudDirector.DockRightColumnLeft(canvasRoot);
         if (dockRight > 0f) right = dockRight - 12f;
-        RectTransform leftPanel = FindFirstObjectByType<SelectedCharacterIcon>()?.transform as RectTransform;
+        RectTransform leftPanel = FindAnyObjectByType<SelectedCharacterIcon>()?.transform as RectTransform;
         if (leftPanel != null && leftPanel.gameObject.activeInHierarchy) left = Mathf.Max(left * 0.8f, CanvasX(leftPanel, right: true) + 12f);
         float width = Mathf.Max(200f, right - left);
         root.localScale = new Vector3(K, K, 1f);

@@ -167,7 +167,7 @@ public class PlayableLeader : Leader
     {
         if (killed) return;
 
-        PlayableLeaderIcons leaderIcons = FindFirstObjectByType<PlayableLeaderIcons>();
+        PlayableLeaderIcons leaderIcons = FindAnyObjectByType<PlayableLeaderIcons>();
         leaderIcons?.AddDeadIcon(this);
 
         health = 0;
@@ -185,7 +185,7 @@ public class PlayableLeader : Leader
     }
     new public void NewTurn()
     {
-        PlayableLeaderIcons leaderIcons = FindFirstObjectByType<PlayableLeaderIcons>();
+        PlayableLeaderIcons leaderIcons = FindAnyObjectByType<PlayableLeaderIcons>();
         leaderIcons?.HighlightCurrentlyPlaying(this);
 
         base.NewTurn();

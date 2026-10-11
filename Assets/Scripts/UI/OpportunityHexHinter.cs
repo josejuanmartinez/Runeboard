@@ -44,7 +44,7 @@ public static class OpportunityHexHinter
         if (character.GetOwner() is not PlayableLeader leader) return;
 
         DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : DeckManager.Instance;
-        HexPathRenderer pathRenderer = Object.FindFirstObjectByType<HexPathRenderer>();
+        HexPathRenderer pathRenderer = Object.FindAnyObjectByType<HexPathRenderer>();
         if (deckManager == null || pathRenderer == null) return;
 
         var targets = new List<Vector2Int>();

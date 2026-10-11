@@ -164,7 +164,7 @@ public class SelectedCharacterIcon : MonoBehaviour
     private void UpdateBloomHint()
     {
         if (cards == null) return;
-        if (bloomWheel == null) bloomWheel = FindFirstObjectByType<CardBloomWheel>();
+        if (bloomWheel == null) bloomWheel = FindAnyObjectByType<CardBloomWheel>();
 
         // Only the icon instance the wheel actually watches gets the affordance — hover
         // preview clones of this component must never pulse or steal the cursor.
@@ -570,7 +570,7 @@ public class SelectedCharacterIcon : MonoBehaviour
             ? playableLeader.GetSelectedSubdeckId()
             : owner.GetBiome()?.subdeckId;
         if (string.IsNullOrWhiteSpace(subdeckId)) return null;
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         return illustrations != null ? illustrations.GetDeckArtByName(subdeckId, false) : null;
     }
 
@@ -604,19 +604,19 @@ public class SelectedCharacterIcon : MonoBehaviour
 
     private Sprite GetIllustrationByName(string name)
     {
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         return illustrations != null ? illustrations.GetIllustrationByName(name) : null;
     }
 
     private Sprite GetIllustrationByName(string name, bool logMissing)
     {
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         return illustrations != null ? illustrations.GetIllustrationByName(name, logMissing) : null;
     }
 
     // private VideoClip GetVideoByName(string name)
     // {
-    //     if (videos == null) videos = FindFirstObjectByType<Videos>();
+    //     if (videos == null) videos = FindAnyObjectByType<Videos>();
     //     return videos != null ? videos.GetVideoByName(name) : null;
     // }
 

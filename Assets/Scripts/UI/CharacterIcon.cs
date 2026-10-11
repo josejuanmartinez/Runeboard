@@ -16,7 +16,7 @@ public class CharacterIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public virtual void Initialize(Character character)
     {
         board = Board.Instance;
-        selectedCharacterIcon = FindFirstObjectByType<SelectedCharacterIcon>();
+        selectedCharacterIcon = FindAnyObjectByType<SelectedCharacterIcon>();
         SetCharacter(character);
     }
 
@@ -32,7 +32,7 @@ public class CharacterIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
         else
         {
-            if (selectedCharacterIcon == null) selectedCharacterIcon = FindFirstObjectByType<SelectedCharacterIcon>();
+            if (selectedCharacterIcon == null) selectedCharacterIcon = FindAnyObjectByType<SelectedCharacterIcon>();
             selectedCharacterIcon?.Refresh(character);
         }
     }
@@ -47,7 +47,7 @@ public class CharacterIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         if (selectedCharacterIcon == null)
         {
-            Layout layout = FindFirstObjectByType<Layout>();
+            Layout layout = FindAnyObjectByType<Layout>();
             selectedCharacterIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
         if (selectedCharacterIcon == null) return;
@@ -59,7 +59,7 @@ public class CharacterIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (selectedCharacterIcon == null)
         {
-            Layout layout = FindFirstObjectByType<Layout>();
+            Layout layout = FindAnyObjectByType<Layout>();
             selectedCharacterIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
         if (selectedCharacterIcon == null) return;
@@ -95,7 +95,7 @@ public class CharacterIcon : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 gameObject.name = character.characterName;
             }
 
-            var illustrations = FindFirstObjectByType<Illustrations>();
+            var illustrations = FindAnyObjectByType<Illustrations>();
             if (illustrations != null)
             {
                 string lookupName = !string.IsNullOrWhiteSpace(character.illustrationName) ? character.illustrationName : character.characterName;

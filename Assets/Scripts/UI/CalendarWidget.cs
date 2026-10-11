@@ -167,7 +167,7 @@ public class CalendarWidget : MonoBehaviour
 
     private void Refresh(MiddleEarthDate today)
     {
-        if (calendar == null) calendar = DateEventManager.Instance ?? FindFirstObjectByType<DateEventManager>();
+        if (calendar == null) calendar = DateEventManager.Instance ?? FindAnyObjectByType<DateEventManager>();
 
         if (headerText != null) headerText.text = $"{today.MonthName}  {today.Year} {MiddleEarthCalendar.EraSuffix}";
         if (footerText != null) footerText.text = "Today is highlighted in gold. Hover a marked day to read its story.";

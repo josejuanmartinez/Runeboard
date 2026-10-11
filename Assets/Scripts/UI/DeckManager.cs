@@ -818,11 +818,11 @@ public class CardData
     {
         if (string.IsNullOrWhiteSpace(region) || owner == null) return true;
 
-        Game game = UnityEngine.Object.FindFirstObjectByType<Game>();
+        Game game = UnityEngine.Object.FindAnyObjectByType<Game>();
         Board board = game?.board != null ? game.board : Board.Instance;
         if (board == null) return false;
 
-        DeckManager deckManager = UnityEngine.Object.FindFirstObjectByType<DeckManager>();
+        DeckManager deckManager = UnityEngine.Object.FindAnyObjectByType<DeckManager>();
         string normalizedTarget = NormalizeRegion(region);
 
         foreach (Hex hex in board.hexes.Values)
@@ -1037,7 +1037,7 @@ public class DeckManager : MonoBehaviour
 
         if (!loaded) InitializeFromResources();
 
-        Game game = FindFirstObjectByType<Game>();
+        Game game = FindAnyObjectByType<Game>();
         if (game != null && game.started)
         {
             InitializeHandsForCurrentGame();
@@ -1134,7 +1134,7 @@ public class DeckManager : MonoBehaviour
     {
         if (!loaded && !InitializeFromResources()) return false;
 
-        Game game = FindFirstObjectByType<Game>();
+        Game game = FindAnyObjectByType<Game>();
         if (game == null)
         {
             Debug.LogWarning("DeckManager: Game not found; cannot initialize player hands.");
@@ -1279,7 +1279,7 @@ public class DeckManager : MonoBehaviour
         int maxCards = GetHandSize();
         if (maxCards <= 0) return result;
 
-        ActionsManager actionsManager = FindFirstObjectByType<ActionsManager>();
+        ActionsManager actionsManager = FindAnyObjectByType<ActionsManager>();
         List<CardSituationEnum> activeSituations = SituationEvaluator.GetActiveSituations(character, hex);
         PC currentPc = hex.GetPCData();
 
@@ -1696,7 +1696,7 @@ public class DeckManager : MonoBehaviour
     {
         if (leader == null || card == null) return;
 
-        Game game = FindFirstObjectByType<Game>();
+        Game game = FindAnyObjectByType<Game>();
         if (game == null || game.player != leader || !game.IsPlayerCurrentlyPlaying()) return;
 
         Board board = game.board != null ? game.board : Board.Instance;
@@ -2439,7 +2439,7 @@ public class DeckManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(region) || leader == null) return result;
 
         string normalizedRegion = NormalizeCardName(region);
-        ActionsManager actionsManager = FindFirstObjectByType<ActionsManager>();
+        ActionsManager actionsManager = FindAnyObjectByType<ActionsManager>();
 
         foreach (CardData card in GetLeaderCardPool(leader))
         {
@@ -2486,7 +2486,7 @@ public class DeckManager : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(regionName)) return;
 
-        FindFirstObjectByType<RegionLabelManager>()?.ShowLabel(regionName.Trim());
+        FindAnyObjectByType<RegionLabelManager>()?.ShowLabel(regionName.Trim());
 
         string displayName = FormatDisplayName(regionName);
         string text = $"{displayName} discovered!";
@@ -2498,7 +2498,7 @@ public class DeckManager : MonoBehaviour
     {
         if (revealedPcHexes == null || revealedPcHexes.Count == 0) return;
 
-        BoardNavigator navigator = BoardNavigator.Instance != null ? BoardNavigator.Instance : FindFirstObjectByType<BoardNavigator>();
+        BoardNavigator navigator = BoardNavigator.Instance != null ? BoardNavigator.Instance : FindAnyObjectByType<BoardNavigator>();
         Hex anchorHex = ChooseFocusHex(revealedPcHexes);
         if (anchorHex == null) return;
 

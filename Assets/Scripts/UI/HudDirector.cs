@@ -21,7 +21,7 @@ public static class HudDirector
 
     public static void Apply()
     {
-        Layout layout = Object.FindFirstObjectByType<Layout>();
+        Layout layout = Object.FindAnyObjectByType<Layout>();
         if (layout == null) return;
         RectTransform root = layout.transform as RectTransform;
 
@@ -274,7 +274,7 @@ public static class HudDirector
     /// <summary>Left edge (canvas units, from the canvas' left) of the bottom-right column.</summary>
     public static float DockRightColumnLeft(RectTransform canvasRoot)
     {
-        Layout layout = Object.FindFirstObjectByType<Layout>();
+        Layout layout = Object.FindAnyObjectByType<Layout>();
         RectTransform endTurn = layout != null ? layout.transform.Find("Bottom/EndTurn") as RectTransform : null;
         if (endTurn == null || canvasRoot == null) return -1f;
         Vector3[] c = new Vector3[4];

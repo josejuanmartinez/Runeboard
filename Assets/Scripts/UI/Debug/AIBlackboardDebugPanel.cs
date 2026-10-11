@@ -78,7 +78,7 @@ public class AIBlackboardDebugPanel : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
     {
-        if (FindFirstObjectByType<AIBlackboardDebugPanel>() != null) return;
+        if (FindAnyObjectByType<AIBlackboardDebugPanel>() != null) return;
         GameObject go = new("AIBlackboardDebugPanel");
         go.AddComponent<AIBlackboardDebugPanel>();
         DontDestroyOnLoad(go);
@@ -113,7 +113,7 @@ public class AIBlackboardDebugPanel : MonoBehaviour
     // ownership) never lingers from a previous session.
     private void RefreshCharacterList()
     {
-        allCharacters = FindObjectsByType<Character>(FindObjectsSortMode.None)
+        allCharacters = FindObjectsByType<Character>()
             .Where(c => c != null && !c.killed && !string.IsNullOrWhiteSpace(c.characterName))
             .OrderBy(c => c.characterName, StringComparer.OrdinalIgnoreCase)
             .ToList();

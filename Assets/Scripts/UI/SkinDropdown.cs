@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 // Bridge for Layout.prefab's Minimap skin dropdown: SkinManager lives in the scene, not inside
-// this prefab, so it's reached via FindFirstObjectByType instead of a serialized reference (same
+// this prefab, so it's reached via FindAnyObjectByType instead of a serialized reference (same
 // pattern as HexGridToggle/RegionsViewToggle). Options are populated from the Skins enum at
 // runtime so a newly added skin shows up here without another prefab edit.
 [RequireComponent(typeof(TMP_Dropdown))]
@@ -25,7 +25,7 @@ public class SkinDropdown : MonoBehaviour
 
         // Matches StartScreenController's own default resolution (CurrentSkin, itself defaulting
         // to Skins.Default) so the dropdown never disagrees with what's actually active.
-        SkinManager manager = FindFirstObjectByType<SkinManager>();
+        SkinManager manager = FindAnyObjectByType<SkinManager>();
         Skins current = manager != null ? manager.CurrentSkin : Skins.Default;
         dropdown.SetValueWithoutNotify(Mathf.Max(0, Array.IndexOf(values, current)));
 
@@ -40,7 +40,7 @@ public class SkinDropdown : MonoBehaviour
     private void OnDropdownValueChanged(int index)
     {
         if (values == null || index < 0 || index >= values.Length) return;
-        FindFirstObjectByType<SkinManager>()?.ChangeSkin(values[index]);
+        FindAnyObjectByType<SkinManager>()?.ChangeSkin(values[index]);
         Sounds.Instance?.PlayUiClick();
     }
 }

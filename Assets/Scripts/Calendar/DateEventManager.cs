@@ -37,7 +37,7 @@ public class DateEventManager : MonoBehaviour
     public static DateEventManager GetOrCreate()
     {
         if (Instance != null) return Instance;
-        DateEventManager existing = FindFirstObjectByType<DateEventManager>();
+        DateEventManager existing = FindAnyObjectByType<DateEventManager>();
         if (existing != null) return existing;
         var go = new GameObject("DateEventManager");
         return go.AddComponent<DateEventManager>();

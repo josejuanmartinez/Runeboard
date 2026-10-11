@@ -66,18 +66,18 @@ public class AutoTourRunner : MonoBehaviour
         Stopwatch clock = Stopwatch.StartNew();
         if (AutoTour.TitleOnly)
         {
-            yield return WaitFor(() => FindFirstObjectByType<StartScreenController>() is StartScreenController s && s.isActiveAndEnabled && s.IsShowing, 600f, "title screen");
+            yield return WaitFor(() => FindAnyObjectByType<StartScreenController>() is StartScreenController s && s.isActiveAndEnabled && s.IsShowing, 600f, "title screen");
             yield return new WaitForSecondsRealtime(3f);
             yield return Shot("title");
             DumpHud();
-            FindFirstObjectByType<StartScreenController>().StartCampaign();
+            FindAnyObjectByType<StartScreenController>().StartCampaign();
             yield return new WaitForSecondsRealtime(2f);
             yield return Shot("campaign_select");
             AutoTour.Log("done");
             Application.Quit();
             yield break;
         }
-        yield return WaitFor(() => FindFirstObjectByType<LeaderSelector>() is LeaderSelector ls && ls.SelectionScreenShown, 600f, "leader selection");
+        yield return WaitFor(() => FindAnyObjectByType<LeaderSelector>() is LeaderSelector ls && ls.SelectionScreenShown, 600f, "leader selection");
         yield return new WaitForSecondsRealtime(2f);
         yield return Shot("leader_selection");
         yield return WaitFor(() => Game.Instance != null && Game.Instance.started && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "first human turn");
@@ -155,7 +155,7 @@ public class AutoTourRunner : MonoBehaviour
     private static void DumpHud()
     {
         var sb = new System.Text.StringBuilder();
-        foreach (Canvas canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+        foreach (Canvas canvas in FindObjectsByType<Canvas>())
         {
             if (!canvas.isRootCanvas || canvas.renderMode == RenderMode.WorldSpace) continue;
             var scaler = canvas.GetComponent<UnityEngine.UI.CanvasScaler>();

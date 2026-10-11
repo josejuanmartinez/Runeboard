@@ -83,7 +83,7 @@ public class Game : MonoBehaviour
 
     public bool IsInitialTurnStarting => started && turn == 0 && !playerTurnAcceptingInput;
     // Same rationale as Board.Instance: dozens of card actions' condition/effect closures were
-    // each independently resolving Game via FindFirstObjectByType<Game>() — a scene-wide search
+    // each independently resolving Game via FindAnyObjectByType<Game>() — a scene-wide search
     // repeated for every card scored, every pick, every character, every AI turn. Cached here.
     public static Game Instance { get; private set; }
 
@@ -139,7 +139,7 @@ public class Game : MonoBehaviour
     private void AssignAIandHumans()
     {
         // Find all ML-Agents in the scene
-        List<Character> allCharacters = FindObjectsByType<Character>(FindObjectsSortMode.None).ToList();
+        List<Character> allCharacters = FindObjectsByType<Character>().ToList();
         foreach(Character character in allCharacters)
         {
             character.isPlayerControlled = character.GetOwner() == player && !playerAutoplayEnabled;
@@ -151,12 +151,12 @@ public class Game : MonoBehaviour
         competitors = new();
         npcs = new();
         player = playableLeader;
-        foreach (PlayableLeader otherPlayableLeader in FindObjectsByType<PlayableLeader>(FindObjectsSortMode.None))
+        foreach (PlayableLeader otherPlayableLeader in FindObjectsByType<PlayableLeader>())
         {
             if (otherPlayableLeader == playableLeader) continue;
             competitors.Add(otherPlayableLeader);
         }
-        foreach (NonPlayableLeader nonPlayableLeader in FindObjectsByType<NonPlayableLeader>(FindObjectsSortMode.None))
+        foreach (NonPlayableLeader nonPlayableLeader in FindObjectsByType<NonPlayableLeader>())
         {
             npcs.Add(nonPlayableLeader);
         }
@@ -207,7 +207,7 @@ public class Game : MonoBehaviour
 
     public void StartGame()
     {
-        FindFirstObjectByType<LeaderSelector>()?.ApplyCurrentSelection();
+        FindAnyObjectByType<LeaderSelector>()?.ApplyCurrentSelection();
         // Must play before any other startup popup, camera pan, or tutorial step — SelectLeader
         // (driven by the carousel) has already finalized player's chosen variant by this point.
         bool loadingSave = SaveSystem.PendingLoad != null;
@@ -223,7 +223,7 @@ public class Game : MonoBehaviour
         // Same timing again: scenario Zone of Control hexes need the final leader instance to
         // mark as permanently revealed, so this must come after the reconciliation above.
         board.nationSpawner?.ApplyScenarioZoneOfControl(board.ActiveScenario);
-        FindFirstObjectByType<Initialize>()?.UndoInitialState();
+        FindAnyObjectByType<Initialize>()?.UndoInitialState();
         PauseMenuController.PrepareForGameplay();
 
         turn = 0;
@@ -242,7 +242,7 @@ public class Game : MonoBehaviour
         InitializePlayableLeaderIcons();
         if (player != null)
         {
-            var layout = FindFirstObjectByType<Layout>();
+            var layout = FindAnyObjectByType<Layout>();
             if (layout != null)
             {
                 layout.SetNationColor(player.nationColor);
@@ -367,7 +367,7 @@ public class Game : MonoBehaviour
             bannerName = biome.banner;
         if (string.IsNullOrWhiteSpace(bannerName)) return null;
 
-        Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = FindAnyObjectByType<Illustrations>();
         return illustrations != null ? illustrations.GetIllustrationByName(bannerName, false) : null;
     }
 
@@ -393,7 +393,7 @@ public class Game : MonoBehaviour
     private void HandleSelectedCharacterChanged(Character previous, Character current)
     {
         Card.RequestInteractionRefreshAll();
-        FindFirstObjectByType<ActionsManager>()?.RefreshInteractableState();
+        FindAnyObjectByType<ActionsManager>()?.RefreshInteractableState();
         OpportunityHexHinter.Refresh(current);
     }
 
@@ -402,16 +402,16 @@ public class Game : MonoBehaviour
         yield return null;
         yield return new WaitForEndOfFrame();
 
-        DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
+        DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindAnyObjectByType<DeckManager>();
         if (deckManager == null) yield break;
 
         deckManager.InitializeHandsForCurrentGame();
-        FindFirstObjectByType<ActionsManager>()?.RefreshInteractableState();
+        FindAnyObjectByType<ActionsManager>()?.RefreshInteractableState();
     }
 
     private void InitializePlayableLeaderIcons()
     {
-        PlayableLeaderIcons leaderIcons = FindFirstObjectByType<PlayableLeaderIcons>();
+        PlayableLeaderIcons leaderIcons = FindAnyObjectByType<PlayableLeaderIcons>();
         if (leaderIcons == null) return;
 
         if (player != null) leaderIcons.Instantiate(player);
@@ -426,7 +426,7 @@ public class Game : MonoBehaviour
     private void AssignNationColors()
     {
         List<Leader> leaders = GetAllLeadersForNationColors();
-        Colors colors = FindFirstObjectByType<Colors>();
+        Colors colors = FindAnyObjectByType<Colors>();
         Color[] palette = colors != null ? colors.nationColors : null;
         for (int i = 0; i < leaders.Count; i++)
         {
@@ -458,7 +458,7 @@ public class Game : MonoBehaviour
 
     private void RefreshPlayableLeaderIconVictoryPoints()
     {
-        PlayableLeaderIcons leaderIcons = FindFirstObjectByType<PlayableLeaderIcons>();
+        PlayableLeaderIcons leaderIcons = FindAnyObjectByType<PlayableLeaderIcons>();
         if (leaderIcons == null) return;
         leaderIcons.RefreshVictoryPointsForAll();
         leaderIcons.UpdateVictoryPointColors();
@@ -693,7 +693,7 @@ public class Game : MonoBehaviour
                 yield return AITurnController.ExecuteLeaderTurn(npl);
                 if (currentlyPlaying == player)
                 {
-                    FindFirstObjectByType<ActionsManager>()?.RefreshInteractableState();
+                    FindAnyObjectByType<ActionsManager>()?.RefreshInteractableState();
                 }
                 // Explicit frame boundary between leaders in addition to the AI scoring budget.
                 yield return null;
@@ -1138,7 +1138,7 @@ public class Game : MonoBehaviour
 
     private bool HasPlayableCardsInHand()
     {
-        DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindFirstObjectByType<DeckManager>();
+        DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : FindAnyObjectByType<DeckManager>();
         if (deckManager == null || player == null) return false;
 
         IReadOnlyList<CardData> hand = deckManager.GetHand(player);

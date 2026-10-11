@@ -117,8 +117,8 @@ public class BattleOfSongs : CharacterAction
         {
             PopupManager.ShowImmediate(
                 $"Battle of Songs: {attacker.characterName} vs {defender.characterName}",
-                FindFirstObjectByType<Illustrations>().GetIllustrationByName(attacker.characterName),
-                FindFirstObjectByType<Illustrations>().GetIllustrationByName(defender.characterName),
+                FindAnyObjectByType<Illustrations>().GetIllustrationByName(attacker.characterName),
+                FindAnyObjectByType<Illustrations>().GetIllustrationByName(defender.characterName),
                 narration,
                 true);
         }

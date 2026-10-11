@@ -50,7 +50,7 @@ public class FontManager : SearcherByName
 
         currentFont = font;
         TMP_Settings.defaultFontAsset = font;
-        foreach (TMP_Text text in FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (TMP_Text text in FindObjectsByType<TMP_Text>(FindObjectsInactive.Include))
         {
             if (text.font == null || skinFonts.Any(entry => entry.font == text.font))
                 text.font = font;

@@ -323,7 +323,7 @@ public class ConfirmationDialog : MonoBehaviour
     {
         Sprite sprite = request.image;
         if (sprite == null && !string.IsNullOrWhiteSpace(request.imageName))
-            sprite = FindFirstObjectByType<Illustrations>()?.GetIllustrationByName(request.imageName, false);
+            sprite = FindAnyObjectByType<Illustrations>()?.GetIllustrationByName(request.imageName, false);
 
         if (dialogPanel == null)
         {

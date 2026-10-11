@@ -209,7 +209,7 @@ public class CombatBanner : MonoBehaviour
     [ContextMenu("Test: Show Combat Banner")]
     private void TestShowCombatBanner()
     {
-        Character[] characters = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        Character[] characters = FindObjectsByType<Character>();
         if (characters.Length < 2)
         {
             Debug.LogWarning("[CombatBanner] Need at least 2 Characters in the scene to test.");
@@ -471,7 +471,7 @@ public class CombatBanner : MonoBehaviour
             bannerName = biome.banner;
         if (string.IsNullOrWhiteSpace(bannerName)) return null;
 
-        Illustrations illustrations = GameObject.FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = GameObject.FindAnyObjectByType<Illustrations>();
         return illustrations != null ? illustrations.GetIllustrationByName(bannerName, false) : null;
     }
 
@@ -573,7 +573,7 @@ public class CombatBanner : MonoBehaviour
             hasSpritesheet = CharacterSpritesheets.TryResolveRaceOrName(
                 character.characterName, character.SpriteVariantBaseName, character.race, null, out raceOrName);
 
-            Illustrations illustrations = GameObject.FindFirstObjectByType<Illustrations>();
+            Illustrations illustrations = GameObject.FindAnyObjectByType<Illustrations>();
             staticFallback = illustrations != null ? illustrations.GetIllustrationByName(character) : null;
             image.sprite = staticFallback;
             if (!hasSpritesheet) return;

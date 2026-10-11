@@ -47,7 +47,7 @@ public class SabotageStorage : AgentPCAction
 
             if (target == Game.Instance.player)
             {
-                FindFirstObjectByType<StoresManager>().RefreshStores();
+                FindAnyObjectByType<StoresManager>().RefreshStores();
             }
             return true;
         };

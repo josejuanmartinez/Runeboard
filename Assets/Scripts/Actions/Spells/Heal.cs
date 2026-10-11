@@ -58,7 +58,7 @@ public class Heal: FreeNeutralSpell
             health = Math.Max(0, ApplySpellEffectMultiplier(c, health));
             Character selectedCharacter = Board.Instance.selectedCharacter;
             target.Heal(health);
-            if (selectedCharacter == target) FindFirstObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(target);
+            if (selectedCharacter == target) FindAnyObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(target);
 
             return true;
         }

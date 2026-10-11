@@ -122,7 +122,7 @@ public class TurnDigest : MonoBehaviour
     private void Show(List<string> lines)
     {
         Hide();
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         Canvas canvas = layout != null ? layout.GetComponentInParent<Canvas>() : null;
         if (canvas == null) return;
         RectTransform root = canvas.rootCanvas.transform as RectTransform;

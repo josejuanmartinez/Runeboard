@@ -180,7 +180,7 @@ public class Hex : MonoBehaviour
     private static int hoveredCharacterCount = 0;
 
     // Scene singletons shared by every hex. Cached statically because Awake runs once
-    // per instantiated hex and FindFirstObjectByType scans the whole scene — per-hex
+    // per instantiated hex and FindAnyObjectByType scans the whole scene — per-hex
     // lookups made board creation O(hexes²) and took minutes on large maps. Unity's
     // overloaded null-check makes destroyed references re-resolve on the next scene.
     private static Game sharedGame;
@@ -199,7 +199,7 @@ public class Hex : MonoBehaviour
         if (sharedTextureMapping == null)
         {
             sharedTextureMapping = GetComponent<HexTextureMapping>();
-            if (sharedTextureMapping == null) sharedTextureMapping = FindFirstObjectByType<HexTextureMapping>();
+            if (sharedTextureMapping == null) sharedTextureMapping = FindAnyObjectByType<HexTextureMapping>();
         }
         return sharedTextureMapping;
     }
@@ -216,8 +216,8 @@ public class Hex : MonoBehaviour
         // Cache singletons once per scene, not once per hex
         if (sharedGame == null) sharedGame = Game.Instance;
         if (sharedBoard == null) sharedBoard = Board.Instance;
-        if (sharedNavigator == null) sharedNavigator = FindFirstObjectByType<BoardNavigator>();
-        if (sharedIllustrations == null) sharedIllustrations = FindFirstObjectByType<Illustrations>();
+        if (sharedNavigator == null) sharedNavigator = FindAnyObjectByType<BoardNavigator>();
+        if (sharedIllustrations == null) sharedIllustrations = FindAnyObjectByType<Illustrations>();
         game = sharedGame;
         board = sharedBoard;
         navigator = sharedNavigator;
@@ -1177,7 +1177,7 @@ public class Hex : MonoBehaviour
         if (!game.IsHumanActivelyActing()) return;
         if (!IsHexSeen()) return;
         // Avoid GameObject.Find/string allocs; use our own transform
-        if (navigator == null) navigator = FindFirstObjectByType<BoardNavigator>();
+        if (navigator == null) navigator = FindAnyObjectByType<BoardNavigator>();
         if (navigator != null) navigator.LookAt(transform.position, duration, delay);
     }
 
@@ -1733,7 +1733,7 @@ public class Hex : MonoBehaviour
             return;
         }
 
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         if (illustrations == null)
         {
             ClearBannerSprite();
@@ -1799,7 +1799,7 @@ public class Hex : MonoBehaviour
         {
             if (illustrations == null)
             {
-                illustrations = FindFirstObjectByType<Illustrations>();
+                illustrations = FindAnyObjectByType<Illustrations>();
             }
             yield return null;
         }

@@ -77,7 +77,7 @@ public class NonPlayableLeader : Leader
             return;
         }
 
-        NonPlayableLeaderIcon npli = FindObjectsByType<NonPlayableLeaderIcon>(FindObjectsSortMode.None)
+        NonPlayableLeaderIcon npli = FindObjectsByType<NonPlayableLeaderIcon>()
             .FirstOrDefault(x => x.nonPlayableLeader == this);
         if (npli != null) npli.SetDead();
 
@@ -143,10 +143,10 @@ public class NonPlayableLeader : Leader
         int targetMithrilAmount = joinedTo.mithrilAmount;
         int targetGoldAmount = joinedTo.goldAmount;
 
-        NonPlayableLeaderIcons npls = FindObjectsByType<NonPlayableLeaderIcons>(FindObjectsSortMode.None)
+        NonPlayableLeaderIcons npls = FindObjectsByType<NonPlayableLeaderIcons>()
             .FirstOrDefault(x => x.playableLeader == playableLeaderJoinedTo);
         if (!npls) return false;
-        NonPlayableLeaderIcon npli = FindObjectsByType<NonPlayableLeaderIcon>(FindObjectsSortMode.None)
+        NonPlayableLeaderIcon npli = FindObjectsByType<NonPlayableLeaderIcon>()
             .FirstOrDefault(x => x.nonPlayableLeader == this);
         if (!npli) return false;
         npli.transform.parent = npls.transform;
@@ -254,7 +254,7 @@ public class NonPlayableLeader : Leader
         Game game = Game.Instance;
         if (game == null || game.player == null) return;
 
-        Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = FindAnyObjectByType<Illustrations>();
         string title = $"{characterName} joins {joinedTo.characterName}";
         string text = $"{characterName} has pledged allegiance to {joinedTo.characterName}.";
         PopupManager.Show(
@@ -279,7 +279,7 @@ public class NonPlayableLeader : Leader
 
         if (!revealedTo.Contains(leader)) revealedTo.Add(leader);
 
-        FindObjectsByType<NonPlayableLeaderIcons>(FindObjectsSortMode.None)
+        FindObjectsByType<NonPlayableLeaderIcons>()
             .ToList()
             .ForEach(x =>
             {
@@ -321,7 +321,7 @@ public class NonPlayableLeader : Leader
 
     private void RevealToPlayerIcons(Game game)
     {
-        FindObjectsByType<NonPlayableLeaderIcons>(FindObjectsSortMode.None)
+        FindObjectsByType<NonPlayableLeaderIcons>()
             .ToList()
             .ForEach(x =>
             {

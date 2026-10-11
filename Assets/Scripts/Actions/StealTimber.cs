@@ -22,7 +22,7 @@ public class StealTimber : AgentPCAction
             pc.owner.RemoveTimber(toSteal);
             MessageDisplayNoUI.ShowMessage(pc.hex, c, $"-{toSteal} <sprite name=\"timber\"> stolen!", Color.red);
             MessageDisplay.ShowMessage($"+{toSteal} <sprite name=\"timber\"> stolen!", Color.green);
-            if (playable == Game.Instance.player) FindFirstObjectByType<StoresManager>().RefreshStores();
+            if (playable == Game.Instance.player) FindAnyObjectByType<StoresManager>().RefreshStores();
             return true;
         };
         condition = (c) => {

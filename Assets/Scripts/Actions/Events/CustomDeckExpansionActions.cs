@@ -508,7 +508,7 @@ public class TrollsHoardGrantArtifactAction : EventAction
             }
         }
 
-        foreach (Leader leader in UnityEngine.Object.FindObjectsByType<Leader>(FindObjectsSortMode.None))
+        foreach (Leader leader in UnityEngine.Object.FindObjectsByType<Leader>())
         {
             if (leader?.controlledCharacters == null) continue;
             foreach (Character ch in leader.controlledCharacters)
@@ -1968,7 +1968,7 @@ public class RingsOfLore : EventAction
             Board board = Board.Instance;
             if (owner == null || board == null || board.hexes == null) return false;
 
-            List<Character> loreBearers = UnityEngine.Object.FindObjectsByType<Character>(FindObjectsSortMode.None)
+            List<Character> loreBearers = UnityEngine.Object.FindObjectsByType<Character>()
                 .Where(ch => ch != null && !ch.killed && LoreBearers.Contains(ch.characterName))
                 .Distinct()
                 .ToList();

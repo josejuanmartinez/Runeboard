@@ -51,7 +51,7 @@ public class CharacterIcons : MonoBehaviour
         Leader owningLeader = leader.GetOwner();
         if (owningLeader != humanPlayer && leader != humanPlayer) return;
 
-        CharacterIcons icons = FindFirstObjectByType<CharacterIcons>();
+        CharacterIcons icons = FindAnyObjectByType<CharacterIcons>();
         icons?.BuildIconsForPlayer(humanPlayer);
     }
 
@@ -63,7 +63,7 @@ public class CharacterIcons : MonoBehaviour
         Leader owner = character.GetOwner();
         if (owner != game.player) return;
 
-        CharacterIcons icons = FindFirstObjectByType<CharacterIcons>();
+        CharacterIcons icons = FindAnyObjectByType<CharacterIcons>();
         if (icons == null) return;
 
         if (!icons.RefreshIcon(character))

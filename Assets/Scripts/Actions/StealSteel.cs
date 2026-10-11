@@ -22,7 +22,7 @@ public class StealSteel : AgentPCAction
             pc.owner.RemoveSteel(toSteal);
             MessageDisplayNoUI.ShowMessage(pc.hex, c, $"-{toSteal} <sprite name=\"steel\"> stolen!", Color.red);
             MessageDisplay.ShowMessage($"+{toSteal} <sprite name=\"steel\"> stolen!", Color.green);
-            if (playable == Game.Instance.player) FindFirstObjectByType<StoresManager>().RefreshStores();
+            if (playable == Game.Instance.player) FindAnyObjectByType<StoresManager>().RefreshStores();
             return true;
         };
         condition = (c) => {

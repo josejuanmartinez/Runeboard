@@ -78,9 +78,9 @@ public class CampaignHud : MonoBehaviour
     private bool EnsureCanvas()
     {
         if (canvasRoot != null) return true;
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         Canvas canvas = layout != null ? layout.GetComponentInParent<Canvas>() : null;
-        if (canvas == null) canvas = FindObjectsByType<Canvas>(FindObjectsSortMode.None).FirstOrDefault(c => c.isRootCanvas && c.renderMode != RenderMode.WorldSpace);
+        if (canvas == null) canvas = FindObjectsByType<Canvas>().FirstOrDefault(c => c.isRootCanvas && c.renderMode != RenderMode.WorldSpace);
         if (canvas == null) return false;
         canvasRoot = canvas.rootCanvas.transform as RectTransform;
         return canvasRoot != null;
@@ -150,7 +150,7 @@ public class CampaignHud : MonoBehaviour
 
     private static RectTransform FindEnvironmentBox()
     {
-        Layout layout = FindFirstObjectByType<Layout>();
+        Layout layout = FindAnyObjectByType<Layout>();
         if (layout == null) return null;
         foreach (RectTransform rt in layout.GetComponentsInChildren<RectTransform>(true))
         {
@@ -208,7 +208,7 @@ public class CampaignHud : MonoBehaviour
         sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>Click an objective to see where and how</color></size>");
         trackerText.text = sb.ToString();
 
-        FindFirstObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
+        FindAnyObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
     }
 
     // ---------------------------------------------------------------- End screen

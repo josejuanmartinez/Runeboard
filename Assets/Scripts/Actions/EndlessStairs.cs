@@ -108,7 +108,7 @@ public class EndlessStairs : CharacterAction
             {
                 List<string> options = destinations.Select(DescribeDestination).ToList();
                 List<string> optionIcons = destinations.Select(GetDestinationIconName).ToList();
-                Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+                Illustrations illustrations = FindAnyObjectByType<Illustrations>();
                 Sprite portrait = illustrations != null ? illustrations.GetIllustrationByName(CardArtName, false) : null;
                 string selected = await SelectionDialog.AskImmediate(
                     "The Endless Stairs wind down into the deep places of the world. Where do they lead?",

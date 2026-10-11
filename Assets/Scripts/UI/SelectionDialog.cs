@@ -43,7 +43,7 @@ public class SelectionDialog : MonoBehaviour
         }
 
         Instance = this;
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         BindUiReferences();
         WireUiListeners();
 
@@ -553,7 +553,7 @@ public class SelectionDialog : MonoBehaviour
 
         if (illustrations == null)
         {
-            illustrations = FindFirstObjectByType<Illustrations>();
+            illustrations = FindAnyObjectByType<Illustrations>();
         }
 
         if (optionButtonsContainer == null)

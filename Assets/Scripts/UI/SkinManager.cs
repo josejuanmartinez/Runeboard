@@ -25,17 +25,17 @@ public class SkinManager : MonoBehaviour
 
     void Awake()
     {
-        videos = FindFirstObjectByType<Videos>();
-        render2dManager = FindFirstObjectByType<Renderer2DManager>();
-        materialManager = FindFirstObjectByType<MaterialManager>();
+        videos = FindAnyObjectByType<Videos>();
+        render2dManager = FindAnyObjectByType<Renderer2DManager>();
+        materialManager = FindAnyObjectByType<MaterialManager>();
         if (materialManager == null && materialManagerPrefab != null)
             materialManager = Instantiate(materialManagerPrefab);
 
-        fontManager = FindFirstObjectByType<FontManager>();
+        fontManager = FindAnyObjectByType<FontManager>();
         if (fontManager == null && fontManagerPrefab != null)
             fontManager = Instantiate(fontManagerPrefab);
 
-        hexMaterialSkin = FindFirstObjectByType<HexMaterialSkin>();
+        hexMaterialSkin = FindAnyObjectByType<HexMaterialSkin>();
         if (hexMaterialSkin == null && hexMaterialSkinPrefab != null)
             hexMaterialSkin = Instantiate(hexMaterialSkinPrefab);
     }

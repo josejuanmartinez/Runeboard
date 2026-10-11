@@ -161,7 +161,7 @@ public class RumoursManager : MonoBehaviour
         if (Instance != null)
             return true;
 
-        Instance = FindFirstObjectByType<RumoursManager>();
+        Instance = FindAnyObjectByType<RumoursManager>();
         if (Instance != null)
         {
             if (Instance.game == null)

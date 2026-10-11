@@ -25,7 +25,7 @@ public sealed class StartScreenController : MonoBehaviour
         campaignSelection.gameObject.SetActive(false);
         WireAuthoredControls();
         root.SetActive(true);
-        ApplySkin(FindFirstObjectByType<SkinManager>()?.CurrentSkin ?? Skins.Default);
+        ApplySkin(FindAnyObjectByType<SkinManager>()?.CurrentSkin ?? Skins.Default);
     }
 
     private void WireAuthoredControls()
@@ -86,7 +86,7 @@ public sealed class StartScreenController : MonoBehaviour
 
     public void ToggleSkin()
     {
-        SkinManager manager = FindFirstObjectByType<SkinManager>();
+        SkinManager manager = FindAnyObjectByType<SkinManager>();
         if (manager == null) return;
         ApplySkin(manager.GetNextSkin());
         Sounds.Instance?.PlayUiClick();
@@ -94,7 +94,7 @@ public sealed class StartScreenController : MonoBehaviour
 
     private void ApplySkin(Skins skin)
     {
-        FindFirstObjectByType<SkinManager>()?.ChangeSkin(skin);
+        FindAnyObjectByType<SkinManager>()?.ChangeSkin(skin);
         if (skinValue != null) skinValue.text = $"Skin: {skin}";
     }
 

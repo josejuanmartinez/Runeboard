@@ -909,7 +909,7 @@ public class SituationCardsUI : MonoBehaviour
         if (!CardNameUtility.Equals(pc.pcName, cardData.startingPC)) return false;
         if (!cardData.EvaluatePlayability(actor)) return false;
 
-        Character existing = FindObjectsByType<Character>(FindObjectsSortMode.None)
+        Character existing = FindObjectsByType<Character>()
             .FirstOrDefault(candidate => candidate != null && !candidate.killed
                 && (CardNameUtility.Equals(candidate.characterName, cardData.name)
                     || (!string.IsNullOrWhiteSpace(cardData.characterGroup)
@@ -925,7 +925,7 @@ public class SituationCardsUI : MonoBehaviour
         InspireEffect inspireEffect = null;
         if (existing == null)
         {
-            instantiator = FindFirstObjectByType<CharacterInstantiator>();
+            instantiator = FindAnyObjectByType<CharacterInstantiator>();
             if (instantiator == null) return false;
         }
         else

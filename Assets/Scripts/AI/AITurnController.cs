@@ -375,7 +375,7 @@ public static class AITurnController
 
         CardCenterPreview preview = CardCenterPreview.Instance != null
             ? CardCenterPreview.Instance
-            : UnityEngine.Object.FindFirstObjectByType<CardCenterPreview>();
+            : UnityEngine.Object.FindAnyObjectByType<CardCenterPreview>();
         await CenterDisplayLock.WaitAsync();
         try
         {
@@ -574,7 +574,7 @@ public static class AITurnController
         bool showToPlayer = game != null && game.IsPlayerCurrentlyPlaying() && game.player == character.GetOwner();
         if (showToPlayer)
         {
-            HexPathRenderer pathRenderer = UnityEngine.Object.FindFirstObjectByType<HexPathRenderer>();
+            HexPathRenderer pathRenderer = UnityEngine.Object.FindAnyObjectByType<HexPathRenderer>();
             pathRenderer?.DrawPathBetweenHexes(character.hex.v2, target.v2, character);
         }
 

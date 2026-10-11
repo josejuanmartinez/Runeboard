@@ -198,7 +198,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         CardCenterPreview preview = CardCenterPreview.Instance != null
             ? CardCenterPreview.Instance
-            : FindFirstObjectByType<CardCenterPreview>();
+            : FindAnyObjectByType<CardCenterPreview>();
         if (hovered) preview?.ShowPreview(previewData, hoverDriven: true);
         else preview?.HidePreview();
     }
@@ -224,12 +224,12 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private static void EnsureManagersLoaded()
     {
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         if (deckManager == null) deckManager = DeckManager.Instance;
         if (actionsManager == null) actionsManager = ActionsManager.Instance;
-        if (colors == null) colors = FindFirstObjectByType<Colors>();
-        if (cursorManager == null) cursorManager = FindFirstObjectByType<CursorManager>();
-        if (pathRenderer == null) pathRenderer = FindFirstObjectByType<HexPathRenderer>();
+        if (colors == null) colors = FindAnyObjectByType<Colors>();
+        if (cursorManager == null) cursorManager = FindAnyObjectByType<CursorManager>();
+        if (pathRenderer == null) pathRenderer = FindAnyObjectByType<HexPathRenderer>();
     }
 
     // The pulse effect (which image, where it sits) is authored directly in the prefab as a
@@ -614,7 +614,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         Board board = Board.Instance;
         if (board != null && board.selectedCharacter != null) return board.selectedCharacter;
-        SelectedCharacterIcon icon = FindFirstObjectByType<SelectedCharacterIcon>();
+        SelectedCharacterIcon icon = FindAnyObjectByType<SelectedCharacterIcon>();
         return icon != null ? icon.CurrentCharacter : null;
     }
 
@@ -847,7 +847,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private Color GetCardTypeColor(CardTypeEnum cardType)
     {
-        if (colors == null) colors = FindFirstObjectByType<Colors>();
+        if (colors == null) colors = FindAnyObjectByType<Colors>();
 
         string colorName = cardType switch
         {
@@ -1288,7 +1288,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
 
         Board board = Board.Instance;
-        SelectedCharacterIcon icon = FindFirstObjectByType<SelectedCharacterIcon>();
+        SelectedCharacterIcon icon = FindAnyObjectByType<SelectedCharacterIcon>();
         Character selected = selectedOverride != null
             ? selectedOverride
             : board != null && board.selectedCharacter != null
@@ -2182,7 +2182,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 return Task.FromResult(false);
             }
 
-            CharacterInstantiator instantiator = FindFirstObjectByType<CharacterInstantiator>();
+            CharacterInstantiator instantiator = FindAnyObjectByType<CharacterInstantiator>();
             if (instantiator == null)
             {
                 Debug.LogWarning($"[CardPlay/Character] '{cardData.name}': no CharacterInstantiator found in scene.");
@@ -2277,14 +2277,14 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     private static Character FindCharacterByName(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) return null;
-        Character[] characters = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        Character[] characters = FindObjectsByType<Character>();
         return characters.FirstOrDefault(c => c != null && CardNameUtility.Equals(c.characterName, name));
     }
 
     private static Character FindCharacterByGroup(string group)
     {
         if (string.IsNullOrWhiteSpace(group)) return null;
-        Character[] characters = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        Character[] characters = FindObjectsByType<Character>();
         return characters.FirstOrDefault(c => c != null && !c.killed && string.Equals(c.characterGroup, group, System.StringComparison.OrdinalIgnoreCase));
     }
 

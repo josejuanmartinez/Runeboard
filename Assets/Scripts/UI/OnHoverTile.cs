@@ -35,7 +35,7 @@ public class OnHoverTile : MonoBehaviour
         // Find or create the path renderer (only once)
         if (pathRenderer == null)
         {
-            pathRenderer = FindFirstObjectByType<HexPathRenderer>();
+            pathRenderer = FindAnyObjectByType<HexPathRenderer>();
             if (pathRenderer == null)
             {
                 GameObject pathRendererObj = new("HexPathRenderer");
@@ -48,11 +48,11 @@ public class OnHoverTile : MonoBehaviour
     {
         if (board == null || PopupManager.IsShowing || IsPausedForBannerOrInstructions()) return;
 
-        if (FindFirstObjectByType<Layout>() != null)
+        if (FindAnyObjectByType<Layout>() != null)
         {
             try
             {
-                FindFirstObjectByType<Layout>().GetHexNumberManager().Show(hex);
+                FindAnyObjectByType<Layout>().GetHexNumberManager().Show(hex);
             }
             catch (Exception e)
             {

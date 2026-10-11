@@ -77,7 +77,7 @@ public class UnquietDead : EventAction
             if (character == null) return false;
             Leader owner = character.GetOwner();
             if (owner == null) return false;
-            return UnityEngine.Object.FindObjectsByType<Character>(FindObjectsSortMode.None).Any(ch => ch != null && ch.killed && ch.GetOwner() == owner);
+            return UnityEngine.Object.FindObjectsByType<Character>().Any(ch => ch != null && ch.killed && ch.GetOwner() == owner);
         };
 
         async Task<bool> unquietAsync(Character character)
@@ -87,7 +87,7 @@ public class UnquietDead : EventAction
             if (character == null || character.hex == null) return false;
             Leader owner = character.GetOwner();
             if (owner == null) return false;
-            var deadAllies = UnityEngine.Object.FindObjectsByType<Character>(FindObjectsSortMode.None).Where(ch => ch != null && ch.killed && ch.GetOwner() == owner).ToList();
+            var deadAllies = UnityEngine.Object.FindObjectsByType<Character>().Where(ch => ch != null && ch.killed && ch.GetOwner() == owner).ToList();
             if (deadAllies.Count == 0) return false;
             bool isAI = !character.isPlayerControlled;
             Character target = null;

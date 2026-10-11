@@ -332,7 +332,7 @@ public static class RuneboardPolish
         values.FindProperty("gainImagePulseColor").colorValue = new Color(1, 0.94f, 0.70f);
         values.ApplyModifiedPropertiesWithoutUndo();
         // Keep end turn independently reachable when the minimap is collapsed.
-        Game game = Object.FindFirstObjectByType<Game>(FindObjectsInactive.Include);
+        Game game = Object.FindAnyObjectByType<Game>(FindObjectsInactive.Include);
         Button endTurn = game.nextTurnButton;
         if (endTurn != null)
         {

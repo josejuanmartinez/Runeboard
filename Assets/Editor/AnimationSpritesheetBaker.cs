@@ -557,7 +557,7 @@ public class AnimationSpritesheetBaker : EditorWindow
     string ComputePropsSignature()
     {
         return string.Join("|", _props.Select(p =>
-            $"{(p.Include ? 1 : 0)}:{(p.Prefab != null ? p.Prefab.GetInstanceID() : 0)}:{p.Bone}:{p.PositionOffset}:{p.RotationOffsetEuler}:{p.PivotOffset}:{p.ScaleMultiplier}:{p.UseForFraming}"));
+            $"{(p.Include ? 1 : 0)}:{(p.Prefab != null ? p.Prefab.GetEntityId().ToString() : "0")}:{p.Bone}:{p.PositionOffset}:{p.RotationOffsetEuler}:{p.PivotOffset}:{p.ScaleMultiplier}:{p.UseForFraming}"));
     }
 
     void EnsurePreviewRig()

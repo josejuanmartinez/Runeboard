@@ -45,7 +45,7 @@ public static class BoardLook
     private static void ApplyPost()
     {
         Volume volume = null;
-        foreach (Volume v in Object.FindObjectsByType<Volume>(FindObjectsSortMode.None))
+        foreach (Volume v in Object.FindObjectsByType<Volume>())
         {
             if (v.isGlobal && v.sharedProfile != null && v.gameObject.layer != LayerMask.NameToLayer("UI")) { volume = v; break; }
         }

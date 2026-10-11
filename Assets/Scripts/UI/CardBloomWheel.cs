@@ -306,7 +306,7 @@ public class CardBloomWheel : MonoBehaviour
         cardDims.Clear();
         cardRedness.Clear();
 
-        Colors colors = FindFirstObjectByType<Colors>();
+        Colors colors = FindAnyObjectByType<Colors>();
 
         if (cards != null)
         {

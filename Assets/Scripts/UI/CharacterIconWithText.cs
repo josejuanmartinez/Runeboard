@@ -58,7 +58,7 @@ public class CharacterIconWithText: CharacterIcon, IPointerEnterHandler, IPointe
 
         if (selectedCharacterIcon == null)
         {
-            Layout layout = FindFirstObjectByType<Layout>();
+            Layout layout = FindAnyObjectByType<Layout>();
             selectedCharacterIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
         if (selectedCharacterIcon == null) return;
@@ -74,7 +74,7 @@ public class CharacterIconWithText: CharacterIcon, IPointerEnterHandler, IPointe
         CardCenterPreview.Instance?.HidePreview();
         if (selectedCharacterIcon == null)
         {
-            Layout layout = FindFirstObjectByType<Layout>();
+            Layout layout = FindAnyObjectByType<Layout>();
             selectedCharacterIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
         if (selectedCharacterIcon == null) return;

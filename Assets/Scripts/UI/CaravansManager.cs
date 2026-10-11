@@ -9,14 +9,14 @@ public class CaravansManager : MonoBehaviour
 
     void OnEnable()
     {
-        StoresManager storesManager = FindFirstObjectByType<StoresManager>();
+        StoresManager storesManager = FindAnyObjectByType<StoresManager>();
         if (storesManager != null) storesManager.MarketChanged += RefreshCaravanPrices;
         GetCaravanPrices();
     }
 
     void OnDisable()
     {
-        StoresManager storesManager = FindFirstObjectByType<StoresManager>();
+        StoresManager storesManager = FindAnyObjectByType<StoresManager>();
         if (storesManager != null) storesManager.MarketChanged -= RefreshCaravanPrices;
     }
 
@@ -27,7 +27,7 @@ public class CaravansManager : MonoBehaviour
 
     public string GetCaravanPrices()
     {
-        StoresManager storesManager = FindFirstObjectByType<StoresManager>();
+        StoresManager storesManager = FindAnyObjectByType<StoresManager>();
         if (storesManager == null) return caravanPricesString;
 
         int buildPrice = storesManager.GetBuyPricePerUnit(produce);

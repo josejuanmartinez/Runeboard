@@ -21,7 +21,7 @@ public class EventIconsManager : MonoBehaviour
 
     public static EventIconsManager FindManager()
     {
-        return FindFirstObjectByType<EventIconsManager>();
+        return FindAnyObjectByType<EventIconsManager>();
     }
 
     public static void ShowHexAnchoredMessage(EventIconType type, Hex targetHex, Hex fallbackHex, string message, Color color)
@@ -160,7 +160,7 @@ public class EventIconsManager : MonoBehaviour
 
     private static Sprite ResolveActiveLeaderPortrait()
     {
-        SelectedCharacterIcon selectedIcon = FindFirstObjectByType<SelectedCharacterIcon>();
+        SelectedCharacterIcon selectedIcon = FindAnyObjectByType<SelectedCharacterIcon>();
         if (selectedIcon != null)
         {
             if (selectedIcon.icon != null && selectedIcon.icon.sprite != null)
@@ -174,7 +174,7 @@ public class EventIconsManager : MonoBehaviour
 
         if (leader == null || string.IsNullOrWhiteSpace(leader.characterName)) return null;
 
-        Illustrations illustrations = FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = FindAnyObjectByType<Illustrations>();
         if (illustrations == null) return null;
 
         return illustrations.GetIllustrationByName(leader.characterName, false)

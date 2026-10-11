@@ -246,7 +246,7 @@ public static class EncounterResolver
     private static async Task<Sprite> ResolvePortraitAsync(CardData encounterCard)
     {
         if (encounterCard == null) return null;
-        Illustrations illustrations = UnityEngine.Object.FindFirstObjectByType<Illustrations>();
+        Illustrations illustrations = UnityEngine.Object.FindAnyObjectByType<Illustrations>();
         if (illustrations == null) return null;
 
         List<string> candidateNames = BuildPortraitLookupNames(encounterCard);

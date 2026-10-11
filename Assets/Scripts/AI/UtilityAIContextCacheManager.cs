@@ -264,7 +264,7 @@ public class UtilityAIContextCacheManager : MonoBehaviour
     {
         unchecked
         {
-            return (leader.GetInstanceID() * 397) ^ character.GetInstanceID();
+            return (leader.GetEntityId().GetHashCode() * 397) ^ character.GetEntityId().GetHashCode();
         }
     }
 }

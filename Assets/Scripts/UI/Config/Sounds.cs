@@ -117,7 +117,7 @@ public class Sounds : SearcherByName
     private float lastPlayTime = -999f;
     private Coroutine queueRoutine;
     private float lastFootstepTime = -999f;
-    private readonly Dictionary<int, VoiceSet> voiceSetByCharacterId = new();
+    private readonly Dictionary<EntityId, VoiceSet> voiceSetByCharacterId = new();
     private Game cachedGame;
 
     private struct SfxRequest
@@ -208,7 +208,7 @@ public class Sounds : SearcherByName
         if (!PlayerCanSeeHex(character.hex)) return;
         if (character.race == RacesEnum.Machine) return;
 
-        if (TryPlayNamedVoiceExpression(character.characterName, character.GetInstanceID().ToString())) return;
+        if (TryPlayNamedVoiceExpression(character.characterName, character.GetEntityId().ToString())) return;
         TryPlaySharedVoiceExpression(character);
     }
 
@@ -688,7 +688,7 @@ public class Sounds : SearcherByName
             string profileKey = string.IsNullOrWhiteSpace(profile.profileId)
                 ? $"{character.race}_{character.sex}"
                 : profile.profileId;
-            AudioClip clip = PickRotatingVoiceClip(profile.selectClips, $"voice_shared_{profileKey}_{character.GetInstanceID()}");
+            AudioClip clip = PickRotatingVoiceClip(profile.selectClips, $"voice_shared_{profileKey}_{character.GetEntityId()}");
             if (!clip) return false;
             Enqueue(clip, voiceVolume, 0.5f);
             return true;
@@ -699,7 +699,7 @@ public class Sounds : SearcherByName
 
     private VoiceSet GetOrCreateVoiceSet(Character character)
     {
-        int key = character.GetInstanceID();
+        EntityId key = character.GetEntityId();
         if (voiceSetByCharacterId.TryGetValue(key, out var set)) return set;
 
         int voiceIndex = GetVoiceIndex(character.sex);
@@ -724,7 +724,7 @@ public class Sounds : SearcherByName
 
     private void PrewarmVoiceSets()
     {
-        Character[] characters = FindObjectsByType<Character>(FindObjectsSortMode.None);
+        Character[] characters = FindObjectsByType<Character>();
         if (characters == null || characters.Length == 0) return;
 
         for (int i = 0; i < characters.Length; i++)

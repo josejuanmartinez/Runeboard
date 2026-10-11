@@ -306,7 +306,7 @@ public class Leader : Character
                 yield break;
             }
             // Refresh UI
-            FindFirstObjectByType<StoresManager>()?.RefreshStores();
+            FindAnyObjectByType<StoresManager>()?.RefreshStores();
             // Refresh hexes
             StartCoroutine(RevealVisibleHexesAsync(() =>
             {
@@ -694,7 +694,7 @@ public class Leader : Character
         Leader owner = GetOwner();
         if (game == null || owner == null || owner != game.player) return;
 
-        StoresManager storesManager = FindFirstObjectByType<StoresManager>();
+        StoresManager storesManager = FindAnyObjectByType<StoresManager>();
         if (storesManager == null) return;
 
         storesManager.RefreshStores();
@@ -709,7 +709,7 @@ public class Leader : Character
         Leader owner = GetOwner();
         if (game == null || owner == null || owner != game.player) return;
 
-        StoresManager storesManager = FindFirstObjectByType<StoresManager>();
+        StoresManager storesManager = FindAnyObjectByType<StoresManager>();
         if (storesManager == null) return;
 
         storesManager.RefreshStores();

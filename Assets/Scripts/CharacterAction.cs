@@ -78,11 +78,6 @@ public class CharacterAction
         return a switch { 0 => AlignmentEnum.freePeople, 1 => AlignmentEnum.darkServants, _ => AlignmentEnum.neutral };
     }
 
-    protected static T FindFirstObjectByType<T>() where T : UnityEngine.Object
-    {
-        return UnityEngine.Object.FindFirstObjectByType<T>();
-    }
-
     protected static T FindAnyObjectByType<T>() where T : UnityEngine.Object
     {
         return UnityEngine.Object.FindAnyObjectByType<T>();
@@ -239,7 +234,7 @@ public class CharacterAction
             BoardNavigator.Instance?.EnqueueEnemyFocus(character.hex, character.GetOwner());
         }
         if (!isAI && game != null) game.PointToCharacterWithMissingActions();
-        if (!isAI) FindFirstObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(character);
+        if (!isAI) FindAnyObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(character);
         if (!isAI) Card.RequestInteractionRefreshAll();
         return;
     }
@@ -403,7 +398,7 @@ public class CharacterAction
                 RumoursManager.AddRumour(tradeRumour, false, logToWidget: false);
                 LogManager.Log(LogCategory.Rumour, character.GetOwner()?.characterName, character.characterName, tradeMessage);
             }
-            if (!isAI) FindFirstObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(character);
+            if (!isAI) FindAnyObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(character);
             if (!isAI) Card.RequestInteractionRefreshAll();
 
             StoresManager storesManager = GetStoresManager();
@@ -426,7 +421,7 @@ public class CharacterAction
         catch (Exception e)
         {
             Debug.Log(e);
-            if (!isAI) FindFirstObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(character);
+            if (!isAI) FindAnyObjectByType<Layout>().GetSelectedCharacterIcon().Refresh(character);
             if (!isAI) Card.RequestInteractionRefreshAll();
 
             // Debug.LogError($"{character.characterName} was unable to Execute action {actionName} {actionId} {actionInitials} {e}");
@@ -1584,7 +1579,7 @@ public class CharacterAction
     private StoresManager GetStoresManager()
     {
         if (cachedStoresManager != null) return cachedStoresManager;
-        cachedStoresManager = FindFirstObjectByType<StoresManager>();
+        cachedStoresManager = FindAnyObjectByType<StoresManager>();
         return cachedStoresManager;
     }
 

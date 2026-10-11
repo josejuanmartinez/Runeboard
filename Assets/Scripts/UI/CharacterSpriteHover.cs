@@ -25,7 +25,7 @@ public class CharacterSpriteHover : MonoBehaviour
     private void Awake()
     {
         board = Board.Instance;
-        selectedIcon = FindFirstObjectByType<SelectedCharacterIcon>();
+        selectedIcon = FindAnyObjectByType<SelectedCharacterIcon>();
         // OnMouseEnter/Exit only fire on the GameObject that owns the collider, so this
         // script (and hoverCollider) must stay on the HexCharacterLayer root, not the
         // "character" child sprite.
@@ -82,7 +82,7 @@ public class CharacterSpriteHover : MonoBehaviour
         if (!hex.TryGetPreviewTextForCharacter(character, out string hoverText)) return;
         if (selectedIcon == null)
         {
-            Layout layout = FindFirstObjectByType<Layout>();
+            Layout layout = FindAnyObjectByType<Layout>();
             selectedIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
         if (selectedIcon == null) return;
@@ -221,7 +221,7 @@ public class CharacterSpriteHover : MonoBehaviour
 
         if (selectedIcon == null)
         {
-            Layout layout = FindFirstObjectByType<Layout>();
+            Layout layout = FindAnyObjectByType<Layout>();
             selectedIcon = layout != null ? layout.GetSelectedCharacterIcon() : null;
         }
         if (selectedIcon == null) return;

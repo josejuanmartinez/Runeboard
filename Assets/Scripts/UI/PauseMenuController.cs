@@ -44,7 +44,7 @@ public sealed class PauseMenuController : MonoBehaviour
     {
         if (instance == null)
         {
-            instance = FindFirstObjectByType<PauseMenuController>(FindObjectsInactive.Include);
+            instance = FindAnyObjectByType<PauseMenuController>(FindObjectsInactive.Include);
             if (instance == null)
             {
                 Debug.LogError("Pause menu is missing. Add Assets/GameObjects/PauseMenu.prefab to the scene.");
@@ -62,7 +62,7 @@ public sealed class PauseMenuController : MonoBehaviour
     /// <summary>Ensures the authored controller survives the pre-game to board transition.</summary>
     public static void PrepareForGameplay()
     {
-        PauseMenuController menu = FindFirstObjectByType<PauseMenuController>(FindObjectsInactive.Include);
+        PauseMenuController menu = FindAnyObjectByType<PauseMenuController>(FindObjectsInactive.Include);
         if (menu == null)
         {
             Debug.LogError("Pause menu is missing. Add Assets/GameObjects/PauseMenu.prefab to the scene.");
@@ -153,7 +153,7 @@ public sealed class PauseMenuController : MonoBehaviour
             RefreshVolumeControls();
             SetButtonLabel(saveButton, "Save campaign");
             RefreshSaveLoadButtons();
-            SkinManager skin = FindFirstObjectByType<SkinManager>();
+            SkinManager skin = FindAnyObjectByType<SkinManager>();
             if (playSound) Sounds.Instance?.PlayUiClick();
         }
         else
@@ -201,7 +201,7 @@ public sealed class PauseMenuController : MonoBehaviour
 
     private void ChangeSkin()
     {
-        SkinManager manager = FindFirstObjectByType<SkinManager>();
+        SkinManager manager = FindAnyObjectByType<SkinManager>();
         if (manager == null) return;
         manager.ChangeSkin(manager.GetNextSkin());
         Sounds.Instance?.PlayUiClick();

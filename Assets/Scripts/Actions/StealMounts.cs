@@ -22,7 +22,7 @@ public class StealMounts : AgentPCAction
             pc.owner.RemoveMounts(toSteal);
             MessageDisplayNoUI.ShowMessage(pc.hex, c, $"-{toSteal} <sprite name=\"mounts\"> stolen!", Color.red);
             MessageDisplay.ShowMessage($"+{toSteal} <sprite name=\"mounts\"> stolen!", Color.green);
-            if (playable == Game.Instance.player) FindFirstObjectByType<StoresManager>().RefreshStores();
+            if (playable == Game.Instance.player) FindAnyObjectByType<StoresManager>().RefreshStores();
             return true; 
         };
         condition = (c) => {

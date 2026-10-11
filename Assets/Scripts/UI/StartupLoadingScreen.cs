@@ -290,8 +290,8 @@ public sealed class StartupLoadingScreen : MonoBehaviour
 
     private bool StartupReady()
     {
-        DeckManager[] deckManagers = FindObjectsByType<DeckManager>(FindObjectsSortMode.None);
-        Illustrations[] illustrationServices = FindObjectsByType<Illustrations>(FindObjectsSortMode.None);
+        DeckManager[] deckManagers = FindObjectsByType<DeckManager>();
+        Illustrations[] illustrationServices = FindObjectsByType<Illustrations>();
         illustrations = illustrationServices.FirstOrDefault(service => service.IsLoaded)
             ?? illustrationServices.FirstOrDefault();
         return deckManagers.Any(manager => manager.IsLoaded)

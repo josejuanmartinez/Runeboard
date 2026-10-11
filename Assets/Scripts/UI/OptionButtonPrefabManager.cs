@@ -14,7 +14,7 @@ public class OptionButtonPrefabManager : MonoBehaviour
     {
         if (text != null) text.text = label;
 
-        if (illustrations == null) illustrations = FindFirstObjectByType<Illustrations>();
+        if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
 
         Sprite sprite = !string.IsNullOrWhiteSpace(iconSpriteName) && illustrations != null
             ? illustrations.GetIllustrationByName(iconSpriteName, false)

@@ -180,7 +180,7 @@ public class VictoryPoints
     private static void RefreshIconVictoryPoints(PlayableLeader leader, int points)
     {
         if (leader == null) return;
-        PlayableLeaderIcons icons = Object.FindFirstObjectByType<PlayableLeaderIcons>();
+        PlayableLeaderIcons icons = Object.FindAnyObjectByType<PlayableLeaderIcons>();
         if (icons == null) return;
         icons.RefreshVictoryPointsFor(leader, points);
     }

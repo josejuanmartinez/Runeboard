@@ -37,7 +37,7 @@ public class IntroVideoManager : MonoBehaviour
     private IEnumerator PlayAfterScenarioChoice()
     {
         yield return new WaitUntil(() => GameConfig.ScenarioChosen);
-        SkinManager skinManager = FindFirstObjectByType<SkinManager>();
+        SkinManager skinManager = FindAnyObjectByType<SkinManager>();
         vp.clip = skinManager != null ? skinManager.GetIntroVideo() : null;
         if (vp.clip == null)
         {

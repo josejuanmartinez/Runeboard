@@ -7,7 +7,7 @@ using UnityEngine;
 public class UtilityAIContext
 {
     // Board is instantiated once at game start and lives for the whole session. Resolving it
-    // via FindFirstObjectByType inside this constructor used to happen once per scored card —
+    // via FindAnyObjectByType inside this constructor used to happen once per scored card —
     // thousands of scene-wide lookups per AI turn (same anti-pattern as the earlier hex-load
     // freeze, see Hex.cs's sharedBoard). Cache it statically instead; Unity's overloaded
     // null-check re-resolves it if the scene reloads and the old reference is destroyed.

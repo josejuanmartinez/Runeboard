@@ -43,7 +43,7 @@ public class LogManager : MonoBehaviour
 
         Instance = this;
 
-        colors = FindFirstObjectByType<Colors>();
+        colors = FindAnyObjectByType<Colors>();
         if (entryTemplate != null) entryTemplate.SetActive(false);     
     }
 
@@ -127,7 +127,7 @@ public class LogManager : MonoBehaviour
 
     private Color ResolveColor(LogCategory category)
     {
-        if (colors == null) colors = FindFirstObjectByType<Colors>();
+        if (colors == null) colors = FindAnyObjectByType<Colors>();
         if (colors == null) return Color.white;
 
         return category switch

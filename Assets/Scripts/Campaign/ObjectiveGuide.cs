@@ -2,25 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
 /// Shows the player where and how to pursue their objectives:
-///  • a pulsing gold beacon + name plate on every objective target, drawn above the fog
-///  • FocusObjective(): camera flies to a target with a caption saying how to achieve it
-///    (the objective tracker calls this when an objective is clicked)
-///  • on the first turn, a short guided camera tour of all targets
+///  • a faint gold ring and a gold place name on every objective target
+///  • on the first turn, an in-place guided tour: the camera flies to each objective and a callout
+///    is pinned beside the place itself (leader line + ring on the hex) explaining what to do and
+///    what it is worth; the player steps through with Next / Skip (Enter / Esc). The last step
+///    points at the objective tracker, which reopens any objective later.
+///  • FocusObjective(): the same pinned callout for one objective (tracker click)
 /// </summary>
 public class ObjectiveGuide : MonoBehaviour
 {
+    private const float CalloutWidth = 400f;
+    private const float LineGap = 70f;     // horizontal distance from the target to the callout
+
     private static ObjectiveGuide instance;
     private readonly List<(Transform root, SpriteRenderer glow, Hex hex)> beacons = new();
     private Game game;
     private bool tourDone;
-    private GameObject caption;
     private Coroutine running;
 
+    // Callout state.
+    private RectTransform canvasRoot;
+    private Canvas canvas;
+    private RectTransform callout;
+    private RectTransform leaderLine;
+    private RectTransform marker;
+    private Vector3? anchorWorld;
+    private RectTransform anchorUi;
+    private readonly HashSet<Hex> focusedHexes = new();
+    private bool advance, skip;
+
     public static ObjectiveGuide Instance => instance;
+    public bool TourRunning { get; private set; }
 
     public static void Attach(Game owner)
     {
@@ -42,32 +59,46 @@ public class ObjectiveGuide : MonoBehaviour
         if (!tourDone && !AutoTour.Active)
         {
             tourDone = true;
+            Stop();
             running = StartCoroutine(Tour());
         }
     }
 
+    // ------------------------------------------------------------------ frame
+
     private void Update()
     {
-        float pulse = 0.55f + 0.45f * Mathf.Sin(Time.unscaledTime * 2.4f);
+        // Kept well under the bloom threshold so the ring never washes out the city it marks.
+        float pulse = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 1.6f);
         foreach (var b in beacons)
         {
             if (b.glow == null) continue;
-            b.glow.color = new Color(1f, 0.80f, 0.42f, 0.30f + 0.35f * pulse);
-            b.glow.transform.localScale = Vector3.one * (1.25f + 0.12f * pulse);
+            bool focused = focusedHexes.Contains(b.hex);
+            b.glow.color = new Color(0.85f, 0.68f, 0.36f, (focused ? 0.75f : 0.45f) + 0.15f * pulse);
+            b.glow.transform.localScale = Vector3.one * ((focused ? 1.05f : 0.95f) + 0.03f * pulse);
         }
-        if (caption != null && Input.GetMouseButtonDown(0) && running != null)
-        {
-            StopCoroutine(running);
-            running = null;
-            HideCaption();
-        }
+
+        if (callout == null) return;
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) advance = true;
+        if (Input.GetKeyDown(KeyCode.Escape)) skip = true;
     }
+
+    private void LateUpdate()
+    {
+        if (callout != null) PlaceCallout();
+    }
+
+    // ------------------------------------------------------------------ beacons
 
     private void BuildBeacons()
     {
         CampaignObjectives objectives = CampaignObjectives.Instance;
         if (objectives == null || game?.player == null) return;
-        foreach (var b in beacons) if (b.root != null) Destroy(b.root.gameObject);
+        foreach (var b in beacons)
+        {
+            if (b.root != null) Destroy(b.root.gameObject);
+            if (b.hex != null) b.hex.SetObjectiveMarker(false);
+        }
         beacons.Clear();
         foreach (CampaignObjective o in objectives.GetObjectives(game.player))
         {
@@ -84,107 +115,340 @@ public class ObjectiveGuide : MonoBehaviour
         var root = new GameObject($"ObjectiveBeacon_{o.id}").transform;
         root.position = hex.transform.position + new Vector3(0f, 0f, -0.1f);
 
-        var glowGo = new GameObject("Glow", typeof(SpriteRenderer));
+        // A thin ring on the ground; the place's own label (gold name) carries the text, so there is
+        // no second floating title over the city.
+        var glowGo = new GameObject("Ring", typeof(SpriteRenderer));
         glowGo.transform.SetParent(root, false);
+        glowGo.transform.localPosition = new Vector3(0f, -0.08f, 0f);
         var glow = glowGo.GetComponent<SpriteRenderer>();
-        glow.sprite = BoardLook.SoftEllipseSprite();
+        glow.sprite = BoardLook.SoftRingSprite();
         glow.sortingLayerName = "Hexes";
         glow.sortingOrder = 5;
-
-        var labelGo = new GameObject("Label", typeof(TextMeshPro));
-        labelGo.transform.SetParent(root, false);
-        labelGo.transform.localPosition = new Vector3(0f, 0.62f, 0f);
-        var label = labelGo.GetComponent<TextMeshPro>();
-        label.font = UiTheme.Display;
-        label.fontSize = 2.6f;
-        label.alignment = TextAlignmentOptions.Center;
-        label.color = UiTheme.Gold;
-        label.outlineWidth = 0.25f;
-        label.outlineColor = new Color32(0, 0, 0, 220);
-        label.text = $"★ {DisplayNames.Format(hex.GetPC()?.pcName ?? o.pc)}";
-        label.rectTransform.sizeDelta = new Vector2(6f, 1f);
-        var mr = label.GetComponent<MeshRenderer>();
-        mr.sortingLayerID = glow.sortingLayerID;
-        mr.sortingOrder = 30000;
+        hex.SetObjectiveMarker(true);
         return (root, glow, hex);
     }
 
-    /// <summary>Flies the camera to an objective's first target and explains how to achieve it.</summary>
+    // ------------------------------------------------------------------ tour
+
+    /// <summary>Flies the camera to an objective and pins its explanation beside the place.</summary>
     public void FocusObjective(CampaignObjective o)
     {
+        Stop();
+        running = StartCoroutine(Single(o));
+    }
+
+    private void Stop()
+    {
         if (running != null) StopCoroutine(running);
-        running = StartCoroutine(Visit(o, 3.2f, returnAfter: false));
+        running = null;
+        TourRunning = false;
+        skip = advance = false;
+        HideCallout();
+    }
+
+    private IEnumerator Single(CampaignObjective o)
+    {
+        yield return Step(o, null, -1, -1, lastStep: true);
+        HideCallout();
+        skip = false;
+        running = null;
     }
 
     private IEnumerator Tour()
     {
         CampaignObjectives objectives = CampaignObjectives.Instance;
-        if (objectives == null) yield break;
-        yield return new WaitForSecondsRealtime(0.8f);
-        foreach (CampaignObjective o in objectives.GetObjectives(game.player))
+        if (objectives == null || game?.player == null || !EnsureCanvas()) yield break;
+
+        // Let the turn banner, intro and any popup finish first, so the tour has the screen.
+        yield return new WaitForSecondsRealtime(0.6f);
+        float deadline = Time.unscaledTime + 20f;
+        while (Time.unscaledTime < deadline && (TurnBanner.IsShowing || PopupManager.IsShowing || VideoPopupManager.IsShowing
+            || ConfirmationDialog.IsShowing || SelectionDialog.IsShowing))
+            yield return null;
+        yield return new WaitForSecondsRealtime(0.4f);
+
+        TourRunning = true;
+        List<CampaignObjective> list = new(objectives.GetObjectives(game.player));
+        int total = list.Count + 1;
+        for (int i = 0; i < list.Count && !skip; i++)
+            yield return Step(list[i], null, i + 1, total, lastStep: false);
+
+        if (!skip)
         {
-            if (objectives.GetTargetHexes(o).Count == 0) continue;
-            yield return Visit(o, 2.6f, returnAfter: false);
+            RectTransform tracker = canvasRoot != null ? FindDeep(canvasRoot, "CampaignObjectivesTracker") : null;
+            yield return TrackerStep(tracker, total);
         }
+
+        HideCallout();
         Character selected = Board.Instance != null ? Board.Instance.selectedCharacter : null;
         if (selected?.hex != null) BoardNavigator.Instance?.LookAt(selected.hex.transform.position, 0.8f);
+        TourRunning = false;
+        skip = false;
         running = null;
     }
 
-    private IEnumerator Visit(CampaignObjective o, float hold, bool returnAfter)
+    private IEnumerator Step(CampaignObjective o, RectTransform uiAnchor, int index, int total, bool lastStep)
     {
         CampaignObjectives objectives = CampaignObjectives.Instance;
-        List<Hex> targets = objectives != null ? objectives.GetTargetHexes(o) : null;
-        if (targets == null || targets.Count == 0)
+        List<Hex> targets = objectives != null ? objectives.GetTargetHexes(o) : new List<Hex>();
+
+        focusedHexes.Clear();
+        foreach (Hex h in targets) if (h != null) focusedHexes.Add(h);
+
+        Vector3? world = null;
+        if (targets.Count > 0)
         {
-            ShowCaption(o, objectives);
-            yield return new WaitForSecondsRealtime(hold);
-            HideCaption();
-            yield break;
+            Vector3 c = Vector3.zero;
+            foreach (Hex h in targets) c += h.transform.position;
+            c /= targets.Count;
+            world = targets.Count == 1 ? targets[0].transform.position : c;
+            BoardNavigator.Instance?.LookAt(world.Value, 0.9f);
         }
-        BoardNavigator.Instance?.LookAt(targets[0].transform.position, 0.9f);
-        ShowCaption(o, objectives);
-        yield return new WaitForSecondsRealtime(hold);
-        HideCaption();
+        else
+        {
+            // Objectives without a place (e.g. "hold N cities") are explained from your capital.
+            Hex home = game.player.hex;
+            if (home != null) { world = home.transform.position; BoardNavigator.Instance?.LookAt(world.Value, 0.9f); }
+        }
+
+        string reward = o.decisive ? $"<color={UiTheme.GoldHex}>WINS THE WAR</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color> POINTS";
+        string step = index > 0 ? $"<color={UiTheme.MutedHex}>{index} / {total}</color>   " : "";
+        string places = targets.Count > 1 ? $"\n<color={UiTheme.MutedHex}>{targets.Count} places, all marked on the map</color>" : "";
+        string how = objectives != null ? objectives.HowTo(game.player, o) : string.Empty;
+        bool met = objectives != null && objectives.IsMet(game.player, o);
+        string status = met ? $"\n<color={UiTheme.GoodHex}>Currently held</color>" : "";
+
+        ShowCallout($"{step}<size=78%><cspace=0.1em>OBJECTIVE · {reward}</cspace></size>",
+            o.title,
+            $"{o.description}{places}{status}",
+            string.IsNullOrWhiteSpace(how) ? null : how,
+            lastStep ? "Got it" : "Next",
+            showSkip: !lastStep && index > 0);
+        anchorWorld = world;
+        anchorUi = uiAnchor;
+
+        yield return WaitForAdvance();
+        focusedHexes.Clear();
     }
 
-    private void ShowCaption(CampaignObjective o, CampaignObjectives objectives)
+    private IEnumerator TrackerStep(RectTransform tracker, int total)
     {
-        HideCaption();
-        Layout layout = FindAnyObjectByType<Layout>();
-        Canvas canvas = layout != null ? layout.GetComponentInParent<Canvas>() : null;
-        if (canvas == null) return;
-        RectTransform root = canvas.rootCanvas.transform as RectTransform;
-        float k = Mathf.Max(0.5f, root.rect.height / 1080f);
+        ShowCallout($"<color={UiTheme.MutedHex}>{total} / {total}</color>",
+            "Your war at a glance",
+            "Your objectives and score live here. Click any objective to fly back to it and see how to achieve it.",
+            null, "Begin", showSkip: false);
+        anchorWorld = null;
+        anchorUi = tracker;
+        yield return WaitForAdvance();
+    }
 
-        caption = new GameObject("ObjectiveCaption", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
-        var rt = caption.GetComponent<RectTransform>();
-        rt.SetParent(root, false);
-        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 1f);
-        rt.pivot = new Vector2(0.5f, 1f);
-        rt.localScale = Vector3.one * k;
-        rt.anchoredPosition = new Vector2(0f, -150f * k);
-        rt.sizeDelta = new Vector2(520f, 0f);
-        var vlg = caption.GetComponent<VerticalLayoutGroup>();
-        vlg.padding = new RectOffset(20, 20, 12, 14);
+    private IEnumerator WaitForAdvance()
+    {
+        advance = false;
+        float ignoreUntil = Time.unscaledTime + 0.35f; // a click that ended the last step mustn't skip this one
+        while (!advance && !skip)
+        {
+            if (Time.unscaledTime < ignoreUntil) advance = false;
+            yield return null;
+        }
+        advance = false;
+    }
+
+    // ------------------------------------------------------------------ callout
+
+    private bool EnsureCanvas()
+    {
+        if (canvasRoot != null) return true;
+        Layout layout = FindAnyObjectByType<Layout>();
+        canvas = layout != null ? layout.GetComponentInParent<Canvas>()?.rootCanvas : null;
+        canvasRoot = canvas != null ? canvas.transform as RectTransform : null;
+        return canvasRoot != null;
+    }
+
+    private float K => canvasRoot != null ? Mathf.Max(0.5f, canvasRoot.rect.height / 1080f) : 1f;
+
+    private void ShowCallout(string eyebrow, string title, string body, string how, string nextLabel, bool showSkip)
+    {
+        HideCallout();
+        if (!EnsureCanvas()) return;
+
+        // Leader line + ring marker sit under the callout.
+        leaderLine = NewRect("ObjectiveLeaderLine", canvasRoot);
+        var lineImg = leaderLine.gameObject.AddComponent<Image>();
+        lineImg.color = new Color(0.88f, 0.72f, 0.42f, 0.85f);
+        lineImg.raycastTarget = false;
+        leaderLine.pivot = new Vector2(0f, 0.5f);
+
+        marker = NewRect("ObjectiveMarker", canvasRoot);
+        var ring = marker.gameObject.AddComponent<Image>();
+        ring.sprite = HudSprites.Ring;
+        ring.color = new Color(1f, 0.85f, 0.5f, 1f);
+        ring.raycastTarget = false;
+        marker.sizeDelta = new Vector2(46f, 46f) * K;
+
+        callout = NewRect("ObjectiveCallout", canvasRoot);
+        callout.localScale = Vector3.one * K;
+        callout.pivot = new Vector2(0f, 0.5f);
+        callout.sizeDelta = new Vector2(CalloutWidth, 0f);
+        var panel = callout.gameObject.AddComponent<CinematicPanel>();
+        panel.fillTop = new Color(0.05f, 0.05f, 0.045f, 0.94f);
+        panel.fillBottom = new Color(0.025f, 0.025f, 0.022f, 0.96f);
+        panel.raycastTarget = true; // swallow clicks so they don't select hexes underneath
+        var vlg = callout.gameObject.AddComponent<VerticalLayoutGroup>();
+        vlg.padding = new RectOffset(22, 22, 16, 16);
+        vlg.spacing = 6f;
         vlg.childControlWidth = vlg.childControlHeight = true;
         vlg.childForceExpandHeight = false;
-        caption.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        vlg.childForceExpandWidth = true;
+        callout.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        var textGo = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        textGo.GetComponent<RectTransform>().SetParent(rt, false);
-        var text = textGo.GetComponent<TextMeshProUGUI>();
-        UiTheme.StyleBody(text, 15f);
-        text.alignment = TextAlignmentOptions.Center;
-        text.raycastTarget = false;
-        string reward = o.decisive ? "Wins the war" : $"+{o.points} points";
-        string how = objectives != null ? objectives.HowTo(game.player, o) : string.Empty;
-        text.text = $"{UiTheme.Eyebrow("Objective")}\n<size=125%><color={UiTheme.GoldHex}>{o.title}</color></size>  <color={UiTheme.MutedHex}>· {reward}</color>\n{o.description}\n<color={UiTheme.GoodHex}>{how}</color>";
+        AddText(callout, eyebrow, 13f, UiTheme.Text, false);
+        AddText(callout, title, 26f, UiTheme.Gold, true);
+        AddText(callout, body, 14.5f, UiTheme.Text, false);
+        if (how != null) AddText(callout, $"<color={UiTheme.GoodHex}>How:</color> {how}", 14f, UiTheme.Muted, false);
+
+        var row = NewRect("Buttons", callout);
+        var hlg = row.gameObject.AddComponent<HorizontalLayoutGroup>();
+        hlg.childAlignment = TextAnchor.MiddleRight;
+        hlg.spacing = 14f;
+        hlg.padding = new RectOffset(0, 0, 8, 0);
+        hlg.childControlWidth = hlg.childControlHeight = true;
+        hlg.childForceExpandWidth = false;
+        row.gameObject.AddComponent<LayoutElement>().preferredHeight = 48f;
+        if (showSkip) AddButton(row, "Skip tour", primary: false, () => skip = true);
+        AddButton(row, nextLabel, primary: true, () => advance = true);
+
+        PlaceCallout();
     }
 
-    private void HideCaption()
+    private void HideCallout()
     {
-        if (caption != null) Destroy(caption);
-        caption = null;
+        if (callout != null) Destroy(callout.gameObject);
+        if (leaderLine != null) Destroy(leaderLine.gameObject);
+        if (marker != null) Destroy(marker.gameObject);
+        callout = leaderLine = marker = null;
+        anchorWorld = null;
+        anchorUi = null;
+    }
+
+    // Pins the callout beside its anchor (a board point or a HUD element), on whichever side has
+    // room, clamped clear of the top bar and the bottom dock; the leader line joins them.
+    private void PlaceCallout()
+    {
+        Rect r = canvasRoot.rect;
+        float k = K;
+        Vector2 size = new(CalloutWidth * k, callout.rect.height * k);
+        Vector2 anchor;
+        bool hasAnchor = TryAnchorLocal(out anchor);
+        if (!hasAnchor) anchor = new Vector2(r.center.x - size.x * 0.5f - LineGap * k, r.center.y);
+
+        float top = r.yMax - 130f * k, bottom = r.yMin + 300f * k;
+        bool right = anchor.x + LineGap * k + size.x < r.xMax - 24f * k;
+        float x = right ? anchor.x + LineGap * k : anchor.x - LineGap * k - size.x;
+        x = Mathf.Clamp(x, r.xMin + 24f * k, r.xMax - 24f * k - size.x);
+        float y = Mathf.Clamp(anchor.y, bottom + size.y * 0.5f, top - size.y * 0.5f);
+        callout.anchorMin = callout.anchorMax = new Vector2(0.5f, 0.5f);
+        callout.anchoredPosition = new Vector2(x, y);
+
+        bool showMarker = hasAnchor && anchorWorld.HasValue;
+        marker.gameObject.SetActive(showMarker);
+        marker.anchorMin = marker.anchorMax = new Vector2(0.5f, 0.5f);
+        marker.anchoredPosition = anchor;
+        float s = 1f + 0.08f * Mathf.Sin(Time.unscaledTime * 3f);
+        marker.localScale = new Vector3(s, s * 0.62f, 1f); // squashed like the board's perspective
+
+        leaderLine.gameObject.SetActive(hasAnchor);
+        if (!hasAnchor) return;
+        Vector2 end = new(right ? x : x + size.x, y);
+        Vector2 start = anchor + (end - anchor).normalized * (showMarker ? 22f * k : 0f);
+        Vector2 d = end - start;
+        leaderLine.anchorMin = leaderLine.anchorMax = new Vector2(0.5f, 0.5f);
+        leaderLine.anchoredPosition = start;
+        leaderLine.sizeDelta = new Vector2(d.magnitude, 1.6f * k);
+        leaderLine.localEulerAngles = new Vector3(0f, 0f, Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg);
+    }
+
+    // Anchor in canvas-local coordinates (origin at the canvas centre).
+    private bool TryAnchorLocal(out Vector2 local)
+    {
+        local = Vector2.zero;
+        Camera uiCam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+        if (anchorWorld.HasValue)
+        {
+            Camera cam = Camera.main;
+            if (cam == null) return false;
+            Vector3 screen = cam.WorldToScreenPoint(anchorWorld.Value);
+            return RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRoot, screen, uiCam, out local);
+        }
+        if (anchorUi != null && anchorUi.gameObject.activeInHierarchy)
+        {
+            Vector3[] c = new Vector3[4];
+            anchorUi.GetWorldCorners(c);
+            Vector3 rightMid = (c[2] + c[3]) * 0.5f;
+            local = canvasRoot.InverseTransformPoint(rightMid);
+            return true;
+        }
+        return false;
+    }
+
+    private static RectTransform NewRect(string name, Transform parent)
+    {
+        var go = new GameObject(name, typeof(RectTransform));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(parent, false);
+        return rt;
+    }
+
+    private static void AddText(RectTransform parent, string value, float size, Color color, bool display)
+    {
+        var go = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        go.GetComponent<RectTransform>().SetParent(parent, false);
+        var t = go.GetComponent<TextMeshProUGUI>();
+        if (display) UiTheme.StyleTitle(t, size, color); else UiTheme.StyleBody(t, size, color);
+        t.textWrappingMode = TextWrappingModes.Normal;
+        t.richText = true;
+        t.raycastTarget = false;
+        t.text = value;
+    }
+
+    private static void AddButton(RectTransform parent, string label, bool primary, UnityEngine.Events.UnityAction onClick)
+    {
+        var go = new GameObject(label, typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel), typeof(Button), typeof(LayoutElement));
+        go.GetComponent<RectTransform>().SetParent(parent, false);
+        var panel = go.GetComponent<CinematicPanel>();
+        panel.ornament = 0f;
+        panel.inset = 2f;
+        panel.fill = primary;
+        panel.fillTop = new Color(0.20f, 0.16f, 0.09f, 0.95f);
+        panel.fillBottom = new Color(0.12f, 0.09f, 0.05f, 0.95f);
+        panel.line = primary ? new Color(0.92f, 0.76f, 0.45f, 1f) : new Color(0f, 0f, 0f, 0f);
+        var le = go.GetComponent<LayoutElement>();
+        le.preferredWidth = primary ? 130f : 100f;
+        le.preferredHeight = 40f;
+        var button = go.GetComponent<Button>();
+        button.targetGraphic = panel;
+        button.onClick.AddListener(() => { Sounds.Instance?.PlayUiClick(); onClick(); });
+        var colors = button.colors;
+        colors.highlightedColor = new Color(1.25f, 1.2f, 1.1f, 1f);
+        button.colors = colors;
+
+        var textGo = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        var trt = textGo.GetComponent<RectTransform>();
+        trt.SetParent(go.transform, false);
+        trt.anchorMin = Vector2.zero;
+        trt.anchorMax = Vector2.one;
+        trt.offsetMin = trt.offsetMax = Vector2.zero;
+        var t = textGo.GetComponent<TextMeshProUGUI>();
+        UiTheme.StyleBody(t, 15f, primary ? UiTheme.Gold : UiTheme.Muted);
+        t.alignment = TextAlignmentOptions.Center;
+        t.raycastTarget = false;
+        t.text = primary ? $"{label}  ›" : label;
+    }
+
+    private static RectTransform FindDeep(Transform root, string name)
+    {
+        foreach (RectTransform t in root.GetComponentsInChildren<RectTransform>(true))
+            if (t.name == name) return t;
+        return null;
     }
 }

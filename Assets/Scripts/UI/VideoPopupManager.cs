@@ -65,10 +65,9 @@ public class VideoPopupManager : MonoBehaviour
         }
         IsShowing = false;
 
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(Hide);
-        }
+        // Continue first completes the narration, then closes (see Continue()).
+        if (!PopupContinue.Rewire(this, "Hide", Continue) && closeButton != null)
+            closeButton.onClick.AddListener(Continue);
     }
 
     private void OnDestroy()
@@ -98,6 +97,7 @@ public class VideoPopupManager : MonoBehaviour
         currentKey = key;
         Game.Instance?.NotifyStartupPopupShown();
 
+        Stylize(DisplayNames.Format(leader.characterName));
         if (scrollableText != null)
         {
             scrollableText.StartWriting(introText);
@@ -142,6 +142,75 @@ public class VideoPopupManager : MonoBehaviour
             entry = genericVideos.Find(e => e != null && string.Equals(e.key, key, StringComparison.OrdinalIgnoreCase));
         }
         return entry?.clip;
+    }
+
+    /// <summary>First press reveals the rest of the narration; the next one closes.</summary>
+    public void Continue()
+    {
+        if (scrollableText != null && scrollableText.IsTyping)
+        {
+            scrollableText.Complete();
+            return;
+        }
+        Hide();
+    }
+
+    // Story presentation: narration in the display serif at reading size, a speaker line above
+    // it, and a gold hairline framing the illustration. Runtime-only so the prefab stays as is.
+    private bool stylized;
+    private TMPro.TextMeshProUGUI speakerLine;
+
+    private void Stylize(string speaker)
+    {
+        TMPro.TMP_Text body = scrollableText != null ? scrollableText.textMeshPro : null;
+        if (!stylized)
+        {
+            stylized = true;
+            if (body != null)
+            {
+                UiTheme.StyleTitle(body, 23f, UiTheme.Text);
+                body.lineSpacing = 8f;
+                body.paragraphSpacing = 10f;
+                body.alignment = TMPro.TextAlignmentOptions.TopLeft;
+            }
+            if (scrollableText != null && scrollableText.transform is RectTransform textRoot)
+            {
+                RectTransform scroll = textRoot.GetComponentInParent<ScrollRect>() is ScrollRect sr ? sr.transform as RectTransform : textRoot;
+                var go = new GameObject("Speaker", typeof(RectTransform), typeof(CanvasRenderer), typeof(TMPro.TextMeshProUGUI));
+                var rt = go.GetComponent<RectTransform>();
+                rt.SetParent(scroll, false);
+                rt.anchorMin = new Vector2(0f, 1f);
+                rt.anchorMax = new Vector2(1f, 1f);
+                rt.pivot = new Vector2(0f, 0f);
+                rt.anchoredPosition = new Vector2(0f, 6f);
+                rt.sizeDelta = new Vector2(0f, 40f);
+                speakerLine = go.GetComponent<TMPro.TextMeshProUGUI>();
+                speakerLine.raycastTarget = false;
+                speakerLine.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                speakerLine.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+                UiTheme.StyleTitle(speakerLine, 26f);
+            }
+            if (videoDisplay != null && videoDisplay.transform is RectTransform art)
+            {
+                var frameGo = new GameObject("ArtFrame", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel));
+                var frame = frameGo.GetComponent<RectTransform>();
+                frame.SetParent(art.parent, false);
+                frame.SetSiblingIndex(art.GetSiblingIndex() + 1);
+                frame.anchorMin = art.anchorMin;
+                frame.anchorMax = art.anchorMax;
+                frame.pivot = art.pivot;
+                frame.anchoredPosition = art.anchoredPosition;
+                frame.sizeDelta = art.sizeDelta + new Vector2(14f, 14f);
+                var panel = frameGo.GetComponent<CinematicPanel>();
+                panel.fill = false;
+                panel.inset = 0f;
+                panel.ornament = 4f;
+                panel.bottomOrnament = true;
+                panel.raycastTarget = false;
+            }
+        }
+        if (speakerLine != null)
+            speakerLine.text = $"<size=55%><color={UiTheme.GoldHex}><cspace=0.14em>PROLOGUE</cspace></color></size>   {speaker}";
     }
 
     public void Hide()

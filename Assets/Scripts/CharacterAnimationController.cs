@@ -152,6 +152,9 @@ public class CharacterAnimationController : MonoBehaviour
     private int frameIndex;
     private float frameTimer;
     private bool cursorHovering;
+    // Per-unit idle tempo and pulse phase, so units on the board don't breathe in lockstep.
+    private float idleTempo = 1f;
+    private float pulsePhase;
 
     private MaterialPropertyBlock outlinePropertyBlock;
     // Full-alpha alignment outline color last applied by SetOutlineForCharacter/ClearOutline —
@@ -177,6 +180,8 @@ public class CharacterAnimationController : MonoBehaviour
     {
         EnsureSpriteRenderer();
         ApplyOutlineMaterial();
+        idleTempo = Random.Range(0.88f, 1.12f);
+        pulsePhase = Random.Range(0f, 10f);
     }
 
     private void Update()
@@ -213,13 +218,16 @@ public class CharacterAnimationController : MonoBehaviour
         if (currentStateName != desiredStateName)
         {
             currentStateName = desiredStateName;
-            frameIndex = 0;
+            // Idle loops start on a random frame so neighbouring units are out of step.
+            bool idleLoop = desiredStateName == StandingIdleStateName && state.frameCount > 1;
+            frameIndex = idleLoop ? Random.Range(0, state.frameCount) : 0;
             frameTimer = 0f;
         }
 
         AnimationKind? activeKind = GetKindForStateName(currentStateName);
         bool isTurning = activeKind == AnimationKind.TurnLeft || activeKind == AnimationKind.TurnRight;
-        float speedMultiplier = isTurning ? Mathf.Max(turnAnimationSpeedMultiplier, 0.01f) : 1f;
+        float speedMultiplier = isTurning ? Mathf.Max(turnAnimationSpeedMultiplier, 0.01f)
+            : activeKind == AnimationKind.StandingIdle ? idleTempo : 1f;
         float frameDuration = 1f / (Mathf.Max(state.fps, 0.01f) * speedMultiplier);
         frameTimer += Time.deltaTime;
         // Loops (not a single "if") to fully drain elapsed time: turnAnimationSpeedMultiplier can
@@ -404,6 +412,28 @@ public class CharacterAnimationController : MonoBehaviour
         focusTarget = selected ? 1f : hovered ? 0.65f : 0f;
     }
 
+    // The gold ring under the feet marks focus only (selected = full, hovered = faint). Shown
+    // under every unit at once it read as decoration and cluttered the board.
+    private SpriteRenderer goldRing;
+    private bool goldRingResolved;
+
+    private void UpdateGoldRing()
+    {
+        if (!goldRingResolved)
+        {
+            goldRingResolved = true;
+            Transform ring = transform.Find("GoldRing");
+            goldRing = ring != null ? ring.GetComponent<SpriteRenderer>() : null;
+        }
+        if (goldRing == null) return;
+        float alpha = Mathf.SmoothStep(0f, 1f, focusAmount);
+        bool visible = alpha > 0.01f;
+        if (goldRing.enabled != visible) goldRing.enabled = visible;
+        if (!visible) return;
+        Color c = goldRing.color;
+        if (!Mathf.Approximately(c.a, alpha)) { c.a = alpha; goldRing.color = c; }
+    }
+
     private void ResetEnemyAlert()
     {
         if (enemyAlertCoroutine != null) StopCoroutine(enemyAlertCoroutine);
@@ -413,13 +443,15 @@ public class CharacterAnimationController : MonoBehaviour
 
     private void LateUpdate()
     {
-        UpdateOutlinePresentation(Time.time, Time.deltaTime);
+        UpdateOutlinePresentation(Time.time + pulsePhase, Time.deltaTime);
     }
 
     private void UpdateOutlinePresentation(float time, float deltaTime)
     {
+        if (goldRing != null && (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite)) goldRing.enabled = false;
         if (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite) return;
         focusAmount = Mathf.MoveTowards(focusAmount, focusTarget, deltaTime * 5f);
+        UpdateGoldRing();
         // Two rounded beats followed by a rest: a heartbeat rather than a flashing alarm.
         float phase = Mathf.Repeat(time * enemyHeartbeatSpeed, 1f);
         float first = Mathf.Exp(-Mathf.Pow((phase - 0.18f) / 0.075f, 2f));
@@ -531,15 +563,14 @@ public class CharacterAnimationController : MonoBehaviour
             return false;
         }
 
-        // Captured before the attempt: if CharacterSpritesheets was still loading when this
-        // call started and resolution fails, it's worth an automatic retry once loading
-        // finishes. If it was ALREADY loaded and still failed, that's a genuine no-match —
-        // don't mark it pending, or Update() would retry it every single frame forever.
-        bool wasLoadedBeforeAttempt = CharacterSpritesheets.IsLoaded;
+        // Checked AFTER the attempt: resolving can itself start loading this character's sheets
+        // (they load lazily), so a failure while anything is still loading is worth a retry. If
+        // nothing is loading and it still failed, that's a genuine no-match — don't mark it
+        // pending, or Update() would retry it every single frame forever.
         if (!ResolveCharacter(character))
         {
             Clear();
-            pendingCharacter = wasLoadedBeforeAttempt ? null : character;
+            pendingCharacter = CharacterSpritesheets.IsLoaded ? null : character;
             return false;
         }
 
@@ -559,9 +590,9 @@ public class CharacterAnimationController : MonoBehaviour
         bool resolved = CharacterSpritesheets.TryResolveRaceOrName(character.characterName, character.SpriteVariantBaseName, character.race, fallback, out resolvedRaceOrName);
         if (!resolved)
         {
-            if (!CharacterSpritesheets.IsLoaded)
-                Debug.LogWarning($"[CharacterAnimationController] '{character.characterName}': CharacterSpritesheets Addressables load isn't finished yet — will retry on the next Show() call.");
-            else
+            // Still loading is normal (sheets load lazily) and retried every frame — only a
+            // genuine no-match is worth a log line.
+            if (CharacterSpritesheets.IsLoaded)
                 Debug.LogWarning($"[CharacterAnimationController] '{character.characterName}' (variantOf={character.SpriteVariantBaseName}, race={character.race}, fallback='{fallback}'): no baked spritesheet found under that name, variant base, race, or fallback.");
             resolvedForCharacter = null;
             return false;

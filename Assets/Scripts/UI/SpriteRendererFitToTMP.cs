@@ -34,11 +34,11 @@ public class SpriteRendererFitToTMP : MonoBehaviour
             rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
             rect.pivot = new Vector2(.5f, 1f);
             rect.anchoredPosition = new Vector2(0, -.23f);
-            rect.sizeDelta = new Vector2(.94f, .3f);
+            rect.sizeDelta = new Vector2(1.1f, .36f);
             label.alignment = TextAlignmentOptions.Top;
             label.enableAutoSizing = true;
-            label.fontSizeMin = .7f;
-            label.fontSizeMax = 1.15f;
+            label.fontSizeMin = .85f;
+            label.fontSizeMax = 1.35f;
             label.lineSpacing = 0;
             label.extraPadding = true;
             label.fontStyle = FontStyles.Normal;

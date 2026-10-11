@@ -85,9 +85,9 @@ public class Board : MonoBehaviour
     public RegionLabelManager regionLabelManager;
 
     // Array to store the terrain types
-    public TerrainEnum[,] terrainGrid;
+    [System.NonSerialized] public TerrainEnum[,] terrainGrid;
     // Dictionary to store all generated hexes
-    public Dictionary<Vector2Int, Hex> hexes;
+    [System.NonSerialized] public Dictionary<Vector2Int, Hex> hexes;
     public List<Hex> hexesWithCharacters;
     public List<Hex> hexesWithPCs;
     public List<Hex> hexesWithObjects;

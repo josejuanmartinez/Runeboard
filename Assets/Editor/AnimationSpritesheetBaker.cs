@@ -1507,6 +1507,11 @@ public class AnimationSpritesheetBaker : EditorWindow
         importer.filterMode = _pointFilter ? FilterMode.Point : FilterMode.Bilinear;
         importer.alphaIsTransparency = true;
         importer.npotScale = TextureImporterNPOTScale.None;
+        // Sheets are drawn several times smaller than baked: mipmaps (keeping alpha coverage so
+        // silhouettes don't thin out) are what stop them shimmering when minified.
+        importer.mipmapEnabled = true;
+        importer.mipMapsPreserveCoverage = true;
+        importer.alphaTestReferenceValue = 0.5f;
         importer.maxTextureSize = Mathf.Clamp(Mathf.NextPowerOfTwo(Mathf.Max(atlas.width, atlas.height)), 32, SystemInfo.maxTextureSize);
 
         // Reimport now, BEFORE computing/assigning per-frame sprite rects. The very first
@@ -1558,6 +1563,15 @@ public class AnimationSpritesheetBaker : EditorWindow
 
         dataProvider.Apply();
         importer.SaveAndReimport();
+
+        // Sliced at full size (see above); now import smaller. Frames are drawn ~80 px on screen, so
+        // 4096 (256 px frames) loses nothing visible for a quarter of the memory. Sprite rects stay
+        // in source pixels, and SpriteOutline measures widths in baked-frame texels.
+        if (importer.maxTextureSize > 4096)
+        {
+            importer.maxTextureSize = 4096;
+            importer.SaveAndReimport();
+        }
 
         // For a large sub-sprite count (16 cols × 11 rows = 176 here), SaveAndReimport()
         // reimporting the file doesn't guarantee every Sprite sub-asset is already materialized

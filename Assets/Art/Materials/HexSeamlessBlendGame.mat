@@ -53,18 +53,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ArtScale: 1.04
+    - _ArtShiftY: 0.0565
     - _AspectY: 1.3
-    - _BlendBand: 0.2
+    - _BlendBand: 1
     - _BlendStrength: 0.5
-    - _EdgeCrop: 0
+    - _EdgeCrop: 1
     - _EdgeTrim: 0.08
-    - _FogFade: 0
+    - _FogFade: 0.5
     - _GammaOut: 0
     - _GridGlowWidth: 0.01
     - _GridHueScale: 0.12
     - _GridIntensity: 2
     - _GridOn: 0
     - _GridWidth: 1.2
+    - _InkBand: 0.03
     - _NeighborValid0: 0
     - _NeighborValid1: 0
     - _NeighborValid2: 0

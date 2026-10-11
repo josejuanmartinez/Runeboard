@@ -387,7 +387,7 @@ public class SelectionDialog : MonoBehaviour
         public static void AttachTo(GameObject obj, Graphic icon, Button button)
         {
             if (obj == null || icon == null || button == null) return;
-            IconHoverTint effect = obj.GetComponent<IconHoverTint>() ?? obj.AddComponent<IconHoverTint>();
+            IconHoverTint effect = obj.GetOrAddComponent<IconHoverTint>();
             effect.icon = icon;
             effect.button = button;
             effect.Apply(button.colors.normalColor);
@@ -728,13 +728,13 @@ public class SelectionDialog : MonoBehaviour
         obj.name = $"Option_{index}";
         OptionButtonPrefabManager prefabManager = obj.GetComponent<OptionButtonPrefabManager>();
         
-        CanvasGroup cg = obj.GetComponent<CanvasGroup>() ?? obj.AddComponent<CanvasGroup>();
+        CanvasGroup cg = obj.GetOrAddComponent<CanvasGroup>();
         cg.alpha = 0f;
 
         // The option icon is a fixed ~64px-tall image (see SelectionManagerOption prefab's
         // "Icon" child); shrinking the button below that spills the icon into neighboring
         // buttons, so the button height must stay at least icon-sized regardless of hasDesc.
-        LayoutElement le = obj.GetComponent<LayoutElement>() ?? obj.AddComponent<LayoutElement>();
+        LayoutElement le = obj.GetOrAddComponent<LayoutElement>();
         le.preferredHeight = hasDesc ? 108f : 64f;
         le.minHeight       = 68f;
 
@@ -748,7 +748,7 @@ public class SelectionDialog : MonoBehaviour
         // Button's targetGraphic (reassigning targetGraphic to the icon broke clicks —
         // Selectable's own pointer bookkeeping seems to key off it for more than color
         // tinting), so the icon's hover/press highlight is driven separately below instead.
-        Image background = obj.GetComponent<Image>() ?? obj.AddComponent<Image>();
+        Image background = obj.GetOrAddComponent<Image>();
         background.sprite = null;
         background.color = new Color(0.08f, 0.06f, 0.04f, 0f);
         background.raycastTarget = true;
@@ -813,7 +813,7 @@ public class SelectionDialog : MonoBehaviour
         {
             Button btn = optionButtons[i];
             if (btn == null) continue;
-            CanvasGroup cg = btn.GetComponent<CanvasGroup>() ?? btn.gameObject.AddComponent<CanvasGroup>();
+            CanvasGroup cg = btn.GetOrAddComponent<CanvasGroup>();
             StartCoroutine(FadeScaleInButton(btn.transform, cg));
             yield return new WaitForSecondsRealtime(0.04f);
         }

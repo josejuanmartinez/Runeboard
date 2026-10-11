@@ -133,13 +133,12 @@ public sealed class UIAnimatedCharacter : MonoBehaviour
             return false;
         }
 
-        bool wasLoaded = CharacterSpritesheets.IsLoaded;
         if (!CharacterSpritesheets.TryResolveRaceOrName(
                 value.characterName, value.SpriteVariantBaseName, value.race, fallback,
                 out string resolved))
         {
             Clear();
-            pendingCharacter = wasLoaded ? null : value;
+            pendingCharacter = CharacterSpritesheets.IsLoaded ? null : value; // checked after: the attempt itself may start a load
             return false;
         }
 
@@ -178,12 +177,11 @@ public sealed class UIAnimatedCharacter : MonoBehaviour
         }
 
         string trimmedName = requestedCharacterName.Trim();
-        bool wasLoaded = CharacterSpritesheets.IsLoaded;
         if (!CharacterSpritesheets.TryResolveRaceOrName(
                 trimmedName, null, requestedRace, fallback, out string resolved))
         {
             Clear();
-            if (!wasLoaded)
+            if (!CharacterSpritesheets.IsLoaded) // checked after: the attempt itself may start a load
             {
                 pendingCharacterName = trimmedName;
                 pendingRace = requestedRace;

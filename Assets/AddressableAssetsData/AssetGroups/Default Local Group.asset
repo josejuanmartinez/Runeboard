@@ -4749,8 +4749,7 @@ MonoBehaviour:
     - default
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ca248267b8a4e14bb2101b6104fa5f1
-    m_Address: Assets/Art/Fonts/SixtyfourConvergence-Regular-VariableFont_BLED,SCAN,XELA,YELA
-      SDF.asset
+    m_Address: Assets/Art/Fonts/SixtyfourConvergence-Regular-VariableFont_BLED,SCAN,XELA,YELA SDF.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
@@ -5585,12 +5584,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4649a68a79ac3c14cab6bb8dffcda7a0
     m_Address: Assets/Art/3D/fbx/Saruman/Saruman.mat
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4653cf9c0a779e74b92093dbd19e4b8d
-    m_Address: Assets/Art/Cards/Lands/Rhun.jpg
     m_ReadOnly: 0
     m_SerializedLabels:
     - default
@@ -17554,12 +17547,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - default
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d6030c2c3ca1a6c46ace20a8d733013d
-    m_Address: Assets/Art/Cards/PC/Ovatharac.jpg
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d6090b80e7f760047becea346af21474
     m_Address: Assets/Art/Characters/Animations/Wildman_Right_idle_look.anim
     m_ReadOnly: 0
@@ -20244,12 +20231,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f765ca76624dd6840ab05d3347d554c0
     m_Address: Assets/Art/Cards/Actions/Events/Imprisonment.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f77cc4ad36509654cbfba5800a6f9ca6
-    m_Address: Assets/Art/Hexes/PCs/Raider Hold.png
     m_ReadOnly: 0
     m_SerializedLabels:
     - default

@@ -46,11 +46,11 @@ Material:
     - _IsoSquash: 0.55
     - _OrbitSpeed: 0.35
     - _ParticleCount: 3
-    - _ParticleIntensity: 2.2
+    - _ParticleIntensity: 0.9
     - _ParticleRadialWidth: 0.035
     - _RingRadius: 0.42
     - _RingSoftness: 0.015
-    - _RingWidth: 0.09
+    - _RingWidth: 0.03
     - _TrailLength: 1.2
     - _ZWrite: 0
     m_Colors:

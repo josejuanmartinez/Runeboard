@@ -238,25 +238,25 @@ MonoBehaviour:
   m_FontFeatureTable:
     m_MultipleSubstitutionRecords: []
     m_LigatureSubstitutionRecords:
-    - m_ComponentGlyphIDs: 2400000028000000
+    - m_ComponentGlyphIDs: 2400000028000000u
       m_LigatureGlyphID: 134
-    - m_ComponentGlyphIDs: 3200000028000000
+    - m_ComponentGlyphIDs: 3200000028000000u
       m_LigatureGlyphID: 244
-    - m_ComponentGlyphIDs: 4400000048000000
+    - m_ComponentGlyphIDs: 4400000048000000u
       m_LigatureGlyphID: 166
-    - m_ComponentGlyphIDs: 5200000048000000
+    - m_ComponentGlyphIDs: 5200000048000000u
       m_LigatureGlyphID: 245
-    - m_ComponentGlyphIDs: 49000000490000004c000000
+    - m_ComponentGlyphIDs: 49000000490000004c000000u
       m_LigatureGlyphID: 343
-    - m_ComponentGlyphIDs: 490000004c000000
+    - m_ComponentGlyphIDs: 490000004c000000u
       m_LigatureGlyphID: 341
-    - m_ComponentGlyphIDs: 49000000490000004f000000
+    - m_ComponentGlyphIDs: 49000000490000004f000000u
       m_LigatureGlyphID: 344
-    - m_ComponentGlyphIDs: 4900000049000000
+    - m_ComponentGlyphIDs: 4900000049000000u
       m_LigatureGlyphID: 340
-    - m_ComponentGlyphIDs: 490000004f000000
+    - m_ComponentGlyphIDs: 490000004f000000u
       m_LigatureGlyphID: 342
-    - m_ComponentGlyphIDs: 4600000057000000
+    - m_ComponentGlyphIDs: 4600000057000000u
       m_LigatureGlyphID: 328
     m_GlyphPairAdjustmentRecords:
     - m_FirstAdjustmentRecord:

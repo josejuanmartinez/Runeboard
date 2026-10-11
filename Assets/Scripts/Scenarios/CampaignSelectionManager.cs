@@ -213,6 +213,34 @@ namespace RetroLOTR.Scenarios
                 : null;
         }
 
+        /// <summary>Starts a scenario (null = default random campaign); used by the title card menu.</summary>
+        public void ChooseScenario(string scenarioName) => Choose(scenarioName);
+
+        /// <summary>
+        /// Card art for a scenario's representative card, or null while Illustrations is still
+        /// loading / the card is unknown.
+        /// </summary>
+        public static Sprite FindRepresentativeArt(string cardName)
+        {
+            if (string.IsNullOrWhiteSpace(cardName)) return null;
+            Illustrations illustrations = FindAnyObjectByType<Illustrations>();
+            if (illustrations == null || !illustrations.IsLoaded) return null;
+            DeckManager deckManager = DeckManager.Instance != null
+                ? DeckManager.Instance
+                : FindAnyObjectByType<DeckManager>(FindObjectsInactive.Include);
+            if (deckManager != null && (deckManager.cards == null || deckManager.cards.Count == 0))
+                deckManager.InitializeFromResources();
+            CardData cardData = deckManager != null ? deckManager.FindAnyCardByName(cardName) : null;
+            Sprite sprite = null;
+            if (cardData != null)
+            {
+                illustrations.TryGetCardArtByName(cardData.spriteName, out sprite);
+                if (sprite == null) illustrations.TryGetCardArtByName(cardData.name, out sprite);
+            }
+            if (sprite == null) illustrations.TryGetIllustrationByName(cardName, out sprite);
+            return sprite;
+        }
+
         private void Choose(string scenarioName)
         {
             GameConfig.ScenarioToLoad = scenarioName; // null = default random campaign

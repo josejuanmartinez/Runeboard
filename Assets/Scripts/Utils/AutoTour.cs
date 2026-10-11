@@ -90,6 +90,7 @@ public class AutoTourRunner : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(1f);
             yield return Shot("card_preview");
+            DumpHud("hud_dump_preview.txt");
             HandTray.Instance.DebugPreview(-1);
             CardCenterPreview.Instance?.HidePreview();
             yield return new WaitForSecondsRealtime(1f);
@@ -110,6 +111,29 @@ public class AutoTourRunner : MonoBehaviour
             if (selected != null && selected.hex != null) nav.LookAt(selected.hex.transform.position, 0.2f);
             yield return new WaitForSecondsRealtime(1.5f);
             yield return Shot("closeup");
+            // -autotour-hide "nameA;nameB": extra close-ups with each named renderer group hidden, to
+            // find which board layer draws a visual artefact.
+            string[] cmd = Environment.GetCommandLineArgs();
+            int hideAt = Array.IndexOf(cmd, "-autotour-hide");
+            if (hideAt >= 0 && hideAt + 1 < cmd.Length)
+            {
+                var census = new System.Collections.Generic.Dictionary<string, int>();
+                foreach (Renderer r in FindObjectsByType<Renderer>())
+                    if (r.enabled && r.gameObject.activeInHierarchy)
+                        census[r.gameObject.name] = census.TryGetValue(r.gameObject.name, out int c) ? c + 1 : 1;
+                foreach (var kv in census) AutoTour.Log($"renderer '{kv.Key}' x{kv.Value}");
+                foreach (string group in cmd[hideAt + 1].Split(';'))
+                {
+                    var names = new System.Collections.Generic.HashSet<string>(group.Split(','));
+                    var hidden = new System.Collections.Generic.List<Renderer>();
+                    foreach (Renderer r in FindObjectsByType<Renderer>())
+                        if (r.enabled && names.Contains(r.gameObject.name)) { r.enabled = false; hidden.Add(r); }
+                    AutoTour.Log($"hide '{group}': {hidden.Count} renderers");
+                    yield return new WaitForSecondsRealtime(0.5f);
+                    yield return Shot("closeup_hide_" + group.Replace(',', '+'));
+                    foreach (Renderer r in hidden) if (r != null) r.enabled = true;
+                }
+            }
             nav.DebugSetZoom(before);
             yield return new WaitForSecondsRealtime(1f);
         }
@@ -152,7 +176,9 @@ public class AutoTourRunner : MonoBehaviour
 
     // Writes every active RectTransform under each screen-space canvas (path, anchors, position,
     // size, scale and notable components) so HUD layout work can be planned from real numbers.
-    private static void DumpHud()
+    private static void DumpHud() => DumpHud("hud_dump.txt");
+
+    private static void DumpHud(string file)
     {
         var sb = new System.Text.StringBuilder();
         foreach (Canvas canvas in FindObjectsByType<Canvas>())
@@ -163,13 +189,13 @@ public class AutoTourRunner : MonoBehaviour
             sb.AppendLine($"# CANVAS {canvas.name} mode={canvas.renderMode} order={canvas.sortingOrder} rect={root.rect.size} scale={canvas.scaleFactor:0.###} ref={(scaler != null ? scaler.referenceResolution.ToString() : "-")} match={(scaler != null ? scaler.matchWidthOrHeight : -1)}");
             DumpNode(root, "", 0, sb);
         }
-        File.WriteAllText(Path.Combine(AutoTour.OutDir, "hud_dump.txt"), sb.ToString());
+        File.WriteAllText(Path.Combine(AutoTour.OutDir, file), sb.ToString());
         AutoTour.Log("hud dump written");
     }
 
     private static void DumpNode(RectTransform rt, string path, int depth, System.Text.StringBuilder sb)
     {
-        if (depth > 7 || !rt.gameObject.activeInHierarchy) return;
+        if (depth > 11 || !rt.gameObject.activeInHierarchy) return;
         string p = path.Length == 0 ? rt.name : path + "/" + rt.name;
         string comps = string.Join(",", System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(rt.GetComponents<Component>(), c => c != null && !(c is RectTransform) && !(c is CanvasRenderer)), c => c.GetType().Name));
         var tmp = rt.GetComponent<TMPro.TMP_Text>();

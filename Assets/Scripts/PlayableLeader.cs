@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayableLeader : Leader
 {
-    public VictoryPoints victoryPoints;
+    [System.NonSerialized] public VictoryPoints victoryPoints;
     private readonly HashSet<string> discoveredRegions = new(StringComparer.OrdinalIgnoreCase);
     private string selectedSubdeckId;
     private string selectedDeckIdentity;

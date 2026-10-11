@@ -144,7 +144,22 @@ public class HexSeamlessTerrain : MonoBehaviour
         }
         // Runtime copy: play-mode tweaks (grid toggle) must never dirty the asset.
         material = new Material(source);
+        ApplyCommandLineOverrides(material);
         return true;
+    }
+
+    // Look tuning without a rebuild: -hexmat "_BlendBand=0.45,_EdgeTrim=0.1"
+    private static void ApplyCommandLineOverrides(Material target)
+    {
+        string[] args = System.Environment.GetCommandLineArgs();
+        int i = System.Array.IndexOf(args, "-hexmat");
+        if (i < 0 || i + 1 >= args.Length) return;
+        foreach (string pair in args[i + 1].Split(','))
+        {
+            string[] kv = pair.Split('=');
+            if (kv.Length == 2 && float.TryParse(kv[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float v) && target.HasProperty(kv[0].Trim()))
+                target.SetFloat(kv[0].Trim(), v);
+        }
     }
 
     private static Board GetBoard()

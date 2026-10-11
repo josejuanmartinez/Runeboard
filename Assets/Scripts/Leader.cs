@@ -15,7 +15,7 @@ public class Leader : Character
     // HashSet: membership is checked per hex on every fog refresh and per hop during
     // walks — List.Contains made those passes O(board × visible). Not Unity-serialized,
     // which is fine: fog state is rebuilt at runtime.
-    public HashSet<Hex> visibleHexes = new();
+    [System.NonSerialized] public HashSet<Hex> visibleHexes = new();
     public bool playedLandThisTurn;
     // Per-turn cap: only one environmental card may be played per leader per turn (the board
     // only has a single active-environment slot — see EnvironmentalCardManager). Stored on

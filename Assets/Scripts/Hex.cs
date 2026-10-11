@@ -378,6 +378,8 @@ public class Hex : MonoBehaviour
         pcTextBandFit?.ConfigureSettlementPresentation();
         pcName.fontStyle = FontStyles.Normal;
         pcName.lineSpacing = 0f;
+        // Grow/shrink with camera zoom around the label's top anchor (Civ-style readable names).
+        ZoomScaledLabel.Attach(pcTextRoot.gameObject, pcTextRoot.localPosition + labelTransform.localPosition);
 
         // Starts hidden; each caller applies the state it needs right after.
         // Band (the hover target) is deliberately left active — see comment above.
@@ -668,6 +670,7 @@ public class Hex : MonoBehaviour
     // exist underneath.
     private void HideHexLabel()
     {
+        HexNameplates.Hide(this);
         if (pcName != null)
         {
             pcName.text = string.Empty;
@@ -680,6 +683,16 @@ public class Hex : MonoBehaviour
     // hides it accordingly. Called by RedrawArmies, RedrawPC, ClearPC, and the reveal/unreveal
     // paths — whichever one fires must recompute the FULL combined text, since any of
     // pc/armies/characters may have changed independently of the others since the last call.
+    // Objective targets get a gold name on their own place label instead of a second floating title.
+    private bool objectiveMarker;
+
+    public void SetObjectiveMarker(bool on)
+    {
+        if (objectiveMarker == on) return;
+        objectiveMarker = on;
+        RefreshHexLabel();
+    }
+
     private void RefreshHexLabel()
     {
         bool seen = IsHexSeen();
@@ -748,10 +761,12 @@ public class Hex : MonoBehaviour
     
         }
         
-        pcName.text = builder.ToString();
-        pcName.color = new Color(.94f, .92f, .84f);
-        SetActiveFast(pcName.gameObject, true);
+        // Drawn by the screen-space nameplate widget; the world-space label stays hidden and only
+        // lends its font and sprite atlas.
+        pcName.text = string.Empty;
+        SetActiveFast(pcName.gameObject, false);
         pcTextBandFit?.Fit();
+        HexNameplates.Show(this, builder.ToString(), pcName.spriteAsset, pcName.font);
     }
 
     public void RedrawCharacters(bool refreshHoverText = true)
@@ -1041,6 +1056,9 @@ public class Hex : MonoBehaviour
         }
 
         framesColors?.SetHovered(true);
+        // The place label is a non-interactive screen widget now, so hovering the hex itself
+        // brings up the PC card preview the label band used to.
+        SetPcTextHovered(true);
 
         if (s_hexInfoActiveHex != null && s_hexInfoActiveHex != this && s_hexInfoActiveHex.IsMouseOverHexOrPanel())
             return;
@@ -1132,6 +1150,7 @@ public class Hex : MonoBehaviour
             board?.UIHover?.Hide();
             s_hexInfoActiveHex = null;
         }
+        SetPcTextHovered(false);
         CancelPcCardPreview();
     }
 
@@ -2714,8 +2733,20 @@ public class Hex : MonoBehaviour
         }
 
         SetActiveFast(hexTextureWater, isWaterHex);
-        SetActiveFast(cliffGameObject, !isWaterHex);
+        // The rocky cliff face only belongs on the map's southern rim (classic look only — the
+        // seamless shroud map has no rim to show it on): under an inner hex it pokes
+        // out between the next row's tiles as dark chevrons and makes the board read as hexes.
+        SetActiveFast(cliffGameObject, !isWaterHex && !BoardLook.Shroud && !HasTileBelow());
         SetFrontierRowAlpha(frontierAlpha);
+    }
+
+    private bool HasTileBelow()
+    {
+        if (board == null) board = Board.Instance;
+        if (board?.hexes == null) return false;
+        Vector2Int[] neighbors = (v2.x & 1) == 0 ? board.evenRowNeighbors : board.oddRowNeighbors;
+        // Table slots 0 and 5 are the row+1 (south-east / south-west) neighbours.
+        return board.hexes.ContainsKey(v2 + neighbors[0]) || board.hexes.ContainsKey(v2 + neighbors[5]);
     }
 
     // Builds the scene-wide particle templates from the assigned sharedParticlesPrefab.
@@ -2992,17 +3023,20 @@ public class Hex : MonoBehaviour
         return new Vector2(spriteSize.x * scale.x * parentScale.x, spriteSize.y * scale.y * parentScale.y);
     }
 
-    private float CurrentTerrainAlpha() => isCurrentlyUnseen ? 0.1f : 1f;
+    // Under the shroud look, sight is drawn only by the soft FogOfWarOverlay: per-tile dimming or
+    // tinting would outline every hex at the edge of vision.
+    private float CurrentTerrainAlpha() => isCurrentlyUnseen && !BoardLook.ShroudActive ? 0.1f : 1f;
 
     private void UpdateTerrainVisualAlpha()
     {
         if (BoardLook.ShroudActive && !IsHexRevealed())
         {
-            if (terrainTexture) terrainTexture.color = BoardLook.ShroudTint;
+            if (terrainTexture) terrainTexture.color = Color.white;
             SetSpriteAlpha(pcTexture, 0f);
             return;
         }
         if (terrainTexture) terrainTexture.color = Color.white;
+        framesColors?.Reapply();
         SetSpriteAlpha(terrainTexture, CurrentTerrainAlpha());
         SetSpriteAlpha(pcTexture, CurrentTerrainAlpha());
     }
@@ -3027,9 +3061,10 @@ public class Hex : MonoBehaviour
 
         StringBuilder builder = new();
         Color labelColor = pc.owner != null ? Color.Lerp(pc.owner.nationColor, Color.white, .6f) : new Color(.86f, .73f, .49f);
+        if (objectiveMarker) labelColor = new Color(.91f, .77f, .42f);
         builder.Append("<b><color=#").Append(ColorUtility.ToHtmlStringRGB(labelColor)).Append('>');
         builder.Append(DisplayNames.Format(pc.pcName));
-        builder.Append("</color></b><br><size=85%>");
+        builder.Append("</color></b><br><size=100%>");
 
         if (pc.citySize != PCSizeEnum.NONE)
         {

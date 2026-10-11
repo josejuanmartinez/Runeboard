@@ -25,6 +25,12 @@ public class FrameColors : MonoBehaviour
         Refresh();
     }
 
+    /// <summary>One uniform tint for every visible hex, between the authored idle and lit colours.</summary>
+    private Color IdleColor => Color.Lerp(unhoveredColor, scoutedColor, 0.6f);
+
+    /// <summary>Re-applies the tint after something else reset the renderers' colour.</summary>
+    public void Reapply() => Refresh();
+
     public void SetDarkness(bool active)
     {
         if (darkness == active) return;
@@ -66,8 +72,11 @@ public class FrameColors : MonoBehaviour
     // color, never Color.clear, which would zero the art out.
     private void Refresh()
     {
+        // Shroud look: one tint for every tile so the board reads as a continuous map; sight and
+        // memory are shown by the fog overlay, not by re-tinting individual hexes.
         Color color =
             darkness ? darknessColor :
+            BoardLook.ShroudActive ? IdleColor :
             scouted ? scoutedColor :
             hovered ? scoutedColor :
             unhoveredColor;

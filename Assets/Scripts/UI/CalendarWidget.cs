@@ -279,7 +279,7 @@ public class CalendarWidget : MonoBehaviour
         if (triggersWired) return;
         triggersWired = true;
 
-        EventTrigger panelTrigger = GetComponent<EventTrigger>() ?? gameObject.AddComponent<EventTrigger>();
+        EventTrigger panelTrigger = gameObject.GetOrAddComponent<EventTrigger>();
         AddTrigger(panelTrigger, EventTriggerType.PointerEnter, _ =>
         {
             pointerOverPanel = true;
@@ -295,7 +295,7 @@ public class CalendarWidget : MonoBehaviour
         {
             if (cell?.cellObject == null) continue;
             GameObject cellObject = cell.cellObject;
-            EventTrigger trigger = cellObject.GetComponent<EventTrigger>() ?? cellObject.AddComponent<EventTrigger>();
+            EventTrigger trigger = cellObject.GetOrAddComponent<EventTrigger>();
             AddTrigger(trigger, EventTriggerType.PointerEnter, _ =>
             {
                 if (footerText != null && cellDescriptions.TryGetValue(cellObject, out string desc) && !string.IsNullOrEmpty(desc))

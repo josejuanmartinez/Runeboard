@@ -37,17 +37,69 @@ public sealed class StartScreenController : MonoBehaviour
     }
 
     // Card-menu title (see TitleCardMenu): the authored left column is hidden and replaced.
+    // "New Campaign" swaps the same column to one plaque per campaign — no second panel.
+    private TitleCardMenu cardMenu;
+    private Coroutine artLoader;
+
     private void BuildCardMenu()
     {
         Transform menuBar = root.transform.Find("Menu Bar");
         if (menuBar != null) menuBar.gameObject.SetActive(false);
+        cardMenu = TitleCardMenu.Build((RectTransform)root.transform);
+        ShowMainMenu();
+    }
+
+    private void ShowMainMenu()
+    {
+        if (artLoader != null) { StopCoroutine(artLoader); artLoader = null; }
+        cardMenu.Clear();
         SaveGame summary = SaveSystem.PeekSave();
-        UnityEngine.Events.UnityAction onContinue = summary == null ? null : () =>
+        if (summary != null)
+            cardMenu.AddPlaque(TitleCardMenu.MenuArt("Continue"), "Continue", $"Turn {summary.turn}, as {summary.playerLeader}", () =>
+            {
+                if (!SaveSystem.BeginLoad(out string error)) Debug.LogWarning($"Continue failed: {error}");
+            });
+        cardMenu.AddPlaque(TitleCardMenu.MenuArt("NewCampaign"), "New Campaign", "Choose a campaign and a leader", StartCampaign);
+        cardMenu.AddPlaque(TitleCardMenu.MenuArt("Quit"), "Quit", "Leave Runeboard", () => Quit());
+    }
+
+    private void ShowCampaigns()
+    {
+        cardMenu.Clear(back: ShowMainMenu);
+        var pending = new System.Collections.Generic.List<(UnityEngine.UI.Image img, string card)>();
+        foreach (string scenario in ScenarioLoader.GetAvailableScenarios())
         {
-            if (!SaveSystem.BeginLoad(out string error)) Debug.LogWarning($"Continue failed: {error}");
-        };
-        TitleCardMenu.Build((RectTransform)root.transform, onContinue, StartCampaign, () => Quit(),
-            summary != null ? $"Turn {summary.turn}, as {summary.playerLeader}" : null);
+            string captured = scenario;
+            ScenarioLoader.ScenarioDisplayInfo info = ScenarioLoader.GetScenarioDisplayInfo(captured);
+            Sprite art = CampaignSelectionManager.FindRepresentativeArt(info.representativeCardName);
+            UnityEngine.UI.Image img = cardMenu.AddPlaque(art ?? TitleCardMenu.MenuArt("NewCampaign"), info.title,
+                string.IsNullOrWhiteSpace(info.description) ? "A scripted campaign" : info.description,
+                () => campaignSelection.ChooseScenario(captured));
+            if (art == null && !string.IsNullOrWhiteSpace(info.representativeCardName)) pending.Add((img, info.representativeCardName));
+        }
+        cardMenu.AddPlaque(TitleCardMenu.MenuArt("Continue"), "Random Middle-earth", "A freshly drawn board, leaders and fortunes",
+            () => campaignSelection.ChooseScenario(null));
+        cardMenu.AddBackLink("‹  Back", ShowMainMenu);
+        if (pending.Count > 0) artLoader = StartCoroutine(FillArtWhenLoaded(pending));
+    }
+
+    // Card art arrives through Addressables; on the first screen it is often not loaded yet.
+    private System.Collections.IEnumerator FillArtWhenLoaded(System.Collections.Generic.List<(UnityEngine.UI.Image img, string card)> pending)
+    {
+        float deadline = Time.unscaledTime + 15f;
+        while (pending.Count > 0 && Time.unscaledTime < deadline)
+        {
+            yield return null;
+            for (int i = pending.Count - 1; i >= 0; i--)
+            {
+                if (pending[i].img == null) { pending.RemoveAt(i); continue; }
+                Sprite art = CampaignSelectionManager.FindRepresentativeArt(pending[i].card);
+                if (art == null) continue;
+                TitleCardMenu.SetArt(pending[i].img, art);
+                pending.RemoveAt(i);
+            }
+        }
+        artLoader = null;
     }
 
     // "Continue campaign" appears above "Begin your journey" when a save exists. Built by
@@ -73,9 +125,8 @@ public sealed class StartScreenController : MonoBehaviour
 
     public void StartCampaign()
     {
-        if (campaignSelection == null) return;
-        Sounds.Instance?.PlayUiClick();
-        campaignSelection.gameObject.SetActive(!campaignSelection.gameObject.activeSelf);
+        if (campaignSelection == null || cardMenu == null) return;
+        ShowCampaigns();
     }
 
     // Called once a scenario has been chosen; campaignSelection has already hidden itself by then.

@@ -29,12 +29,13 @@ public sealed class RuneboardPanel : MaskableGraphic
             vh.AddVert(p, Color.Lerp(bottomColor, topColor, Mathf.InverseLerp(rect.yMin, rect.yMax, p.y)) * color, Vector2.zero);
         for (int i = 0; i < 8; i++) vh.AddTriangle(0, i + 1, (i + 1) % 8 + 1);
         if (edgeWidth <= 0) return;
+        float ew = UiPixel.AtLeastOnePixel(this, edgeWidth);
         for (int i = 0; i < 8; i++)
         {
             Vector2 a = points[i];
             Vector2 b = points[(i + 1) % 8];
             Vector2 delta = (b - a).normalized;
-            Vector2 inset = new Vector2(-delta.y, delta.x) * edgeWidth;
+            Vector2 inset = new Vector2(-delta.y, delta.x) * ew;
             int start = vh.currentVertCount;
             Color tint = edgeColor * color;
             vh.AddVert(a, tint, Vector2.zero);
@@ -44,5 +45,13 @@ public sealed class RuneboardPanel : MaskableGraphic
             vh.AddTriangle(start, start + 1, start + 2);
             vh.AddTriangle(start, start + 2, start + 3);
         }
+    }
+
+    private float builtScale;
+
+    // Edge thickness depends on on-screen scale, which doesn't dirty the mesh by itself.
+    private void LateUpdate()
+    {
+        if (!Mathf.Approximately(transform.lossyScale.x, builtScale)) { builtScale = transform.lossyScale.x; SetVerticesDirty(); }
     }
 }

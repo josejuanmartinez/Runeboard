@@ -62,8 +62,9 @@ public static class BoardLook
 
         Bloom bloom = profile.TryGet(out Bloom existingBloom) ? existingBloom : profile.Add<Bloom>(true);
         bloom.active = true;
-        bloom.threshold.Override(0.95f);
-        bloom.intensity.Override(0.45f);
+        // Above 1: only HDR highlights (additive sparkles, rings) bloom — never plain white city art.
+        bloom.threshold.Override(1.1f);
+        bloom.intensity.Override(0.35f);
         bloom.scatter.Override(0.6f);
 
         if (profile.TryGet(out ColorAdjustments color))
@@ -80,17 +81,46 @@ public static class BoardLook
         go.transform.SetParent(character.transform, false);
         // Same spot as the prefab's GoldRing (character-local units), nudged up a hair so the
         // ring still sorts in front of it on the Y sort axis.
-        go.transform.localPosition = new Vector3(0.04f, -1.64f, 0f);
+        go.transform.localPosition = new Vector3(0.04f, -1.64f, 0.15f);
         go.transform.localScale = new Vector3(4.6f, 4.6f, 1f);
         var sr = go.GetComponent<SpriteRenderer>();
         sr.sprite = ShadowSprite();
-        sr.color = new Color(0f, 0f, 0f, 0.55f);
+        sr.color = new Color(0f, 0f, 0f, 0.42f); // ambient occlusion only; CastShadow carries the shape
         sr.sortingLayerID = character.sortingLayerID;
         sr.sortingOrder = character.sortingOrder - 1;
+        CharacterCastShadow.Attach(character);
     }
 
     /// <summary>Soft-edged ellipse sprite (also used as a scrim behind banner text).</summary>
     public static Sprite SoftEllipseSprite() => ShadowSprite();
+
+    private static Sprite ringSprite;
+
+    /// <summary>Thin soft-edged elliptical ring (objective markers), generated once.</summary>
+    public static Sprite SoftRingSprite()
+    {
+        if (ringSprite != null) return ringSprite;
+        const int w = 256, h = 128;
+        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, filterMode = FilterMode.Bilinear };
+        var px = new Color32[w * h];
+        for (int y = 0; y < h; y++)
+        {
+            for (int x = 0; x < w; x++)
+            {
+                float dx = (x + 0.5f) / w * 2f - 1f;
+                float dy = (y + 0.5f) / h * 2f - 1f;
+                float d = Mathf.Sqrt(dx * dx + dy * dy);
+                // Crisp core at d=0.9 with a short inner halo.
+                float a = Mathf.Clamp01(1f - Mathf.Abs(d - 0.9f) / 0.035f) + 0.35f * Mathf.Clamp01(1f - (0.9f - d) / 0.18f) * (d < 0.9f ? 1f : 0f);
+                px[y * w + x] = new Color32(255, 255, 255, (byte)(Mathf.Clamp01(a) * 255));
+            }
+        }
+        tex.SetPixels32(px);
+        tex.Apply(false, true);
+        ringSprite = Sprite.Create(tex, new Rect(0, 0, w, h), new Vector2(0.5f, 0.5f), w / 1.2f);
+        ringSprite.name = "ObjectiveRing";
+        return ringSprite;
+    }
 
     // Soft-edged ellipse, generated once (no art asset needed).
     private static Sprite ShadowSprite()

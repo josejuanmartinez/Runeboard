@@ -93,10 +93,10 @@ public class BoardGenerator : MonoBehaviour
     private Dictionary<TerrainEnum, Color> terrainColors;
 
     // Hexes adjacent to rivers (shallowWater cells that are part of rivers)
-    public HashSet<Vector2Int> riverCoastHexes = new HashSet<Vector2Int>();
+    [System.NonSerialized] public HashSet<Vector2Int> riverCoastHexes = new HashSet<Vector2Int>();
 
     // Hexes adjacent to lakes (shallowWater clusters generated as lakes)
-    public HashSet<Vector2Int> lakeCoastHexes = new HashSet<Vector2Int>();
+    [System.NonSerialized] public HashSet<Vector2Int> lakeCoastHexes = new HashSet<Vector2Int>();
 
     // Internally used to mark which shallowWater are rivers vs lakes
     private HashSet<Vector2Int> riverCells = new HashSet<Vector2Int>();

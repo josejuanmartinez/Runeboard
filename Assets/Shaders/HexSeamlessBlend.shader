@@ -63,6 +63,16 @@ Shader "RetroLOTR/HexSeamlessBlend"
         // 0 = leave the overdrawn art uncropped (bleeds past the hex into neighbors) for a
         // deliberately unconstrained look, e.g. HexNoSeamlessBlendGame.
         _EdgeCrop ("Crop Overdraw To Hex", Float) = 1
+        // Width (fraction of centre-to-edge) of the dark ink outline baked into the tile art. Near an
+        // edge shared with a rendered neighbour both tiles sample their art mirrored inward past
+        // this band, so the outline vanishes and the board reads as one painted surface. 0 = off.
+        _InkBand ("Ink Outline Band (hide baked hex outline)", Range(0,0.2)) = 0
+        // 1 = fill the unpainted wedges at the cell's top/bottom vertices from nearby art.
+        _HoleFill ("Fill Unpainted Cell Corners", Float) = 1
+        // Where the painted hexagon sits in the tile art, in tile-width units (0.0565 = 55px of a 974px
+        // tile below centre) and how much to enlarge it to cover the board cell.
+        _ArtShiftY ("Painted Centre Offset Y", Float) = 0
+        _ArtScale ("Painted Scale", Float) = 1
 
         _GridOn ("Neon Grid Enabled", Float) = 1
         _GridColor ("Neon Grid Tint", Color) = (1, 1, 1, 1)
@@ -122,6 +132,10 @@ Shader "RetroLOTR/HexSeamlessBlend"
             float _FogFade;
             float _GammaOut;
             float _EdgeCrop;
+            float _InkBand;
+            float _HoleFill;
+            float _ArtShiftY;
+            float _ArtScale;
 
             float _GridOn;
             fixed4 _GridColor;
@@ -152,12 +166,37 @@ Shader "RetroLOTR/HexSeamlessBlend"
             // t (seam coordinate, 1 == the shared edge) for one direction, with no neighbor/glow
             // logic attached — used to find which of the 6 edges is nearest at a given pixel before
             // any of them draw their line (see tMax in frag()).
+            // Tile-local point -> normalised sprite UV. The painted hexagon in the tile art sits below
+            // the image centre (and a touch small for the board cell); _ArtShiftY / _ArtScale line the
+            // painting up with the cell so no unpainted corner shows at the cell's top vertex.
+            float2 ArtLocal(float2 p)
+            {
+                float2 q = float2(p.x, p.y - _ArtShiftY) / max(_ArtScale, 1e-3);
+                return saturate(float2(q.x + 0.5, q.y / _AspectY + 0.5));
+            }
+
             float SeamT(float2 offset, float2 s)
             {
                 float dist = length(offset);
                 if (dist < 1e-4) return -1e6; // no geometry in this slot; never the nearest edge
                 float halfD = 0.5 * dist;
                 return dot(s, offset / dist) / halfD;
+            }
+
+            // Inward mirror for the ink band: for the nearest edge with a rendered neighbour, a pixel at
+            // seam coordinate t inside the band samples at 2(1-band) - t instead.
+            void InkShift(float valid, float2 offset, float2 s, inout float2 shift, inout float bestT)
+            {
+                if (valid < 0.5) return;
+                float dist = length(offset);
+                if (dist < 1e-4) return;
+                float2 u = offset / dist;
+                float halfD = 0.5 * dist;
+                float t = dot(s, u) / halfD;
+                float inkEdge = 1.0 - _InkBand;
+                if (t <= inkEdge || t > 1.0 + _InkBand || t <= bestT) return;
+                bestT = t;
+                shift = -u * ((t - inkEdge) * 2.0 * halfD);
             }
 
             // Accumulates one neighbor's contribution for fragment position s (tile-local frame).
@@ -237,7 +276,10 @@ Shader "RetroLOTR/HexSeamlessBlend"
                 // collapses to s - 2*dot(s,u)*u. At the seam the reflected point IS the seam
                 // point, so both tiles sample identical colors there (C0 continuity).
                 float2 sn = s - 2.0 * dAlong * u;
-                float2 nLocal = saturate(float2(sn.x + 0.5, sn.y / _AspectY + 0.5));
+                // Step past the neighbour's own baked ink outline (mirrored inward, see _InkBand).
+                float inkEdge = 1.0 - _InkBand;
+                if (_InkBand > 0.0 && t > inkEdge) sn += u * ((t - inkEdge) * 2.0 * halfD);
+                float2 nLocal = ArtLocal(sn);
                 float2 uv = rect.xy + nLocal * rect.zw;
 
                 // Small cross average softens pixel-level mismatch between the two tiles' art.
@@ -262,17 +304,57 @@ Shader "RetroLOTR/HexSeamlessBlend"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 own = tex2D(_MainTex, i.uv);
-
                 // Tile-local frame: origin at hex center, +y up on screen, 1 unit = tile width.
                 float2 localUV = (i.uv - _SpriteUV.xy) / _SpriteUV.zw;
                 float2 s = float2(localUV.x - 0.5, (localUV.y - 0.5) * _AspectY);
+                // Own art, sampled through the same painted-centre alignment as every other tap.
+                fixed4 own = tex2D(_MainTex, _SpriteUV.xy + ArtLocal(s) * _SpriteUV.zw);
+
+                // Hide the baked ink outline along every edge shared with a rendered neighbour:
+                // inside the outline band, take colour from the art mirrored inward (alpha stays
+                // our own, so the silhouette is unchanged).
+                if (_InkBand > 0.0)
+                {
+                    float2 shift = float2(0, 0);
+                    float bestT = -1e6;
+                    InkShift(_NeighborValid0, _NeighborOffset0.xy, s, shift, bestT);
+                    InkShift(_NeighborValid1, _NeighborOffset1.xy, s, shift, bestT);
+                    InkShift(_NeighborValid2, _NeighborOffset2.xy, s, shift, bestT);
+                    InkShift(_NeighborValid3, _NeighborOffset3.xy, s, shift, bestT);
+                    InkShift(_NeighborValid4, _NeighborOffset4.xy, s, shift, bestT);
+                    InkShift(_NeighborValid5, _NeighborOffset5.xy, s, shift, bestT);
+                    if (bestT > -1e5)
+                    {
+                        float2 si = s + shift;
+                        float2 inner = ArtLocal(si);
+                        fixed4 c = tex2D(_MainTex, _SpriteUV.xy + inner * _SpriteUV.zw);
+                        if (c.a > 0.5) own.rgb = c.rgb;
+                    }
+                }
 
                 // Which of the 6 edges is nearest at this pixel — see AccumulateNeighbor/SeamT.
                 float tMax = max(
                     max(max(SeamT(_NeighborOffset0.xy, s), SeamT(_NeighborOffset1.xy, s)),
                         max(SeamT(_NeighborOffset2.xy, s), SeamT(_NeighborOffset3.xy, s))),
                     max(SeamT(_NeighborOffset4.xy, s), SeamT(_NeighborOffset5.xy, s)));
+
+                // Hole fill: the painted hexagon in the tile art is flatter than the board cell, so
+                // wedges at the cell's top/bottom vertices have no paint and the black background
+                // showed through. Inside our own cell, fill transparent art from the nearest opaque
+                // point toward the tile centre (all taps unconditional: no divergent gradients).
+                if (_HoleFill > 0.5 && tMax <= 1.0 + _EdgeTrim)
+                {
+                    float4 fill = float4(0, 0, 0, 0);
+                    [unroll] for (int k = 1; k <= 6; k++)
+                    {
+                        float2 sk = s * (1.0 - 0.07 * k);
+                        float2 uvk = _SpriteUV.xy + ArtLocal(sk) * _SpriteUV.zw;
+                        fixed4 c = tex2D(_MainTex, uvk);
+                        if (fill.a < 0.9 && c.a > 0.9) fill = c;
+                    }
+                    own.rgb = lerp(fill.rgb, own.rgb, own.a);
+                    own.a = max(own.a, fill.a);
+                }
 
                 float3 rgbSum = float3(0, 0, 0);
                 float weightSum = 0.0;

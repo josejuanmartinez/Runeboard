@@ -173,6 +173,7 @@ public class LevelChangeEffectUI : MonoBehaviour
             {
                 cardComp.Initialize(cardData, startAsToken: false);
                 cardComp.SuppressHoverEffects = true;
+                cardComp.ApplyCenterPreviewPresentation();
             }
 
             var cg = cardInstance.GetComponent<CanvasGroup>();

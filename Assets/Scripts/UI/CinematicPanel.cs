@@ -38,23 +38,32 @@ public sealed class CinematicPanel : MaskableGraphic
         }
 
         if (lineWidth <= 0) return;
+        float lw = UiPixel.AtLeastOnePixel(this, lineWidth);
         Rect l = new(r.xMin + inset, r.yMin + inset, r.width - inset * 2f, r.height - inset * 2f);
         Color c = line * color;
-        Quad(vh, new Rect(l.xMin, l.yMax - lineWidth, l.width, lineWidth), c);
-        Quad(vh, new Rect(l.xMin, l.yMin, l.width, lineWidth), c);
-        Quad(vh, new Rect(l.xMin, l.yMin, lineWidth, l.height), c);
-        Quad(vh, new Rect(l.xMax - lineWidth, l.yMin, lineWidth, l.height), c);
+        Quad(vh, new Rect(l.xMin, l.yMax - lw, l.width, lw), c);
+        Quad(vh, new Rect(l.xMin, l.yMin, l.width, lw), c);
+        Quad(vh, new Rect(l.xMin, l.yMin, lw, l.height), c);
+        Quad(vh, new Rect(l.xMax - lw, l.yMin, lw, l.height), c);
 
         // Short corner ticks just outside the hairline.
         float t = Mathf.Min(10f, l.width * 0.1f);
-        Quad(vh, new Rect(l.xMin - inset * 0.5f, l.yMax - lineWidth, t, lineWidth), c);
-        Quad(vh, new Rect(l.xMax - t + inset * 0.5f, l.yMax - lineWidth, t, lineWidth), c);
+        Quad(vh, new Rect(l.xMin - inset * 0.5f, l.yMax - lw, t, lw), c);
+        Quad(vh, new Rect(l.xMax - t + inset * 0.5f, l.yMax - lw, t, lw), c);
 
         if (ornament > 0f)
         {
-            if (topOrnament) Diamond(vh, new Vector2(l.center.x, l.yMax - lineWidth * 0.5f), ornament, c);
-            if (bottomOrnament) Diamond(vh, new Vector2(l.center.x, l.yMin + lineWidth * 0.5f), ornament, c);
+            if (topOrnament) Diamond(vh, new Vector2(l.center.x, l.yMax - lw * 0.5f), ornament, c);
+            if (bottomOrnament) Diamond(vh, new Vector2(l.center.x, l.yMin + lw * 0.5f), ornament, c);
         }
+    }
+
+    private float builtScale;
+
+    // Hairline thickness depends on on-screen scale (hover zoom, resolution), which doesn't dirty the mesh.
+    private void LateUpdate()
+    {
+        if (!Mathf.Approximately(transform.lossyScale.x, builtScale)) { builtScale = transform.lossyScale.x; SetVerticesDirty(); }
     }
 
     private static void Quad(VertexHelper vh, Rect q, Color c)
@@ -77,6 +86,27 @@ public sealed class CinematicPanel : MaskableGraphic
         vh.AddVert(p + new Vector2(-size, 0), c, Vector2.zero);
         vh.AddTriangle(s, s + 1, s + 2);
         vh.AddTriangle(s, s + 2, s + 3);
+    }
+}
+
+/// <summary>
+/// Hairlines thinner than one screen pixel can fall between pixel centres and vanish — and which
+/// edge vanishes depends on sub-pixel position, so panels randomly lose a side. A quad at least one
+/// pixel thick always covers a row of pixel centres.
+/// </summary>
+public static class UiPixel
+{
+    public static float AtLeastOnePixel(Graphic g, float width)
+    {
+        Canvas canvas = g.canvas;
+        if (canvas == null || width <= 0f) return width;
+        Canvas root = canvas.rootCanvas;
+        float rootScale = root.transform.lossyScale.x;
+        if (rootScale <= 0f) return width;
+        float pxPerUnit = root.renderMode == RenderMode.WorldSpace
+            ? 0f
+            : root.scaleFactor * g.transform.lossyScale.x / rootScale;
+        return pxPerUnit > 0f ? Mathf.Max(width, 1.05f / pxPerUnit) : width;
     }
 }
 

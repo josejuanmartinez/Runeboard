@@ -107,7 +107,7 @@ public static class HudDirector
             Place(stores, new Vector2(0f, 1f), new Vector2(0f, 0.5f), new Vector2(Margin - 10f, -TopBarHeight * 0.45f), 0.95f);
             RectTransform grid = stores.Find("Stores") as RectTransform;
             if (grid != null) grid.anchoredPosition = new Vector2(grid.anchoredPosition.x, stores.rect.height * 0.5f);
-            AddHairline(top, new Vector2(0f, 1f), new Vector2(Margin, -TopBarHeight + 8f), new Vector2(600f, 1.2f), new Vector2(0f, 0.5f));
+            AddHairline(top, new Vector2(0f, 1f), new Vector2(Margin, -TopBarHeight + 8f), new Vector2(600f, 2f), new Vector2(0f, 0.5f));
         }
 
         foreach (string name in new[] { "PlayableLeaderIcon", "PlayableLeaderIcon-Competitor1", "PlayableLeaderIcon-Competitor2" })
@@ -119,21 +119,46 @@ public static class HudDirector
         // Environment chip + turn/date share one hairline panel at the top-right.
         RectTransform turn = top.Find("HexTurnDarkCloud") as RectTransform;
         RectTransform environment = top.Find("Environmental") as RectTransform;
+        // The authored turn/date strip keeps running (DateManager owns the month calendar) but is
+        // invisible; HudCalendar draws turn, date, the coming week and the next scripted event.
+        const float calendarWidth = 400f, panelHeight = 176f;
         RectTransform panel = EnsureCinematicPanel(top, "HudTopRightPanel", new Vector2(1f, 1f), new Vector2(1f, 1f),
-            new Vector2(-Margin, -14f), new Vector2(640f, 104f), topOrnament: false, bottomOrnament: true);
-        float x = -Margin - 24f;
+            new Vector2(-Margin, -14f), new Vector2(calendarWidth + 400f, panelHeight), topOrnament: false, bottomOrnament: true);
         if (turn != null)
         {
-            SetActive(turn, "Polish Surface", false);
-            SetActive(turn, "HexNumberManager", false);
-            if (turn.TryGetComponent(out Image turnImage)) turnImage.enabled = false;
-            Place(turn, new Vector2(1f, 1f), new Vector2(1f, 0.5f), new Vector2(x, -66f), 0.78f);
-            x -= turn.rect.width * 0.78f + 8f;
+            CanvasGroup hidden = turn.GetOrAddComponent<CanvasGroup>();
+            hidden.alpha = 0f;
+            hidden.blocksRaycasts = false;
+            hidden.interactable = false;
         }
+        HudCalendar calendar = HudCalendar.Build(top, new Vector2(calendarWidth, panelHeight - 16f));
+        ((RectTransform)calendar.transform).anchoredPosition = new Vector2(-Margin - 26f, -22f);
+        float x = -Margin - 26f - calendarWidth - 30f;
+        AddHairline(top, new Vector2(1f, 1f), new Vector2(x + 14f, -14f - panelHeight * 0.5f), new Vector2(2f, panelHeight - 44f), new Vector2(0.5f, 0.5f));
         if (environment != null)
         {
             SetActive(environment, "Polish Surface", false);
-            Place(environment, new Vector2(1f, 1f), new Vector2(1f, 0.5f), new Vector2(x, -66f), 0.8f);
+            Place(environment, new Vector2(1f, 1f), new Vector2(1f, 0.5f), new Vector2(x, -14f - panelHeight * 0.5f), 1f);
+            environment.sizeDelta = new Vector2(330f, 100f);
+            // Same two-tier type as the calendar: small gold eyebrow over one large display line.
+            if (environment.Find("Environment Title")?.GetComponent<TextMeshProUGUI>() is TextMeshProUGUI envTitle)
+            {
+                UiTheme.StyleBody(envTitle, 20f, UiTheme.Gold);
+                envTitle.characterSpacing = 12f;
+                envTitle.alignment = TextAlignmentOptions.BottomLeft;
+                Box(envTitle.rectTransform, new Vector2(112f, 6f), new Vector2(210f, 28f));
+            }
+            if (environment.Find("Environment Hint")?.GetComponent<TextMeshProUGUI>() is TextMeshProUGUI envName)
+            {
+                UiTheme.StyleTitle(envName, 34f, UiTheme.Text);
+                envName.enableAutoSizing = true;
+                envName.fontSizeMin = 22f;
+                envName.fontSizeMax = 34f;
+                envName.textWrappingMode = TextWrappingModes.NoWrap;
+                envName.overflowMode = TextOverflowModes.Ellipsis;
+                envName.alignment = TextAlignmentOptions.TopLeft;
+                Box(envName.rectTransform, new Vector2(112f, -2f), new Vector2(210f, 46f));
+            }
         }
         panel.SetAsFirstSibling();
     }
@@ -182,6 +207,60 @@ public static class HudDirector
             bar.anchoredPosition = new Vector2(0f, -66f);
         }
         SetActive(icon, "AlignmentImage", false);
+
+        // Score: a small round badge on the ring's lower-right (keeps the rank colours and the
+        // "Victory Points" hover), instead of a trophy row under the name.
+        if (icon.Find("VPBg") is RectTransform vp)
+        {
+            vp.anchorMin = vp.anchorMax = new Vector2(0.5f, 1f);
+            vp.pivot = new Vector2(0.5f, 0.5f);
+            vp.localScale = Vector3.one;
+            vp.sizeDelta = new Vector2(44f, 44f);
+            vp.anchoredPosition = new Vector2(46f, -98f);
+            SetActive(vp, "Icon", false);
+            Image disc = vp.GetOrAddComponent<Image>();
+            disc.sprite = HudSprites.Circle;
+            disc.color = new Color(0.04f, 0.04f, 0.045f, 0.96f);
+            disc.raycastTarget = false;
+            if (vp.Find("BadgeRing") == null)
+            {
+                var ringGo = new GameObject("BadgeRing", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+                var ring = ringGo.GetComponent<RectTransform>();
+                ring.SetParent(vp, false);
+                ring.SetSiblingIndex(0);
+                ring.anchorMin = Vector2.zero;
+                ring.anchorMax = Vector2.one;
+                ring.offsetMin = ring.offsetMax = Vector2.zero;
+                var ringImage = ringGo.GetComponent<Image>();
+                ringImage.sprite = HudSprites.Ring;
+                ringImage.color = new Color(0.88f, 0.72f, 0.42f, 1f);
+                ringImage.raycastTarget = false;
+            }
+            if (vp.Find("Text") is RectTransform score && score.TryGetComponent(out TMP_Text scoreText))
+            {
+                score.anchorMin = Vector2.zero;
+                score.anchorMax = Vector2.one;
+                score.offsetMin = score.offsetMax = Vector2.zero;
+                score.localScale = Vector3.one;
+                scoreText.font = UiTheme.BodyBold;
+                scoreText.enableAutoSizing = true;
+                scoreText.fontSizeMin = 10f;
+                scoreText.fontSizeMax = 20f;
+                scoreText.alignment = TextAlignmentOptions.Center;
+                scoreText.margin = new Vector4(5f, 0f, 5f, 0f);
+            }
+        }
+
+        // Allied nations: a compact row of round portraits under the name.
+        if (icon.Find("NonPlayableLeaderIcons") is RectTransform nations)
+        {
+            nations.anchorMin = nations.anchorMax = new Vector2(0.5f, 1f);
+            nations.pivot = new Vector2(0.5f, 1f);
+            nations.sizeDelta = new Vector2(200f, 36f);
+            nations.anchoredPosition = new Vector2(0f, -166f);
+            nations.localScale = Vector3.one;
+            MedallionSatellites.Attach(nations);
+        }
     }
 
     // ------------------------------------------------------------------ bottom
@@ -331,6 +410,15 @@ public static class HudDirector
         var img = go.GetComponent<Image>();
         img.color = new Color(Line.r, Line.g, Line.b, 0.45f);
         img.raycastTarget = false;
+    }
+
+    // Left-middle anchored box: x from the parent's left edge, y from its vertical centre.
+    private static void Box(RectTransform rt, Vector2 position, Vector2 size)
+    {
+        rt.anchorMin = rt.anchorMax = new Vector2(0f, 0.5f);
+        rt.pivot = new Vector2(0f, position.y >= 0f ? 0f : 1f);
+        rt.anchoredPosition = position;
+        rt.sizeDelta = size;
     }
 
     private static void Place(RectTransform rt, Vector2 anchor, Vector2 pivot, Vector2 position, float scale)

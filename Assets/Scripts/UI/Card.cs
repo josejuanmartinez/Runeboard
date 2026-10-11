@@ -366,33 +366,72 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public static readonly Vector2 CenterPreviewSize = new(340f, 570f);
 
-    // Applied only to the large inspection clone; hand and gallery cards keep their layout.
+    // Full card face, same language as the hand (HandTray): the painting fills the whole card and a
+    // dark scrim rises from the bottom carrying the name, rules + flavour and the cost row. Used by
+    // every full card (centre preview, loading screen, situation tray, level-up). Idempotent.
     public void ApplyCenterPreviewPresentation()
     {
         if (realCardCanvasGroup == null) return;
         if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
-        if (layoutElement == null) layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
+        if (layoutElement == null) layoutElement = gameObject.GetOrAddComponent<LayoutElement>();
         RectTransform face = (RectTransform)realCardCanvasGroup.transform;
         rectTransform.sizeDelta = CenterPreviewSize;
-        face.anchorMin = Vector2.zero;
-        face.anchorMax = Vector2.one;
-        face.offsetMin = face.offsetMax = Vector2.zero;
-        foreach (Image decoration in face.GetComponentsInChildren<Image>(true))
-            if (decoration != cardArtImage && decoration != deckTypeImage && decoration != encounterArtOverlay)
-                decoration.enabled = false;
+        // Fixed-size face centred in the root: callers that later resize the root for their own
+        // layout (SituationCardsUI) can't squash the absolutely-placed contents.
+        face.anchorMin = face.anchorMax = face.pivot = new Vector2(.5f, .5f);
+        face.anchoredPosition = Vector2.zero;
+        face.sizeDelta = CenterPreviewSize;
 
-        var surfaceObject = new GameObject("Preview Surface", typeof(RectTransform), typeof(CanvasRenderer), typeof(RuneboardPanel));
-        var surface = surfaceObject.GetComponent<RectTransform>();
-        surface.SetParent(face, false);
-        surface.anchorMin = Vector2.zero;
-        surface.anchorMax = Vector2.one;
-        surface.offsetMin = surface.offsetMax = Vector2.zero;
-        surface.SetAsFirstSibling();
-        var panel = surfaceObject.GetComponent<RuneboardPanel>();
-        panel.raycastTarget = false;
-        panel.topColor = new Color(.105f, .12f, .13f, .99f);
-        panel.bottomColor = new Color(.035f, .045f, .052f, .99f);
-        panel.edgeColor = new Color(.79f, .64f, .40f, .85f);
+        const float frameInset = 7f;
+        CinematicPanel surface = face.Find("Preview Surface")?.GetComponent<CinematicPanel>();
+        if (surface == null)
+        {
+            Transform legacy = face.Find("Preview Surface");
+            if (legacy != null) DestroyImmediate(legacy.gameObject);
+            var surfaceObject = new GameObject("Preview Surface", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel));
+            surface = surfaceObject.GetComponent<CinematicPanel>();
+            var sr = (RectTransform)surfaceObject.transform;
+            sr.SetParent(face, false);
+            sr.anchorMin = Vector2.zero;
+            sr.anchorMax = Vector2.one;
+            sr.offsetMin = sr.offsetMax = Vector2.zero;
+        }
+        surface.transform.SetAsFirstSibling();
+        surface.raycastTarget = false;
+        surface.fillTop = new Color(0.10f, 0.09f, 0.075f, 1f);
+        surface.fillBottom = new Color(0.04f, 0.037f, 0.032f, 1f);
+        surface.line = new Color(0.86f, 0.70f, 0.40f, 0.85f);
+        surface.inset = 4f;
+        surface.lineWidth = 1.6f;
+        surface.ornament = 0f;
+
+        // Art window: stencil Mask (works on rotated/scaled cards too), the painting cover-fitted.
+        RectTransform window = face.Find("ArtWindow") as RectTransform;
+        if (window == null)
+        {
+            var windowObject = new GameObject("ArtWindow", typeof(RectTransform), typeof(Image), typeof(Mask));
+            window = (RectTransform)windowObject.transform;
+            window.SetParent(face, false);
+            windowObject.GetComponent<Mask>().showMaskGraphic = false;
+            var maskImage = windowObject.GetComponent<Image>();
+            maskImage.raycastTarget = false;
+            maskImage.gameObject.AddComponent<ImageUnaffectedBySkin>();
+        }
+        window.SetSiblingIndex(1);
+        window.anchorMin = Vector2.zero;
+        window.anchorMax = Vector2.one;
+        window.offsetMin = new Vector2(frameInset, frameInset);
+        window.offsetMax = new Vector2(-frameInset, -frameInset);
+        Vector2 windowSize = CenterPreviewSize - Vector2.one * frameInset * 2f;
+
+        // Scrim: a near-solid block under the text plus a long fade into the painting above it.
+        Image scrimSolid = EnsureScrim(window, "ScrimSolid", null, new Color(0.02f, 0.018f, 0.015f, 0.84f), 0f, 238f);
+        Image scrimFade = EnsureScrim(window, "ScrimFade", HudSprites.FadeUp, new Color(1f, 1f, 1f, 0.9f), 238f, 170f);
+
+        foreach (Image decoration in face.GetComponentsInChildren<Image>(true))
+            if (decoration != cardArtImage && decoration != deckTypeImage && decoration != encounterArtOverlay
+                && decoration != scrimSolid && decoration != scrimFade && decoration.transform != window)
+                decoration.enabled = false;
 
         void PlacePreview(RectTransform r, Vector2 position, Vector2 size)
         {
@@ -403,6 +442,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             r.sizeDelta = size;
             r.localScale = Vector3.one;
             r.localRotation = Quaternion.identity;
+            r.SetAsLastSibling();
         }
         void StylePreviewText(TMP_Text label, float size, Color tint)
         {
@@ -424,39 +464,86 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             label.outlineColor = new Color(.025f, .03f, .035f, 1f);
             label.outlineWidth = .06f;
         }
-        Color paper = new(.91f, .89f, .81f);
-        if (titleText != null)
-        {
-            PlacePreview(titleText.rectTransform, new Vector2(0, 258), new Vector2(300, 40));
-            StylePreviewText(titleText, 22, new Color(.86f, .73f, .49f));
-            titleText.alignment = TextAlignmentOptions.Center;
-        }
+        Color paper = new(.93f, .90f, .82f);
         if (cardArtImage != null)
         {
-            PlacePreview(cardArtImage.rectTransform, new Vector2(0, 80), new Vector2(300, 300));
-            cardArtImage.preserveAspect = true;
+            RectTransform art = cardArtImage.rectTransform;
+            art.SetParent(window, false);
+            art.SetAsFirstSibling();
+            art.anchorMin = art.anchorMax = art.pivot = new Vector2(.5f, .5f);
+            art.localScale = Vector3.one;
+            art.localRotation = Quaternion.identity;
+            cardArtImage.preserveAspect = false;
             cardArtImage.color = Color.white;
+            FitArtToWindow(windowSize);
+        }
+        // Bottom-up inside the scrim (card is 570 tall, centre-pivoted: bottom edge is y=-285).
+        if (requirementsText != null)
+        {
+            PlacePreview(requirementsText.rectTransform, new Vector2(0, -258), new Vector2(296, 30));
+            StylePreviewText(requirementsText, 14, paper);
+            requirementsText.alignment = TextAlignmentOptions.Center;
         }
         if (descriptionText != null)
         {
-            PlacePreview(descriptionText.rectTransform, new Vector2(0, -153), new Vector2(298, 142));
+            PlacePreview(descriptionText.rectTransform, new Vector2(0, -150), new Vector2(296, 176));
             StylePreviewText(descriptionText, 16, paper);
-            descriptionText.alignment = TextAlignmentOptions.TopLeft;
-            descriptionText.lineSpacing = 3;
+            descriptionText.fontSizeMin = 11f;
+            descriptionText.alignment = TextAlignmentOptions.Top;
+            descriptionText.lineSpacing = 2;
         }
-        if (requirementsText != null)
+        if (titleText != null)
         {
-            PlacePreview(requirementsText.rectTransform, new Vector2(0, -249), new Vector2(298, 42));
-            StylePreviewText(requirementsText, 13, paper);
-            requirementsText.alignment = TextAlignmentOptions.Center;
+            PlacePreview(titleText.rectTransform, new Vector2(0, -36), new Vector2(300, 46));
+            StylePreviewText(titleText, 30, UiTheme.Text);
+            titleText.font = UiTheme.Display;
+            titleText.textWrappingMode = TextWrappingModes.NoWrap;
+            titleText.alignment = TextAlignmentOptions.Bottom;
         }
         if (deckTypeImage != null)
         {
-            PlacePreview(deckTypeImage.rectTransform, new Vector2(137, 207), new Vector2(24, 32));
+            PlacePreview(deckTypeImage.rectTransform, new Vector2(140, 252), new Vector2(24, 32));
             deckTypeImage.enabled = deckTypeImage.sprite != null;
         }
         ShowCloseIcon = false;
         layoutElement.ignoreLayout = true;
+    }
+
+    // Cover-fit: fill the window, centre-crop the overflow, favour the top of tall art (the scrim
+    // covers the bottom).
+    private void FitArtToWindow(Vector2 windowSize)
+    {
+        if (cardArtImage == null) return;
+        Sprite sprite = cardArtImage.sprite;
+        float aspect = sprite != null ? sprite.rect.width / sprite.rect.height : windowSize.x / windowSize.y;
+        Vector2 size = aspect > windowSize.x / windowSize.y
+            ? new Vector2(windowSize.y * aspect, windowSize.y)
+            : new Vector2(windowSize.x, windowSize.x / aspect);
+        cardArtImage.rectTransform.sizeDelta = size;
+        cardArtImage.rectTransform.anchoredPosition = new Vector2(0f, -(size.y - windowSize.y) * 0.5f * 0.6f);
+    }
+
+    private static Image EnsureScrim(RectTransform window, string name, Sprite sprite, Color color, float bottom, float height)
+    {
+        Image scrim = window.Find(name)?.GetComponent<Image>();
+        if (scrim == null)
+        {
+            var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(ImageUnaffectedBySkin));
+            go.transform.SetParent(window, false);
+            scrim = go.GetComponent<Image>();
+        }
+        scrim.sprite = sprite;
+        scrim.color = color;
+        scrim.raycastTarget = false;
+        scrim.enabled = true;
+        var rt = scrim.rectTransform;
+        rt.anchorMin = new Vector2(0f, 0f);
+        rt.anchorMax = new Vector2(1f, 0f);
+        rt.pivot = new Vector2(0.5f, 0f);
+        rt.anchoredPosition = new Vector2(0f, bottom);
+        rt.sizeDelta = new Vector2(0f, height);
+        rt.SetAsLastSibling();
+        return scrim;
     }
 
     // The same runtime-built face as ApplyCenterPreviewPresentation, fitted into an existing
@@ -1655,6 +1742,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         }
 
         cardBackgroundImage.color = TintTokenColor(cardBackgroundBaseColor, 1f, unplayable ? 1f : 0f);
+        // The art-card face hides the border, so dim the painting too.
+        if (cardArtImage != null) cardArtImage.color = unplayable ? new Color(.5f, .45f, .45f, 1f) : Color.white;
     }
 
     private static Color TintTokenColor(Color baseColor, float k, float redness)

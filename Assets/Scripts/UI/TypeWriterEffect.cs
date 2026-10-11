@@ -13,7 +13,7 @@ public class TypewriterEffect : MonoBehaviour
     [Tooltip("Characters per second. Higher values type faster.")]
     public float typingSpeed = 20f;
 
-    public Coroutine coroutine;
+    [System.NonSerialized] public Coroutine coroutine;
 
     public bool startUponInstantiating = false;
 
@@ -48,6 +48,19 @@ public class TypewriterEffect : MonoBehaviour
         coroutine = StartCoroutine(TypeText(text));
     }
 
+    /// <summary>True while characters are still being revealed.</summary>
+    public bool IsTyping => coroutine != null;
+
+    /// <summary>Reveals the rest of the text at once (first click on Continue does this).</summary>
+    public void Complete()
+    {
+        if (coroutine == null) return;
+        StopCoroutine(coroutine);
+        coroutine = null;
+        if (textMeshPro != null) textMeshPro.text = fullText ?? string.Empty;
+        autoScroll?.Refresh();
+    }
+
     public void Clear()
     {
         if (coroutine != null) { StopCoroutine(coroutine); coroutine = null; }
@@ -61,6 +74,7 @@ public class TypewriterEffect : MonoBehaviour
         if (text == null) text = fullText;
         if (string.IsNullOrEmpty(text))
         {
+            coroutine = null;
             yield break;
         }
 
@@ -82,6 +96,7 @@ public class TypewriterEffect : MonoBehaviour
 
             if (shownCount >= text.Length)
             {
+                coroutine = null;
                 break;
             }
 

@@ -59,6 +59,7 @@ public class PopupManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // optional: persists across scenes
 
+        PopupContinue.Rewire(this, "Hide", Continue);
         rectTransform = container != null ? container.GetComponent<RectTransform>() : null;
 
         // `container` is the framed popup panel, while its direct child of PopupManager is the
@@ -114,6 +115,17 @@ public class PopupManager : MonoBehaviour
         {
             UpdateArrows(); // refresh navigation availability when adding while already showing
         }
+    }
+
+    /// <summary>Continue button: the first press finishes the typewriter, the next one closes.</summary>
+    public void Continue()
+    {
+        if (typeWriterEffect != null && typeWriterEffect.isActiveAndEnabled && typeWriterEffect.IsTyping)
+        {
+            typeWriterEffect.Complete();
+            return;
+        }
+        Hide();
     }
 
     public void Hide()

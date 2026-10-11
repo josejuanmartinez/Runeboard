@@ -57,6 +57,11 @@ public static class CharacterSpritesheets
     private static readonly Dictionary<string, Sprite> spritesByName = new();
     // Every raceOrName folder with at least one baked facing, lowercased.
     private static readonly HashSet<string> availableRaceOrNames = new();
+    // Every raceOrName with a manifest (sheets may not be loaded yet), lowercased.
+    private static readonly HashSet<string> knownRaceOrNames = new();
+    private static readonly HashSet<string> requestedRaceOrNames = new();
+    private static readonly Dictionary<string, int> sheetsPending = new();
+    private static readonly Dictionary<string, string> folderByKey = new();
 
     private static bool loadStarted;
     private static bool manifestLocationsScanned;
@@ -124,34 +129,47 @@ public static class CharacterSpritesheets
         if (!TrySplitFacing(stem, out string raceOrName, out string facing)) return;
 
         manifestsByKey[NormalizeKey(raceOrName, facing)] = manifest;
-        // availableRaceOrNames is populated once the actual sprite FRAMES load (see
-        // OnSpriteSheetLoaded below), not here — the manifest alone tells TryResolveRaceOrName
-        // "this character resolves," but GetSprite(...) would still return null until the frame
-        // texture itself finishes its own, separate (and typically much slower) Addressables
-        // load, leaving the Hex-drawn card-illustration fallback stuck on screen for that gap.
+        // Only the manifest is registered here. The sheets themselves (171 of them, each a
+        // multi-megabyte texture) used to ALL load at boot — gigabytes of textures for characters
+        // that never appear, which made startup take minutes and pushed the editor into swap.
+        // Now a raceOrName's sheets load the first time something asks for it (RequestSheets).
+        knownRaceOrNames.Add(raceOrName.ToLowerInvariant());
+        folderByKey[raceOrName.ToLowerInvariant()] = raceOrName; // exact casing, for addresses
+    }
+
+    // Loads every facing sheet of one raceOrName, once. availableRaceOrNames is only filled when
+    // all its frames are in, so a character never resolves to a name whose frames are missing.
+    private static void RequestSheets(string name)
+    {
+        string key = name.ToLowerInvariant();
+        string raceOrName = folderByKey.TryGetValue(key, out string folder) ? folder : name;
+        if (!requestedRaceOrNames.Add(key)) return;
 
         // Addressables.LoadResourceLocationsAsync(label, typeof(Sprite)) does NOT reliably
         // enumerate the individual sliced sub-sprites of a multi-sprite texture as separate
-        // locations — in practice it only ever surfaced one location per PNG here (confirmed:
-        // exactly as many "Sprite" locations as baked sheets, never the ~192 frames each sheet
-        // actually contains). Loading IList<Sprite> against the TEXTURE's own address is the
-        // documented way to pull every sub-sprite of one multi-sprite texture at once, and since
-        // manifest.texture already tells us that texture's filename, no separate scan is needed.
-        if (string.IsNullOrEmpty(manifest.texture)) return;
-        string pngAddress = $"{AddressRoot}{raceOrName}/{manifest.texture}";
-        pendingSpriteLoads++;
-        Addressables.LoadAssetAsync<IList<Sprite>>(pngAddress).Completed += handle => OnSpriteSheetLoaded(handle, raceOrName);
+        // locations — in practice it only ever surfaced one location per PNG here. Loading
+        // IList<Sprite> against the TEXTURE's own address is the documented way to pull every
+        // sub-sprite of one multi-sprite texture at once; manifest.texture gives that filename.
+        int sheets = 0;
+        foreach (string facing in Facings)
+        {
+            AtlasManifest manifest = GetManifest(raceOrName, facing);
+            if (manifest == null || string.IsNullOrEmpty(manifest.texture)) continue;
+            string pngAddress = $"{AddressRoot}{raceOrName}/{manifest.texture}";
+            sheets++;
+            pendingSpriteLoads++;
+            Addressables.LoadAssetAsync<IList<Sprite>>(pngAddress).Completed += handle => OnSpriteSheetLoaded(handle, key);
+        }
+        if (sheets == 0) { availableRaceOrNames.Add(key); return; }
+        sheetsPending[key] = sheets;
     }
 
-    private static void OnSpriteSheetLoaded(AsyncOperationHandle<IList<Sprite>> handle, string raceOrName)
+    private static void OnSpriteSheetLoaded(AsyncOperationHandle<IList<Sprite>> handle, string key)
     {
         if (handle.Status == AsyncOperationStatus.Succeeded && handle.Result != null)
         {
             foreach (Sprite sprite in handle.Result)
                 if (sprite != null) spritesByName[sprite.name] = sprite;
-            // Only NOW is this raceOrName actually safe to resolve to — GetSprite(...) can
-            // genuinely return a frame for it from this point on.
-            availableRaceOrNames.Add(raceOrName.ToLowerInvariant());
         }
         else
         {
@@ -159,9 +177,13 @@ public static class CharacterSpritesheets
         }
 
         pendingSpriteLoads = Mathf.Max(0, pendingSpriteLoads - 1);
-        if (pendingSpriteLoads == 0 && pendingManifestLoads == 0)
+        int left = sheetsPending.TryGetValue(key, out int n) ? n - 1 : 0;
+        sheetsPending[key] = left;
+        if (left <= 0)
         {
-            Debug.Log($"CharacterSpritesheets: loaded {spritesByName.Count} sprite frame(s) total.");
+            // Only NOW is this raceOrName safe to resolve to — GetSprite(...) can return its frames.
+            availableRaceOrNames.Add(key);
+            Debug.Log($"CharacterSpritesheets: '{key}' ready ({spritesByName.Count} frames loaded in total).");
         }
     }
 
@@ -192,34 +214,44 @@ public static class CharacterSpritesheets
     public static bool TryResolveRaceOrName(string characterName, string variantBaseName, RacesEnum race, string fallback, out string raceOrName)
     {
         EnsureLoading();
-        if (TryMatch(characterName, out raceOrName)) return true;
+        raceOrName = null;
+        // All manifests (small JSON) must be in before any tier can be judged: otherwise a
+        // less-specific tier (variant base / race / fallback) could win just because the
+        // character's own manifest hadn't arrived yet, locking in the wrong look (e.g. Galadriel
+        // rendering as generic "Elf") — nothing re-resolves an already-"showing" character.
+        if (!ManifestsReady) return false;
 
-        // Manifests register incrementally as each one finishes loading, not all at once — so
-        // mid-load, a less-specific tier's sheet (variantBaseName/race/fallback) can already be
-        // registered while this character's own name sheet simply hasn't arrived yet. Committing
-        // to one of those in that window would lock in the wrong look (e.g. Galadriel briefly, and
-        // in a slow-loading build sometimes permanently, rendering as generic "Elf" because that
-        // sheet happened to finish loading first) instead of waiting for its own match — nothing
-        // re-resolves an already-"showing" UIAnimatedCharacter once it commits. Only trust these
-        // once loading is fully done and nothing more specific can still show up.
-        if (!IsLoaded) { raceOrName = null; return false; }
-
-        if (TryMatch(variantBaseName, out raceOrName)) return true;
-        if (TryMatch(race.ToString(), out raceOrName)) return true;
-        if (TryMatch(fallback, out raceOrName)) return true;
+        // Tiers in order. The first tier that HAS baked sheets wins; if its sheets aren't loaded
+        // yet they are requested and resolution waits for them (never falls through to a lower
+        // tier, for the same reason as above). While anything is loading IsLoaded stays false,
+        // so callers keep retrying.
+        foreach (string candidate in new[] { characterName, variantBaseName, race.ToString(), fallback })
+        {
+            if (TryTier(candidate, out raceOrName, out bool waiting)) return true;
+            if (waiting) return false;
+        }
         raceOrName = null;
         return false;
     }
+
+    private static bool ManifestsReady => manifestLocationsScanned && pendingManifestLoads == 0;
 
     // Baked folder names never contain spaces (e.g. "TomBombadil"), but a Character's given name
     // can (e.g. "Tom Bombadil") — strip spaces before matching so those still resolve to their
     // own art instead of falling through to the race tier, and return the stripped form so later
     // GetManifest/GetSprite lookups (which use it verbatim) line up with the folder name too.
-    private static bool TryMatch(string candidate, out string raceOrName)
+    private static bool TryTier(string candidate, out string raceOrName, out bool waiting)
     {
-        string stripped = candidate?.Replace(" ", "");
-        if (HasAny(stripped)) { raceOrName = stripped; return true; }
         raceOrName = null;
+        waiting = false;
+        string stripped = candidate?.Replace(" ", "").Trim();
+        if (string.IsNullOrEmpty(stripped)) return false;
+        string key = stripped.ToLowerInvariant();
+        if (!knownRaceOrNames.Contains(key)) return false;
+        if (HasAny(stripped)) { raceOrName = stripped; return true; }
+        RequestSheets(stripped);
+        waiting = !HasAny(stripped);
+        if (!waiting) { raceOrName = stripped; return true; }
         return false;
     }
 

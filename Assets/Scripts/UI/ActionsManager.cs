@@ -7,8 +7,8 @@ using UnityEngine;
 public class ActionsManager : MonoBehaviour
 {
     [HideInInspector]
-    public CharacterAction DEFAULT;
-    public CharacterAction[] characterActions;
+    [System.NonSerialized] public CharacterAction DEFAULT;
+    [System.NonSerialized] public CharacterAction[] characterActions;
     public static readonly char[] ActionHotkeyLetters = "BCEFGHIJKLMOQRTUVWYZ".ToCharArray();
 
     private readonly Dictionary<Type, CharacterAction> actionComponents = new();

@@ -221,6 +221,7 @@ public class CharacterAction
 
     public void Fail(bool isAI)
     {
+        UnitAnimations.ActionFailed(character);
         if (this is Spell)
         {
             ApplySpellFailurePenalty(isAI);
@@ -300,6 +301,8 @@ public class CharacterAction
                 Sounds.Instance?.PlayActionExecute();
             }
             Hex actionHex = character.hex;
+            // The unit acts it out on the board (a cast, a strike, a sneak...), human or AI.
+            UnitAnimations.ActionExecuted(character, this);
             ActionCostSnapshot caravanSnapshot = (isBuyCaravans || isSellCaravans)
                 ? CalculateCostSnapshot(GetResourceCostProfile(character.GetOwner()))
                 : default;

@@ -1207,6 +1207,8 @@ public class Character : MonoBehaviour
 
     virtual public void Killed(Leader killedBy, bool onlyMark=false)
     {
+        // First, while the unit still stands on its hex: its 3D model falls where it stood.
+        UnitAnimations.Killed(this);
         bool redrawArmies = false;
         if (IsArmyCommander() && !army.killed) {
             army.Killed(killedBy, onlyMark);
@@ -1271,6 +1273,7 @@ public class Character : MonoBehaviour
 
     public void Wounded(Leader woundedBy, int damage)
     {
+        UnitAnimations.Wounded(this, damage);
         health -= damage;
         MessageDisplayNoUI.ShowMessage(hex, this,  $"{characterName} wounded by {damage}", Color.red);
         Sounds.Instance?.PlayVoicePain(this);
@@ -1691,6 +1694,7 @@ public class Character : MonoBehaviour
     // player's own characters — AI skill changes happen too often to interrupt with an overlay.
     private void NotifySkillLevelChanged(CharacterSkillEnum skill, int previousLevel, int newLevel)
     {
+        if (newLevel > previousLevel && !killed) UnitAnimations.LeveledUp(this);
         if (previousLevel == newLevel || killed || !isPlayerControlled) return;
         LevelChangeEffectUI.Show(this, skill, previousLevel, newLevel);
     }

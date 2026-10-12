@@ -176,12 +176,26 @@ public class CharacterAnimationController : MonoBehaviour
     // forever, even once loading finishes moments later.
     private Character pendingCharacter;
 
+    // Read-only view of the resolved playback state, mirrored by Character3DView (live 3D prototype).
+    public bool IsShowing => isShowing;
+    public string ResolvedRaceOrName => resolvedRaceOrName;
+    public Character ShownCharacter => resolvedForCharacter;
+    // The character this slot was last asked to show — set even when it has no baked spritesheet.
+    public Character RequestedCharacter { get; private set; }
+    public string CurrentStateName => currentStateName;
+    public Orientation ActiveOrientation => GetActiveOrientation();
+    // This frame's alignment outline colour (rgb, a = strength), as sent to the sprite shader.
+    public Color PresentationRimColor { get; private set; }
+
     private void Awake()
     {
         EnsureSpriteRenderer();
         ApplyOutlineMaterial();
         idleTempo = Random.Range(0.88f, 1.12f);
         pulsePhase = Random.Range(0f, 10f);
+        // Board units only — the 3D prototype doesn't cover UI/editor uses of this controller.
+        if (GetComponentInParent<Hex>(true) != null && GetComponent<Character3DView>() == null)
+            gameObject.AddComponent<Character3DView>();
     }
 
     private void Update()
@@ -492,6 +506,8 @@ public class CharacterAnimationController : MonoBehaviour
             : Mathf.Clamp01(haloIntensity) * outlineAlpha * outlineBaseColor.a);
         outlinePropertyBlock.SetVector(OutlineUvRectShaderId, outlineUvRect);
         spriteRenderer.SetPropertyBlock(outlinePropertyBlock);
+
+        PresentationRimColor = size <= 0f ? Color.clear : rim;
     }
 
     private Material ResolveOutlineMaterial(Character character)
@@ -571,10 +587,12 @@ public class CharacterAnimationController : MonoBehaviour
         {
             Clear();
             pendingCharacter = CharacterSpritesheets.IsLoaded ? null : character;
+            RequestedCharacter = character; // still drawn in 3D, which resolves on its own
             return false;
         }
 
         pendingCharacter = null;
+        RequestedCharacter = character;
         EnsureSpriteRenderer();
         isShowing = true;
         return true;
@@ -699,6 +717,7 @@ public class CharacterAnimationController : MonoBehaviour
         ClearOutline();
         focusTarget = focusAmount = 0f;
         isShowing = false;
+        RequestedCharacter = null;
         resolvedForCharacter = null;
         resolvedRaceOrName = null;
         currentStateName = null;

@@ -14,8 +14,8 @@ using UnityEngine;
 /// </summary>
 public class CharacterCastShadow : MonoBehaviour
 {
-    private const float Shear = 0.85f;    // sideways lean per unit of height
-    private const float Squash = 0.42f;   // how flat the shadow lies
+    public const float Shear = 0.85f;     // sideways lean per unit of height (also Character3DLighting)
+    public const float Squash = 0.42f;    // how flat the shadow lies
     private static readonly Vector2 Foot = new(0.04f, -1.70f); // character-local, same spot as the GoldRing
     private const float FootV = 0.17f;    // feet height inside a 512px frame (pivot is the frame centre)
 

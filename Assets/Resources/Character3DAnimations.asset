@@ -1,0 +1,131 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22fe8bf433334f2198937d54d2badd50, type: 3}
+  m_Name: Character3DAnimations
+  m_EditorClassIdentifier: 
+  clips:
+  - name: Crouch Idle
+    clip: {fileID: -203655887218126122, guid: c67468deb401f854297c4a4bcc362365, type: 3}
+  - name: Crouch To Standing Idle
+    clip: {fileID: -203655887218126122, guid: d811fc564986c1f4296d5490b85f2998, type: 3}
+  - name: Crouch Turn Left 90
+    clip: {fileID: -203655887218126122, guid: 50aaf4904505c3e4f87aebe8f9b97268, type: 3}
+  - name: Crouch Turn Right 90
+    clip: {fileID: -203655887218126122, guid: 62fdfef2afa5448498c9d893d647a780, type: 3}
+  - name: Crouch Walk Back
+    clip: {fileID: -203655887218126122, guid: 9f65593235dbf4647ad461ba9436882f, type: 3}
+  - name: Crouch Walk Forward
+    clip: {fileID: -203655887218126122, guid: 47ef7604b0d26aa49bdc96947dd68c57, type: 3}
+  - name: Crouch Walk Left
+    clip: {fileID: -203655887218126122, guid: bb08bdd02453f254eb14b08e4cc229e5, type: 3}
+  - name: Crouch Walk Right
+    clip: {fileID: -203655887218126122, guid: 8efd7f3293a62ca46ade80386779cab6, type: 3}
+  - name: Standing 1H Magic Attack 01
+    clip: {fileID: -203655887218126122, guid: 179b284f0893e2e44a8a37c904e2ff62, type: 3}
+  - name: Standing 1H Magic Attack 02
+    clip: {fileID: -203655887218126122, guid: 6f2480c1735afb04d8ba2458a1d26788, type: 3}
+  - name: Standing 1H Magic Attack 03
+    clip: {fileID: -203655887218126122, guid: d826934391130ac48acd4f6ccd19b564, type: 3}
+  - name: Standing 2H Cast Spell 01
+    clip: {fileID: -203655887218126122, guid: 8f8784813b0ad3243b964b651c5e4575, type: 3}
+  - name: Standing 2H Magic Area Attack 01
+    clip: {fileID: -203655887218126122, guid: 23ad8cbbc2ede38458e602a1594fe4ad, type: 3}
+  - name: Standing 2H Magic Area Attack 02
+    clip: {fileID: -203655887218126122, guid: 930ed2a08cc3d27488ce32a85fdc2cb7, type: 3}
+  - name: Standing 2H Magic Attack 01
+    clip: {fileID: -203655887218126122, guid: 8c47421d4617ab147ac5a23391e3645c, type: 3}
+  - name: Standing 2H Magic Attack 02
+    clip: {fileID: -203655887218126122, guid: 2d52497808953c944a5e06044f6a71ba, type: 3}
+  - name: Standing 2H Magic Attack 03
+    clip: {fileID: -203655887218126122, guid: aa90c183538a9c84bb9dee87cbb70d22, type: 3}
+  - name: Standing 2H Magic Attack 04
+    clip: {fileID: -203655887218126122, guid: 8d1806aeb26fe014a9ce892f2f9360d4, type: 3}
+  - name: Standing 2H Magic Attack 05
+    clip: {fileID: -203655887218126122, guid: 7ee679b3711e6494fb263c5136642a54, type: 3}
+  - name: Standing Block End
+    clip: {fileID: -203655887218126122, guid: 7584271cce1d4b94cbf260fe161cd935, type: 3}
+  - name: Standing Block Idle
+    clip: {fileID: -203655887218126122, guid: 23fe2f622356e3049943113edd264fde, type: 3}
+  - name: Standing Block React Large
+    clip: {fileID: -203655887218126122, guid: 7c82a8c3ff2d486418716a98806a879f, type: 3}
+  - name: Standing Block Start
+    clip: {fileID: -203655887218126122, guid: 685824fb7b956cd45b221408d8e9eb26, type: 3}
+  - name: Standing Idle 03
+    clip: {fileID: -203655887218126122, guid: 3aa2bbcda40b96e47b253389741e2ccc, type: 3}
+  - name: Standing Idle 04
+    clip: {fileID: -203655887218126122, guid: 5f3601b767138774f89d7d2c854c5b50, type: 3}
+  - name: Standing Idle To Crouch
+    clip: {fileID: -203655887218126122, guid: e835fae7c26cdd1439b6b4d96ab1f5fd, type: 3}
+  - name: Standing Jump Running Landing
+    clip: {fileID: -203655887218126122, guid: 136feb421cb873748adc3253b570e5b5, type: 3}
+  - name: Standing Jump Running
+    clip: {fileID: -203655887218126122, guid: aad92a54bbabc6642911fbb8adad2e4c, type: 3}
+  - name: Standing Jump
+    clip: {fileID: -203655887218126122, guid: ffc23114486f3a24aa66625ee3a9a5df, type: 3}
+  - name: Standing Land To Standing Idle
+    clip: {fileID: -203655887218126122, guid: 5d0e3cd989e955b419354eb0642b5d4e, type: 3}
+  - name: Standing Melee Attack Downward
+    clip: {fileID: -203655887218126122, guid: ca9afc2c34cf2ef42be26521fc9091bf, type: 3}
+  - name: Standing React Death Backward
+    clip: {fileID: -203655887218126122, guid: ff0091e66c92e7d41a18ec794c18793c, type: 3}
+  - name: Standing React Death Forward
+    clip: {fileID: -203655887218126122, guid: 0b33e334fc4850449a652e2394bd323b, type: 3}
+  - name: Standing React Death Left
+    clip: {fileID: -203655887218126122, guid: 1965ddc690d24b74ea4d0e007d7f6475, type: 3}
+  - name: Standing React Death Right
+    clip: {fileID: -203655887218126122, guid: d2a8180ac9e760e4e8de332e93e1ae95, type: 3}
+  - name: Standing React Large From Back
+    clip: {fileID: -203655887218126122, guid: 884029395adc9b847b2e96adefd09449, type: 3}
+  - name: Standing React Large From Front
+    clip: {fileID: -203655887218126122, guid: c4e7778179d0f15458f5ed0830ace9bf, type: 3}
+  - name: Standing React Large From Left
+    clip: {fileID: -203655887218126122, guid: 4e9e535d7816157428912a1acfc3631c, type: 3}
+  - name: Standing React Large From Right
+    clip: {fileID: -203655887218126122, guid: 90d8d5bee4a4ab64cbfc26f907fa588d, type: 3}
+  - name: Standing React Small From Back
+    clip: {fileID: -203655887218126122, guid: fe558f6f1305da8428e33b98d57c9aae, type: 3}
+  - name: Standing React Small From Front
+    clip: {fileID: -203655887218126122, guid: 91ded6cb1949f2644a6aadfe4786e4db, type: 3}
+  - name: Standing React Small From Left
+    clip: {fileID: -203655887218126122, guid: f8cea8b322e3f4744a0b98a395f87215, type: 3}
+  - name: Standing React Small From Right
+    clip: {fileID: -203655887218126122, guid: 7460ce52f23576b449cb8159e45ec935, type: 3}
+  - name: Standing Run Back
+    clip: {fileID: -203655887218126122, guid: aba7eee67c9987d47ab173e89c853638, type: 3}
+  - name: Standing Run Forward
+    clip: {fileID: -203655887218126122, guid: 8a9ce5dbfa7895240b5a1fdae2bd2d05, type: 3}
+  - name: Standing Run Left
+    clip: {fileID: -203655887218126122, guid: 4237d45a7ab9d1046bc907a517dd0093, type: 3}
+  - name: Standing Run Right
+    clip: {fileID: -203655887218126122, guid: 5502538ee99d6d0438fb421717198818, type: 3}
+  - name: Standing Sprint Forward
+    clip: {fileID: -203655887218126122, guid: 0e180d3720c1aa549aad23644d063335, type: 3}
+  - name: Standing Turn Left 90
+    clip: {fileID: -203655887218126122, guid: 695a8d1cbd9fb3f479caa09f39dc9ad1, type: 3}
+  - name: Standing Turn Right 90
+    clip: {fileID: -203655887218126122, guid: f0a786b1166213546be3585bd7339b45, type: 3}
+  - name: Standing Walk Back
+    clip: {fileID: -203655887218126122, guid: 8a2b3659dd788594e8396ef086237eb9, type: 3}
+  - name: Standing Walk Forward
+    clip: {fileID: -203655887218126122, guid: e5b5fc3c4fd1119449727786a877b3ff, type: 3}
+  - name: Standing Walk Left
+    clip: {fileID: -203655887218126122, guid: 40c28d937bd056d4a99eb71fe9cd7e5c, type: 3}
+  - name: Standing Walk Right
+    clip: {fileID: -203655887218126122, guid: 74bf886026ee5d54395bf548ad2229d3, type: 3}
+  - name: Sword And Shield Block Idle
+    clip: {fileID: -203655887218126122, guid: 473e7f7fe5732f643ada6f780a33b741, type: 3}
+  - name: standing 1H cast spell 01
+    clip: {fileID: -203655887218126122, guid: ce57ecd2e37e92d458d6ba47aab912be, type: 3}
+  - name: standing idle 02
+    clip: {fileID: -203655887218126122, guid: 7c3972046f8935c45a08522af3c4c63f, type: 3}
+  - name: standing idle
+    clip: {fileID: -203655887218126122, guid: aec05679cd9ca2241b88b286edc0c90b, type: 3}

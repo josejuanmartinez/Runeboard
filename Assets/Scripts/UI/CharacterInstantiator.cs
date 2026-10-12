@@ -23,6 +23,7 @@ public class CharacterInstantiator : MonoBehaviour
         Character character = InstantiateFromTemplate<Character>(characterTemplate, biomeConfig.characterName, otherCharactersParent);
         character.InitializeFromBiome(leader, hex, biomeConfig, showSpawnMessage: false);
         CharacterIcons.RefreshForHumanPlayerOf(leader);
+        UnitAnimations.Recruited(character); // no-op during setup and save loading
         return character;
     }
     // applyNoScenarioStart: pass true only from procedural (non-scenario) leader placement —

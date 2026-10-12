@@ -984,6 +984,9 @@ public class Army
         if (defenderLosses.Any) hudMessages.Add(($"{defenderName} losses: {defenderLossesText}.", Color.red));
         hudMessages.AddRange(battleAbilityMessages);
 
+        // Before casualties, so the attacker swings before anyone falls.
+        UnitAnimations.Combat(attackerCommander, defenderCommander, defenderHeld: !anyDefenderCasualties);
+
         // Apply casualties to attacker troops
         ReceiveCasualties(attackerCasualtyPercent, defenderLeader, !anyAttackerCasualties && !forceCasualtySide);
 

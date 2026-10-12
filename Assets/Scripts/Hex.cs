@@ -737,18 +737,14 @@ public class Hex : MonoBehaviour
         if (!hasContent) { HideHexLabel(); return; }
         if (!EnsurePcText()) return;
 
-        StringBuilder builder = new();
-        if (shouldShowPc) builder.Append(BuildPcNameLabel());
-
-        if(hasArmiesOrCharacters)
+        StringBuilder units = new();
+        if (hasArmiesOrCharacters)
         {
-            if (shouldShowPc) builder.Append("  <color=#95866C>·</color> ");
-            builder.Append("<size=75%>");
             void AppendGroup(string spriteName, int count)
             {
                 if (count <= 0) return;
-                if (builder.Length > 0) builder.Append(' ');
-                builder.Append("<sprite name=\"").Append(spriteName).Append("\">").Append(count);
+                if (units.Length > 0) units.Append("  ");
+                units.Append("<sprite name=\"").Append(spriteName).Append("\">").Append(count);
             }
 
             AppendGroup("freePeople", armyCounts[(int)AlignmentEnum.freePeople]);
@@ -757,16 +753,29 @@ public class Hex : MonoBehaviour
             AppendGroup("freePeopleCharacter", characterCounts[(int)AlignmentEnum.freePeople]);
             AppendGroup("darkServantsCharacter", characterCounts[(int)AlignmentEnum.darkServants]);
             AppendGroup("neutralCharacter", characterCounts[(int)AlignmentEnum.neutral]);
-            builder.Append("</size>");
-    
         }
-        
-        // Drawn by the screen-space nameplate widget; the world-space label stays hidden and only
+
+        HexNameplates.PlateData plate = new() { hasSettlement = shouldShowPc && pc != null, unitsRichText = units.ToString() };
+        if (plate.hasSettlement)
+        {
+            plate.name = DisplayNames.Format(pc.pcName);
+            plate.nationColor = pc.owner != null ? pc.owner.nationColor : Color.clear;
+            plate.nationColor.a = pc.owner != null ? 1f : 0f;
+            plate.capital = pc.isCapital;
+            plate.objective = objectiveMarker;
+            plate.citySize = Mathf.Max(1, (int)pc.citySize);
+            plate.fortSize = (int)pc.fortSize;
+            plate.loyalty = Math.Max(0, pc.loyalty);
+            plate.port = pc.hasPort;
+            plate.hidden = pc.isHidden;
+        }
+
+        // Drawn by the screen-space city banner widget; the world-space label stays hidden and only
         // lends its font and sprite atlas.
         pcName.text = string.Empty;
         SetActiveFast(pcName.gameObject, false);
         pcTextBandFit?.Fit();
-        HexNameplates.Show(this, builder.ToString(), pcName.spriteAsset, pcName.font);
+        HexNameplates.Show(this, plate, pcName.spriteAsset, pcName.font);
     }
 
     public void RedrawCharacters(bool refreshHoverText = true)
@@ -3052,64 +3061,6 @@ public class Hex : MonoBehaviour
         {
             SetSpriteAlpha(hexTextureWater.GetComponent<SpriteRenderer>(), alpha);
         }
-    }
-
-    // The name and one compact status row share a fitted, feathered label at the tile's foot.
-    private string BuildPcNameLabel()
-    {
-        if (pc == null) return string.Empty;
-
-        StringBuilder builder = new();
-        Color labelColor = pc.owner != null ? Color.Lerp(pc.owner.nationColor, Color.white, .6f) : new Color(.86f, .73f, .49f);
-        if (objectiveMarker) labelColor = new Color(.91f, .77f, .42f);
-        builder.Append("<b><color=#").Append(ColorUtility.ToHtmlStringRGB(labelColor)).Append('>');
-        builder.Append(DisplayNames.Format(pc.pcName));
-        builder.Append("</color></b><br><size=100%>");
-
-        if (pc.citySize != PCSizeEnum.NONE)
-        {
-            builder.Append("<sprite name=\"pc\"><color=");
-            builder.Append(GetGradientColorHex((int)pc.citySize, (int)PCSizeEnum.camp, (int)PCSizeEnum.city));
-            builder.Append('>');
-            builder.Append((int)pc.citySize);
-            builder.Append("</color>");
-        }
-
-        if (pc.fortSize > FortSizeEnum.NONE)
-        {
-            if (pc.citySize != PCSizeEnum.NONE || pc.hasPort) builder.Append(' ');
-            builder.Append("<sprite name=\"fort\"><color=");
-            builder.Append(GetGradientColorHex((int)pc.fortSize, (int)FortSizeEnum.tower, (int)FortSizeEnum.citadel));
-            builder.Append('>');
-            builder.Append((int)pc.fortSize);
-            builder.Append("</color>");
-        }
-
-        builder.Append("  <sprite name=\"loyalty\"><color=");
-        builder.Append(GetLoyaltyColorHex(pc.loyalty));
-        builder.Append('>');
-        builder.Append(Math.Max(0, pc.loyalty));
-        builder.Append("</color>");
-
-        if (pc.hasPort) builder.Append(" <sprite name=\"port\">");
-        if (pc.isHidden) builder.Append(" <sprite name=\"hidden\">");
-        builder.Append("</size>");
-
-        return builder.ToString();
-    }
-
-    private static string GetGradientColorHex(int value, int minValue, int maxValue)
-    {
-        float t = Mathf.InverseLerp(minValue, maxValue, value);
-        Color blended = Color.Lerp(new Color(1f, 0.85f, 0.2f, 1f), new Color(0.2f, 0.8f, 0.2f, 1f), t);
-        return $"#{ColorUtility.ToHtmlStringRGB(blended)}";
-    }
-
-    private static string GetLoyaltyColorHex(int loyaltyValue)
-    {
-        if (loyaltyValue <= 33) return "#ff4d4d";
-        if (loyaltyValue <= 66) return "#ffd54f";
-        return "#00c853";
     }
 
     public void SetCharacterHovered(bool hovered)

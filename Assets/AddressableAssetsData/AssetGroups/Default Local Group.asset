@@ -20960,6 +20960,138 @@ MonoBehaviour:
     m_SerializedLabels:
     - default
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 813dbbeca096f6441816bbb79b924d41
+    m_Address: Assets/Art/3D/fbx/Aragorn/Aragorn.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d610b954b361ada4e906bc012621165a
+    m_Address: Assets/Art/3D/fbx/Arwen/Arwen.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b0786974b55cf644bbac8e3033df9e9
+    m_Address: Assets/Art/3D/fbx/Bard/Bard.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c0601d7aa3659a64191b43dbfafaafb1
+    m_Address: Assets/Art/3D/fbx/Beorn/Beorn.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c453cea3d6ea1f84c9cab404cd4674fe
+    m_Address: Assets/Art/3D/fbx/Boromir/Boromir.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0eafec2d82a939448295abc210ea4ac
+    m_Address: Assets/Art/3D/fbx/Cirdan/Cirdan.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3899e1558d595dd429683c33fda79e94
+    m_Address: Assets/Art/3D/fbx/Dragon/Dragon_rigged.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 072bf672a7a6c4b479a79d1e95f7ef4b
+    m_Address: Assets/Art/3D/fbx/Elladan/Elladan.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3647d712f09ac7545bb0fd4ebd9fa98e
+    m_Address: Assets/Art/3D/fbx/Elrohir/Elrohir.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed3a2fa2794c9624cb9b6f51d629eae1
+    m_Address: Assets/Art/3D/fbx/Elrond/Elrond.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 81ed9d597c68c7344ac368792466f246
+    m_Address: Assets/Art/3D/fbx/Eomer/Eomer.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98fb1a9a2bfa527459d8ae5325a5c5c0
+    m_Address: Assets/Art/3D/fbx/Eowyn/Eowyn.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 237cd5295831236418e998af6d17daf8
+    m_Address: Assets/Art/3D/fbx/Faramir/Faramir.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6331d398bd4b1f748978bf76ee148f0e
+    m_Address: Assets/Art/3D/fbx/Galadriel/Galadriel.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b1f15443eb12c649912beec19518a4c
+    m_Address: Assets/Art/3D/fbx/Giordia/Giordia.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78580782f0e20c64f99ec7776aea5cd2
+    m_Address: Assets/Art/3D/fbx/Legolas/Legolas.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4badb9d827114244794f5177d5965a08
+    m_Address: Assets/Art/3D/fbx/Radagast/Radagast.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13dcfa2b1c964ba45be83c61f20d1b8d
+    m_Address: Assets/Art/3D/fbx/Shelob/Shelob_rigged.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90c1c031a75ca0d4a819977866412294
+    m_Address: Assets/Art/3D/fbx/Spider/Spider.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eeb2075b3344e164f8156ed2b2d7be2f
+    m_Address: Assets/Art/3D/fbx/Theoden/Theoden.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 912f1eb33c6520c4d8696c9f7f89f5e5
+    m_Address: Assets/Art/3D/fbx/Thranduil/Thranduil.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f87e56babbe669b4ba1876bc5a81dcb5
+    m_Address: Assets/Art/3D/fbx/TomBombadil/Tom Bombadil.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3e0b2b26bae919f4cbe9c39921416c87, type: 2}
   m_SchemaSet:

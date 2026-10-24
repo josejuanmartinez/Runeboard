@@ -285,6 +285,21 @@ public class BoardNavigator : MonoBehaviour
         }
     }
 
+    /// <summary>Eases the camera to a spot and zoom over the given time (AutoTour film mode).</summary>
+    public IEnumerator FilmMove(Vector3 target, float zoom, float duration)
+    {
+        if (boardCamera == null) yield break;
+        if (lookAtCoroutine != null) { StopCoroutine(lookAtCoroutine); lookAtCoroutine = null; }
+        zoomAtPointer = false;
+        target.z = pivot.z;
+        float toZoom = Mathf.Clamp(zoom, minZoom, maxZoom);
+        // Hold board input like a close-up, or HandleZoom eases the zoom back every frame.
+        closeUpMoving = true;
+        yield return Ease(pivot, boardCamera.orthographicSize, target, toZoom, duration, 0f, 0f);
+        targetZoom = toZoom;
+        closeUpMoving = false;
+    }
+
     /// <summary>Jumps the zoom to an orthographic size (used by AutoTour screenshots).</summary>
     public void DebugSetZoom(float size)
     {

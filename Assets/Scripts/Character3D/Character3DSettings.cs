@@ -30,7 +30,7 @@ public class Character3DSettings : ScriptableObject
     [Tooltip("RetroLOTR/UnitToken. Empty = no tokens, figures at every zoom.")]
     public Shader tokenShader;
     [Tooltip("Orthographic sizes where figures start turning into tokens, and where they are tokens only.")]
-    public Vector2 tokenZoom = new(10f, 13f);
+    public Vector2 tokenZoom = new(8.5f, 10.5f);
     [Header("Miniature base (see Character3DBase)")]
     [Tooltip("Stand every unit on a bevelled base with a nation-coloured rim, like a painted miniature.")]
     public bool showBase = true;

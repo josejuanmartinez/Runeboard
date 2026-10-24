@@ -22,6 +22,8 @@ public static class AutoTour
     public static int Turns { get; private set; } = 2;
     /// <summary>-autotour-title: photograph the title/menu screens instead of playing.</summary>
     public static bool TitleOnly { get; private set; }
+    /// <summary>-autotour-film: slow camera moves and no screenshots, for recording a trailer.</summary>
+    public static bool Film { get; private set; }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Init()
@@ -37,6 +39,7 @@ public static class AutoTour
 
         Directory.CreateDirectory(OutDir);
         TitleOnly = System.Array.IndexOf(args, "-autotour-title") >= 0;
+        Film = System.Array.IndexOf(args, "-autotour-film") >= 0;
         if (TitleOnly)
         {
             AudioListener.volume = 0f;
@@ -78,6 +81,7 @@ public class AutoTourRunner : MonoBehaviour
             yield break;
         }
         yield return WaitFor(() => FindAnyObjectByType<LeaderSelector>() is LeaderSelector ls && ls.SelectionScreenShown, 600f, "leader selection");
+        if (AutoTour.Film) { yield return Film(clock); yield break; }
         yield return new WaitForSecondsRealtime(2f);
         yield return Shot("leader_selection");
         yield return WaitFor(() => Game.Instance != null && Game.Instance.started && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "first human turn");
@@ -174,6 +178,106 @@ public class AutoTourRunner : MonoBehaviour
         Application.Quit();
     }
 
+    // Film mode: the same campaign start, but with slow camera moves over the realm's towns and
+    // characters, card previews and the AI's turns. The game records its own frames to
+    // <outDir>/frames (FilmRecorder), never the desktop, so the window may sit behind others.
+    // "[AutoTour] film mark <name>" lines give each beat's time in the recording for the edit.
+    private IEnumerator Film(Stopwatch clock)
+    {
+        Application.runInBackground = true;
+        StartCoroutine(HideCursor());
+        FilmRecorder recorder = gameObject.AddComponent<FilmRecorder>();
+        recorder.Begin(Path.Combine(AutoTour.OutDir, "frames"));
+        Mark("leader_selection");
+        yield return WaitFor(() => Game.Instance != null && Game.Instance.started && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "first human turn");
+        Mark("campaign_ready");
+        yield return new WaitForSecondsRealtime(5f);
+
+        BoardNavigator nav = BoardNavigator.Instance;
+        PlayableLeader player = Game.Instance.player;
+        if (nav != null && player != null)
+        {
+            float home = Camera.main != null ? Camera.main.orthographicSize : 5f;
+            float town = Mathf.Lerp(nav.minZoom, nav.maxZoom, 0.35f);
+            float close = nav.minZoom;
+            Character first = player.controlledCharacters.Find(c => c != null && !c.killed && c.hex != null);
+            PC capital = player.controlledPcs.Find(p => p?.hex != null);
+            Vector3 start = first != null ? first.hex.transform.position : capital != null ? capital.hex.transform.position : Vector3.zero;
+
+            Mark("pull_back");
+            yield return nav.FilmMove(start, nav.maxZoom, 6f);
+            yield return new WaitForSecondsRealtime(1.5f);
+
+            Mark("towns");
+            int towns = 0;
+            foreach (PC pc in player.controlledPcs)
+            {
+                if (pc?.hex == null || towns++ >= 4) continue;
+                yield return nav.FilmMove(pc.hex.transform.position, town, 3.5f);
+                yield return new WaitForSecondsRealtime(2f);
+            }
+
+            Mark("characters");
+            int shown = 0;
+            foreach (Character c in player.controlledCharacters)
+            {
+                if (c == null || c.killed || c.hex == null || shown++ >= 3) continue;
+                yield return nav.FilmMove(c.hex.transform.position, close, 3f);
+                yield return new WaitForSecondsRealtime(2.5f);
+            }
+
+            yield return nav.FilmMove(start, home, 3f);
+        }
+
+        if (HandTray.Instance != null)
+        {
+            Mark("cards");
+            for (int i = 0; i < 2 && HandTray.Instance.DebugPreview(i); i++)
+                yield return new WaitForSecondsRealtime(3f);
+            HandTray.Instance.DebugPreview(-1);
+            CardCenterPreview.Instance?.HidePreview();
+            yield return new WaitForSecondsRealtime(1.5f);
+        }
+
+        for (int t = 0; t < AutoTour.Turns; t++)
+        {
+            int turnBefore = Game.Instance.turn;
+            Mark($"end_turn_{turnBefore}");
+            Game.Instance.EndTurnWithoutPrompt();
+            yield return WaitFor(() => Game.Instance.turn > turnBefore && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 600f, "next human turn");
+            Mark($"turn_{Game.Instance.turn}");
+            yield return new WaitForSecondsRealtime(4f);
+        }
+
+        CampaignObjectives objectives = CampaignObjectives.Instance;
+        if (objectives != null && ObjectiveGuide.Instance != null)
+        {
+            foreach (CampaignObjective o in objectives.GetObjectives(Game.Instance.player))
+            {
+                if (objectives.GetTargetHexes(o).Count == 0) continue;
+                Mark("objective");
+                ObjectiveGuide.Instance.FocusObjective(o);
+                yield return new WaitForSecondsRealtime(5f);
+                break;
+            }
+        }
+
+        yield return recorder.Finish();
+        AutoTour.Log($"done after {clock.Elapsed.TotalSeconds:0.0}s");
+        Application.Quit();
+
+        void Mark(string beat) => AutoTour.Log($"film mark {beat} t={recorder.Seconds:0.00} zoom={(Camera.main != null ? Camera.main.orthographicSize : -1f):0.00}");
+    }
+
+    private static IEnumerator HideCursor()
+    {
+        while (true)
+        {
+            Cursor.visible = false;
+            yield return null;
+        }
+    }
+
     // Writes every active RectTransform under each screen-space canvas (path, anchors, position,
     // size, scale and notable components) so HUD layout work can be planned from real numbers.
     private static void DumpHud() => DumpHud("hud_dump.txt");
@@ -229,5 +333,94 @@ public class AutoTourRunner : MonoBehaviour
         yield return null;
         yield return null;
         AutoTour.Log($"shot {path}");
+    }
+}
+
+/// <summary>
+/// Records the game's own frames for AutoTour film mode: about 30 times a second it copies the
+/// finished frame into a render texture, reads it back asynchronously and writes a JPEG on a
+/// worker thread. frames.ffconcat lists every frame with how long it was on screen, so the
+/// video keeps real time even when frames are dropped:
+///   ffmpeg -f concat -safe 0 -i frames.ffconcat -vsync vfr -r 30 out.mp4
+/// </summary>
+public class FilmRecorder : MonoBehaviour
+{
+    private const float Interval = 1f / 30f;
+    private const int MaxPending = 6;
+
+    private string dir;
+    private RenderTexture target;
+    private readonly Stopwatch clock = new();
+    private readonly System.Collections.Generic.List<(string file, double time)> frames = new();
+    private int pending, dropped;
+    private bool recording;
+
+    /// <summary>Seconds since recording began (the time in the finished video).</summary>
+    public float Seconds => (float)clock.Elapsed.TotalSeconds;
+
+    public void Begin(string outDir)
+    {
+        dir = outDir;
+        Directory.CreateDirectory(dir);
+        recording = true;
+        clock.Start();
+        StartCoroutine(Capture());
+    }
+
+    private IEnumerator Capture()
+    {
+        var endOfFrame = new WaitForEndOfFrame();
+        double next = 0;
+        while (recording)
+        {
+            yield return endOfFrame;
+            double now = clock.Elapsed.TotalSeconds;
+            if (now < next) continue;
+            next = now + Interval;
+            if (pending >= MaxPending) { dropped++; continue; }
+
+            if (target == null || target.width != Screen.width || target.height != Screen.height)
+            {
+                if (target != null) target.Release();
+                target = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
+            }
+            ScreenCapture.CaptureScreenshotIntoRenderTexture(target);
+            string file = $"f{frames.Count:000000}.jpg";
+            frames.Add((file, now));
+            int w = target.width, h = target.height;
+            string path = Path.Combine(dir, file);
+            pending++;
+            UnityEngine.Rendering.AsyncGPUReadback.Request(target, 0, TextureFormat.RGBA32, request =>
+            {
+                if (request.hasError) { pending--; return; }
+                byte[] pixels = request.GetData<byte>().ToArray();
+                System.Threading.Tasks.Task.Run(() =>
+                {
+                    byte[] jpg = ImageConversion.EncodeArrayToJPG(pixels, UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_UNorm, (uint)w, (uint)h, 0, 92);
+                    File.WriteAllBytes(path, jpg);
+                    System.Threading.Interlocked.Decrement(ref pending);
+                });
+            });
+        }
+    }
+
+    /// <summary>Stops recording, waits for the last frames to be written and writes the frame list.</summary>
+    public IEnumerator Finish()
+    {
+        recording = false;
+        double end = clock.Elapsed.TotalSeconds;
+        float deadline = Time.realtimeSinceStartup + 30f;
+        while (pending > 0 && Time.realtimeSinceStartup < deadline) yield return null;
+
+        var list = new System.Text.StringBuilder("ffconcat version 1.0\n");
+        for (int i = 0; i < frames.Count; i++)
+        {
+            if (!File.Exists(Path.Combine(dir, frames[i].file))) continue;
+            double until = i + 1 < frames.Count ? frames[i + 1].time : end;
+            list.Append($"file '{frames[i].file}'\nduration {(until - frames[i].time).ToString("0.0000", System.Globalization.CultureInfo.InvariantCulture)}\n");
+        }
+        File.WriteAllText(Path.Combine(dir, "frames.ffconcat"), list.ToString());
+        AutoTour.Log($"film recorder frames={frames.Count} dropped={dropped} seconds={end:0.0}");
+        if (target != null) target.Release();
     }
 }

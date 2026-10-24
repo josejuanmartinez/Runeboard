@@ -35,4 +35,4 @@ MonoBehaviour:
   shadowFarOpacity: 0.45
   rimStrength: 1
   tokenShader: {fileID: 4800000, guid: 708665795a31bbbe66428b6bbb4007bf, type: 3}
-  tokenZoom: {x: 10, y: 13}
+  tokenZoom: {x: 8.5, y: 10.5}

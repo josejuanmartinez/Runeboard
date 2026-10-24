@@ -163,6 +163,10 @@ public class Board : MonoBehaviour
 
         if (regionLabelManager == null)
             regionLabelManager = FindAnyObjectByType<RegionLabelManager>();
+        // Region names belong to the Regions view only. The camera renders every layer by
+        // default, so without this a label shown when a land is played floated over the board
+        // as giant letters while the view was off.
+        ApplyRegionLabelsLayer();
 
         // Subscribe to generation progress events
         boardGenerator.OnGenerationProgress += UpdateGenerationProgress;
@@ -564,17 +568,18 @@ public class Board : MonoBehaviour
                 hex.terrainTexture.gameObject.SetActive(revealed && !terrainTexturesHidden);
         }
 
-        if (Camera.main != null && regionLabelManager != null)
-        {
-            int layer = LayerMask.NameToLayer(regionLabelManager.labelsLayerName);
-            if (layer >= 0)
-            {
-                if (terrainTexturesHidden)
-                    Camera.main.cullingMask |= 1 << layer;
-                else
-                    Camera.main.cullingMask &= ~(1 << layer);
-            }
-        }
+        ApplyRegionLabelsLayer();
+    }
+
+    private void ApplyRegionLabelsLayer()
+    {
+        if (Camera.main == null || regionLabelManager == null) return;
+        int layer = LayerMask.NameToLayer(regionLabelManager.labelsLayerName);
+        if (layer < 0) return;
+        if (terrainTexturesHidden)
+            Camera.main.cullingMask |= 1 << layer;
+        else
+            Camera.main.cullingMask &= ~(1 << layer);
     }
 
     public void SelectCharacter(Character character, bool lookAt = true, float duration = 1.0f, float delay = 0.0f)

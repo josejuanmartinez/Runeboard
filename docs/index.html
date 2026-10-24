@@ -3,376 +3,286 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090806">
-  <meta name="description" content="RuneBoard is a dark, hex&card-driven strategy game of armies, alliances, and ancient powers across Middle-earth.">
-  <meta property="og:title" content="RuneBoard">
-  <meta property="og:description" content="Command heroes, settlements, nations. Raise armies, and reshape the fate of the world using a personalized card deck.">
-  <meta property="og:image" content="https://raw.githubusercontent.com/josejuanmartinez/Runeboard/main/dev-diary-assets/retrolotr-campaign-hero.png">
-  <meta property="og:type" content="website">
-  <title>Runeboard</title>
-  <link rel="preconnect" href="https://raw.githubusercontent.com">
+  <title>Runeboard — a hand-painted strategy game of Middle-earth</title>
+  <meta name="description" content="Runeboard is a hand-painted hex and card strategy game across Middle-earth: miniature armies on a living tabletop map, illustrated cards, and rival nations driven by a layered AI.">
+  <meta property="og:title" content="Runeboard">
+  <meta property="og:description" content="A hand-painted hex & card strategy game of Middle-earth, with rival nations driven by a layered AI.">
+  <meta property="og:image" content="https://josejuanmartinez.github.io/Runeboard/images/v2/brand/hero.jpg">
+  <meta name="theme-color" content="#0e0c0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IM+Fell+English+SC&family=Jacquard+12&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to the tale</a>
+  <a class="skip" href="#tabletop">Skip to the tale</a>
 
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="Runeboard home">
-      <span class="brand-mark" aria-hidden="true">R</span>
-      <span>Runeboard</span>
-    </a>
-    <nav aria-label="Main navigation">
-      <a href="#game">The Game</a>
-      <a href="#gameplay">How to Play</a>
-      <a href="#cards">The Interface</a>
-      <a href="#autoplay">AI</a>
-      <a href="#features">Features</a>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top" aria-label="Runeboard, back to top"><img src="images/v2/brand/logo.png" alt="Runeboard"></a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#tabletop">The Board</a>
+      <a href="#fronts">Fronts</a>
+      <a href="#cards">Cards</a>
+      <a href="#turn">A Turn</a>
+      <a href="#ai">The AI</a>
+      <a href="#art">The Art</a>
       <a href="#gallery">Gallery</a>
-      <a class="nav-cta" href="https://github.com/josejuanmartinez/Runeboard">View on GitHub</a>
-      <a class="nav-cta" href="https://github.com/josejuanmartinez/Runeboard/releases">Download</a>
     </nav>
+    <a class="btn btn--small" href="https://github.com/josejuanmartinez/Runeboard/releases">Download</a>
   </header>
 
-  <main id="main">
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-slideshow" aria-hidden="true">
-        <img class="hero-image hero-slide active" src="images/gameplay/01-title.png" alt="">
-        <img class="hero-image hero-slide" src="images/hero/frame-01.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-02.png" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-03.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-04.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-05.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-06.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-07.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-08.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-09.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-10.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-11.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-12.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-13.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-14.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-15.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-16.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-17.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-18.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-19.webp" alt="" loading="lazy">
-        <img class="hero-image hero-slide" src="images/hero/frame-20.webp" alt="" loading="lazy">
+  <!-- ─────────────────────────── Hero ─────────────────────────── -->
+  <section class="hero" id="top">
+    <div class="hero__art" role="img" aria-label="Rivendell's falls and bridges, painted for Runeboard's title screen"></div>
+    <div class="hero__column">
+      <img class="hero__logo" src="images/v2/brand/logo.png" alt="Runeboard">
+      <p class="hero__tagline">A hand-painted strategy game of armies, cards and ancient powers across Middle-earth.</p>
+      <div class="hero__actions">
+        <a class="btn" href="https://github.com/josejuanmartinez/Runeboard/releases">Download the game</a>
+        <a class="btn btn--ghost" href="#trailer">Watch the trailer</a>
       </div>
-      <div class="hero-shade"></div>
-      <div class="hero-content">
-        <p class="eyebrow">A hand-painted strategy & collective card game</p>
-        <h1 id="hero-title">Runeboard<br><em>hangs in the balance.</em></h1>
-        <p class="hero-copy">Lead the Free Peoples, bend the world to the Shadow, or pursue the designs of the Neutral Nations in a sprawling war of cards, armies, and ancient power.</p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#game">Enter the campaign</a>
-          <a class="button button-ghost" href="#gallery">See the battlefield</a>
-        </div>
-      </div>
-      <div class="hero-scroll" aria-hidden="true"><span></span>Scroll to explore</div>
-    </section>
+      <ul class="hero__facts">
+        <li><b>3</b> fronts of the War of the Ring</li>
+        <li><b>171</b> hand-built settlements</li>
+        <li><b>5</b>-layer AI behind every rival</li>
+      </ul>
+    </div>
+    <a class="hero__scroll" href="#trailer" aria-label="Scroll down">
+      <img src="images/v2/ui/star.png" alt="">
+    </a>
+  </section>
 
-    <section class="trailer section" id="trailer">
-      <div class="trailer-heading">
-        <p class="eyebrow">See it in motion</p>
-        <h2>Watch a campaign unfold.</h2>
-      </div>
-      <video class="trailer-video" controls preload="none" poster="images/hero/trailer-poster.webp">
+  <!-- ─────────────────────────── Trailer ─────────────────────────── -->
+  <section class="section section--tight" id="trailer">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">See it in motion</p>
+    <h2 class="title">A campaign unfolds</h2>
+    <div class="frame frame--video reveal">
+      <video controls preload="metadata" poster="images/gameplay/05-mordor-turn0.png">
         <source src="https://media.githubusercontent.com/media/josejuanmartinez/Runeboard/main/docs/videos/trailer.mp4" type="video/mp4">
+        Your browser can't play this video. <a href="https://github.com/josejuanmartinez/Runeboard/blob/main/docs/videos/trailer.mp4">Watch the trailer on GitHub.</a>
       </video>
-    </section>
+    </div>
+  </section>
 
-    <section class="intro section" id="game">
-      <div class="section-number" aria-hidden="true">I</div>
-      <div class="intro-heading">
-        <p class="eyebrow">A war told your way</p>
-        <h2>Strategy with the soul of an old fantasy table.</h2>
-      </div>
-      <div class="intro-copy">
-        <p>Runeboard brings a sweeping conflict to a living hex map. Muster distinct armies, guide legendary characters, claim strongholds, and play illustrated cards that can turn a desperate battle.</p>
-        <p>Every campaign grows from competing powers and shifting fronts. Roads, rivers, mountains, and hidden lands shape the choices before you—and the story left behind.</p>
-      </div>
-    </section>
+  <!-- ─────────────────────────── Tabletop ─────────────────────────── -->
+  <section class="section" id="tabletop">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">I · The board</p>
+    <h2 class="title">A living tabletop</h2>
+    <p class="lede">Middle-earth is laid out as one continuous painted map, every hex painted by hand, and on it your war is played with miniatures — figures on their bases, towns built hex by hex, fog that rolls back as your scouts ride out.</p>
 
-    <section class="factions" aria-label="Playable powers">
-      <article class="faction faction-free">
-        <div class="feature-image-wrap">
-          <img src="images/gameplay/26-FreePeople.png" alt="One of the Avatars for the Free People" loading="lazy">          
-        </div>
-        <span class="sigil" aria-hidden="true">✦</span>
-        <p>The Free Peoples</p>
-        <h3>Kindle hope.</h3>
-        <span>Rally scattered realms and stand against the gathering dark.</span>
+    <div class="pillars">
+      <article class="pillar reveal">
+        <span class="pillar__mark" aria-hidden="true"></span>
+        <h3>Miniatures, not sprites</h3>
+        <p>Every hero and captain is a live, animated 3D figure on a painted base in its nation's colour. They walk the roads, raise their guard, cast, fall — and your own company stands out at a glance.</p>
       </article>
-      <article class="faction faction-shadow">
-        <div class="feature-image-wrap">
-          <img src="images/gameplay/28-DarkServants.png" alt="One of the Avatars for the Dark Servants" loading="lazy">          
-        </div>
-        <span class="sigil" aria-hidden="true">◆</span>
-        <p>The Dark Lord</p>
-        <h3>Cover the lands.</h3>
-        <span>Unleash vast hosts and break the strongholds of the Free People.</span>
+      <article class="pillar reveal">
+        <span class="pillar__mark" aria-hidden="true"></span>
+        <h3>171 settlements, each its own</h3>
+        <p>Every town, hold and ruin has its own painting — and its own miniature built from it: Imladris' falls and domed halls, the seven circles of Minas Tirith, Hobbiton's smials, the black horns of Orthanc.</p>
       </article>
-      <article class="faction faction-hand">
-        <div class="feature-image-wrap">
-          <img src="images/gameplay/27-Neutral.png" alt="One of the Avatars for the Neutral Nations" loading="lazy">          
-        </div>
-        <span class="sigil" aria-hidden="true">♜</span>
-        <p>Neutral Nations</p>
-        <h3>Master the board.</h3>
-        <span>Scheme, industrialize, and strike where rival powers are weakest.</span>
+      <article class="pillar reveal">
+        <span class="pillar__mark" aria-hidden="true"></span>
+        <h3>A board that breathes</h3>
+        <p>Cloud shadows drift over the land, chimneys smoke, birds cross the map. The seasons turn with the calendar, dusk falls while rival nations move, and the camera leans in on a duel or a battle.</p>
       </article>
-    </section>
+    </div>
 
-    <section class="features section" id="features">
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/24-map-grid-toggled.png" alt="The hex map opening up around Isengard as Saruman's scouts push into Rohan in Runeboard" loading="lazy">
-        <p class="image-caption">The Riddermark · 3018 T.A.</p>
-      </div>
-      <div class="feature-copy">
-        <p class="eyebrow">Command the war</p>
-        <h2>Every move writes history.</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Shape your armies</h3><p>Recruit troops, combine forces, and march commanders across a dangerous world.</p></div></li>
-          <li><span>02</span><div><h3>Play the moment</h3><p>Build a deck around your power and answer the battlefield with characters, actions, spells, and events.</p></div></li>
-          <li><span>03</span><div><h3>Outthink rival powers</h3><p>Read the terrain, defend vital routes, and pursue objectives before the age turns against you.</p></div></li>
-        </ol>
-      </div>
-    </section>
+    <div class="towns reveal" aria-label="Settlement paintings">
+      <figure><img src="images/v2/settlements/imladris.png" alt="Imladris" loading="lazy"><figcaption>Imladris</figcaption></figure>
+      <figure><img src="images/v2/settlements/minastirith.png" alt="Minas Tirith" loading="lazy"><figcaption>Minas Tirith</figcaption></figure>
+      <figure><img src="images/v2/settlements/hobbiton.png" alt="Hobbiton" loading="lazy"><figcaption>Hobbiton</figcaption></figure>
+      <figure><img src="images/v2/settlements/orthanc.png" alt="Orthanc" loading="lazy"><figcaption>Orthanc</figcaption></figure>
+      <figure><img src="images/v2/settlements/baraddur.png" alt="Barad-dûr" loading="lazy"><figcaption>Barad-dûr</figcaption></figure>
+      <figure><img src="images/v2/settlements/edoras.png" alt="Edoras" loading="lazy"><figcaption>Edoras</figcaption></figure>
+      <figure><img src="images/v2/settlements/helmdeep.png" alt="Helm's Deep" loading="lazy"><figcaption>Helm's Deep</figcaption></figure>
+      <figure><img src="images/v2/settlements/esgaroth.png" alt="Esgaroth" loading="lazy"><figcaption>Esgaroth</figcaption></figure>
+      <figure><img src="images/v2/settlements/dolamroth.png" alt="Dol Amroth" loading="lazy"><figcaption>Dol Amroth</figcaption></figure>
+      <figure><img src="images/v2/settlements/minasmorgul.png" alt="Minas Morgul" loading="lazy"><figcaption>Minas Morgul</figcaption></figure>
+      <figure><img src="images/v2/settlements/carasgaladhon.png" alt="Caras Galadhon" loading="lazy"><figcaption>Caras Galadhon</figcaption></figure>
+      <figure><img src="images/v2/settlements/ereborlost.png" alt="Erebor" loading="lazy"><figcaption>Erebor</figcaption></figure>
+    </div>
+    <p class="caption">Each settlement is painted by hand — and rebuilt on the board as its own miniature from that painting.</p>
+  </section>
 
-    <section class="features section" id="gameplay">
-      <div class="feature-copy">
-        <p class="eyebrow">Choose your leader</p>
-        <h2>Take command of your campaign.</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Pick a scenario</h3><p>From the Start menu, choose a campaign — from the classic random earth of Champions of Middle Earth to the authored 2950 T.A. story of The Untold War of the Ring.</p></div></li>
-          <li><span>02</span><div><h3>Browse the company</h3><p>Move the mouse wheel over the carousel to cycle through the available leaders — Gandalf, Saruman, Sauron and their many flavours, each with its own deck identity.</p></div></li>
-          <li><span>03</span><div><h3>Confirm your choice</h3><p>Click the front card or the New Game button. Choose Yes to begin as that leader, or No to return to the selection screen.</p></div></li>
-        </ol>
-      </div>
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/04-confirm-leader.png" alt="Confirmation popup asking whether to start as Saruman (The White Hand) in Runeboard" loading="lazy">
-        <p class="image-caption">"Do you want to start as Saruman (The White Hand)?"</p>
-      </div>
-    </section>
+  <!-- ─────────────────────────── Fronts ─────────────────────────── -->
+  <section class="section section--dark" id="fronts">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">II · The war</p>
+    <h2 class="title">Three fronts, one fate</h2>
+    <p class="lede">Lead a wizard, a dark lord or a neutral power through an age of the War of the Ring. Every leader brings its own deck, its own realm and its own way to win.</p>
+    <div class="fronts">
+      <article class="front reveal">
+        <img src="images/v2/banners/gandalf_mithrandir.png" alt="Banner of Mithrandir" loading="lazy">
+        <h3>The Free Peoples</h3>
+        <p class="front__motto">Kindle hope.</p>
+        <p>Rally the scattered realms of Elves, Dwarves, Men and Hobbits, hold the White City and the Last Homely House, and carry the war to the Mountain of Fire.</p>
+      </article>
+      <article class="front reveal">
+        <img src="images/v2/banners/sauron_the_dark_eye.png" alt="Banner of the Dark Eye" loading="lazy">
+        <h3>The Shadow</h3>
+        <p class="front__motto">Cover the lands.</p>
+        <p>Unleash vast hosts, Ringwraiths and terror, and break the strongholds of the West one by one before the age runs out.</p>
+      </article>
+      <article class="front reveal">
+        <img src="images/v2/banners/saruman_saruman_the_white.png" alt="Banner of Saruman the White" loading="lazy">
+        <h3>The Neutral Powers</h3>
+        <p class="front__motto">Master the board.</p>
+        <p>Scheme, industrialise and play both sides — strike where the great powers are weakest and take the board for yourself.</p>
+      </article>
+    </div>
+    <div class="banners reveal" aria-hidden="true">
+      <img src="images/v2/banners/elven_leaf.png" alt="" loading="lazy">
+      <img src="images/v2/banners/green_horse.png" alt="" loading="lazy">
+      <img src="images/v2/banners/hobbit_hobbiton.png" alt="" loading="lazy">
+      <img src="images/v2/banners/grey_dwarven.png" alt="" loading="lazy">
+      <img src="images/v2/banners/nazgul_helmet.png" alt="" loading="lazy">
+    </div>
+  </section>
 
-    <section class="features section" id="play">
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/05-mordor-turn0.png" alt="Turn 0 of a Runeboard campaign, showing Saruman's Isengard and Fangorn's Camp on the hex map" loading="lazy">
-        <p class="image-caption">Turn 0 · Isengard, 23 Halimath 3018 T.A.</p>
+  <!-- ─────────────────────────── Cards ─────────────────────────── -->
+  <section class="section" id="cards">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">III · The cards</p>
+    <h2 class="title">Every hero, host and hold is a card</h2>
+    <p class="lede">Characters, armies, lands, settlements, artifacts, spells and encounters — hundreds of illustrated cards, each one a piece of the board. Build your hand around your leader and play the moment: a duel, a march, a spell, an omen.</p>
+    <div class="hand reveal" aria-label="A hand of cards">
+      <img src="images/v2/cards/gandalf.jpg" alt="Gandalf, Mithrandir" loading="lazy">
+      <img src="images/v2/cards/galadriel.jpg" alt="Galadriel" loading="lazy">
+      <img src="images/v2/cards/aragorn.jpg" alt="Aragorn" loading="lazy">
+      <img src="images/v2/cards/balrog.jpg" alt="The Balrog" loading="lazy">
+      <img src="images/v2/cards/saruman.jpg" alt="Saruman the White" loading="lazy">
+      <img src="images/v2/cards/blackrider.jpg" alt="A Black Rider" loading="lazy">
+      <img src="images/v2/cards/eowyn.jpg" alt="Éowyn" loading="lazy">
+    </div>
+    <div class="split">
+      <figure class="frame reveal"><img src="images/gameplay/20-card-bloom.png" alt="Places as cards: Orthanc, the Gap of Rohan, Arthedain, Fangorn's Camp" loading="lazy" data-zoom></figure>
+      <div class="steps">
+        <div class="step"><span class="step__n">01</span><div><h3>Hover a name, meet the card</h3><p>Every character's title opens its full card — portrait, stats and abilities. Underlined armies open their own.</p></div></div>
+        <div class="step"><span class="step__n">02</span><div><h3>Places are cards too</h3><p>Orthanc, the Gap of Rohan, Arthedain — every settlement and region carries the resources and standing it brings your realm.</p></div></div>
+        <div class="step"><span class="step__n">03</span><div><h3>The world plays back</h3><p>Environmental cards like <em>Twilight</em> change the field for everyone, and rival nations play them against you.</p></div></div>
       </div>
-      <div class="feature-copy">
-        <p class="eyebrow">Turn 0</p>
-        <h2>The board wakes up beneath you.</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Survey your realm</h3><p>Your capital, characters, and starting resources are laid out on the hex map — fog of war hides the rest of Middle-earth until you explore it.</p></div></li>
-          <li><span>02</span><div><h3>Read the turn log</h3><p>Every reveal, encounter, and rival move streams into the log at the bottom of the screen, so you always know what changed and why.</p></div></li>
-          <li><span>03</span><div><h3>Investigate and play</h3><p>Click glowing markers to trigger encounters, and resolve event cards — illustrated moments like <em>Secrets From A Lost Tome</em> — as they arise.</p></div></li>
-        </ol>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="features section" id="cards">
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/10-character-card.png" alt="Hovering Lurtz's name reveals his full character card in Runeboard" loading="lazy">
-        <p class="image-caption">Hover a name, meet the card behind it</p>
-      </div>
-      <div class="feature-copy">
-        <p class="eyebrow">Know your company</p>
-        <h2>Every character is a card too.</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Hover a character's title</h3><p>Hovering a character's name — like Lurtz — reveals their full card: stats, portrait, and ability text.</p></div></li>
-          <li><span>02</span><div><h3>Follow the underlines</h3><p>Underlined army names such as the Uruk Hai open that unit's own card, with its own stats and flavor text.</p></div></li>
-          <li><span>03</span><div><h3>Check the field, too</h3><p>A small icon beneath the Resources bar previews the current Environmental card in play, like Twilight.</p></div></li>
-        </ol>
-      </div>
-    </section>
+  <!-- ─────────────────────────── A turn ─────────────────────────── -->
+  <section class="section section--dark" id="turn">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">IV · A turn of the age</p>
+    <h2 class="title">Every move writes history</h2>
+    <p class="lede">An age lasts sixty days. Each turn is one of them: muster, march, scheme, fight — then the calendar turns and the other nations move in the dusk.</p>
+    <ol class="turn">
+      <li class="turn__step reveal">
+        <figure class="frame"><img src="images/gameplay/05-mordor-turn0.png" alt="A realm at the start of a campaign" loading="lazy" data-zoom></figure>
+        <h3>Survey your realm</h3>
+        <p>Your capital, characters and resources wait on the board. Fog hides the rest of Middle-earth until you explore it.</p>
+      </li>
+      <li class="turn__step reveal">
+        <figure class="frame"><img src="images/gameplay/06-event-card.png" alt="An event card" loading="lazy" data-zoom></figure>
+        <h3>Answer events</h3>
+        <p>Encounters hide in the hexes and omens arrive with the dawn — illustrated moments that ask you to choose.</p>
+      </li>
+      <li class="turn__step reveal">
+        <figure class="frame"><img src="images/gameplay/21-combat.png" alt="Combat" loading="lazy" data-zoom></figure>
+        <h3>Fight for the ground</h3>
+        <p>Armies clash and heroes duel. Hold strongholds, defend the roads, chase the objectives of your age.</p>
+      </li>
+      <li class="turn__step reveal">
+        <figure class="frame"><img src="images/gameplay/19-end-turn.png" alt="Ending the turn" loading="lazy" data-zoom></figure>
+        <h3>Close the day</h3>
+        <p>End your turn and watch the rival powers answer — every march, broken oath and last stand logged as it happens.</p>
+      </li>
+    </ol>
+  </section>
 
-    <section class="features section" id="prices-events">
-      <div class="feature-copy">
-        <p class="eyebrow">Manage the realm</p>
-        <h2>Prices, portents, and the passing of turns.</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Click for prices</h3><p>Click a Resources icon to see what it costs to Build and Sell — caravan prices shift turn to turn.</p></div></li>
-          <li><span>02</span><div><h3>Answer the omens</h3><p>A red badge on a leader's banner marks a waiting event; click it to react and clear the alert.</p></div></li>
-          <li><span>03</span><div><h3>Close the day</h3><p>When you're done, the disc in the bottom-right corner asks "End turn?" — confirm to advance the calendar.</p></div></li>
-        </ol>
-      </div>
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/19-end-turn.png" alt="The End Turn confirmation dialog in Runeboard, asking to finish the current turn" loading="lazy">
-        <p class="image-caption">"End turn?" — Finish Turn or Cancel</p>
-      </div>
-    </section>
+  <!-- ─────────────────────────── AI ─────────────────────────── -->
+  <section class="section" id="ai">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">V · The minds behind the Shadow</p>
+    <h2 class="title">A war that thinks back</h2>
+    <p class="lede">Every rival nation and every character it commands is played by a layered AI — not a script. It reads the board, remembers what it has seen, sets itself missions, plans how to achieve them, and checks its own judgement against a neural network trained on good play. Turn on Watch Mode and the whole war plays itself.</p>
 
-    <section class="quote-band" aria-label="Atmosphere">
-      <p>“The board remembers every march, every broken oath, every last stand.”</p>
-      <span>— From the annals of the campaign</span>
-    </section>
+    <div class="ai">
+      <div class="ai__stack" role="tablist" aria-label="AI layers">
+        <button class="ai__layer is-active" role="tab" aria-selected="true" data-layer="0"><span>01</span>Utility AI<em>scores everything</em></button>
+        <button class="ai__layer" role="tab" aria-selected="false" data-layer="1"><span>02</span>Blackboards<em>remember the world</em></button>
+        <button class="ai__layer" role="tab" aria-selected="false" data-layer="2"><span>03</span>Hierarchical Task Network<em>plans missions</em></button>
+        <button class="ai__layer" role="tab" aria-selected="false" data-layer="3"><span>04</span>Behaviour &amp; State Trees<em>act them out</em></button>
+        <button class="ai__layer" role="tab" aria-selected="false" data-layer="4"><span>05</span>Neural Network<em>a second opinion</em></button>
+      </div>
+      <div class="ai__panel" role="tabpanel" aria-live="polite">
+        <figure class="frame"><img id="ai-figure" src="images/gameplay/33-utility-ai.webp" alt="Utility AI scoring" loading="lazy" data-zoom></figure>
+        <h3 id="ai-title">Utility AI</h3>
+        <p id="ai-text">Every nation constantly scores danger, opportunity, growth and stagnation — literally everything that can be quantified about the board — to weigh what is worth doing next.</p>
+      </div>
+    </div>
 
-    <section class="features section" id="morgul">
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/20-card-bloom.png" alt="The settlement cards for Orthanc, the Gap Of Rohan, Arthedain, and Fangorn's Camp fanned out in Runeboard" loading="lazy">
-        <p class="image-caption">Orthanc, the Gap of Rohan, Arthedain, Fangorn's Camp</p>
+    <div class="split split--reverse">
+      <figure class="frame reveal"><img src="images/gameplay/07-watch-mode.png" alt="Watch Mode: the campaign plays itself" loading="lazy" data-zoom></figure>
+      <div>
+        <h3 class="subtitle">Watch Mode</h3>
+        <p>Hand your own nation to the AI and watch the age play out: Gandalf rallies the West, Saruman schemes, the Dark Lord's hosts pour from the East. A good way to learn the game — and to see the minds at work.</p>
+        <a class="link" href="https://medium.com/@jjmcarrascosa/field-notes-dev-diary-on-video-games-ai-and-some-generative-ai-9d435055ae3f?postPublishedType=repub">Read the dev diary on the AI →</a>
       </div>
-      <div class="feature-copy">
-        <p class="eyebrow">Into harm's way</p>
-        <h2>Cross into the enemy's shadow.</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Move hex by hex</h3><p>Arrow keys and W A S D send a selected character across the map — the game's own Movement tutorial shows exactly which key goes which way.</p></div></li>
-          <li><span>02</span><div><h3>Read the outlines</h3><p>Spotted enemies are traced in red, spotted neutrals in grey — a hex bordered in red is one you enter at your own risk.</p></div></li>
-          <li><span>03</span><div><h3>Claim the ground</h3><p>Every settlement and region carries its own card — Orthanc, the Gap of Rohan, Arthedain, Fangorn's Camp — each with the resources and standing it brings to your realm.</p></div></li>
-        </ol>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="features section" id="autoplay">
-      <div class="feature-copy">
-        <p class="eyebrow">The world is (artificially) intelligent</p>
-        <h2>AI</h2>
-        Check <a href="https://medium.com/@jjmcarrascosa/field-notes-dev-diary-on-video-games-ai-and-some-generative-ai-9d435055ae3f?postPublishedType=repub">this article</a> explaining all the AI techniques used in detail.
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>Utility AI</h3><p>All the nations have score calculation utilities that measure danger, opportunities, growth, stagnation.</p></div></li>
-          <li><span>02</span><div><h3>Blackboards</h3><p>Store the situation of the world, register and remember nation and character missions</p></div></li>
-          <li><span>03</span><div><h3>Hierarchical Task Network</h3><p>Plans tasks for Characters, dividing them into specific possible behaviours</p></div></li>
-          <li><span>04</span><div><h3>Behaviour / State trees</h3><p>Execute the behaviours depending on the Utility AI scores and feasibility</p></div></li>
-          <li><span>05</span><div><h3>Neural Network</h3><p>A Multilayer Perceptron (MLP) trained on supervised best strategies, used also to consult best strategies</p></div></li>
-        </ol>
-      </div>
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/07-watch-mode.png" alt="Runeboard Watch Mode automatically playing out a campaign turn, with trophy scores rising and new territory revealed" loading="lazy">
-        <p class="image-caption">Watch Mode · the campaign plays itself</p>
-      </div>
-    </section>
-      <div class="gallery-grid">
-        <figure class="gallery-wide">
-          <img src="images/gameplay/33-utility-ai.webp" alt="Utility AI" loading="lazy">
-          <figcaption><span>01</span> Utility AI scores literally everything that can be quantified</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/32-blackboard.webp" alt="Blackboards" loading="lazy">
-          <figcaption><span>02</span> Blackboards register information, events, missions, scores</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/31-blackboards.webp" alt="Each character has a blackboard" loading="lazy">
-          <figcaption><span>03</span> Each character has its own blackboard</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/30-htn.webp" alt="Hierarchical Task Network" loading="lazy">
-          <figcaption><span>04</span> Utility AI scores, stored in Blackboards, are evaluated. Tasks are planned, executed by (State) Behaviour Trees.</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/29-mlp.webp" alt="Reinforcement Learning" loading="lazy">
-          <figcaption><span>05</span> A Neural Network was trained with supervised feedback on the incorrect decisions, to provide a separate opinion</figcaption>
-        </figure>
-      </div>
+  <!-- ─────────────────────────── Art ─────────────────────────── -->
+  <section class="section section--dark" id="art">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">VI · The art</p>
+    <h2 class="title">Painted, not prompted</h2>
+    <p class="lede">Runeboard's retro look started on paper: old black-and-white illustrations from RPG books, redrawn and hand-painted with the colours and techniques of the 1980s — then taught to an open-weight model so the cards could share that one hand.</p>
+    <ol class="pipeline">
+      <li class="reveal"><figure class="frame"><img src="images/gameplay/35-lora-bw.png" alt="Scanned black and white drawing" loading="lazy" data-zoom></figure><h3>Scan &amp; redraw</h3><p>Old black-and-white illustrations, scanned and redrawn.</p></li>
+      <li class="reveal"><figure class="frame"><img src="images/gameplay/36-lora-painted.png" alt="Hand-painted version" loading="lazy" data-zoom></figure><h3>Paint by hand</h3><p>Twenty-five of them painted with 80s palettes and techniques.</p></li>
+      <li class="reveal"><figure class="frame"><img src="images/gameplay/34-lora-result.png" alt="Card art generated in the same style" loading="lazy" data-zoom></figure><h3>Teach a model</h3><p>A LoRA on the open-weight Qwen Image model, trained only on that art, paints the cards.</p></li>
+      <li class="reveal"><figure class="frame"><img src="images/gameplay/38-hex.webp" alt="Repainted hex tiles" loading="lazy" data-zoom></figure><h3>Repaint the land</h3><p>Hex tiles built from Unity Asset Store pieces, repainted by hand into one map.</p></li>
+    </ol>
+  </section>
 
-    <section class="gallery section" id="gallery">
-      <div class="gallery-heading">
-        <div>
-          <p class="eyebrow">From the campaign</p>
-          <h2>Three fronts.<br>One fate.</h2>
-        </div>
-        <p>Hand-painted terrain, character portraits, illustrated cards, and atmospheric interfaces give each campaign the texture of a lost fantasy game brought back to life.</p>
-      </div>
-      <div class="gallery-grid">
-        <figure class="gallery-wide">
-          <img src="images/gameplay/00-load.png" alt="Encounter the Balrog, travel to Havens of Umbar, Wear Narya" loading="lazy">
-          <figcaption><span>01</span> Encounter the Balrog, travel to Havens of Umbar, Wear Narya</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/21-combat.png" alt="See animated combat" loading="lazy">
-          <figcaption><span>02</span> See animated combat</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/12-environmental-card.png" alt="Face environmental dangers played by your opponents..." loading="lazy">
-          <figcaption><span>03</span> Face environmental dangers played by your opponents</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/06-event-card.png" alt="The event card What Does Mordor Command being played in Runeboard" loading="lazy">
-          <figcaption><span>04</span> Answer events and encounters hidden at hexes</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/11-army-card.png" alt="Hire armies" loading="lazy">
-          <figcaption><span>05</span> Hire custon troops tailored to your nation's deck</figcaption>
-        </figure>
-        <figure class="gallery-wide">
-          <img src="images/gameplay/03-leader-carousel.png" alt=" Leaders can have different personalities (Avatars)" loading="lazy">
-          <figcaption><span>06</span> Leaders can have different personalities (Avatars)</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/15-tutorial-cards.png" alt="The Runeboard How to Play tutorial showing example Attack, Block, and Find Artifact cards" loading="lazy">
-          <figcaption><span>07</span> How to play: Attack, Block, Find Artifact</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/17-friend-or-foe.png" alt="The Runeboard tutorial explaining that spotted enemies are outlined in red and spotted neutrals in grey" loading="lazy">
-          <figcaption><span>08</span> Friend or foe, spotted or not</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/13-resource-price.png" alt="Clicking the Steel resource icon in Runeboard to reveal its Build and Sell prices" loading="lazy">
-          <figcaption><span>09</span> What does Steel cost today?</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/16-tutorial-movement.png" alt="The Runeboard Movement tutorial showing the arrow keys and W A S D used to move across hexes" loading="lazy">
-          <figcaption><span>10</span> Movement, key by key</figcaption>
-        </figure>
-      </div>
-    </section>
+  <!-- ─────────────────────────── Gallery ─────────────────────────── -->
+  <section class="section" id="gallery">
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">VII · From the campaign</p>
+    <h2 class="title">Gallery</h2>
+    <div class="gallery">
+      <img src="images/gameplay/03-leader-carousel.png" alt="Choosing a leader" loading="lazy" data-zoom>
+      <img src="images/gameplay/11-army-card.png" alt="An army card" loading="lazy" data-zoom>
+      <img src="images/gameplay/12-environmental-card.png" alt="An environmental card" loading="lazy" data-zoom>
+      <img src="images/gameplay/10-character-card.png" alt="A character card" loading="lazy" data-zoom>
+      <img src="images/gameplay/17-friend-or-foe.png" alt="Friend or foe" loading="lazy" data-zoom>
+      <img src="images/gameplay/13-resource-price.png" alt="Resource prices" loading="lazy" data-zoom>
+      <img src="images/v2/cards/angmar.jpg" alt="Angmar" loading="lazy" data-zoom>
+      <img src="images/v2/cards/elrond.jpg" alt="Elrond" loading="lazy" data-zoom>
+      <img src="images/v2/cards/anduin.jpg" alt="The Anduin" loading="lazy" data-zoom>
+    </div>
+  </section>
 
-    <section class="features section" id="art">
-      <div class="feature-image-wrap">
-        <img src="images/gameplay/34-lora-result.png" alt="Final results on the trained LoRA" loading="lazy">
-        <p class="image-caption"><i>[Retro] Three dwarven explorers walk over the Green Hills...</i></p>
-      </div>
-      <div class="feature-copy">
-        <p class="eyebrow">Into harm's way</p>
-        <h2>How do I achieve this unique art style?</h2>
-        <ol class="feature-list">
-          <li><span>01</span><div><h3>I scanned old black&white illustrations</h3><p>from old RPG books I had at home</p></div></li>
-          <li><span>02</span><div><h3>I redraw and painted</h3><p> some of them to have a unique retro old feeling.</p></div></li>
-          <li><span>03</span><div><h3>I painted 25 of them manually</h3><p>Using old color schemas and techniques from the 80s.</p></div></li>
-          <li><span>04</span><div><h3>I trained a LoRA</h3><p>on an open source, open weight Qwen Image model.</p></div></li>
-          <li><span>05</span><div><h3>I queried that model</h3><p>trained on my own art to create cards for the game.</p></div></li>
-        </ol>
-      <div class="gallery-grid">
-        <figure class="gallery-wide">
-          <img src="images/gameplay/35-lora-bw.png" alt="Black and White scanned and hand made drawings" loading="lazy">
-          <figcaption><span>01</span> Black and White scanned and hand made drawings</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/36-lora-painted.png" alt="Painted drawings with retro, colourful sets" loading="lazy">
-          <figcaption><span>02</span> Painted drawings with retro, colourful sets</figcaption>
-        </figure>
-        <figure>
-          <img src="images/gameplay/37-lora-painted-2.png" alt="Painted drawings with retro, colourful sets" loading="lazy">
-          <figcaption><span>03</span> Painted drawings with retro, colourful sets</figcaption>
-        </figure>
-      </div>
-      <hr>
-        For the hexes, I built assets from Artists in the <a href="https://assetstore.unity.com/packages/2d/environments/hex-medieval-fantasy-locations-59271">Unity Store</a> and repainted them myself.
-      
-        <figure>
-          <img src="images/gameplay/38-hex.webp" alt="Built assets modified and re-painted manually" loading="lazy">
-          <figcaption><span>01</span> Built assets modified and re-painted manually</figcaption>
-        </figure>
-      </div>
-    </section>
+  <!-- ─────────────────────────── CTA ─────────────────────────── -->
+  <section class="cta">
+    <img class="cta__star" src="images/v2/ui/star.png" alt="">
+    <h2 class="title">The road goes ever on</h2>
+    <p>Download the latest build, follow development on GitHub, or read how the AI was made.</p>
+    <div class="hero__actions">
+      <a class="btn" href="https://github.com/josejuanmartinez/Runeboard/releases">Download the game</a>
+      <a class="btn btn--ghost" href="https://github.com/josejuanmartinez/Runeboard">View on GitHub</a>
+      <a class="btn btn--ghost" href="https://medium.com/@jjmcarrascosa/field-notes-dev-diary-on-video-games-ai-and-some-generative-ai-9d435055ae3f?postPublishedType=repub">Dev diary</a>
+    </div>
+  </section>
 
-    <section class="final-cta">
-      <div class="final-ornament" aria-hidden="true">✦</div>
-      <p class="eyebrow">The road goes ever on</p>
-      <h2>Follow the making<br>of Runeboard.</h2>
-      <p>Explore the project, watch the campaign grow, and follow development on GitHub.</p>
-      <a class="button button-primary" href="https://github.com/josejuanmartinez/Runeboard">Visit the repository</a>
-      <br/>
-      <a class="button button-primary" href="https://github.com/josejuanmartinez/Runeboard/releases">Download the game</a>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="brand"><span class="brand-mark" aria-hidden="true">R</span><span>Runeboard</span></div>
+  <footer class="footer">
+    <img src="images/v2/brand/logo.png" alt="Runeboard">
     <p>An independent, non-commercial fan project inspired by classic fantasy strategy games.</p>
-    <p>© <span id="year">2026</span> Runeboard</p>
+    <p class="footer__small">© 2026 Runeboard</p>
   </footer>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <button class="lightbox__close" aria-label="Close">×</button>
+    <img alt="">
+  </div>
 
   <script src="script.js"></script>
 </body>

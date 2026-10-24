@@ -81,6 +81,7 @@ public class FogOfWarOverlay : MonoBehaviour
         material.SetFloat("_CloudShadowScale", look.cloudShadowScale);
         material.SetVector("_CloudShadowDrift", look.cloudShadowDrift);
         material.SetFloat("_WaterShimmer", look.waterShimmer);
+        material.SetFloat("_EdgeGlow", look.fogEdgeGlow);
 
         // A unit white sprite stretched over the board's bounds.
         var tex = Texture2D.whiteTexture;

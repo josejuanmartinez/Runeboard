@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="docs/images/hero/frame-02.png" alt="Runeboard title screen" width="720">
+<img src="docs/images/v2/brand/logo.png" alt="Runeboard" width="560">
+
+<img src="docs/images/v2/brand/title.jpg" alt="Runeboard title screen" width="720">
 
 <a href="https://github.com/josejuanmartinez/Runeboard/blob/main/docs/videos/trailer.mp4"><img src="docs/images/hero/trailer-preview.gif" alt="Watch the trailer" width="720"></a>
 
@@ -21,6 +23,18 @@
 Runeboard brings a sweeping conflict to a living hex map. Muster distinct armies, guide legendary characters, claim strongholds, and play illustrated cards that can turn a desperate battle.
 
 Every campaign grows from competing powers and shifting fronts. Roads, rivers, mountains, and hidden lands shape the choices before you — and the story left behind.
+
+## A living tabletop
+
+The war is played with miniatures on one continuous hand-painted map:
+
+- **Live 3D figures** — every hero and captain is an animated figure on a painted base in its nation's colour.
+- **171 hand-built settlements** — each town, hold and ruin has its own painting, and its own miniature rebuilt from it: Imladris, the seven circles of Minas Tirith, Hobbiton's smials, Orthanc, Barad-dûr…
+- **A board that breathes** — drifting cloud shadows, chimney smoke, fog that rolls back as you explore, seasons that follow the calendar, and dusk while the rival nations move.
+
+<div align="center">
+<img src="docs/images/v2/settlements/imladris.png" width="170"><img src="docs/images/v2/settlements/minastirith.png" width="170"><img src="docs/images/v2/settlements/hobbiton.png" width="170"><img src="docs/images/v2/settlements/orthanc.png" width="170">
+</div>
 
 ## Three fronts, one fate
 
@@ -82,7 +96,7 @@ Every character doubles as a card — hover a leader's name to see their full st
 
 ## AI
 
-Runeboard's nations and characters are driven by a layered AI stack, [written up in detail here](https://medium.com/@jjmcarrascosa/field-notes-dev-diary-on-video-games-ai-and-some-generative-ai-9d435055ae3f?postPublishedType=repub):
+Every rival nation, and every character it commands, is played by a layered AI rather than a script: it reads the board, remembers what it has seen, sets itself missions, plans them, and checks its judgement against a neural network. Turn on **Watch Mode** and the whole war plays itself. The stack is [written up in detail here](https://medium.com/@jjmcarrascosa/field-notes-dev-diary-on-video-games-ai-and-some-generative-ai-9d435055ae3f?postPublishedType=repub):
 
 | | |
 |---|---|

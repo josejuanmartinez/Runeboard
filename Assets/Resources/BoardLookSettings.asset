@@ -18,7 +18,7 @@ MonoBehaviour:
   focusHalfWidth: 0.2
   focusFalloff: 0.25
   maxBlur: 4
-  warmth: 8
+  warmth: 0
   vignette: 0.34
   grain: 0.18
   cloudShadow: 0.2
@@ -43,6 +43,7 @@ MonoBehaviour:
   duskDuringOtherTurns: 1
   duskStrength: 0.8
   terrainRelief: 0.5
+  terrainBlendBand: 0.35
   cities3D: 1
   cityScale: 1
   cameraTilt: 15
@@ -51,3 +52,4 @@ MonoBehaviour:
   cityBrightness: 1
   citySaturation: 1
   bannerFont: {fileID: 11400000, guid: 6efaeeea32eca554eb20a1f53a74f16a, type: 2}
+  fogEdgeGlow: 0.12

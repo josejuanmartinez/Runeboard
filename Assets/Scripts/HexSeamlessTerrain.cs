@@ -124,6 +124,7 @@ public class HexSeamlessTerrain : MonoBehaviour
         {
             ApplyGridLookOverrides();
             material.SetFloat(ReliefId, BoardLookSettings.Instance.terrainRelief);
+            material.SetFloat(BlendBandId, BoardLookSettings.Instance.terrainBlendBand);
         }
         ApplyPcLook();
         Flush();
@@ -194,6 +195,7 @@ public class HexSeamlessTerrain : MonoBehaviour
     private static Material pcMaterial;
     private static readonly int HexCenterId = Shader.PropertyToID("_HexCenter");
     private static readonly int ReliefId = Shader.PropertyToID("_Relief");
+    private static readonly int BlendBandId = Shader.PropertyToID("_BlendBand");
     private static readonly int HexStepId = Shader.PropertyToID("_HexStep");
 
     private static bool EnsurePcMaterial()

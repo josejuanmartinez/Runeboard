@@ -29,11 +29,12 @@ public class WorldLight : MonoBehaviour
             Mathf.Lerp(a.Temperature, b.Temperature, t), Mathf.Lerp(a.Saturation, b.Saturation, t), Color.Lerp(a.Filter, b.Filter, t));
     }
 
-    // Offsets on top of the tabletop grade.
-    private static readonly Grade Spring = new(0f, 4f, new Color(0.99f, 1.02f, 0.97f));
-    private static readonly Grade Summer = new(4f, 2f, new Color(1.02f, 1.01f, 0.95f));
-    private static readonly Grade Autumn = new(8f, -2f, new Color(1.04f, 0.98f, 0.9f));
-    private static readonly Grade Winter = new(-14f, -20f, new Color(0.93f, 0.98f, 1.06f));
+    // Offsets on top of the tabletop grade, kept to a hint: stronger ones (autumn +8 with a warm
+    // filter) turned the whole board yellow.
+    private static readonly Grade Spring = new(0f, 2f, new Color(0.995f, 1.01f, 0.99f));
+    private static readonly Grade Summer = new(1f, 1f, new Color(1.01f, 1.005f, 0.985f));
+    private static readonly Grade Autumn = new(2f, -2f, new Color(1.015f, 0.995f, 0.97f));
+    private static readonly Grade Winter = new(-8f, -14f, new Color(0.96f, 0.99f, 1.03f));
 
     // Shire-reckoning months (MiddleEarthCalendar.Months): Afteryule, Solmath, Rethe, Astron,
     // Thrimidge, Forelithe, Afterlithe, Wedmath, Halimath, Winterfilth, Blotmath, Foreyule.

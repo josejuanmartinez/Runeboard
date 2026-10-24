@@ -23,10 +23,14 @@ public class BoardLookSettings : ScriptableObject
 
     [Header("Grade (BoardLook, applied when a campaign starts)")]
     [Tooltip("White balance temperature: + = warmer, like a lamp-lit table.")]
-    [Range(-30f, 30f)] public float warmth = 8f;
+    [Range(-30f, 30f)] public float warmth = 0f; // 0: the seasons (WorldLight) already warm autumn; +8 stacked on them turned the board yellow
     [Range(0f, 1f)] public float vignette = 0.34f;
     [Tooltip("Film grain, so the 2D map and the 3D units share one surface texture.")]
     [Range(0f, 1f)] public float grain = 0.18f;
+
+    [Header("Fog (FogOfWarOverlay, applied when a campaign starts)")]
+    [Tooltip("The warm rim where the fog thins at the edge of sight. The shader's default (0.35) read as an orange halo round the visible land.")]
+    [Range(0f, 1f)] public float fogEdgeGlow = 0.12f;
 
     [Header("Cloud shadows (FogOfWarOverlay)")]
     [Tooltip("How dark the drifting cloud shadows are on land in sight.")]
@@ -58,6 +62,11 @@ public class BoardLookSettings : ScriptableObject
     [Range(0f, 1f)] public float duskStrength = 0.8f;
     [Tooltip("Relief lighting on the painted terrain: slopes facing the front-left light brighten, the others shade.")]
     [Range(0f, 1.5f)] public float terrainRelief = 0.5f;
+    [Tooltip("How far into each hex the terrain blends with its neighbours (fraction of centre-to-edge). " +
+             "1 blends all the way to the centre — one soft painted surface, but every tile smeared toward its " +
+             "neighbours with mirrored repeats; ~0.35 keeps each painting's own detail and contrast while the seams " +
+             "still melt together.")]
+    [Range(0.05f, 1f)] public float terrainBlendBand = 0.35f;
 
     [Header("Camera (BoardNavigator rig, live)")]
     [Tooltip("Degrees the board camera looks up the board, in perspective, like a photo of a tabletop. 0 = straight down, orthographic.")]

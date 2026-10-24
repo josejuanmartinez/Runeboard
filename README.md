@@ -4,7 +4,7 @@
 
 <img src="docs/images/v2/brand/title.jpg" alt="Runeboard title screen" width="720">
 
-<a href="https://github.com/josejuanmartinez/Runeboard/blob/main/docs/videos/trailer.mp4"><img src="docs/images/hero/trailer-preview.gif" alt="Watch the trailer" width="720"></a>
+<a href="https://github.com/josejuanmartinez/Runeboard/blob/main/docs/videos/trailer.mp4"><img src="docs/images/v2/trailer-preview.gif" alt="Watch the trailer" width="720"></a>
 
 <sub>Click the preview above to watch the full trailer.</sub>
 
@@ -74,7 +74,7 @@ Every character doubles as a card — hover a leader's name to see their full st
 
 <div align="center">
 <img src="docs/images/v2/shots/places-bloom.jpg" width="720"><br>
-<sub>Carn Dûm, Angmar, Barad-dûr, Gorgoroth, the Misty Mountains — every place is a card too</sub>
+<sub>Bywater, the Shire, Arthedain, the Gap of Rohan — every place is a card too</sub>
 </div>
 
 ## Gallery
@@ -82,7 +82,7 @@ Every character doubles as a card — hover a leader's name to see their full st
 <table>
 <tr>
 <td><img src="docs/images/v2/shots/shire-turn.jpg" width="380"></td>
-<td><img src="docs/images/v2/shots/witch-king.jpg" width="380"></td>
+<td><img src="docs/images/v2/shots/armies.jpg" width="380"></td>
 </tr>
 <tr>
 <td><img src="docs/images/v2/shots/nazgul-hobbiton.jpg" width="380"></td>

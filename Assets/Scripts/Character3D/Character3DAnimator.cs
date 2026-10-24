@@ -72,7 +72,7 @@ public class Character3DAnimator : MonoBehaviour
         bool changed = baseLoop != clipName;
         baseLoop = clipName;
         if (current == null || (!current.OneShot && (changed || current.Name != clipName)))
-            Start(clipName, fade, oneShot: false, hold: false, speed: 1f, done: null, randomPhase: current == null);
+            StartClip(clipName, fade, oneShot: false, hold: false, speed: 1f, done: null, randomPhase: current == null);
     }
 
     // Plays a clip once over the base loop, then crossfades back to it (or, with hold, stays on
@@ -80,14 +80,14 @@ public class Character3DAnimator : MonoBehaviour
     public bool PlayOnce(string clipName, float fade = 0.15f, float speed = 1f, bool hold = false, System.Action done = null)
     {
         if (Library(clipName) == null) return false;
-        Start(clipName, fade, oneShot: true, hold: hold, speed: speed, done: done, randomPhase: false);
+        StartClip(clipName, fade, oneShot: true, hold: hold, speed: speed, done: done, randomPhase: false);
         return true;
     }
 
     // Leaves a held pose (e.g. a unit that was "killed" but turns out to stay on the board).
     public void Release(float fade = 0.3f)
     {
-        if (current != null && current.Hold) Start(baseLoop, fade, false, false, 1f, null, false);
+        if (current != null && current.Hold) StartClip(baseLoop, fade, false, false, 1f, null, false);
     }
 
     private static readonly HashSet<string> warnedMissing = new();
@@ -100,7 +100,7 @@ public class Character3DAnimator : MonoBehaviour
         return clip;
     }
 
-    private void Start(string clipName, float fade, bool oneShot, bool hold, float speed, System.Action done, bool randomPhase)
+    private void StartClip(string clipName, float fade, bool oneShot, bool hold, float speed, System.Action done, bool randomPhase)
     {
         AnimationClip clip = Library(clipName);
         if (clip == null) return;
@@ -181,7 +181,7 @@ public class Character3DAnimator : MonoBehaviour
                 {
                     System.Action done = current.Done;
                     current.Done = null;
-                    Start(baseLoop, 0.25f, false, false, 1f, null, false);
+                    StartClip(baseLoop, 0.25f, false, false, 1f, null, false);
                     done?.Invoke();
                 }
             }

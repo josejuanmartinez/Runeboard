@@ -1,0 +1,67 @@
+{
+  "name": "Rhubar",
+  "description": "An elven tree-hold deep in a mossy wood: a colossal gnarled tree with braided roots and arched hollows rises in the centre, its crown carrying three pale lattice pavilions with needle spires, two more spired lattice gazebos stand on the forest floor left and right, and a stream with a little waterfall runs under an arched footbridge at the front right.",
+  "style": "Elven",
+  "colors":   ["#C8C2A4", "#B4AC8A", "#6A5A38", "#8A8A70", "#A89C70", "#2A2A1C", "#4E6E68", "", "#5A7030"],
+  "surfaces": ["Plain", "Plain", "Planks", "Fieldstone", "Plain", "", "Plain", "", "Leaves"],
+  "buildings": [
+    { "note": "great tree", "at": [-0.02, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.34, "sides": 9, "taper": 0.45, "twist": 0.05, "cell": "wood" },
+      { "shape": "cylinder", "pos": [-0.08, 0, -0.04], "radius": 0.04, "height": 0.2, "sides": 6, "taper": 0.3, "cell": "wood", "yaw": 20 },
+      { "shape": "cylinder", "pos": [0.09, 0, -0.03], "radius": 0.04, "height": 0.22, "sides": 6, "taper": 0.3, "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0.04, -0.09], "size": [0.04, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.05, 0.12, -0.075], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "dome", "pos": [0, 0.28, 0.02], "radius": 0.22, "height": 0.14, "sides": 12, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.14, 0.27, -0.02], "radius": 0.11, "height": 0.1, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.14, 0.26, -0.02], "radius": 0.11, "height": 0.1, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.0, 0.36, 0.06], "radius": 0.14, "height": 0.1, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "crown pavilions", "at": [-0.02, 0.07], "parts": [
+      { "shape": "cylinder", "pos": [0.0, 0.44, 0.07], "radius": 0.038, "height": 0.1, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.54, 0.07], "radius": 0.045, "height": 0.16, "sides": 6, "cell": "roof" },
+      { "shape": "cylinder", "pos": [-0.16, 0.34, -0.02], "radius": 0.033, "height": 0.08, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.16, 0.42, -0.02], "radius": 0.04, "height": 0.11, "sides": 6, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.09, 0.33, -0.08], "radius": 0.033, "height": 0.08, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0.09, 0.41, -0.08], "radius": 0.04, "height": 0.11, "sides": 6, "cell": "roof" },
+      { "shape": "flag", "pos": [0.0, 0.7, 0.07], "height": 0.06 }
+    ] },
+    { "note": "left spired gazebo", "at": [-0.28, -0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.045, "height": 0.13, "sides": 6, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.04], "size": [0.03, 0.08, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.05, "height": 0.13, "sides": 6, "cell": "roof" },
+      { "shape": "box", "pos": [0.08, 0, 0.02], "size": [0.08, 0.02, 0.06], "cell": "stone" }
+    ] },
+    { "note": "right spired gazebo", "at": [0.23, -0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.11, "sides": 6, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.036], "size": [0.025, 0.07, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.11, 0], "radius": 0.045, "height": 0.12, "sides": 6, "cell": "roof" }
+    ] },
+    { "note": "stream with waterfall and bridge", "at": [0.14, -0.2], "parts": [
+      { "shape": "box", "pos": [-0.02, 0, 0.18], "size": [0.06, 0.004, 0.25], "cell": "accent", "yaw": -20 },
+      { "shape": "box", "pos": [0.0, 0, -0.15], "size": [0.07, 0.004, 0.35], "cell": "accent", "yaw": 10 },
+      { "shape": "box", "pos": [0.0, 0, -0.02], "size": [0.05, 0.03, 0.01], "cell": "accent" },
+      { "shape": "box", "pos": [0.0, 0.03, 0.04], "size": [0.12, 0.012, 0.04], "cell": "stone", "yaw": -25 },
+      { "shape": "box", "pos": [-0.04, 0, 0.04], "size": [0.02, 0.03, 0.03], "cell": "stone", "yaw": -25 },
+      { "shape": "box", "pos": [-0.18, 0, 0.12], "size": [0.2, 0.004, 0.06], "cell": "trim", "yaw": -20 }
+    ] },
+    { "note": "mossy standing stones", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.42, 0, 0.3], "radius": 0.035, "height": 0.09, "cell": "stone" },
+      { "shape": "rock", "pos": [0.32, 0, 0.6], "radius": 0.035, "height": 0.09, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.11, 0, -0.75], "radius": 0.03, "height": 0.07, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.43, 0, -0.1], "radius": 0.03, "height": 0.08, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "forest ring", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.33, 0, 0.75], "kind": "broadleaf", "height": 0.2, "radius": 0.08 },
+      { "shape": "tree", "pos": [0.33, 0, 0.75], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 2 },
+      { "shape": "tree", "pos": [-0.42, 0, 0.0], "kind": "broadleaf", "height": 0.17, "radius": 0.07, "seed": 3 },
+      { "shape": "tree", "pos": [0.42, 0, 0.25], "kind": "broadleaf", "height": 0.17, "radius": 0.07, "seed": 4 },
+      { "shape": "tree", "pos": [-0.38, 0, -0.55], "kind": "pine", "height": 0.14, "radius": 0.04, "seed": 5 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.9], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "seed": 6 },
+      { "shape": "tree", "pos": [0.0, 0, -0.95], "kind": "pine", "height": 0.13, "radius": 0.04, "seed": 7 },
+      { "shape": "tree", "pos": [0.38, 0, -0.5], "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 8 },
+      { "shape": "tree", "pos": [-0.2, 0, 0.95], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 9 },
+      { "shape": "tree", "pos": [0.18, 0, 0.95], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 10 },
+      { "shape": "tree", "pos": [-0.1, 0, -0.45], "kind": "pine", "height": 0.12, "radius": 0.035, "seed": 11 }
+    ] }
+  ]
+}

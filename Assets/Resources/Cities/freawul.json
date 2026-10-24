@@ -1,0 +1,71 @@
+{
+  "name": "Freawul",
+  "description": "A lonely watchtower in a ring of sharp grey peaks: a tall, dark round stone tower with a crenellated top inside a low broken ring wall, on a mossy upland valley with a winding dirt track, scattered dark pines and two thin streams at the front.",
+  "style": "Northman",
+  "colors":   ["#46423C", "#3A3632", "#4A3A2C", "#857E70", "#B8B0A0", "#1E1C1A", "#4A6474", "", "#2F3E2A"],
+  "surfaces": ["Fieldstone", "Slate", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "dark round watchtower with ring wall", "at": [0.15, 0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.11, "height": 0.04, "sides": 12, "cell": "stone", "top": "foliage" },
+      { "shape": "cylinder", "radius": 0.045, "height": 0.26, "sides": 10, "taper": 0.85, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.15, -0.042], "size": [0.012, 0.03, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.0, -0.046], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "battlements", "pos": [0, 0.26, 0], "radius": 0.04, "count": 8, "cell": "wall" },
+      { "shape": "flag", "pos": [0, 0.26, 0], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "great peak, back centre", "at": [0.02, 0.33], "parts": [
+      { "shape": "rock", "radius": 0.2, "height": 0.2, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.12, 0], "radius": 0.13, "height": 0.28, "sides": 5, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.16, 0, 0.05], "radius": 0.08, "height": 0.16, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.17, 0, 0.0], "radius": 0.08, "height": 0.17, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "peak, left", "at": [-0.33, 0.16], "parts": [
+      { "shape": "rock", "radius": 0.15, "height": 0.14, "cell": "stone", "seed": 3 },
+      { "shape": "cone", "pos": [0, 0.08, 0], "radius": 0.1, "height": 0.22, "sides": 5, "cell": "stone" },
+      { "shape": "rock", "pos": [0.12, 0, -0.04], "radius": 0.06, "height": 0.12, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "peak, front left", "at": [-0.36, -0.13], "parts": [
+      { "shape": "rock", "radius": 0.14, "height": 0.13, "cell": "stone", "seed": 5 },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.09, "height": 0.2, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "peak, front centre", "at": [0.04, -0.34], "parts": [
+      { "shape": "rock", "radius": 0.14, "height": 0.12, "cell": "stone", "seed": 6 },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.09, "height": 0.19, "sides": 5, "cell": "stone" },
+      { "shape": "rock", "pos": [0.11, 0, 0.04], "radius": 0.05, "height": 0.09, "cell": "stone", "seed": 7 }
+    ] },
+    { "note": "peak, right", "at": [0.38, 0.17], "parts": [
+      { "shape": "rock", "radius": 0.13, "height": 0.13, "cell": "stone", "seed": 8 },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.09, "height": 0.2, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "peak, front right", "at": [0.41, -0.15], "parts": [
+      { "shape": "rock", "radius": 0.12, "height": 0.12, "cell": "stone", "seed": 9 },
+      { "shape": "cone", "pos": [0, 0.06, 0], "radius": 0.08, "height": 0.17, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "winding track", "at": [-0.08, -0.02], "parts": [
+      { "shape": "box", "pos": [0.0, 0, 0.35], "size": [0.04, 0.004, 0.4], "cell": "trim", "yaw": 25 },
+      { "shape": "box", "pos": [-0.03, 0, -0.1], "size": [0.04, 0.004, 0.4], "cell": "trim", "yaw": -15 },
+      { "shape": "box", "pos": [-0.13, 0, -0.55], "size": [0.04, 0.004, 0.4], "cell": "trim", "yaw": 20 }
+    ] },
+    { "note": "stream, front right", "at": [0.36, -0.33], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.22, 0.004, 0.04], "cell": "accent" }
+    ] },
+    { "note": "stream, front left", "at": [-0.36, -0.33], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.18, 0.004, 0.04], "cell": "accent" }
+    ] },
+    { "note": "pines below the back peak", "at": [-0.12, 0.25], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.06, 0, -0.05], "kind": "pine", "height": 0.09, "radius": 0.022, "seed": 1 },
+      { "shape": "tree", "pos": [0.14, 0, -0.08], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 2 }
+    ] },
+    { "note": "pines by the tower", "at": [0.3, 0.06], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [0.06, 0, -0.05], "kind": "pine", "height": 0.09, "radius": 0.022, "seed": 4 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.12], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 5 }
+    ] },
+    { "note": "pines, left valley", "at": [-0.18, 0.04], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 6 },
+      { "shape": "tree", "pos": [0.05, 0, -0.04], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 7 },
+      { "shape": "tree", "pos": [0.04, 0, -0.25], "kind": "pine", "height": 0.07, "radius": 0.02, "seed": 8 }
+    ] }
+  ]
+}

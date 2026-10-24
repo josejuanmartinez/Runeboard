@@ -186,6 +186,8 @@ public class CharacterAnimationController : MonoBehaviour
     public Orientation ActiveOrientation => GetActiveOrientation();
     // This frame's alignment outline colour (rgb, a = strength), as sent to the sprite shader.
     public Color PresentationRimColor { get; private set; }
+    // Focus (0 = none, 0.65 = hovered, 1 = selected), smoothed — drives the gold ring / 3D base glow.
+    public float FocusAmount => focusAmount;
 
     private void Awake()
     {

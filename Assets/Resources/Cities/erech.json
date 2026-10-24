@@ -1,0 +1,52 @@
+{
+  "name": "Erech",
+  "description": "The Stone of Erech: a huge round grey boulder pocked with deep dark holes sits on a grassy hillside, half-ringed by tumbled tan rock blocks and slabs, with a strip of green turf and more broken pale stones along the front.",
+  "style": "Mannish",
+  "colors":   ["#B8A688", "#7A7A72", "#5E4A34", "#8C8C88", "#C8B898", "#24221E", "#A8A496", "", "#5E7A2C"],
+  "surfaces": ["Fieldstone", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the Stone of Erech", "at": [0.02, 0.02], "parts": [
+      { "shape": "dome", "pos": [0, 0.3, 0.05], "radius": 0.29, "height": 0.36, "sides": 14, "cell": "stone" },
+      { "shape": "dome", "pos": [0, 0.3, 0.05], "radius": 0.29, "height": -0.3, "sides": 14, "cell": "stone" },
+      { "shape": "box", "pos": [0.07, 0.12, -0.21], "size": [0.09, 0.09, 0.006], "cell": "dark" },
+      { "shape": "box", "pos": [-0.11, 0.2, -0.21], "size": [0.06, 0.06, 0.006], "cell": "dark" },
+      { "shape": "box", "pos": [0.17, 0.34, -0.19], "size": [0.05, 0.05, 0.006], "cell": "dark" },
+      { "shape": "box", "pos": [-0.15, 0.4, -0.17], "size": [0.05, 0.05, 0.006], "cell": "dark" },
+      { "shape": "box", "pos": [0.0, 0.33, -0.235], "size": [0.04, 0.04, 0.006], "cell": "dark" },
+      { "shape": "box", "pos": [-0.04, 0.55, -0.12], "size": [0.05, 0.04, 0.006], "cell": "dark" },
+      { "shape": "box", "pos": [0.08, 0.56, -0.12], "size": [0.04, 0.04, 0.006], "cell": "dark" }
+    ] },
+    { "note": "rock blocks, left", "at": [-0.33, 0.12], "parts": [
+      { "shape": "rock", "pos": [0, 0, 0.1], "radius": 0.07, "height": 0.12, "cell": "wall", "seed": 1 },
+      { "shape": "rock", "pos": [-0.1, 0, -0.1], "radius": 0.06, "height": 0.1, "cell": "wall", "seed": 2 },
+      { "shape": "rock", "pos": [0.05, 0, -0.25], "radius": 0.06, "height": 0.1, "cell": "wall", "seed": 3 },
+      { "shape": "rock", "pos": [-0.08, 0, 0.35], "radius": 0.05, "height": 0.08, "cell": "wall", "seed": 4 },
+      { "shape": "rock", "pos": [0.12, 0, 0.5], "radius": 0.05, "height": 0.08, "cell": "wall", "seed": 5 },
+      { "shape": "rock", "pos": [-0.07, 0, -0.42], "radius": 0.04, "height": 0.06, "cell": "wall", "seed": 6 }
+    ] },
+    { "note": "rock blocks, right", "at": [0.36, 0.08], "parts": [
+      { "shape": "rock", "pos": [0, 0, 0.1], "radius": 0.07, "height": 0.13, "cell": "wall", "seed": 7 },
+      { "shape": "rock", "pos": [0.08, 0, -0.15], "radius": 0.06, "height": 0.1, "cell": "wall", "seed": 8 },
+      { "shape": "rock", "pos": [-0.02, 0, 0.4], "radius": 0.05, "height": 0.08, "cell": "wall", "seed": 9 },
+      { "shape": "rock", "pos": [0.08, 0, -0.4], "radius": 0.05, "height": 0.08, "cell": "wall", "seed": 10 }
+    ] },
+    { "note": "large slabs in front of the stone", "at": [0.12, -0.18], "parts": [
+      { "shape": "rock", "pos": [-0.15, 0, 0.1], "radius": 0.06, "height": 0.1, "cell": "wall", "seed": 11 },
+      { "shape": "rock", "pos": [0.0, 0, 0.0], "radius": 0.07, "height": 0.13, "cell": "wall", "seed": 12 },
+      { "shape": "rock", "pos": [0.12, 0, 0.05], "radius": 0.08, "height": 0.14, "cell": "wall", "seed": 13 },
+      { "shape": "rock", "pos": [0.18, 0, -0.12], "radius": 0.06, "height": 0.1, "cell": "wall", "seed": 14 },
+      { "shape": "rock", "pos": [-0.25, 0, 0.18], "radius": 0.04, "height": 0.07, "cell": "wall", "seed": 15 }
+    ] },
+    { "note": "broken stones along the front", "at": [-0.1, -0.4], "parts": [
+      { "shape": "rock", "pos": [-0.25, 0, 0.2], "radius": 0.05, "height": 0.04, "cell": "wall", "seed": 16 },
+      { "shape": "rock", "pos": [-0.1, 0, 0.12], "radius": 0.06, "height": 0.05, "cell": "wall", "seed": 17 },
+      { "shape": "rock", "pos": [0.05, 0, -0.05], "radius": 0.05, "height": 0.04, "cell": "wall", "seed": 18 },
+      { "shape": "rock", "pos": [0.2, 0, -0.05], "radius": 0.04, "height": 0.03, "cell": "wall", "seed": 19 }
+    ] },
+    { "note": "grass tufts", "at": [-0.2, -0.15], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.0], "kind": "broadleaf", "height": 0.04, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [0.65, 0, 0.1], "kind": "broadleaf", "height": 0.05, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.62, 0, 0.9], "kind": "broadleaf", "height": 0.05, "radius": 0.03, "seed": 3 }
+    ] }
+  ]
+}

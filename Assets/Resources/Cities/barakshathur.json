@@ -1,0 +1,78 @@
+{
+  "name": "Barak Shathur",
+  "description": "A mining settlement dug into a snow-capped grey peak: weathered plank sheds with slate roofs shelter glowing mine adits, a tall timber headframe with a ladder stands mid-slope, a huge wooden waterwheel and trestle carries a mine-cart track round the hill, with ore crates, a front shed and dark pines.",
+  "style": "Dwarven",
+  "colors":   ["#8A7A5E", "#6A6E70", "#6E5A40", "#8A8274", "#D8DADA", "#1E1A16", "#E0A030", "", "#3E5430"],
+  "surfaces": ["Planks", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "snow-capped peak", "at": [0.02, 0.3], "parts": [
+      { "shape": "rock", "radius": 0.36, "height": 0.5, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.04, 0.2, 0.06], "radius": 0.18, "height": 0.36, "cell": "trim", "seed": 2 },
+      { "shape": "rock", "pos": [0.26, 0, 0.0], "radius": 0.15, "height": 0.3, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.3, 0.12, 0.05], "radius": 0.08, "height": 0.16, "cell": "trim", "seed": 4 }
+    ] },
+    { "note": "snowy crag, front left", "at": [-0.19, -0.02], "parts": [
+      { "shape": "rock", "radius": 0.13, "height": 0.25, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0, 0.12, 0.02], "radius": 0.07, "height": 0.13, "cell": "trim", "seed": 6 }
+    ] },
+    { "note": "snowy crag, right", "at": [0.2, 0.12], "parts": [
+      { "shape": "rock", "radius": 0.09, "height": 0.15, "cell": "trim", "seed": 7 }
+    ] },
+    { "note": "upper left adit shed", "at": [-0.35, 0.26], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.13, 0.06, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.05, 0.05, 0.004], "cell": "accent" }
+    ] },
+    { "note": "lower left adit shed", "at": [-0.3, 0.12], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.13, 0.07, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.14, 0.06, 0.13], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.056], "size": [0.05, 0.05, 0.004], "cell": "accent" }
+    ] },
+    { "note": "timber headframe", "at": [-0.02, 0.2], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.2, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.2, 0], "size": [0.13, 0.08, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0, -0.051], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.08, 0, -0.06], "size": [0.03, 0.09, 0.01], "cell": "wood", "yaw": 15 }
+    ] },
+    { "note": "right adit shed", "at": [0.11, 0.17], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.13, 0.06, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.05, 0.05, 0.004], "cell": "accent" }
+    ] },
+    { "note": "rail-end shed, right", "at": [0.37, 0.01], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.14, 0.08, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.15, 0.06, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.05, 0.06, 0.004], "cell": "accent" }
+    ] },
+    { "note": "waterwheel and trestle", "at": [0.06, -0.1], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.01, 0], "size": [0.22, 0.22, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.04, -0.016], "size": [0.16, 0.16, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.115, -0.02], "size": [0.2, 0.012, 0.006], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.02, -0.02], "size": [0.012, 0.19, 0.006], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.1, -0.035], "radius": 0.02, "height": 0.03, "sides": 8, "cell": "stone" },
+      { "shape": "box", "pos": [0.17, 0, 0.04], "size": [0.14, 0.12, 0.06], "cell": "wood" },
+      { "shape": "box", "pos": [0.17, 0.12, 0.04], "size": [0.14, 0.008, 0.03], "cell": "stone" }
+    ] },
+    { "note": "mine-cart rails", "at": [0, 0], "parts": [
+      { "shape": "box", "pos": [-0.32, 0, 0.0], "size": [0.025, 0.006, 0.4], "cell": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [0.33, 0, -0.35], "size": [0.025, 0.006, 0.35], "cell": "wood", "yaw": -20 }
+    ] },
+    { "note": "front shed", "at": [-0.18, -0.31], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.14, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.05, 0.12], "cell": "wood", "top": "wall" },
+      { "shape": "box", "pos": [-0.03, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "ore crates", "at": [0.06, -0.34], "parts": [
+      { "shape": "box", "size": [0.07, 0.035, 0.05], "cell": "wood", "top": "dark", "yaw": 30 },
+      { "shape": "box", "pos": [0.07, 0, -0.15], "size": [0.06, 0.03, 0.045], "cell": "wood", "top": "dark", "yaw": 30 }
+    ] },
+    { "note": "pines", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.44, 0, 0.45], "kind": "pine", "height": 0.12, "radius": 0.03 },
+      { "shape": "tree", "pos": [-0.45, 0, -0.35], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.33, 0, -0.45], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [0.41, 0, 0.4], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [0.44, 0, -0.45], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 5 },
+      { "shape": "tree", "pos": [-0.03, 0, -0.95], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 6 }
+    ] }
+  ]
+}

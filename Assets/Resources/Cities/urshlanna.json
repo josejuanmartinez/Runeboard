@@ -1,0 +1,81 @@
+{
+  "name": "Ursh Lanna",
+  "description": "A small hill village of five stone-and-timber cottages under shaggy straw-thatch roofs with tall fieldstone chimneys, set round a dusty crossroads where a white-tree banner hangs on a pole, with a pale rock outcrop and cypresses behind and little waterfalls spilling over the cliff edge at the front.",
+  "style": "Mannish",
+  "colors":   ["#7E7262", "#8E7E46", "#5E4630", "#8A8270", "#B4A47C", "#2A241C", "#8A9AA0", "", "#4A5A2E"],
+  "surfaces": ["HalfTimber", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "road west 1", "at": [-0.329, -0.052], "yaw": -63, "parts": [ { "shape": "box", "size": [0.591, 0.005, 0.07], "cell": "trim" } ] },
+    { "note": "road west 2", "at": [-0.081, 0.072], "yaw": -21, "parts": [ { "shape": "box", "size": [0.3, 0.005, 0.07], "cell": "trim" } ] },
+    { "note": "road west 3", "at": [0.148, 0.183], "yaw": -64, "parts": [ { "shape": "box", "size": [0.518, 0.005, 0.07], "cell": "trim" } ] },
+    { "note": "road south 1", "at": [-0.146, -0.144], "yaw": 79, "parts": [ { "shape": "box", "size": [0.668, 0.005, 0.07], "cell": "trim" } ] },
+    { "note": "road south 2", "at": [-0.055, -0.333], "yaw": 77, "parts": [ { "shape": "box", "size": [0.323, 0.005, 0.07], "cell": "trim" } ] },
+    { "note": "road east", "at": [0.265, -0.059], "yaw": 60, "parts": [ { "shape": "box", "size": [0.717, 0.005, 0.07], "cell": "trim" } ] },
+    { "note": "pale rock outcrop, back", "at": [0.0, 0.36], "parts": [
+      { "shape": "rock", "radius": 0.1, "height": 0.22, "cell": "trim" },
+      { "shape": "rock", "pos": [0.08, 0, -0.06], "radius": 0.07, "height": 0.14, "cell": "trim", "seed": 1 }
+    ] },
+    { "note": "back-left cottage with big chimney", "at": [-0.13, 0.18], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.16, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.03, 0, -0.051], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.17, 0.08, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.035, 0.2, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [-0.02, 0, -0.07], "size": [0.05, 0.02, 0.03], "cell": "wood" }
+    ] },
+    { "note": "back-right cottage with porch", "at": [0.23, 0.12], "yaw": -55, "parts": [
+      { "shape": "box", "size": [0.17, 0.1, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0, -0.056], "size": [0.025, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.18, 0.1, 0.12], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.0, 0, -0.07], "size": [0.05, 0.03, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [-0.09, 0, 0.0], "size": [0.03, 0.17, 0.03], "cell": "stone" }
+    ] },
+    { "note": "white-tree banner pole", "at": [0.05, 0.12], "parts": [
+      { "shape": "flag", "height": 0.13, "radius": 0.035 },
+      { "shape": "box", "pos": [0.05, 0, -0.03], "size": [0.025, 0.025, 0.025], "cell": "wood" }
+    ] },
+    { "note": "left cottage", "at": [-0.28, -0.09], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.15, 0.07, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [0.03, 0, -0.046], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.07, 0.1], "cell": "roof", "top": "wall" },
+      { "shape": "gable", "pos": [-0.04, 0.07, -0.03], "size": [0.05, 0.05, 0.05], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "right cottage with chimney", "at": [0.3, -0.09], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.14, 0.07, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.046], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.15, 0.07, 0.1], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.03, 0.17, 0.03], "cell": "stone" }
+    ] },
+    { "note": "front cottage with chimney", "at": [0.0, -0.25], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.17, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, -0.051], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.18, 0.08, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "gable", "pos": [0.04, 0.08, -0.03], "size": [0.06, 0.06, 0.06], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.08, 0, -0.02], "size": [0.035, 0.19, 0.035], "cell": "stone" }
+    ] },
+    { "note": "cliff edge rocks and waterfalls, front", "at": [-0.1, -0.4], "parts": [
+      { "shape": "rock", "pos": [-0.22, 0, 0.12], "radius": 0.06, "height": 0.05, "cell": "stone" },
+      { "shape": "box", "pos": [-0.3, 0, 0.05], "size": [0.03, 0.04, 0.01], "cell": "accent" },
+      { "shape": "rock", "pos": [0.12, 0, -0.05], "radius": 0.05, "height": 0.04, "cell": "stone", "seed": 1 },
+      { "shape": "box", "pos": [0.5, 0, 0.2], "size": [0.03, 0.04, 0.01], "cell": "accent" },
+      { "shape": "rock", "pos": [0.42, 0, 0.25], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "cypresses, back", "at": [-0.12, 0.44], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.15, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.08, 0, -0.1], "kind": "poplar", "height": 0.12, "radius": 0.022, "seed": 1 },
+      { "shape": "tree", "pos": [0.25, 0, -0.05], "kind": "poplar", "height": 0.12, "radius": 0.022, "seed": 2 }
+    ] },
+    { "note": "cypresses, right", "at": [0.39, 0.25], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.14, "radius": 0.024, "seed": 3 },
+      { "shape": "tree", "pos": [0.04, 0, -0.25], "kind": "poplar", "height": 0.16, "radius": 0.026, "seed": 4 }
+    ] },
+    { "note": "cypresses, front right", "at": [0.45, -0.15], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.14, "radius": 0.024, "seed": 5 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.06], "kind": "poplar", "height": 0.12, "radius": 0.022, "seed": 6 }
+    ] },
+    { "note": "cypress and rock, left", "at": [-0.41, 0.12], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.15, "radius": 0.026, "seed": 7 },
+      { "shape": "rock", "pos": [0.0, 0, -0.06], "radius": 0.04, "height": 0.03, "cell": "stone", "seed": 3 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.45], "kind": "poplar", "height": 0.09, "radius": 0.02, "seed": 8 }
+    ] }
+  ]
+}

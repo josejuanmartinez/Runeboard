@@ -48,7 +48,7 @@ public class CharacterSpriteHover : MonoBehaviour
         if (hex.characterSpriteRenderer.sprite == null) return;
         if (!hex.TryGetKnownCharacterForIcon(out Character character)) return;
         if (BoardNavigator.IsPointerOverVisibleUIElement()) return;
-        Sounds.Instance?.PlayUiHover();
+        BoardSounds.UnitHover();
         if (BoardNavigator.IsNavigationInputLocked()) return;
 
         // Every known character loses the unhovered dim tint while hovered, regardless of
@@ -150,7 +150,7 @@ public class CharacterSpriteHover : MonoBehaviour
         board ??= Board.Instance;
         if (board == null) return;
 
-        Sounds.Instance?.PlayUiClick();
+        BoardSounds.UnitSelect();
         // SelectHex itself now drives the situation-card bloom for whichever character ends up
         // selected (restore-if-dismissed, or a fresh check) — see
         // SituationCardsUI.RefreshBloomForCharacterSelection.

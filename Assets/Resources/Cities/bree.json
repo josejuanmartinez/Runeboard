@@ -1,0 +1,69 @@
+{
+  "name": "Bree",
+  "description": "A rambling many-gabled inn of cream half-timber over a stone footing, with steep blue-slate roofs, tall stone chimneys, shuttered windows and an arched door, flanked by a thatched shed on the left and a thatched barn with a plank smithy and stone chimney on the right, facing a cobbled yard with a hanging signpost and golden autumn trees.",
+  "style": "Mannish",
+  "colors":   ["#CDBF9C", "#46596E", "#4A3424", "#8A8A84", "#B8A060", "#241C14", "#7A5030", "", "#B08A30"],
+  "surfaces": ["HalfTimber", "Slate", "Planks", "Fieldstone", "Thatch", "", "Planks", "", ""],
+  "buildings": [
+    { "note": "inn: main gabled block", "at": [-0.1, 0.1], "yaw": -10, "parts": [
+      { "shape": "box", "size": [0.2, 0.04, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.2, 0.14, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.18, 0], "size": [0.22, 0.14, 0.16], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0.08, -0.071], "size": [0.14, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.22, -0.06], "size": [0.04, 0.04, 0.004], "cell": "dark" }
+    ] },
+    { "note": "inn: right gabled wing", "at": [0.16, 0.13], "yaw": -10, "parts": [
+      { "shape": "box", "size": [0.18, 0.04, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.18, 0.15, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.19, 0], "size": [0.2, 0.15, 0.16], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0.08, -0.071], "size": [0.12, 0.04, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.12, 0.03, 0.06], "size": [0.1, 0.13, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0.12, 0.16, 0.06], "size": [0.1, 0.07, 0.14], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0.18, 0.14], "size": [0.14, 0.14, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0.0, 0.32, 0.14], "size": [0.14, 0.1, 0.12], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "inn: link with arched door and central chimney", "at": [0.03, 0.12], "yaw": -10, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.08, 0.1, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0.02], "size": [0.08, 0.05, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.041], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.01, 0.12, 0.08], "size": [0.05, 0.28, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.12, 0.12], "size": [0.3, 0.12, 0.1], "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.4, 0.08], "height": 0.08, "radius": 0.025 }
+    ] },
+    { "note": "inn: left wing with tall chimney", "at": [-0.28, 0.14], "yaw": -10, "parts": [
+      { "shape": "box", "size": [0.12, 0.08, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.13, 0.07, 0.14], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0, 0.04], "size": [0.05, 0.33, 0.05], "cell": "stone" }
+    ] },
+    { "note": "thatched shed, far left", "at": [-0.39, 0.2], "yaw": -10, "parts": [
+      { "shape": "box", "size": [0.1, 0.07, 0.12], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.12, 0.1, 0.14], "cell": "trim", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "thatched barn, right", "at": [0.25, -0.09], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.09, 0.12], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.22, 0.1, 0.15], "cell": "trim", "top": "wood" },
+      { "shape": "box", "pos": [0.0, 0, -0.061], "size": [0.05, 0.06, 0.004], "cell": "dark" }
+    ] },
+    { "note": "smithy with stone chimney", "at": [0.31, -0.25], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.14, 0.08, 0.1], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.15, 0.06, 0.12], "cell": "accent", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0.02, 0.0, 0.05], "size": [0.045, 0.24, 0.045], "cell": "stone" }
+    ] },
+    { "note": "hanging signpost", "at": [-0.14, -0.27], "parts": [
+      { "shape": "box", "size": [0.012, 0.13, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [-0.05, 0.12, 0], "size": [0.1, 0.01, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.07, 0.06, 0], "size": [0.06, 0.05, 0.006], "cell": "accent" }
+    ] },
+    { "note": "cobbled yard", "at": [-0.05, -0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.3, "height": 0.003, "sides": 14, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.33, 0, -0.3], "radius": 0.03, "height": 0.025, "cell": "stone" },
+      { "shape": "rock", "pos": [0.05, 0, -0.65], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "autumn trees", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.47, 0, 0.6], "kind": "poplar", "height": 0.22, "radius": 0.04 },
+      { "shape": "tree", "pos": [0.41, 0, 0.8], "kind": "poplar", "height": 0.26, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.45, 0, 0.45], "kind": "pine", "height": 0.12, "radius": 0.035, "cell": "wall", "seed": 3 }
+    ] }
+  ]
+}

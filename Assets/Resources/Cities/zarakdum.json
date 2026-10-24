@@ -1,0 +1,95 @@
+{
+  "name": "Zarak-dum",
+  "description": "A cluster of jagged snow-capped grey peaks in the northern mountains, with a timber-framed dwarven mine gate dug into the slope on the right, a squat round battlemented stone watchtower on a rise at the left above an oval log-stake stockade holding a domed hut, a winding track between the peaks and dark snow-dusted pines everywhere.",
+  "style": "Dwarven",
+  "colors":   ["#7A766E", "#5A5650", "#5A4630", "#6E6A64", "#E4E2DC", "#1A1A18", "#8A9AA6", "", "#2E3A2C"],
+  "surfaces": ["Fieldstone", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great peak, back centre", "at": [0.04, 0.2], "parts": [
+      { "shape": "cone", "radius": 0.2, "height": 0.46, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.27, 0], "radius": 0.085, "height": 0.19, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.1, 0, 0.04], "radius": 0.12, "height": 0.3, "sides": 6, "cell": "stone", "twist": 0.1 },
+      { "shape": "cone", "pos": [-0.1, 0.19, 0.04], "radius": 0.045, "height": 0.11, "sides": 6, "cell": "trim", "twist": 0.1 }
+    ] },
+    { "note": "back peaks", "at": [-0.05, 0.42], "parts": [
+      { "shape": "cone", "pos": [-0.07, 0, 0], "radius": 0.1, "height": 0.2, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.07, 0.12, 0], "radius": 0.04, "height": 0.08, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [0.25, 0, -0.04], "radius": 0.1, "height": 0.2, "sides": 6, "cell": "stone", "twist": 0.2 },
+      { "shape": "cone", "pos": [0.25, 0.12, -0.04], "radius": 0.04, "height": 0.08, "sides": 6, "cell": "trim", "twist": 0.2 }
+    ] },
+    { "note": "left peak", "at": [-0.28, 0.17], "parts": [
+      { "shape": "cone", "radius": 0.15, "height": 0.27, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.15, 0], "radius": 0.065, "height": 0.12, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.1, 0, 0.06], "radius": 0.08, "height": 0.15, "sides": 6, "cell": "stone", "twist": 0.2 }
+    ] },
+    { "note": "right peak", "at": [0.38, 0.17], "parts": [
+      { "shape": "cone", "radius": 0.15, "height": 0.24, "sides": 6, "cell": "stone", "twist": 0.1 },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.065, "height": 0.11, "sides": 6, "cell": "trim", "twist": 0.1 }
+    ] },
+    { "note": "middle-right peak", "at": [0.17, 0.08], "parts": [
+      { "shape": "cone", "radius": 0.13, "height": 0.22, "sides": 6, "cell": "stone", "twist": 0.2 },
+      { "shape": "cone", "pos": [0, 0.12, 0], "radius": 0.055, "height": 0.1, "sides": 6, "cell": "trim", "twist": 0.2 }
+    ] },
+    { "note": "front peak", "at": [-0.04, -0.12], "parts": [
+      { "shape": "cone", "radius": 0.19, "height": 0.33, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.2, 0], "radius": 0.075, "height": 0.13, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "dwarven mine gate", "at": [0.38, 0.0], "yaw": 25, "parts": [
+      { "shape": "rock", "pos": [0, 0, 0.05], "radius": 0.1, "height": 0.1, "cell": "stone", "seed": 1 },
+      { "shape": "box", "pos": [0, 0, -0.04], "size": [0.09, 0.07, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.056], "size": [0.05, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.065, -0.058], "size": [0.09, 0.012, 0.01], "cell": "wood" },
+      { "shape": "flag", "pos": [0.05, 0.08, -0.04], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "round watchtower on a rise", "at": [-0.38, 0.0], "parts": [
+      { "shape": "rock", "radius": 0.08, "height": 0.05, "cell": "stone", "seed": 2 },
+      { "shape": "cylinder", "pos": [0, 0.03, 0], "radius": 0.045, "height": 0.12, "sides": 10, "cell": "wall", "top": "stone" },
+      { "shape": "battlements", "pos": [0, 0.15, 0], "radius": 0.045, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.04, -0.043], "size": [0.02, 0.035, 0.004], "cell": "dark" }
+    ] },
+    { "note": "palisade 1", "at": [-0.382, -0.183], "yaw": 65, "parts": [ { "shape": "box", "size": [0.35, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade 2", "at": [-0.244, -0.261], "yaw": 25, "parts": [ { "shape": "box", "size": [0.152, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade 3", "at": [-0.159, -0.222], "yaw": -81, "parts": [ { "shape": "box", "size": [0.26, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade 4", "at": [-0.218, -0.118], "yaw": -122, "parts": [ { "shape": "box", "size": [0.302, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "domed hut in the stockade", "at": [-0.32, -0.16], "parts": [
+      { "shape": "dome", "radius": 0.035, "height": 0.03, "sides": 8, "cell": "stone" },
+      { "shape": "tree", "pos": [0.12, 0, -0.04], "kind": "pine", "height": 0.09, "radius": 0.03, "seed": 1 }
+    ] },
+    { "note": "mountain path 1", "at": [-0.192, 0.157], "yaw": 109, "parts": [ { "shape": "box", "size": [0.348, 0.005, 0.04], "cell": "wood" } ] },
+    { "note": "mountain path 2", "at": [-0.251, 0.039], "yaw": 93, "parts": [ { "shape": "box", "size": [0.269, 0.005, 0.04], "cell": "wood" } ] },
+    { "note": "mountain path 3", "at": [-0.231, -0.065], "yaw": 78, "parts": [ { "shape": "box", "size": [0.274, 0.005, 0.04], "cell": "wood" } ] },
+    { "note": "mountain path 4", "at": [-0.127, -0.157], "yaw": 50, "parts": [ { "shape": "box", "size": [0.264, 0.005, 0.04], "cell": "wood" } ] },
+    { "note": "mountain path 5", "at": [-0.009, -0.235], "yaw": 67, "parts": [ { "shape": "box", "size": [0.223, 0.005, 0.04], "cell": "wood" } ] },
+    { "note": "mountain path 6", "at": [0.004, -0.333], "yaw": 101, "parts": [ { "shape": "box", "size": [0.305, 0.005, 0.04], "cell": "wood" } ] },
+    { "note": "pines, front left", "at": [-0.12, -0.28], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.16, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [0.06, 0, -0.08], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [-0.04, 0, 0.12], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 4 }
+    ] },
+    { "note": "pines, front right", "at": [0.2, -0.24], "parts": [
+      { "shape": "tree", "pos": [-0.1, 0, 0.1], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [0.0, 0, 0.0], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 6 },
+      { "shape": "tree", "pos": [0.1, 0, 0.12], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 7 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.18], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 8 }
+    ] },
+    { "note": "pines, right", "at": [0.36, -0.12], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.1], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 9 },
+      { "shape": "tree", "pos": [0.1, 0, -0.05], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 10 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.05], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 11 }
+    ] },
+    { "note": "pines by the mine", "at": [0.24, 0.06], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 12 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.05], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 13 },
+      { "shape": "tree", "pos": [0.33, 0, 0.12], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 14 }
+    ] },
+    { "note": "pines, left edge", "at": [-0.45, 0.17], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 15 },
+      { "shape": "tree", "pos": [0.04, 0, -0.25], "kind": "pine", "height": 0.1, "radius": 0.028, "seed": 16 },
+      { "shape": "tree", "pos": [0.0, 0, 0.4], "kind": "pine", "height": 0.09, "radius": 0.025, "seed": 17 }
+    ] },
+    { "note": "pines on the path", "at": [-0.12, 0.08], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.028, "seed": 18 },
+      { "shape": "tree", "pos": [0.06, 0, 0.15], "kind": "pine", "height": 0.1, "radius": 0.028, "seed": 19 }
+    ] }
+  ]
+}

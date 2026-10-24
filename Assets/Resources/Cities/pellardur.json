@@ -1,0 +1,71 @@
+{
+  "name": "Pellardur",
+  "description": "A half-timbered market town round a cobbled square with a well: a big two-gabled hall with red and blue-slate roofs at the back, timber-framed houses with red tile or slate roofs on either side, a tall round stone tower with a slate spire and pennant on the right, and a stream crossed by a stone bridge at the front left, dotted with cypresses.",
+  "style": "Mannish",
+  "colors":   ["#C8B898", "#8E4A34", "#5A3C28", "#8A8476", "#6E4A30", "#2E2620", "#3E4E62", "", "#4E5E30"],
+  "surfaces": ["HalfTimber", "Tiles", "Planks", "Fieldstone", "Plain", "", "Slate", "", ""],
+  "buildings": [
+    { "note": "great hall", "at": [0.06, 0.24], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.26, 0.14, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0.05, 0.14, 0], "size": [0.26, 0.09, 0.12], "cell": "accent", "top": "wall" },
+      { "shape": "box", "pos": [-0.12, 0, 0.02], "size": [0.1, 0.17, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [-0.12, 0.17, 0.02], "size": [0.1, 0.12, 0.14], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.05, 0, -0.061], "size": [0.03, 0.05, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0.13, 0, -0.061], "size": [0.03, 0.05, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [-0.07, 0.14, 0.04], "size": [0.02, 0.1, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0.09, -0.061], "size": [0.2, 0.025, 0.004], "cell": "dark" }
+    ] },
+    { "note": "slate-roofed house, left", "at": [-0.15, 0.14], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.1, 0.13, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.1, 0.08, 0.1], "cell": "accent", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.025, 0.045, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [-0.06, 0.12, 0.04], "size": [0.015, 0.09, 0.015], "cell": "stone" }
+    ] },
+    { "note": "red-roofed house, left", "at": [-0.33, -0.03], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.1, 0.11, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.1, 0.08, 0.1], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.07, 0, 0.0], "size": [0.04, 0.06, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0.07, 0.06, 0.0], "size": [0.04, 0.03, 0.06], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0, -0.051], "size": [0.025, 0.045, 0.004], "cell": "wood" }
+    ] },
+    { "note": "red-roofed house, front", "at": [0.06, -0.29], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.11, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.12, 0.09, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0, -0.051], "size": [0.025, 0.045, 0.004], "cell": "wood" }
+    ] },
+    { "note": "slate-roofed house with awning, front right", "at": [0.24, -0.19], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.11, 0.12, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.11, 0.08, 0.1], "cell": "accent", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0.05, -0.06], "size": [0.06, 0.008, 0.03], "cell": "accent" },
+      { "shape": "box", "pos": [-0.05, 0.12, 0.03], "size": [0.015, 0.07, 0.015], "cell": "stone" }
+    ] },
+    { "note": "round watchtower", "at": [0.38, -0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.075, "height": 0.3, "sides": 12, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.09, "height": 0.2, "sides": 12, "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, -0.072], "size": [0.025, 0.05, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0.02, 0.1, -0.08], "size": [0.03, 0.1, 0.004], "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.5, 0], "height": 0.07 }
+    ] },
+    { "note": "well in the square", "at": [0.02, 0.0], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.025, "sides": 8, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.025, 0], "size": [0.04, 0.035, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.05, 0.02, 0.035], "cell": "wood", "top": "wood" }
+    ] },
+    { "note": "cobbled square", "at": [0.0, 0.03], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.3, 0.003, 0.3], "cell": "stone" }
+    ] },
+    { "note": "stream and bridge", "at": [-0.25, -0.27], "yaw": 33, "parts": [
+      { "shape": "box", "pos": [0.0, 0, 0], "size": [0.6, 0.004, 0.07], "cell": "accent" },
+      { "shape": "box", "pos": [-0.03, 0.02, 0], "size": [0.05, 0.015, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [-0.03, 0, 0], "size": [0.05, 0.02, 0.03], "cell": "stone" }
+    ] },
+    { "note": "cypresses", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.26, 0, 0.9], "kind": "poplar", "height": 0.15, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.23, 0, 0.4], "kind": "poplar", "height": 0.13, "radius": 0.022, "seed": 2 },
+      { "shape": "tree", "pos": [-0.18, 0, -0.5], "kind": "poplar", "height": 0.13, "radius": 0.022, "seed": 3 },
+      { "shape": "tree", "pos": [0.21, 0, 1.0], "kind": "poplar", "height": 0.1, "radius": 0.02, "seed": 4 },
+      { "shape": "tree", "pos": [-0.46, 0, 0.5], "kind": "poplar", "height": 0.11, "radius": 0.022, "seed": 5 },
+      { "shape": "tree", "pos": [-0.36, 0, 0.75], "kind": "broadleaf", "height": 0.08, "radius": 0.05, "seed": 6 }
+    ] }
+  ]
+}

@@ -4,19 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Screen-space city banners in the manner of Civilization: one widget per labelled hex, pinned
-/// under the hex and redrawn crisp at any zoom.
-///   • a ribbon in the owner's nation colour (gold rim; a diamond crest on capitals) with the name —
-///     gold for objective targets — plus small port / hidden marks
-///   • left, a round population badge: the settlement size, ringed by a gold arc that fills as it
-///     grows from camp to city
-///   • right, a steel-ringed fort badge with the fortification level, when there is one
-///   • underneath, a loyalty bar (red → amber → green) that pulses when the place is close to revolt
-///   • below that, chips for the armies and characters present
-/// Hexes with units but no settlement get the unit chips alone. Hex owns the content
+/// Screen-space city banners, one per labelled hex, pinned under the hex and redrawn crisp at any
+/// zoom — built from the game's own UI art (pieces cut from Art/UI/bokshi_mockup.png into
+/// Resources/UI/CityBanner): dark weathered ink, fine bronze filigree, torn edges.
+///   • a spiked bronze medallion holding the owner's true nation colour and the settlement size;
+///     capitals carry the compass-star ornament above it
+///   • a torn ink name plate with filigree lines (9-sliced to the name), the name in parchment-gold
+///     (BoardLookSettings.bannerFont) — brighter gold for objective targets — plus port / hidden marks
+///   • the fortification level on a filigree shield at the plate's end, when there is one
+///   • under the plate, a thin bronze-edged loyalty bar (red → amber → green) that pulses when the
+///     place is close to revolt
+///   • after the name, behind a bronze rule, everything else on the hex: chips for the armies and
+///     characters present, then a bronze-ringed medallion for each marker on the hex (an artifact,
+///     a pending event, an underground way — Hex.CollectHudMarkers), whose tooltip shows in a
+///     matching plate on hover (the strip's medallions are the canvas's only raycast targets)
+/// Hexes with units or markers but no settlement get them alone, on a small strip of the same ink
+/// (the unitsPlate). Hex owns the content
 /// (RefreshHexLabel fills a PlateData) and calls Show/Hide; this class only builds, places and
-/// draws. Banners sit on their own overlay canvas below the HUD and never take raycasts, so clicks
-/// and hovers still reach the board underneath.
+/// draws. Banners sit on their own overlay canvas below the HUD; apart from the markers nothing
+/// takes raycasts, so clicks and hovers still reach the board underneath.
 /// </summary>
 public class HexNameplates : MonoBehaviour
 {
@@ -33,43 +39,78 @@ public class HexNameplates : MonoBehaviour
         public bool port;
         public bool hidden;
         public string unitsRichText; // inline <sprite> + count groups, may be empty
+        public List<Marker> markers;  // artifact, event, underground… shown after the units; may be null
+    }
+
+    /// <summary>A small medallion on the info strip (an artifact, a pending event, an underground
+    /// way…): the icon in a bronze ring, with its tooltip on hover.</summary>
+    public struct Marker
+    {
+        public Sprite icon;
+        public string tooltip;
+        public System.Func<string> tooltipSource; // read on hover, so text set later still shows
     }
 
     private const float ReferenceHeight = 1080f;
-    private const float BodyHeight = 28f;
-    private const float BadgeSize = 40f;
-    private const float FortBadgeSize = 32f;
-    private const float NameSize = 17f;
-    private const float BarHeight = 5f;
+    private const float PlateHeight = 36f;
+    private const float PlateSourceHeight = 180f;            // plate.png's height, for its 9-slice ends
+    private const float MedalWidth = 46f, MedalHeight = 62f;  // medallion.png is 145 × 195
+    private const float StarWidth = 66f, StarHeight = 35f;    // star.png is 132 × 70
+    private const float FortWidth = 28f, FortHeight = 33f;    // shield.png is 115 × 135
+    private const float NameSize = 20f;
+    private const float BarHeight = 3f;
     private const int MaxCitySize = 5;
     private static readonly Vector3 AnchorOffset = new(0f, -0.23f, 0f); // under the tile's centre
     private static readonly Color Unowned = new(0.42f, 0.38f, 0.31f, 1f);
-    private static readonly Color Gold = new(0.92f, 0.76f, 0.42f, 1f);
-    private static readonly Color NameColor = new(0.97f, 0.95f, 0.9f, 1f);
-    private static readonly Color Steel = new(0.7f, 0.75f, 0.82f, 1f);
+    private static readonly Color Parchment = new(0.91f, 0.84f, 0.66f, 1f);
+    private static readonly Color ObjectiveGold = new(1f, 0.82f, 0.42f, 1f);
+    private static readonly Color Ink = new(0.08f, 0.06f, 0.04f, 1f);
+    private static readonly Color Bronze = new(0.55f, 0.42f, 0.24f, 1f);
 
     private static HexNameplates instance;
     private RectTransform root;
     private Canvas canvas;
     private readonly Dictionary<Hex, Plate> plates = new();
 
+    private static Sprite plateSprite, medalFrameSprite, medalFillSprite, shieldSprite, starSprite, ringSprite;
+
+    private const float MarkerSize = 26f;
+
+    private sealed class MarkerView
+    {
+        public RectTransform rect;
+        public Image icon;
+        public MarkerHover hover;
+    }
+
+    // Shows a marker's tooltip while the pointer is on it (the banner canvas raycasts only these).
+    private sealed class MarkerHover : MonoBehaviour, UnityEngine.EventSystems.IPointerEnterHandler, UnityEngine.EventSystems.IPointerExitHandler
+    {
+        public string text;
+        public System.Func<string> source;
+        public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData) => ShowTooltip((RectTransform)transform, source?.Invoke() ?? text);
+        public void OnPointerExit(UnityEngine.EventSystems.PointerEventData eventData) => HideTooltip();
+        private void OnDisable() => HideTooltip();
+    }
+
     private sealed class Plate
     {
         public RectTransform rect;
         public RectTransform banner;
-        public CityBannerGraphic body;
         public TextMeshProUGUI name;
-        public RectTransform popBadge;
-        public Image popArc;
-        public Image popRing;
+        public RectTransform medal;
+        public Image medalFill;
         public TextMeshProUGUI popText;
+        public RectTransform star;
         public RectTransform fortBadge;
-        public Image fortRing;
         public TextMeshProUGUI fortText;
         public RectTransform barBack;
         public Image barFill;
         public RectTransform units;
+        public Image unitsPlate;     // the strip's own ink plate: off when the chips sit in the city plate
+        public Image divider;        // bronze rule between the name and the chips in the city plate
         public TextMeshProUGUI unitsText;
+        public readonly List<MarkerView> markers = new();
         public bool lowLoyalty;
         public float height;
     }
@@ -98,6 +139,7 @@ public class HexNameplates : MonoBehaviour
         instance.canvas = go.GetComponent<Canvas>();
         instance.canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         instance.canvas.sortingOrder = -50; // under every HUD canvas, still above the board
+        go.AddComponent<GraphicRaycaster>(); // only the info-strip markers are raycast targets
         var scaler = go.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, ReferenceHeight);
@@ -108,73 +150,96 @@ public class HexNameplates : MonoBehaviour
 
     // ── Construction ────────────────────────────────────────────────────────────────────────
 
+    private static void LoadSprites()
+    {
+        if (plateSprite != null) return;
+        plateSprite = Resources.Load<Sprite>("UI/CityBanner/plate");
+        medalFrameSprite = Resources.Load<Sprite>("UI/CityBanner/medallion_frame");
+        medalFillSprite = Resources.Load<Sprite>("UI/CityBanner/medallion_fill");
+        shieldSprite = Resources.Load<Sprite>("UI/CityBanner/shield");
+        starSprite = Resources.Load<Sprite>("UI/CityBanner/star");
+        ringSprite = Resources.Load<Sprite>("UI/CityBanner/ring");
+    }
+
+    // The torn ink plate, 9-sliced so its ragged ends keep their shape at any width.
+    private static Image PlateImage(RectTransform rt, float height)
+    {
+        var image = rt.gameObject.AddComponent<Image>();
+        image.sprite = plateSprite;
+        image.type = Image.Type.Sliced;
+        image.pixelsPerUnitMultiplier = PlateSourceHeight / height;
+        image.raycastTarget = false;
+        return image;
+    }
+
     private Plate CreatePlate(Hex hex)
     {
+        LoadSprites();
         var plate = new Plate();
         plate.rect = NewRect($"CityBanner_{hex.name}", root);
         plate.rect.anchorMin = plate.rect.anchorMax = Vector2.zero;
         plate.rect.pivot = new Vector2(0.5f, 1f);
 
-        plate.banner = NewRect("Banner", plate.rect);
+        // Name plate first, so the medallion and shield sit over its ends.
+        plate.banner = NewRect("Plate", plate.rect);
         TopCentre(plate.banner);
-        plate.body = plate.banner.gameObject.AddComponent<CityBannerGraphic>();
-        plate.body.raycastTarget = false;
-
-        plate.name = NewText("Name", plate.banner, NameSize, FontStyles.Bold | FontStyles.SmallCaps);
+        PlateImage(plate.banner, PlateHeight);
+        plate.name = NewText("Name", plate.banner, NameSize, FontStyles.Normal); // a pixel face: no faux bold or small caps
         Stretch((RectTransform)plate.name.transform);
-        plate.name.characterSpacing = 3f;
-        plate.name.color = NameColor;
+        plate.name.characterSpacing = 1f;
+        plate.name.color = Parchment;
 
-        // Population: dark disc, dim track, gold growth arc, nation-coloured ring, the size.
-        plate.popBadge = NewRect("Population", plate.rect);
-        plate.popBadge.sizeDelta = new Vector2(BadgeSize, BadgeSize);
-        NewImage("Shadow", plate.popBadge, HudSprites.Circle, new Color(0f, 0f, 0f, 0.45f), BadgeSize + 4f, new Vector2(1.5f, -2.5f));
-        NewImage("Track", plate.popBadge, HudSprites.Circle, new Color(0.08f, 0.07f, 0.06f, 1f), BadgeSize, Vector2.zero);
-        plate.popArc = NewImage("Growth", plate.popBadge, HudSprites.Circle, Gold, BadgeSize - 2f, Vector2.zero);
-        plate.popArc.type = Image.Type.Filled;
-        plate.popArc.fillMethod = Image.FillMethod.Radial360;
-        plate.popArc.fillOrigin = (int)Image.Origin360.Top;
-        plate.popArc.fillClockwise = true;
-        NewImage("Disc", plate.popBadge, HudSprites.Circle, new Color(0.1f, 0.09f, 0.08f, 1f), BadgeSize - 9f, Vector2.zero);
-        plate.popRing = NewImage("Ring", plate.popBadge, HudSprites.Ring, Gold, BadgeSize + 2f, Vector2.zero);
-        plate.popText = NewText("Size", plate.popBadge, 21f, FontStyles.Bold);
-        Stretch((RectTransform)plate.popText.transform);
-        plate.popText.color = NameColor;
-
-        // Fort: smaller dark disc with the fort icon and level.
-        plate.fortBadge = NewRect("Fort", plate.rect);
-        plate.fortBadge.sizeDelta = new Vector2(FortBadgeSize, FortBadgeSize);
-        NewImage("Shadow", plate.fortBadge, HudSprites.Circle, new Color(0f, 0f, 0f, 0.45f), FortBadgeSize + 4f, new Vector2(1.5f, -2.5f));
-        NewImage("Disc", plate.fortBadge, HudSprites.Circle, new Color(0.1f, 0.09f, 0.08f, 1f), FortBadgeSize, Vector2.zero);
-        plate.fortRing = NewImage("Ring", plate.fortBadge, HudSprites.Ring, Gold, FortBadgeSize + 2f, Vector2.zero);
-        plate.fortText = NewText("Level", plate.fortBadge, 16f, FontStyles.Bold);
-        Stretch((RectTransform)plate.fortText.transform);
-        plate.fortText.color = NameColor;
-
-        // Loyalty bar under the ribbon.
+        // Loyalty: a hairline bronze frame round a thin bar, under the plate.
         plate.barBack = NewRect("Loyalty", plate.rect);
         var back = plate.barBack.gameObject.AddComponent<Image>();
-        back.color = new Color(0.05f, 0.045f, 0.04f, 0.9f);
+        back.color = Bronze;
         back.raycastTarget = false;
-        var fillRect = NewRect("Fill", plate.barBack);
+        var inner = NewRect("Back", plate.barBack);
+        inner.anchorMin = Vector2.zero;
+        inner.anchorMax = Vector2.one;
+        inner.offsetMin = new Vector2(1f, 1f);
+        inner.offsetMax = new Vector2(-1f, -1f);
+        var innerImage = inner.gameObject.AddComponent<Image>();
+        innerImage.color = new Color(0.06f, 0.05f, 0.04f, 1f);
+        innerImage.raycastTarget = false;
+        var fillRect = NewRect("Fill", inner);
         fillRect.anchorMin = Vector2.zero;
         fillRect.anchorMax = Vector2.one;
-        fillRect.offsetMin = new Vector2(1f, 1f);
-        fillRect.offsetMax = new Vector2(-1f, -1f);
+        fillRect.offsetMin = fillRect.offsetMax = Vector2.zero;
         plate.barFill = fillRect.gameObject.AddComponent<Image>();
         plate.barFill.raycastTarget = false;
 
-        // Units present: a small smoked pill under everything.
+        // The medallion: the nation colour behind the bronze frame, the size on top.
+        plate.medal = NewRect("Medallion", plate.rect);
+        plate.medal.sizeDelta = new Vector2(MedalWidth, MedalHeight);
+        plate.medalFill = NewImage("Field", plate.medal, medalFillSprite, Color.white, 0f, Vector2.zero);
+        Stretch(plate.medalFill.rectTransform);
+        Image frame = NewImage("Frame", plate.medal, medalFrameSprite, Color.white, 0f, Vector2.zero);
+        Stretch(frame.rectTransform);
+        plate.popText = NewText("Size", plate.medal, 26f, FontStyles.Normal);
+        Stretch((RectTransform)plate.popText.transform);
+
+        plate.star = NewRect("Capital", plate.rect);
+        plate.star.sizeDelta = new Vector2(StarWidth, StarHeight);
+        Stretch(NewImage("Star", plate.star, starSprite, Color.white, 0f, Vector2.zero).rectTransform);
+
+        // The fort level on a filigree shield at the plate's end.
+        plate.fortBadge = NewRect("Fort", plate.rect);
+        plate.fortBadge.sizeDelta = new Vector2(FortWidth, FortHeight);
+        Stretch(NewImage("Shield", plate.fortBadge, shieldSprite, Color.white, 0f, Vector2.zero).rectTransform);
+        plate.fortText = NewText("Level", plate.fortBadge, 17f, FontStyles.Normal);
+        Stretch((RectTransform)plate.fortText.transform);
+        ((RectTransform)plate.fortText.transform).offsetMin = new Vector2(0f, 4f); // up out of the point
+        plate.fortText.color = Parchment;
+
+        // Units present: a small plate of the same ink.
         plate.units = NewRect("Units", plate.rect);
-        var unitsFace = plate.units.gameObject.AddComponent<CinematicPanel>();
-        unitsFace.fillTop = new Color(0.03f, 0.035f, 0.04f, 0.8f);
-        unitsFace.fillBottom = new Color(0.02f, 0.022f, 0.026f, 0.88f);
-        unitsFace.lineWidth = 0f;
-        unitsFace.ornament = 0f;
-        unitsFace.raycastTarget = false;
+        plate.unitsPlate = PlateImage(plate.units, 24f);
+        plate.divider = NewImage("Divider", plate.banner, null, Bronze, 0f, Vector2.zero);
+        plate.divider.rectTransform.sizeDelta = new Vector2(1.5f, PlateHeight * 0.5f);
         plate.unitsText = NewText("Text", plate.units, 15f, FontStyles.Normal);
         Stretch((RectTransform)plate.unitsText.transform);
-        plate.unitsText.color = NameColor;
+        plate.unitsText.color = Parchment;
         return plate;
     }
 
@@ -229,88 +294,132 @@ public class HexNameplates : MonoBehaviour
 
     private void Apply(Plate plate, PlateData data, TMP_SpriteAsset sprites, TMP_FontAsset font)
     {
+        // The banner face (BoardLookSettings.bannerFont) with its own plain material: the hex
+        // label's font material is overbright (HDR face colour) and glowed under the bloom.
+        TMP_FontAsset bannerFont = BoardLookSettings.Instance.bannerFont != null ? BoardLookSettings.Instance.bannerFont : font;
         foreach (TextMeshProUGUI text in new[] { plate.name, plate.popText, plate.fortText, plate.unitsText })
         {
-            if (font != null && text.font != font) text.font = font;
+            if (bannerFont != null && text.font != bannerFont) text.font = bannerFont;
+            if (bannerFont != null && text != plate.popText && text.fontSharedMaterial != bannerFont.material) text.fontSharedMaterial = bannerFont.material;
             if (sprites != null) text.spriteAsset = sprites;
         }
 
         bool settlement = data.hasSettlement;
         plate.banner.gameObject.SetActive(settlement);
-        plate.popBadge.gameObject.SetActive(settlement);
+        plate.medal.gameObject.SetActive(settlement);
+        plate.star.gameObject.SetActive(settlement && data.capital);
         plate.fortBadge.gameObject.SetActive(settlement && data.fortSize > 0);
         plate.barBack.gameObject.SetActive(settlement);
-        bool hasUnits = !string.IsNullOrEmpty(data.unitsRichText);
+        bool hasUnitText = !string.IsNullOrEmpty(data.unitsRichText);
+        int markerCount = data.markers != null ? data.markers.Count : 0;
+        bool hasUnits = hasUnitText || markerCount > 0; // unit chips and/or markers
         plate.units.gameObject.SetActive(hasUnits);
+        plate.divider.gameObject.SetActive(settlement && hasUnits);
+
+        // The chips and markers: inside the city plate after the name, or on their own strip.
+        plate.unitsText.text = hasUnitText ? data.unitsRichText : string.Empty;
+        plate.unitsText.alignment = TextAlignmentOptions.Left;
+        float textWidth = hasUnitText ? plate.unitsText.GetPreferredValues(data.unitsRichText).x : 0f;
+        float gap = hasUnitText && markerCount > 0 ? 8f : 0f;
+        float contentWidth = hasUnits ? textWidth + gap + markerCount * (MarkerSize + 2f) : 0f;
+        const float DividerSpace = 16f;
 
         float y = 0f;
         float width = 0f;
         if (settlement)
         {
-            // Nation colour, kept dark enough for the white name to read on it.
+            // The nation colour exactly as the nation has it.
             Color nation = data.nationColor.a > 0f ? data.nationColor : Unowned;
-            Color.RGBToHSV(nation, out float h, out float s, out float v);
-            Color deep = Color.HSVToRGB(h, Mathf.Clamp(s, 0.35f, 0.85f), Mathf.Clamp(v, 0.32f, 0.62f));
-            Color rimColor = data.objective || data.capital ? Gold : Color.Lerp(deep, Color.white, 0.45f);
-            plate.body.fillTop = Color.Lerp(deep, Color.white, 0.12f);
-            plate.body.fillBottom = deep * 0.68f;
-            plate.body.fillTop.a = plate.body.fillBottom.a = 0.97f;
-            plate.body.rim = rimColor;
-            plate.body.crest = data.capital;
-            plate.body.SetVerticesDirty();
+            nation.a = 1f;
+            plate.medalFill.color = nation;
+
+            // The size: dark ink on light nation colours, parchment on dark ones.
+            float luma = 0.2126f * nation.r + 0.7152f * nation.g + 0.0722f * nation.b;
+            bool lightField = luma > 0.5f;
+            plate.popText.color = lightField ? Ink : Parchment;
+            // Ink on light fields needs no outline; parchment on dark ones gets a thin dark edge.
+            if (bannerFont != null)
+            {
+                Material wanted = lightField ? bannerFont.material : NumberMaterial(bannerFont);
+                if (plate.popText.fontSharedMaterial != wanted) plate.popText.fontSharedMaterial = wanted;
+            }
 
             string marks = (data.port ? " <size=80%><sprite name=\"port\"></size>" : "") + (data.hidden ? " <size=80%><sprite name=\"hidden\"></size>" : "");
-            string nameColor = data.objective ? ColorUtility.ToHtmlStringRGB(Gold) : ColorUtility.ToHtmlStringRGB(NameColor);
+            string nameColor = ColorUtility.ToHtmlStringRGB(data.objective ? ObjectiveGold : Parchment);
             plate.name.text = $"<color=#{nameColor}>{data.name}</color>{marks}";
             float nameWidth = plate.name.GetPreferredValues(plate.name.text).x;
 
-            // Ribbon spans the name with room for the badges tucked into its pointed ends.
-            float bodyWidth = Mathf.Max(120f, nameWidth + BadgeSize + (data.fortSize > 0 ? FortBadgeSize : 12f) + 20f);
-            plate.banner.sizeDelta = new Vector2(bodyWidth, BodyHeight);
-            plate.banner.anchoredPosition = new Vector2(0f, -(BadgeSize - BodyHeight) * 0.5f);
-            RectTransform nameRect = (RectTransform)plate.name.transform;
-            float leftInset = BadgeSize * 0.5f + 6f, rightInset = (data.fortSize > 0 ? FortBadgeSize * 0.5f : 0f) + 10f;
-            nameRect.offsetMin = new Vector2(leftInset, 0f);
-            nameRect.offsetMax = new Vector2(-rightInset, 0f);
+            // The plate runs from under the medallion past the name — and the units and markers on
+            // this hex, after a bronze rule — to the fort shield: one widget per city.
+            float leftInset = MedalWidth * 0.5f + 10f;
+            float rightInset = 22f + (data.fortSize > 0 ? FortWidth * 0.5f : 0f);
+            float unitsSpace = hasUnits ? DividerSpace + contentWidth : 0f;
+            float plateWidth = Mathf.Max(120f, nameWidth + leftInset + rightInset + unitsSpace);
+            float total = MedalWidth * 0.5f + plateWidth;
+            float left = -total * 0.5f;
+            float plateTop = -(MedalHeight - PlateHeight) * 0.5f;
 
-            int size = Mathf.Clamp(data.citySize, 1, MaxCitySize);
-            plate.popText.text = size.ToString();
-            plate.popArc.fillAmount = size / (float)MaxCitySize;
-            plate.popRing.color = rimColor;
-            PlaceBadge(plate.popBadge, -bodyWidth * 0.5f + 4f, -BadgeSize * 0.5f);
+            plate.banner.anchorMin = plate.banner.anchorMax = new Vector2(0.5f, 1f);
+            plate.banner.pivot = new Vector2(0f, 1f);
+            plate.banner.sizeDelta = new Vector2(plateWidth, PlateHeight);
+            plate.banner.anchoredPosition = new Vector2(left + MedalWidth * 0.5f, plateTop);
+            RectTransform nameRect = (RectTransform)plate.name.transform;
+            nameRect.offsetMin = new Vector2(leftInset, 0f);
+            nameRect.offsetMax = new Vector2(-(rightInset + unitsSpace), 0f);
+
+            if (hasUnits)
+            {
+                // Chips inside the plate, right of the name; the strip's own plate is not drawn.
+                float contentLeft = left + MedalWidth * 0.5f + plateWidth - rightInset - contentWidth;
+                plate.unitsPlate.enabled = false;
+                plate.units.anchorMin = plate.units.anchorMax = new Vector2(0.5f, 1f);
+                plate.units.pivot = new Vector2(0f, 0.5f);
+                plate.units.sizeDelta = new Vector2(contentWidth, PlateHeight);
+                plate.units.anchoredPosition = new Vector2(contentLeft, plateTop - PlateHeight * 0.5f);
+                LayoutStripContent(plate, data, textWidth, gap, markerCount, 0f);
+                RectTransform divider = plate.divider.rectTransform;
+                divider.anchorMin = divider.anchorMax = new Vector2(0f, 0.5f);
+                divider.pivot = new Vector2(0.5f, 0.5f);
+                divider.anchoredPosition = new Vector2(plateWidth - rightInset - contentWidth - DividerSpace * 0.5f, 0f);
+            }
+
+            plate.popText.text = Mathf.Clamp(data.citySize, 1, MaxCitySize).ToString();
+            PlaceAt(plate.medal, left + MedalWidth * 0.5f, -MedalHeight * 0.5f);
+            if (data.capital) PlaceAt(plate.star, left + MedalWidth * 0.5f, StarHeight * 0.32f);
 
             if (data.fortSize > 0)
             {
                 plate.fortText.text = data.fortSize.ToString();
-                plate.fortRing.color = Steel; // walls: steel, where the population ring is gold
-                PlaceBadge(plate.fortBadge, bodyWidth * 0.5f - 2f, -BadgeSize * 0.5f);
+                PlaceAt(plate.fortBadge, left + MedalWidth * 0.5f + plateWidth - 12f, plateTop - PlateHeight * 0.5f);
             }
 
-            // Loyalty bar, slung under the ribbon between the badges.
-            float barWidth = bodyWidth - BadgeSize - 4f;
+            // Loyalty under the plate, from the medallion to before the ragged end.
+            float barWidth = plateWidth - MedalWidth * 0.5f - 24f;
             plate.barBack.anchorMin = plate.barBack.anchorMax = new Vector2(0.5f, 1f);
-            plate.barBack.pivot = new Vector2(0.5f, 1f);
+            plate.barBack.pivot = new Vector2(0f, 1f);
             plate.barBack.sizeDelta = new Vector2(barWidth, BarHeight + 2f);
-            plate.barBack.anchoredPosition = new Vector2(BadgeSize * 0.25f, -(BadgeSize + BodyHeight) * 0.5f + 1f);
+            plate.barBack.anchoredPosition = new Vector2(left + MedalWidth + 2f, plateTop - PlateHeight + 3f);
             float loyalty = Mathf.Clamp01(data.loyalty / 100f);
             RectTransform fill = plate.barFill.rectTransform;
             fill.anchorMax = new Vector2(loyalty, 1f); // the bar fills from the left
             plate.barFill.color = LoyaltyColor(loyalty);
             plate.lowLoyalty = data.loyalty < 30;
 
-            y = BadgeSize + 2f;
-            width = bodyWidth + BadgeSize * 0.5f;
+            y = MedalHeight;
+            width = total;
         }
 
-        if (hasUnits)
+        if (hasUnits && !settlement)
         {
-            plate.unitsText.text = data.unitsRichText;
-            Vector2 preferred = plate.unitsText.GetPreferredValues(data.unitsRichText);
+            // No settlement: the chips and markers on their own small ink strip under the hex.
+            const float Padding = 17f;
+            plate.unitsPlate.enabled = true;
             plate.units.anchorMin = plate.units.anchorMax = new Vector2(0.5f, 1f);
             plate.units.pivot = new Vector2(0.5f, 1f);
-            plate.units.sizeDelta = new Vector2(preferred.x + 16f, Mathf.Max(20f, preferred.y + 4f));
-            plate.units.anchoredPosition = new Vector2(0f, -(y + (settlement ? 3f : 0f)));
-            y += plate.units.sizeDelta.y + 3f;
+            plate.units.sizeDelta = new Vector2(contentWidth + Padding * 2f, markerCount > 0 ? MarkerSize + 2f : 24f);
+            plate.units.anchoredPosition = new Vector2(0f, -y);
+            LayoutStripContent(plate, data, textWidth, gap, markerCount, Padding);
+            y += plate.units.sizeDelta.y + 2f;
             width = Mathf.Max(width, plate.units.sizeDelta.x);
         }
 
@@ -318,7 +427,104 @@ public class HexNameplates : MonoBehaviour
         plate.height = y;
     }
 
-    private static void PlaceBadge(RectTransform badge, float x, float y)
+    // Unit chips text, then a medallion per marker, left to right from `start` inside plate.units.
+    private static void LayoutStripContent(Plate plate, PlateData data, float textWidth, float gap, int markerCount, float start)
+    {
+        RectTransform textRect = (RectTransform)plate.unitsText.transform;
+        textRect.anchorMin = new Vector2(0f, 0f);
+        textRect.anchorMax = new Vector2(0f, 1f);
+        textRect.pivot = new Vector2(0f, 0.5f);
+        textRect.sizeDelta = new Vector2(textWidth, 0f);
+        textRect.anchoredPosition = new Vector2(start, 0f);
+
+        for (int i = 0; i < Mathf.Max(markerCount, plate.markers.Count); i++)
+        {
+            if (i >= markerCount) { plate.markers[i].rect.gameObject.SetActive(false); continue; }
+            if (i >= plate.markers.Count) plate.markers.Add(NewMarker(plate.units));
+            MarkerView view = plate.markers[i];
+            Marker marker = data.markers[i];
+            view.rect.gameObject.SetActive(true);
+            view.icon.sprite = marker.icon;
+            view.icon.enabled = marker.icon != null;
+            view.hover.text = marker.tooltip;
+            view.hover.source = marker.tooltipSource;
+            view.rect.anchorMin = view.rect.anchorMax = new Vector2(0f, 0.5f);
+            view.rect.pivot = new Vector2(0f, 0.5f);
+            view.rect.anchoredPosition = new Vector2(start + textWidth + gap + i * (MarkerSize + 2f), 0f);
+        }
+    }
+
+    // A marker medallion: the bronze ring (the strip's only raycast target) with the icon inside.
+    private static MarkerView NewMarker(RectTransform strip)
+    {
+        var view = new MarkerView { rect = NewRect("Marker", strip) };
+        view.rect.sizeDelta = new Vector2(MarkerSize, MarkerSize);
+        view.icon = NewImage("Icon", view.rect, null, Color.white, MarkerSize * 0.62f, Vector2.zero);
+        view.icon.preserveAspect = true;
+        Image ring = NewImage("Ring", view.rect, ringSprite, Color.white, MarkerSize, Vector2.zero);
+        ring.raycastTarget = true;
+        view.hover = ring.gameObject.AddComponent<MarkerHover>();
+        return view;
+    }
+
+    // ── Tooltip ─────────────────────────────────────────────────────────────────────────────
+    // One shared tooltip for the markers: the same torn ink plate, parchment text, above the marker.
+
+    private static RectTransform tooltip;
+    private static TextMeshProUGUI tooltipText;
+
+    private static void ShowTooltip(RectTransform anchor, string text)
+    {
+        if (instance == null || string.IsNullOrWhiteSpace(text)) return;
+        if (tooltip == null)
+        {
+            tooltip = NewRect("Tooltip", instance.root);
+            tooltip.anchorMin = tooltip.anchorMax = Vector2.zero;
+            tooltip.pivot = new Vector2(0.5f, 0f);
+            PlateImage(tooltip, 34f);
+            tooltipText = NewText("Text", tooltip, 18f, FontStyles.Normal);
+            Stretch((RectTransform)tooltipText.transform);
+            ((RectTransform)tooltipText.transform).offsetMin = new Vector2(22f, 6f);
+            ((RectTransform)tooltipText.transform).offsetMax = new Vector2(-22f, -6f);
+            tooltipText.textWrappingMode = TextWrappingModes.Normal;
+            tooltipText.color = Parchment;
+            TMP_FontAsset font = BoardLookSettings.Instance.bannerFont;
+            if (font != null) { tooltipText.font = font; tooltipText.fontSharedMaterial = font.material; }
+        }
+        tooltipText.text = text;
+        Vector2 size = tooltipText.GetPreferredValues(text, 320f, 0f);
+        tooltip.sizeDelta = new Vector2(Mathf.Min(size.x, 320f) + 44f, size.y + 16f);
+        tooltip.gameObject.SetActive(true);
+        tooltip.SetAsLastSibling();
+        // Above the marker, in the banner canvas's space.
+        Vector3[] corners = new Vector3[4];
+        anchor.GetWorldCorners(corners);
+        Vector2 top = (corners[1] + corners[2]) * 0.5f;
+        Vector2 local = instance.root.InverseTransformPoint(top);
+        Vector2 rootSize = instance.root.rect.size;
+        tooltip.anchoredPosition = local + rootSize * instance.root.pivot + new Vector2(0f, 6f);
+    }
+
+    private static void HideTooltip()
+    {
+        if (tooltip != null) tooltip.gameObject.SetActive(false);
+    }
+
+    // One shared outlined copy of the banner font's material, for numbers on the coloured medallion.
+    private static Material numberMaterial;
+
+    private static Material NumberMaterial(TMP_FontAsset font)
+    {
+        if (numberMaterial != null) return numberMaterial;
+        numberMaterial = new Material(font.material) { name = $"{font.name} (banner number)" };
+        numberMaterial.EnableKeyword(ShaderUtilities.Keyword_Outline);
+        numberMaterial.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.18f);
+        numberMaterial.SetColor(ShaderUtilities.ID_OutlineColor, new Color(0f, 0f, 0f, 0.85f));
+        numberMaterial.SetColor(ShaderUtilities.ID_FaceColor, Color.white);
+        return numberMaterial;
+    }
+
+    private static void PlaceAt(RectTransform badge, float x, float y)
     {
         badge.anchorMin = badge.anchorMax = new Vector2(0.5f, 1f);
         badge.pivot = new Vector2(0.5f, 0.5f);
@@ -365,7 +571,7 @@ public class HexNameplates : MonoBehaviour
 
         // Constant on-screen size around the default zoom, a little smaller when zoomed far out
         // so neighbouring banners don't pile up.
-        float zoom = cam.orthographic ? cam.orthographicSize : ZoomScaledLabel.ReferenceZoom;
+        float zoom = cam.orthographicSize; // the board zoom, in perspective too (BoardNavigator)
         float scale = Mathf.Clamp(Mathf.Pow(ZoomScaledLabel.ReferenceZoom / zoom, 0.55f), 0.5f, 1.1f);
         plate.rect.localScale = new Vector3(scale, scale, 1f);
         float toCanvas = root.rect.height / Mathf.Max(1f, Screen.height);

@@ -1,0 +1,56 @@
+{
+  "name": "Khazad-Dum",
+  "description": "The great gate of the Dwarrowdelf: a tall grey Gothic stone portal with pointed arches, pinnacles and iron-bound doors cut into the foot of jagged snow-capped peaks, flanked by two carved guardian statues, with a stone stair and cobbled path leading down through pines and boulders.",
+  "style": "Dwarven",
+  "colors":   ["#6E6E68", "#5A5A56", "#4A3424", "#7C7A70", "#D6DAD6", "#2A2A28", "#5E4A30", "", "#3E5230"],
+  "surfaces": ["Ashlar",  "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great peaks behind", "at": [0.0, 0.3], "parts": [
+      { "shape": "rock", "pos": [-0.2, 0, 0.05], "radius": 0.24, "height": 0.6, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.22, 0, 0.08], "radius": 0.26, "height": 0.66, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.02, 0, 0.2], "radius": 0.2, "height": 0.5, "cell": "stone", "seed": 3 },
+      { "shape": "cone", "pos": [-0.2, 0.46, 0.05], "radius": 0.08, "height": 0.15, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [0.22, 0.5, 0.08], "radius": 0.09, "height": 0.17, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [0.02, 0.38, 0.2], "radius": 0.07, "height": 0.13, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "side crags", "at": [0.0, 0.02], "parts": [
+      { "shape": "rock", "pos": [-0.36, 0, 0.05], "radius": 0.13, "height": 0.3, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.36, 0, 0.0], "radius": 0.14, "height": 0.34, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.19, 0, -0.1], "radius": 0.11, "height": 0.28, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.2, 0, -0.12], "radius": 0.11, "height": 0.26, "cell": "stone", "seed": 7 },
+      { "shape": "cone", "pos": [0.36, 0.25, 0.0], "radius": 0.06, "height": 0.1, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "the gate facade", "at": [-0.01, -0.2], "parts": [
+      { "shape": "box", "size": [0.24, 0.28, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.036], "size": [0.1, 0.17, 0.004], "cell": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.17, -0.036], "radius": 0.05, "height": 0.04, "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.28, 0], "size": [0.24, 0.07, 0.07], "cell": "stone", "top": "wall" },
+      { "shape": "cylinder", "pos": [-0.11, 0, -0.03], "radius": 0.016, "height": 0.32, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.11, 0, -0.03], "radius": 0.016, "height": 0.32, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "pyramid", "pos": [-0.11, 0.32, -0.03], "radius": 0.018, "height": 0.05, "cell": "trim" },
+      { "shape": "pyramid", "pos": [0.11, 0.32, -0.03], "radius": 0.018, "height": 0.05, "cell": "trim" },
+      { "shape": "box", "pos": [-0.14, 0, -0.07], "size": [0.04, 0.03, 0.04], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.14, 0.03, -0.07], "radius": 0.016, "height": 0.09, "sides": 6, "taper": 0.7, "cell": "dark" },
+      { "shape": "box", "pos": [0.14, 0, -0.07], "size": [0.04, 0.03, 0.04], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.14, 0.03, -0.07], "radius": 0.016, "height": 0.09, "sides": 6, "taper": 0.7, "cell": "dark" },
+      { "shape": "box", "pos": [0, 0, -0.1], "size": [0.12, 0.012, 0.08], "cell": "stone" },
+      { "shape": "flag", "pos": [0, 0.35, 0], "height": 0.08, "radius": 0.005 }
+    ] },
+    { "note": "cobbled path down", "at": [-0.05, -0.38], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.09, 0.004, 0.3], "cell": "stone" }
+    ] },
+    { "note": "pines left", "at": [-0.35, -0.2], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [0.05, 0, -0.1], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.1, 0, 0.3], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [-0.05, 0, 0.9], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 4 },
+      { "shape": "rock", "pos": [-0.05, 0, 0.12], "radius": 0.06, "height": 0.06, "cell": "stone", "seed": 8 }
+    ] },
+    { "note": "pines right", "at": [0.25, -0.3], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [0.1, 0, 0.05], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [0.2, 0, 0.4], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 7 },
+      { "shape": "rock", "pos": [0.05, 0, -0.12], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 9 }
+    ] }
+  ]
+}

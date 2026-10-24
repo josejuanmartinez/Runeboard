@@ -1,0 +1,81 @@
+{
+  "name": "Edoras",
+  "description": "A green hilltop ringed by a tall pointed-stake palisade on a stone footing; inside, the golden-thatched Meduseld with carved gable, horse-head finials and a stair stands at the back on a stone base, two smaller thatched timber halls flank a winding dirt lane, a round well sits on the green, a horse banner flies at the back right, and a stair climbs to the front gate guarded by carved horse-head posts, with grey rocks and dark pines on the slopes.",
+  "style": "Northman",
+  "colors":   ["#7E5E38", "#A8843C", "#6E5232", "#8E8C80", "#B89A58", "#2A2016", "#C8A84A", "", "#3C4A28"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "hill under the town", "at": [-0.01, 0.06], "parts": [
+      { "shape": "dome", "radius": 0.44, "height": 0.03, "sides": 16, "cell": "foliage" }
+    ] },
+    { "note": "Meduseld, the golden hall", "at": [0.06, 0.2], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.4, 0.05, 0.17], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.38, 0.09, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.14, 0], "size": [0.4, 0.13, 0.18], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.2, 0.05, 0], "size": [0.02, 0.27, 0.02], "cell": "trim" },
+      { "shape": "box", "pos": [-0.2, 0.05, -0.09], "size": [0.02, 0.2, 0.02], "cell": "trim" },
+      { "shape": "box", "pos": [-0.2, 0.05, 0.09], "size": [0.02, 0.2, 0.02], "cell": "trim" },
+      { "shape": "box", "pos": [-0.21, 0.08, 0], "size": [0.004, 0.06, 0.04], "cell": "dark" },
+      { "shape": "box", "pos": [-0.26, 0, 0], "size": [0.08, 0.05, 0.06], "cell": "wood" }
+    ] },
+    { "note": "thatched hall, left", "at": [-0.24, 0.13], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0.101, 0, 0], "size": [0.004, 0.05, 0.04], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.22, 0.09, 0.13], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "thatched hall, right", "at": [0.27, 0.0], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.22, 0.08, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.111, 0, 0], "size": [0.004, 0.05, 0.04], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.24, 0.1, 0.14], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "dirt lane", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.05, 0.02, -0.2], "size": [0.07, 0.004, 0.55], "cell": "trim", "yaw": -20 },
+      { "shape": "box", "pos": [0.08, 0.025, 0.15], "size": [0.3, 0.004, 0.06], "cell": "trim", "yaw": -30 }
+    ] },
+    { "note": "round well", "at": [0.11, -0.03], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.02, 0], "radius": 0.025, "height": 0.02, "sides": 10, "cell": "stone", "top": "dark" }
+    ] },
+    { "note": "palisade ring", "at": [0.0, 0.0], "parts": [
+      { "shape": "wall", "pos": [-0.4, 0, 0.59], "to": [-0.3, 0.96], "height": 0.09, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.3, 0, 0.96], "to": [-0.09, 1.21], "height": 0.09, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.09, 0, 1.21], "to": [0.15, 1.12], "height": 0.09, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [0.15, 0, 1.12], "to": [0.33, 0.87], "height": 0.09, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [0.33, 0, 0.87], "to": [0.4, 0.28], "height": 0.09, "thickness": 0.025, "count": 4, "cell": "wood" },
+      { "shape": "wall", "pos": [0.4, 0, 0.28], "to": [0.36, -0.34], "height": 0.1, "thickness": 0.025, "count": 4, "cell": "wood" },
+      { "shape": "wall", "pos": [0.36, 0, -0.34], "to": [0.15, -0.53], "height": 0.1, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [0.15, 0, -0.53], "to": [-0.02, -0.59], "height": 0.1, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.14, 0, -0.47], "to": [-0.31, -0.03], "height": 0.1, "thickness": 0.025, "count": 4, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.31, 0, -0.03], "to": [-0.4, 0.28], "height": 0.1, "thickness": 0.025, "count": 3, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.4, 0, 0.28], "to": [-0.4, 0.59], "height": 0.09, "thickness": 0.025, "count": 2, "cell": "wood" }
+    ] },
+    { "note": "gate with horse-head posts", "at": [-0.08, -0.22], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.1, 0.11, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.03, 0.16, 0.03], "cell": "trim" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.03, 0.16, 0.03], "cell": "trim" },
+      { "shape": "box", "pos": [-0.06, 0.16, 0.0], "size": [0.02, 0.03, 0.04], "cell": "trim" },
+      { "shape": "box", "pos": [0.06, 0.16, 0.0], "size": [0.02, 0.03, 0.04], "cell": "trim" }
+    ] },
+    { "note": "front stair", "at": [-0.14, -0.31], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.09, 0.02, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.06], "size": [0.09, 0.04, 0.06], "cell": "stone" }
+    ] },
+    { "note": "horse banner", "at": [0.3, 0.29], "parts": [
+      { "shape": "flag", "height": 0.25, "radius": 0.006 }
+    ] },
+    { "note": "rocks on the hill slopes", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.42, 0, 0.1], "radius": 0.06, "height": 0.08, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.33, 0, -0.32], "radius": 0.07, "height": 0.07, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.42, 0, 0.5], "radius": 0.05, "height": 0.07, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.42, 0, -0.1], "radius": 0.05, "height": 0.06, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.0, 0, -0.95], "radius": 0.07, "height": 0.04, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "pines outside the wall", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.42, 0, -0.2], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [-0.47, 0, -0.5], "kind": "pine", "height": 0.11, "radius": 0.025, "seed": 2 },
+      { "shape": "tree", "pos": [-0.38, 0, -0.75], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [0.42, 0, -0.55], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 4 },
+      { "shape": "tree", "pos": [0.3, 0, -0.85], "kind": "pine", "height": 0.09, "radius": 0.025, "seed": 5 },
+      { "shape": "tree", "pos": [0.46, 0, 0.25], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 6 }
+    ] }
+  ]
+}

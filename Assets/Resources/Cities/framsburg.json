@@ -1,0 +1,59 @@
+{
+  "name": "Framsburg",
+  "description": "A single towering ruin on a grassy hill: a tall stepped stone hall with red-tiled cornices, gutted to its splintered roof timbers, fronted by a pillared portico with a painted pediment, its right side spilling into a great slope of fallen blocks and toppled column drums, with a torn blue banner, a dropped shield and pines around it.",
+  "style": "Northman",
+  "colors":   ["#BEB49A", "#9A4A36", "#5E4630", "#A69C80", "#D4C8A8", "#2A261E", "#3A5288", "", "#3E5A34"],
+  "surfaces": ["Ashlar", "Tiles", "Planks", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "stepped ruined hall", "at": [0.0, 0.1], "yaw": -45, "parts": [
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.14, 0.22, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.12, 0.3, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [0.16, 0, 0.01], "size": [0.1, 0.38, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [-0.08, 0.22, 0], "size": [0.14, 0.015, 0.165], "cell": "roof" },
+      { "shape": "box", "pos": [0.05, 0.3, 0], "size": [0.12, 0.015, 0.165], "cell": "roof" },
+      { "shape": "box", "pos": [0.16, 0.38, 0.01], "size": [0.1, 0.015, 0.145], "cell": "roof" },
+      { "shape": "box", "pos": [0.04, 0.03, -0.081], "size": [0.2, 0.22, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.0, 0.03, -0.085], "size": [0.012, 0.2, 0.012], "cell": "wood", "yaw": 20 },
+      { "shape": "box", "pos": [0.08, 0.05, -0.085], "size": [0.012, 0.22, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [-0.21, 0, 0], "size": [0.1, 0.05, 0.18], "cell": "stone" },
+      { "shape": "box", "pos": [-0.225, 0.003, 0], "size": [0.004, 0.035, 0.04], "cell": "dark", "yaw": 90 },
+      { "shape": "cylinder", "pos": [-0.23, 0.05, -0.06], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.23, 0.05, 0], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.23, 0.05, 0.06], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "trim" },
+      { "shape": "box", "pos": [-0.2, 0.18, 0], "size": [0.1, 0.025, 0.18], "cell": "accent" },
+      { "shape": "gable", "pos": [-0.2, 0.205, 0], "size": [0.1, 0.06, 0.18], "cell": "roof", "top": "trim", "yaw": 0 }
+    ] },
+    { "note": "rubble slope, right", "at": [0.2, 0.0], "parts": [
+      { "shape": "rock", "radius": 0.14, "height": 0.13, "cell": "stone" },
+      { "shape": "rock", "pos": [0.08, 0, 0.12], "radius": 0.08, "height": 0.1, "cell": "stone", "seed": 2 },
+      { "shape": "box", "pos": [-0.04, 0.04, -0.12], "size": [0.05, 0.08, 0.004], "cell": "accent", "yaw": 20 }
+    ] },
+    { "note": "rubble in front", "at": [-0.05, -0.22], "parts": [
+      { "shape": "rock", "radius": 0.1, "height": 0.035, "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0, -0.06], "size": [0.05, 0.035, 0.05], "cell": "wall", "yaw": 15 },
+      { "shape": "box", "pos": [-0.13, 0, 0.06], "size": [0.04, 0.03, 0.04], "cell": "wall", "yaw": -10 },
+      { "shape": "box", "pos": [-0.07, 0, -0.33], "size": [0.05, 0.035, 0.05], "cell": "wall", "yaw": 30 }
+    ] },
+    { "note": "toppled column drums", "at": [0.07, -0.1], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.03, 0.03, 0.16], "cell": "trim", "yaw": 20 },
+      { "shape": "box", "pos": [0.1, 0, 0.06], "size": [0.12, 0.03, 0.03], "cell": "trim", "yaw": -15 },
+      { "shape": "box", "pos": [0.19, 0, -0.18], "size": [0.03, 0.03, 0.15], "cell": "trim", "yaw": 30 }
+    ] },
+    { "note": "dropped shield", "at": [-0.08, -0.33], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.006, "sides": 12, "cell": "accent", "top": "trim" }
+    ] },
+    { "note": "pines, left", "at": [-0.38, 0.17], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.17, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.25], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.4], "kind": "pine", "height": 0.08, "radius": 0.025, "seed": 2 }
+    ] },
+    { "note": "pines, back right", "at": [0.34, 0.3], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.17, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.07, 0, -0.08], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 4 }
+    ] },
+    { "note": "pines, right", "at": [0.44, 0.03], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.45], "kind": "pine", "height": 0.12, "radius": 0.025, "seed": 6 }
+    ] }
+  ]
+}

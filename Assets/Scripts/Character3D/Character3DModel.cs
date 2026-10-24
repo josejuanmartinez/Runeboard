@@ -11,14 +11,9 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 // giving it a Character3DAnimator for its clips, and the per-renderer tint, sorting
 // and depth-slab values the shader needs.
 [DefaultExecutionOrder(200)] // after Character3DView has placed every model this frame
-public class Character3DModel : MonoBehaviour
+public class Character3DModel : DepthSlabbed
 {
     public const string AddressRoot = "Assets/Art/3D/fbx/";
-
-    // Depth slabs (see Character3D.shader) live in this 0..1 band of the depth range: far from
-    // the sprites at the real board depth, which therefore always pass the depth test over a model.
-    private const float DepthBandStart = 0.05f;
-    private const float DepthBandWidth = 0.04f;
 
     private class PrefabEntry
     {
@@ -28,8 +23,7 @@ public class Character3DModel : MonoBehaviour
 
     private static readonly Dictionary<string, PrefabEntry> prefabsByFolder = new();
     private static readonly Dictionary<Material, Material> convertedMaterials = new();
-    private static readonly List<Character3DModel> live = new();
-    private static int slotsSortedFrame = -1;
+    private static int lightingPublishedFrame = -1;
 
     private static readonly int ColorId = Shader.PropertyToID("_Color");
     private static readonly int OriginId = Shader.PropertyToID("_C3D_Origin");
@@ -39,10 +33,15 @@ public class Character3DModel : MonoBehaviour
     private static readonly int DepthBaseId = Shader.PropertyToID("_DepthBase");
     private static readonly int DepthSlabWidthId = Shader.PropertyToID("_DepthSlabWidth");
     private static readonly int DepthSlabScaleId = Shader.PropertyToID("_DepthSlabScale");
+    private static readonly int FocusId = Shader.PropertyToID("_C3D_Focus");
 
     public Color Tint = Color.white;
     // Alignment outline colour (rgb, a = strength), from the sprite controller's outline presentation.
     public Color RimColor = Color.clear;
+    // Selection glow on the miniature base (0 = idle .. 1 = selected), from the sprite controller.
+    public float Focus;
+    // Fades the figure (not its base) — the strategic-zoom tokens take over (UnitToken).
+    public float FigureAlpha = 1f;
     public int SortingLayerId;
     public int SortingOrder;
 
@@ -54,7 +53,9 @@ public class Character3DModel : MonoBehaviour
     private Renderer[] renderers;
     private MaterialPropertyBlock block;
     public Character3DAnimator Animation { get; private set; }
-    private int slot;
+
+    private MeshRenderer miniatureBase;
+    private Color32 baseColor;
 
 
     private static readonly bool ShadowDebug =
@@ -273,44 +274,91 @@ public class Character3DModel : MonoBehaviour
         return converted;
     }
 
-    private void OnEnable() => live.Add(this);
+    // World radius of the miniature's base; 0 while it is hidden.
+    public float BaseWorldRadius =>
+        miniatureBase != null && miniatureBase.gameObject.activeSelf ? miniatureBase.transform.lossyScale.x : 0f;
 
-    private void OnDisable() => live.Remove(this);
+    // The miniature's base (Character3DBase), side band in the owner's nation colour; null hides it.
+    public void SetBase(Color? nation, float radius)
+    {
+        if (nation == null)
+        {
+            if (miniatureBase != null) miniatureBase.gameObject.SetActive(false);
+            return;
+        }
+        if (miniatureBase == null)
+        {
+            var go = new GameObject("MiniatureBase", typeof(MeshFilter), typeof(MeshRenderer));
+            go.transform.SetParent(transform, false);
+            go.GetComponent<MeshFilter>().sharedMesh = Character3DBase.Mesh;
+            miniatureBase = go.GetComponent<MeshRenderer>();
+            miniatureBase.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            miniatureBase.receiveShadows = false;
+            baseColor = new Color32(0, 0, 0, 1); // never a real key, so the material is set below
+        }
+        if (!miniatureBase.gameObject.activeSelf) miniatureBase.gameObject.SetActive(true);
+        Color32 key = nation.Value;
+        if (!key.Equals(baseColor))
+        {
+            baseColor = key;
+            miniatureBase.sharedMaterial = Character3DBase.MaterialFor(nation.Value, Character3DSettings.Instance.shader);
+        }
+        miniatureBase.transform.localScale = Vector3.one * (radius * ModelHeight);
+    }
 
     private void LateUpdate()
     {
-        if (slotsSortedFrame != Time.frameCount)
+        if (lightingPublishedFrame != Time.frameCount)
         {
-            slotsSortedFrame = Time.frameCount;
-            // Highest on the board = farthest = slot 0.
-            live.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));
-            for (int i = 0; i < live.Count; i++) live[i].slot = i;
-
+            lightingPublishedFrame = Time.frameCount;
             Character3DSettings frameSettings = Character3DSettings.Instance;
             if (frameSettings != null) Character3DLighting.Publish(frameSettings);
         }
 
-        float slabWidth = DepthBandWidth / Mathf.Max(live.Count, 1);
+        float slabBase = SlabBase;
+        float slabWidth = SlabWidth;
         float worldHeight = Mathf.Max(ModelHeight * transform.lossyScale.y, 1e-4f);
         float rimScale = Character3DSettings.Instance != null ? Character3DSettings.Instance.rimStrength : 1f;
         Vector3 feet = CurrentFeet();
         Color rim = RimColor;
         rim.a *= rimScale;
+        Color figureTint = Tint;
+        figureTint.a *= FigureAlpha;
 
         foreach (Renderer r in renderers)
         {
             if (r.sortingLayerID != SortingLayerId) r.sortingLayerID = SortingLayerId;
             if (r.sortingOrder != SortingOrder) r.sortingOrder = SortingOrder;
             r.GetPropertyBlock(block);
-            block.SetColor(ColorId, Tint);
+            block.SetColor(ColorId, figureTint);
             block.SetVector(OriginId, feet);
             block.SetVector(UpId, transform.up);
             block.SetFloat(HeightId, worldHeight);
             block.SetColor(RimColorId, rim);
-            block.SetFloat(DepthBaseId, DepthBandStart + slot * slabWidth);
+            block.SetFloat(DepthBaseId, slabBase);
             // A margin under the slab width keeps neighbouring slabs from touching.
             block.SetFloat(DepthSlabWidthId, slabWidth * 0.9f);
             block.SetFloat(DepthSlabScaleId, 0.5f / worldHeight);
+            r.SetPropertyBlock(block);
+        }
+
+        if (miniatureBase != null && miniatureBase.gameObject.activeSelf)
+        {
+            Renderer r = miniatureBase;
+            if (r.sortingLayerID != SortingLayerId) r.sortingLayerID = SortingLayerId;
+            if (r.sortingOrder != SortingOrder) r.sortingOrder = SortingOrder;
+            r.GetPropertyBlock(block);
+            block.SetColor(ColorId, Tint);
+            block.SetVector(OriginId, transform.position);
+            block.SetVector(UpId, transform.up);
+            block.SetFloat(HeightId, worldHeight);
+            block.SetColor(RimColorId, Color.clear);
+            // One flat depth in the margin just behind this model's slab: the figure always stands
+            // in front of its base, and the base's own triangle order (far → near, top last) sorts it.
+            block.SetFloat(DepthBaseId, Mathf.Max(slabBase - slabWidth * 0.05f, 0f));
+            block.SetFloat(DepthSlabWidthId, 0f);
+            block.SetFloat(DepthSlabScaleId, 0f);
+            block.SetFloat(FocusId, Focus);
             r.SetPropertyBlock(block);
         }
     }

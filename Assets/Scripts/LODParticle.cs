@@ -32,7 +32,8 @@ public class LODParticle : MonoBehaviour
     private void ApplyLOD()
     {
         if (particleSystemRef == null || targetCamera == null) return;
-        float currentZoom = targetCamera.orthographic ? targetCamera.orthographicSize : targetCamera.fieldOfView;
+        // orthographicSize is the board zoom even while the camera is tilted into perspective (BoardNavigator).
+        float currentZoom = targetCamera.orthographicSize;
         bool shouldEnable = currentZoom <= zoom;
         if (shouldEnable == lastEnabled) return;
 

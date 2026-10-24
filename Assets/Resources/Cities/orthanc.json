@@ -1,0 +1,63 @@
+{
+  "name": "Orthanc",
+  "description": "A soaring black stone tower rising from a flared, ribbed base amid jagged grey rocks: a tall main shaft with lit lancet windows under a flared pagoda-like roof and needle spire, joined by a lower wing with a pointed roof, a long straight stair climbing to its arched door, dark firs and a black pool on the bleak plain.",
+  "style": "Mannish",
+  "colors":   ["#3A3A3C", "#2A2A2C", "", "#7A786E", "#8A887E", "#141414", "#D08A3A", "", "#2A3024"],
+  "surfaces": ["Ashlar",  "Slate",   "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "rocks around the base", "at": [0.0, 0.08], "parts": [
+      { "shape": "rock", "pos": [-0.25, 0, 0.1], "radius": 0.1, "height": 0.18, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.15, 0, -0.25], "radius": 0.08, "height": 0.14, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.28, 0, 0.2], "radius": 0.09, "height": 0.16, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.12, 0, -0.45], "radius": 0.08, "height": 0.12, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.35, 0, 0.55], "radius": 0.07, "height": 0.1, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.35, 0, -0.2], "radius": 0.06, "height": 0.09, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "main tower", "at": [0.0, 0.16], "parts": [
+      { "shape": "cylinder", "radius": 0.18, "height": 0.36, "sides": 10, "taper": 0.5, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.36, 0], "radius": 0.09, "height": 0.36, "sides": 8, "taper": 0.9, "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0.42, -0.085], "size": [0.015, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.03, 0.3, -0.105], "size": [0.015, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.0, 0.62, -0.08], "size": [0.015, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.05, 0.62, -0.065], "size": [0.015, 0.03, 0.004], "cell": "accent" },
+      { "shape": "cone", "pos": [0, 0.72, 0], "radius": 0.11, "height": 0.08, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.76, 0], "radius": 0.06, "height": 0.14, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.88, 0], "radius": 0.012, "height": 0.06, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "side wing", "at": [0.14, 0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.12, "height": 0.3, "sides": 8, "taper": 0.55, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.3, 0], "size": [0.1, 0.16, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.38, -0.046], "size": [0.012, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.02, 0.38, -0.046], "size": [0.012, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.06, 0.3, -0.046], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0.03, 0.46, 0], "radius": 0.07, "height": 0.16, "cell": "roof" },
+      { "shape": "flag", "pos": [0.03, 0.62, 0], "height": 0.06 }
+    ] },
+    { "note": "long stair", "at": [0.03, -0.06], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0, -0.12], "size": [0.05, 0.08, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.06], "size": [0.05, 0.16, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.0], "size": [0.05, 0.24, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.06], "size": [0.05, 0.31, 0.06], "cell": "stone" }
+    ] },
+    { "note": "path", "at": [-0.12, -0.25], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.05, 0.003, 0.55], "cell": "trim" }
+    ] },
+    { "note": "black pool", "at": [-0.33, 0.29], "parts": [
+      { "shape": "box", "size": [0.2, 0.004, 0.18], "cell": "dark", "yaw": -15 }
+    ] },
+    { "note": "dark firs", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.0], "kind": "pine", "height": 0.15, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.37, 0, -0.15], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [-0.43, 0, -0.45], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.3, 0, -0.55], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [-0.22, 0, -0.25], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "seed": 4 },
+      { "shape": "tree", "pos": [-0.14, 0, -0.6], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [-0.1, 0, -0.95], "kind": "broadleaf", "height": 0.08, "radius": 0.045, "seed": 6 },
+      { "shape": "tree", "pos": [0.04, 0, -1.05], "kind": "pine", "height": 0.09, "radius": 0.025, "seed": 7 },
+      { "shape": "tree", "pos": [0.3, 0, -0.5], "kind": "broadleaf", "height": 0.08, "radius": 0.045, "seed": 8 },
+      { "shape": "tree", "pos": [0.38, 0, -0.1], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "seed": 9 },
+      { "shape": "tree", "pos": [0.4, 0, 0.35], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 10 },
+      { "shape": "tree", "pos": [0.42, 0, 0.6], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 11 }
+    ] }
+  ]
+}

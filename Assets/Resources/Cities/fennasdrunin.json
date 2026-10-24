@@ -1,0 +1,65 @@
+{
+  "name": "Fennas Drunin",
+  "description": "Crumbling grey-stone ruins on parched, cracked yellow ground: a tall round watchtower with a red conical roof at the back, a squat red-roofed tower with a broken arched curtain wall on the left, gutted arched halls on the right, a low ruined enclosure with a small turret in front, and leafless dead trees around the edge.",
+  "style": "Mannish",
+  "colors":   ["#8C887A", "#8E4A3A", "#5A4636", "#7A7668", "#9A5A44", "#2E2C28", "#8E4A3A", "", "#6E6A3C"],
+  "surfaces": ["Fieldstone", "Tiles", "", "Fieldstone", "", "", "", "", ""],
+  "buildings": [
+    { "note": "tall watchtower, back", "at": [0.13, 0.28], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.36, "sides": 4, "twist": 0.125, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [0, 0.22, -0.051], "size": [0.016, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.12, -0.051], "size": [0.016, 0.04, 0.004], "cell": "dark" },
+      { "shape": "battlements", "pos": [0, 0.36, 0], "radius": 0.055, "count": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.36, 0], "radius": 0.045, "height": 0.16, "sides": 8, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.52, 0], "height": 0.06, "radius": 0.004 },
+      { "shape": "rock", "pos": [0.06, 0, -0.05], "radius": 0.035, "height": 0.03, "cell": "stone" }
+    ] },
+    { "note": "broken arched wall behind, centre", "at": [-0.08, 0.3], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.06, 0.2, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.14, 0.12, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.021], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.12, 0, 0], "size": [0.04, 0.08, 0.04], "cell": "stone" }
+    ] },
+    { "note": "left red-roofed tower and ruined arch", "at": [-0.32, -0.13], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.12, 0.08, 0.1], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.08, 0], "radius": 0.045, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.17, -0.046], "size": [0.016, 0.04, 0.004], "cell": "dark" },
+      { "shape": "battlements", "pos": [0, 0.28, 0], "radius": 0.05, "count": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.28, 0], "radius": 0.04, "height": 0.13, "sides": 8, "cell": "roof" },
+      { "shape": "box", "pos": [0.12, 0, 0.02], "size": [0.12, 0.1, 0.04], "cell": "wall", "yaw": 30 },
+      { "shape": "box", "pos": [0.11, 0, -0.005], "size": [0.035, 0.065, 0.004], "cell": "dark", "yaw": 30 },
+      { "shape": "box", "pos": [0.2, 0, 0.06], "size": [0.05, 0.14, 0.04], "cell": "wall", "yaw": 30 }
+    ] },
+    { "note": "gutted arched hall, right", "at": [0.29, -0.01], "yaw": -30, "parts": [
+      { "shape": "wall", "pos": [-0.12, 0, -0.06], "to": [0.1, -0.06], "height": 0.09, "thickness": 0.03 },
+      { "shape": "box", "pos": [-0.04, 0, -0.077], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "wall", "pos": [-0.12, 0, -0.06], "to": [-0.12, 0.1], "height": 0.12, "thickness": 0.03 },
+      { "shape": "wall", "pos": [-0.12, 0, 0.1], "to": [0.06, 0.1], "height": 0.1, "thickness": 0.03 },
+      { "shape": "box", "pos": [0.02, 0, 0.1], "size": [0.06, 0.22, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0.1, 0, -0.05], "size": [0.04, 0.12, 0.04], "cell": "stone" }
+    ] },
+    { "note": "low ruined enclosure with turret, front", "at": [0.0, -0.27], "yaw": 30, "parts": [
+      { "shape": "wall", "pos": [-0.14, 0, -0.06], "to": [0.12, -0.06], "height": 0.06, "thickness": 0.03 },
+      { "shape": "wall", "pos": [-0.14, 0, -0.06], "to": [-0.14, 0.08], "height": 0.05, "thickness": 0.03 },
+      { "shape": "wall", "pos": [0.12, 0, -0.06], "to": [0.12, 0.06], "height": 0.07, "thickness": 0.03 },
+      { "shape": "cylinder", "pos": [0.0, 0, 0.06], "radius": 0.018, "height": 0.1, "sides": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.1, 0.06], "radius": 0.022, "height": 0.04, "sides": 8, "cell": "roof" }
+    ] },
+    { "note": "fallen stones", "at": [0.05, 0.08], "parts": [
+      { "shape": "rock", "pos": [-0.04, 0, 0], "radius": 0.025, "height": 0.02, "cell": "stone" },
+      { "shape": "rock", "pos": [0.05, 0, 0.04], "radius": 0.02, "height": 0.018, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "dead tree, far left", "at": [-0.4, 0.12], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.17, "radius": 0.04, "cell": "wood" }
+    ] },
+    { "note": "dead tree, back left", "at": [-0.21, 0.4], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.12, "radius": 0.03, "cell": "wood", "seed": 1 }
+    ] },
+    { "note": "dead tree, back right", "at": [0.26, 0.4], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.11, "radius": 0.03, "cell": "wood", "seed": 2 }
+    ] },
+    { "note": "dead tree, right", "at": [0.45, 0.22], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.035, "cell": "wood", "seed": 3 }
+    ] }
+  ]
+}

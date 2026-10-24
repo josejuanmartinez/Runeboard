@@ -63,12 +63,67 @@ public class BoardNavigator : MonoBehaviour
 
         Instance = this;
         boardCamera = GetComponent<Camera>();
+        pivot = transform.position;
 
-        if (boardCamera != null && boardCamera.orthographic)
+        if (boardCamera != null)
         {
             // Initialize the target zoom so it matches the current camera size
             targetZoom = Mathf.Clamp(boardCamera.orthographicSize, minZoom, maxZoom);
         }
+    }
+
+    // ── Camera rig ──────────────────────────────────────────────────────────────────────────
+    // Panning, focusing and close-ups move a pivot: where the straight-down camera would sit, its
+    // x/y the board point at the centre of the screen. Zoom is the camera's orthographicSize. Every
+    // LateUpdate the rig places the real camera from those two: straight down and orthographic,
+    // or — once a campaign runs, with BoardLookSettings.cameraTilt — a perspective camera tilted up
+    // the board like a photo of a tabletop, at the distance that shows the same board height
+    // (orthographicSize stays the zoom value for everything that reads it, e.g. label scaling).
+    private Vector3 pivot;
+
+    /// <summary>Degrees the board camera looks up the board (0 = straight down).</summary>
+    public static float CurrentTilt { get; private set; }
+
+    /// <summary>The board point at the centre of the screen (z = the straight-down camera's z).</summary>
+    public Vector3 Pivot => pivot;
+
+    /// <summary>Moves the view across the board (keyboard panning). Never move the camera's
+    /// transform directly: the rig places it from the pivot every frame.</summary>
+    public void Pan(Vector3 delta) => pivot += new Vector3(delta.x, delta.y, 0f);
+
+    /// <summary>Where a screen point falls on the board plane (z = 0), for either camera mode.</summary>
+    public static Vector3 ScreenToBoard(Camera cam, Vector3 screenPosition)
+    {
+        Ray ray = cam.ScreenPointToRay(screenPosition);
+        if (Mathf.Abs(ray.direction.z) < 1e-5f) return new Vector3(ray.origin.x, ray.origin.y, 0f);
+        return ray.GetPoint(-ray.origin.z / ray.direction.z);
+    }
+
+    private void ApplyRig()
+    {
+        if (boardCamera == null) return;
+        BoardLookSettings look = BoardLookSettings.Instance;
+        bool tilted = look.cameraTilt > 0.01f && Game.Instance != null && Game.Instance.started;
+        CurrentTilt = tilted ? look.cameraTilt : 0f;
+        if (!tilted)
+        {
+            if (!boardCamera.orthographic) boardCamera.orthographic = true;
+            transform.SetPositionAndRotation(pivot, Quaternion.identity);
+            return;
+        }
+
+        float tilt = look.cameraTilt * Mathf.Deg2Rad;
+        float fov = Mathf.Clamp(look.cameraFov, 5f, 90f);
+        float distance = boardCamera.orthographicSize / Mathf.Tan(fov * 0.5f * Mathf.Deg2Rad);
+        var forward = new Vector3(0f, Mathf.Sin(tilt), Mathf.Cos(tilt));
+        var up = new Vector3(0f, Mathf.Cos(tilt), -Mathf.Sin(tilt));
+        boardCamera.orthographic = false;
+        boardCamera.fieldOfView = fov;
+        // Near and far hug the board, so its sprites sit at depths well in front of the 3D
+        // models' depth slabs (DepthSlabbed), exactly as with the orthographic camera.
+        boardCamera.nearClipPlane = Mathf.Max(0.05f, distance * 0.4f);
+        boardCamera.farClipPlane = distance * 4f + 10f;
+        transform.SetPositionAndRotation(new Vector3(pivot.x, pivot.y, 0f) - forward * distance, Quaternion.LookRotation(forward, up));
     }
 
     void Update()
@@ -128,6 +183,7 @@ public class BoardNavigator : MonoBehaviour
         // This runs on BoardNavigator.Instance, which is the live camera that all panning
         // moves, so it clamps reliably regardless of how the scene cameras are wired.
         ClampToDiscoveredBounds();
+        ApplyRig();
     }
 
     private void ClampToDiscoveredBounds()
@@ -140,17 +196,17 @@ public class BoardNavigator : MonoBehaviour
 
         if (!hasDiscoveredBounds) return;
 
-        float half = boardCamera != null && boardCamera.orthographic ? boardCamera.orthographicSize : discoveredMinMargin;
+        float half = boardCamera != null ? boardCamera.orthographicSize : discoveredMinMargin;
         float marginY = Mathf.Max(discoveredMinMargin, half * discoveredEdgeSlack);
         float marginX = Mathf.Max(discoveredMinMargin, half * discoveredEdgeSlack * (boardCamera != null ? boardCamera.aspect : 1f));
 
-        Vector3 pos = transform.position;
+        Vector3 pos = pivot;
         float x = Mathf.Clamp(pos.x, discoveredMin.x - marginX, discoveredMax.x + marginX);
         float y = Mathf.Clamp(pos.y, discoveredMin.y - marginY, discoveredMax.y + marginY);
 
         if (!Mathf.Approximately(x, pos.x) || !Mathf.Approximately(y, pos.y))
         {
-            transform.position = new Vector3(x, y, pos.z);
+            pivot = new Vector3(x, y, pos.z);
         }
     }
 
@@ -190,14 +246,14 @@ public class BoardNavigator : MonoBehaviour
         float moveY = Input.GetAxis("Mouse Y");
 
         Vector3 move = new Vector3(moveX, moveY, 0);
-        transform.position += move * moveSpeed * Time.deltaTime;
+        pivot += move * moveSpeed * Time.deltaTime;
     }
 
     void HandleZoom()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (boardCamera != null && boardCamera.orthographic)
+        if (boardCamera != null)
         {
             if (Mathf.Abs(scroll) > 0.001f)
             {
@@ -207,7 +263,7 @@ public class BoardNavigator : MonoBehaviour
                 zoomAtPointer = true;
             }
 
-            Vector3 before = boardCamera.ScreenToWorldPoint(zoomAnchor);
+            Vector3 before = ScreenToBoard(boardCamera, zoomAnchor);
             boardCamera.orthographicSize = Mathf.Lerp(
                 boardCamera.orthographicSize,
                 targetZoom,
@@ -218,8 +274,12 @@ public class BoardNavigator : MonoBehaviour
             boardCamera.orthographicSize = Mathf.Clamp(boardCamera.orthographicSize, minZoom, maxZoom);
             if (zoomAtPointer && lookAtCoroutine == null)
             {
-                Vector3 after = boardCamera.ScreenToWorldPoint(zoomAnchor);
-                transform.position += new Vector3(before.x - after.x, before.y - after.y, 0);
+                // Re-place the camera for the new zoom, then shift so the board point under the
+                // cursor stays under it.
+                ApplyRig();
+                Vector3 after = ScreenToBoard(boardCamera, zoomAnchor);
+                pivot += new Vector3(before.x - after.x, before.y - after.y, 0);
+                ApplyRig();
                 if (Mathf.Abs(boardCamera.orthographicSize - targetZoom) < 0.001f) zoomAtPointer = false;
             }
         }
@@ -230,6 +290,14 @@ public class BoardNavigator : MonoBehaviour
     {
         targetZoom = Mathf.Clamp(size, minZoom, maxZoom);
         if (boardCamera != null) boardCamera.orthographicSize = targetZoom;
+    }
+
+    private void OnDisable()
+    {
+        // A close-up cut short must not leave board input locked.
+        closeUpCoroutine = null;
+        closeUpMoving = false;
+        TabletopLens.CloseUp = 0f;
     }
 
     private void OnApplicationFocus(bool focused)
@@ -301,7 +369,7 @@ public class BoardNavigator : MonoBehaviour
 
     private IEnumerator SmoothLookAt(Vector3 targetPosition, float duration = 1.0f, float delay = 0.0f)
     {
-        Vector3 startPosition = transform.position;
+        Vector3 startPosition = pivot;
         targetPosition.z = startPosition.z;
         float journeyLength = Vector3.Distance(startPosition, targetPosition);
 
@@ -337,12 +405,12 @@ public class BoardNavigator : MonoBehaviour
 
             Vector3 newPosition = Vector3.Lerp(startPosition, targetPosition, t);
             if (!float.IsNaN(newPosition.x) && !float.IsNaN(newPosition.y) && !float.IsNaN(newPosition.z))
-                transform.position = newPosition;
+                pivot = newPosition;
 
             yield return null;
         }
 
-        transform.position = targetPosition;
+        pivot = targetPosition;
         lookAtCoroutine = null;
     }
 
@@ -428,6 +496,67 @@ public class BoardNavigator : MonoBehaviour
         EnqueueFocus(selectedHex, enemyFocusDuration, 0f, false);
     }
 
+    // ── Close-ups (CloseUps) ─────────────────────────────────────────────────────────────────
+    // A short cinematic move for a battle, duel, big spell or death: the camera eases in on the
+    // spot, holds while the units act it out, then returns exactly where it was. Board input and
+    // the focus queue wait meanwhile, and the tilt-shift lens tightens (TabletopLens.CloseUp).
+    private Coroutine closeUpCoroutine;
+    private bool closeUpMoving; // past the wait for an earlier camera move: input and focus hold
+
+    public bool IsPlayingCloseUp => closeUpMoving;
+
+    public void PlayCloseUp(Vector3 target, float zoom, float hold)
+    {
+        if (closeUpCoroutine != null || boardCamera == null) return;
+        closeUpCoroutine = StartCoroutine(CloseUp(target, zoom, hold));
+    }
+
+    private IEnumerator CloseUp(Vector3 target, float zoom, float hold)
+    {
+        // Let a camera move already under way finish first, so the two never fight.
+        float waited = 0f;
+        while (lookAtCoroutine != null && waited < 1.5f)
+        {
+            waited += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        closeUpMoving = true;
+        Vector3 homePosition = pivot;
+        float homeZoom = boardCamera.orthographicSize;
+        target.z = homePosition.z;
+        float closeZoom = Mathf.Clamp(Mathf.Min(zoom, homeZoom), minZoom, maxZoom);
+
+        yield return Ease(homePosition, homeZoom, target, closeZoom, 0.55f, 0f, 1f);
+        float held = 0f;
+        while (held < hold)
+        {
+            held += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        yield return Ease(target, closeZoom, homePosition, homeZoom, 0.7f, 1f, 0f);
+
+        targetZoom = homeZoom;
+        zoomAtPointer = false;
+        TabletopLens.CloseUp = 0f;
+        closeUpMoving = false;
+        closeUpCoroutine = null;
+    }
+
+    private IEnumerator Ease(Vector3 fromPosition, float fromZoom, Vector3 toPosition, float toZoom, float duration, float lensFrom, float lensTo)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
+            pivot = Vector3.Lerp(fromPosition, toPosition, t);
+            boardCamera.orthographicSize = Mathf.Lerp(fromZoom, toZoom, t);
+            TabletopLens.CloseUp = Mathf.Lerp(lensFrom, lensTo, t);
+            yield return null;
+        }
+    }
+
     public bool HasPendingFocus()
     {
         return focusQueue.Count > 0 || focusQueueRoutine != null || lookAtCoroutine != null;
@@ -447,7 +576,7 @@ public class BoardNavigator : MonoBehaviour
     public static bool IsNavigationInputLocked()
     {
         bool popupActive = PopupManager.IsShowing || ConfirmationDialog.IsShowing || SelectionDialog.IsShowing;
-        bool focusQueued = Instance != null && Instance.HasPendingFocus();
+        bool focusQueued = Instance != null && (Instance.HasPendingFocus() || Instance.IsPlayingCloseUp);
         bool messageUiShowing = MessageDisplay.IsDisplaying();
         bool messageNoUiShowing = MessageDisplayNoUI.IsDisplaying;
         // TurnBanner.IsShowing covers both the "TURN X" banner and the Gathering Resources
@@ -490,7 +619,7 @@ public class BoardNavigator : MonoBehaviour
 
     public void ClampToLastValidPosition(Vector3 lastValidPosition, Vector2Int lastHitHexCoords)
     {
-        var desiredPosition = transform.position;
+        var desiredPosition = pivot;
         var attemptedDelta = desiredPosition - lastValidPosition;
         const float epsilon = 0.0001f;
         bool clamped = false;
@@ -519,7 +648,7 @@ public class BoardNavigator : MonoBehaviour
 
         if (!clamped) return;
 
-        transform.position = desiredPosition;
+        pivot = desiredPosition;
 
         /*if (lastHitHexCoords.x >= 0 && lastHitHexCoords.y >= 0)
         {
@@ -581,7 +710,8 @@ public class BoardNavigator : MonoBehaviour
 
     private static bool ShouldPauseFocus()
     {
-        return PopupManager.IsShowing || ConfirmationDialog.IsShowing || SelectionDialog.IsShowing || MessageDisplayNoUI.IsDisplaying || IsStartupPopupLookAtBlocked();
+        return PopupManager.IsShowing || ConfirmationDialog.IsShowing || SelectionDialog.IsShowing || MessageDisplayNoUI.IsDisplaying || IsStartupPopupLookAtBlocked()
+            || (Instance != null && Instance.IsPlayingCloseUp);
     }
 
     private static bool IsStartupPopupLookAtBlocked()

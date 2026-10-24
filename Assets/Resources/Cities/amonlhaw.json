@@ -1,0 +1,51 @@
+{
+  "name": "Amon Lhaw",
+  "description": "The Hill of Hearing: a tall, ivy-wrapped round tower of pale stone with an arched wooden door and a broken crenellated top, beside a crumbling stepped wall, with scattered fallen blocks, pines and broadleaf trees behind and a rocky river running down the left edge.",
+  "style": "Mannish",
+  "colors":   ["#A89E84", "#6E6A5C", "#5A3E28", "#948A72", "#8A5A30", "#221E18", "#4E6E80", "", "#4E6430"],
+  "surfaces": ["Ashlar", "", "Planks", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "round watchtower", "at": [0.05, -0.02], "parts": [
+      { "shape": "cylinder", "radius": 0.14, "height": 0.05, "sides": 14, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.05, 0], "radius": 0.13, "height": 0.36, "sides": 14, "taper": 0.95, "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.0, -0.13], "size": [0.05, 0.08, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0.24, -0.12], "size": [0.025, 0.05, 0.02], "cell": "dark" },
+      { "shape": "box", "pos": [-0.06, 0.32, -0.11], "size": [0.025, 0.05, 0.02], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.41, 0], "radius": 0.135, "height": 0.03, "sides": 14, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.44, 0], "radius": 0.13, "count": 7 },
+      { "shape": "box", "pos": [0.0, 0.44, 0.1], "size": [0.04, 0.05, 0.03], "cell": "wall" }
+    ] },
+    { "note": "crumbling stepped wall", "at": [-0.2, 0.2], "parts": [
+      { "shape": "wall", "pos": [0.1, 0, 0.05], "to": [-0.12, -0.06], "height": 0.07, "thickness": 0.04, "cell": "wall" },
+      { "shape": "box", "pos": [0.07, 0.07, 0.03], "size": [0.05, 0.04, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0.07, -0.02], "size": [0.05, 0.02, 0.04], "cell": "wall" }
+    ] },
+    { "note": "fallen blocks", "at": [0.1, -0.25], "parts": [
+      { "shape": "box", "pos": [0.04, 0, 0.1], "size": [0.04, 0.04, 0.04], "cell": "wall", "yaw": 20 },
+      { "shape": "box", "pos": [0.14, 0, -0.05], "size": [0.04, 0.035, 0.04], "cell": "wall", "yaw": -15 },
+      { "shape": "box", "pos": [-0.27, 0, 0.35], "size": [0.04, 0.035, 0.04], "cell": "wall", "yaw": 30 },
+      { "shape": "box", "pos": [0.2, 0, 0.45], "size": [0.04, 0.04, 0.04], "cell": "wall", "yaw": 10 },
+      { "shape": "box", "pos": [0.05, 0, -0.25], "size": [0.04, 0.035, 0.04], "cell": "wall", "yaw": 40 }
+    ] },
+    { "note": "river along the left edge", "at": [-0.32, -0.05], "yaw": -12, "parts": [
+      { "shape": "box", "size": [0.12, 0.004, 1.0], "cell": "accent" },
+      { "shape": "rock", "pos": [0.02, 0, -0.2], "radius": 0.03, "height": 0.03, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.03, 0, 0.3], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.05, 0, -0.5], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "pines behind", "at": [0, 0.4], "parts": [
+      { "shape": "tree", "pos": [-0.35, 0, -0.05], "kind": "pine", "height": 0.2, "radius": 0.045 },
+      { "shape": "tree", "pos": [-0.15, 0, 0.05], "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.25, 0, 0.05], "kind": "pine", "height": 0.25, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.31, 0, -0.05], "kind": "pine", "height": 0.22, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [0.41, 0, -0.1], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 5 },
+      { "shape": "tree", "pos": [-0.24, 0, -0.15], "kind": "broadleaf", "height": 0.18, "radius": 0.07, "seed": 6 }
+    ] },
+    { "note": "broadleaf trees right and shrubs", "at": [0.33, 0.05], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.07 },
+      { "shape": "tree", "pos": [-0.05, 0, 0.22], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "seed": 2 },
+      { "shape": "tree", "pos": [0.07, 0, -0.2], "kind": "broadleaf", "height": 0.08, "radius": 0.05, "cell": "trim", "seed": 3 },
+      { "shape": "tree", "pos": [-0.33, 0, -0.5], "kind": "pine", "height": 0.11, "radius": 0.035, "cell": "trim", "seed": 4 }
+    ] }
+  ]
+}

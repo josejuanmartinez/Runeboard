@@ -72,8 +72,9 @@ public class OnHoverTile : MonoBehaviour
         // Store current hover coordinates
         currentHoverCoordinates = hexCoordinates;
 
-        // If right mouse is already being held down, update path immediately
-        if (board.selectedCharacter != null && board.selectedCharacter.moved < board.selectedCharacter.GetMaxMovement())
+        // If right mouse is already being held down, update path immediately (red when out of
+        // reach, including for a unit with no movement left — see HexPathRenderer).
+        if (board.selectedCharacter != null)
         {
             UpdatePathRendering(board);
         }
@@ -155,19 +156,19 @@ public class OnHoverTile : MonoBehaviour
             }
             else
             {
-                // Button pressed down
-                if (board.selectedCharacter != null && board.selectedCharacter.moved < board.selectedCharacter.GetMaxMovement())
+                // Button pressed down: show the route — red with X marks when it is out of reach.
+                if (board.selectedCharacter != null)
                 {
                     UpdatePathRendering(board);
-                }
-                else
-                {
-                    pathRenderer.HidePath();
-                    if (board.selectedCharacter != null && board.selectedCharacter.moved >= board.selectedCharacter.GetMaxMovement())
+                    if (board.selectedCharacter.moved >= board.selectedCharacter.GetMaxMovement())
                     {
                         CursorManager.Instance?.SetDisableCursor();
                         movementCursorDisabled = true;
                     }
+                }
+                else
+                {
+                    pathRenderer.HidePath();
                 }
             }
         }

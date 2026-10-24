@@ -1,0 +1,82 @@
+{
+  "name": "Edhellond",
+  "description": "An elven haven of cream stone tracery and tall pointed gothic arches under sweeping sage-green roofs: a long arcaded hall on rocky foundations at the back left, a soaring spired central tower, a great curving hall on a drystone bastion at the right, a round open colonnade court in the middle and a small chapel at the front, with stairs, a statue, cypresses, autumn trees and a stream on the left.",
+  "style": "Elven",
+  "colors":   ["#D4C8A2", "#8A9C7E", "#6A5638", "#9C9682", "#C8B888", "#2C2C22", "#C89A3A", "", "#4E6230"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "arcaded hall on rocks, back left", "at": [-0.2, 0.12], "yaw": -35, "parts": [
+      { "shape": "rock", "pos": [0.0, 0, 0.0], "radius": 0.16, "height": 0.08, "cell": "stone", "seed": 1 },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.4, 0.13, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, -0.081], "size": [0.34, 0.08, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.19, 0], "size": [0.42, 0.14, 0.18], "cell": "roof", "top": "wall" },
+      { "shape": "cylinder", "pos": [-0.2, 0.06, 0], "radius": 0.08, "height": 0.13, "sides": 12, "cell": "wall", "top": "roof" },
+      { "shape": "box", "pos": [0.05, 0.22, -0.09], "size": [0.04, 0.05, 0.03], "cell": "roof" },
+      { "shape": "box", "pos": [-0.07, 0.22, -0.09], "size": [0.04, 0.05, 0.03], "cell": "roof" }
+    ] },
+    { "note": "small round tower, back left", "at": [-0.17, 0.38], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.3, "sides": 10, "taper": 0.85, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.045, "height": 0.1, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.38, 0], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "spired central tower", "at": [0.08, 0.2], "parts": [
+      { "shape": "cylinder", "radius": 0.085, "height": 0.42, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.15, -0.062], "size": [0.05, 0.2, 0.004], "cell": "accent" },
+      { "shape": "pyramid", "pos": [0, 0.42, 0], "radius": 0.075, "height": 0.26, "cell": "roof" },
+      { "shape": "cone", "pos": [-0.06, 0.42, -0.06], "radius": 0.012, "height": 0.1, "sides": 6, "cell": "roof" },
+      { "shape": "cone", "pos": [0.06, 0.42, -0.06], "radius": 0.012, "height": 0.1, "sides": 6, "cell": "roof" },
+      { "shape": "cone", "pos": [0.06, 0.42, 0.06], "radius": 0.012, "height": 0.1, "sides": 6, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.66, 0], "height": 0.08, "radius": 0.004 }
+    ] },
+    { "note": "stair up to the tower", "at": [0.02, 0.05], "yaw": -35, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.05, 0.04, 0.08], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.08], "size": [0.05, 0.08, 0.08], "cell": "stone" }
+    ] },
+    { "note": "great curving hall on a bastion, right", "at": [0.21, -0.03], "yaw": -50, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.42, 0.06, 0.2], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.38, 0.12, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, -0.081], "size": [0.3, 0.08, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.18, 0], "size": [0.42, 0.17, 0.2], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.05, 0.2, -0.1], "size": [0.05, 0.06, 0.04], "cell": "roof" }
+    ] },
+    { "note": "round drystone bastion, right", "at": [0.41, 0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.13, "sides": 12, "cell": "stone", "top": "foliage" }
+    ] },
+    { "note": "round open colonnade court", "at": [-0.05, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.12, "height": 0.08, "sides": 16, "cell": "wall", "top": "foliage" },
+      { "shape": "cylinder", "pos": [0, 0.08, 0], "radius": 0.12, "height": 0.02, "sides": 16, "cell": "trim", "top": "foliage" },
+      { "shape": "tree", "pos": [0.01, 0.1, 0.03], "kind": "broadleaf", "height": 0.07, "radius": 0.035, "seed": 1 }
+    ] },
+    { "note": "front chapel", "at": [-0.01, -0.33], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.13, 0.13, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.05, 0.09, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.13, 0.12, 0.15], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.09], "size": [0.09, 0.02, 0.06], "cell": "stone" }
+    ] },
+    { "note": "stairs and wall, front right", "at": [0.36, -0.22], "yaw": -50, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.1, 0.04, 0.08], "cell": "stone" },
+      { "shape": "box", "pos": [-0.1, 0, 0], "size": [0.1, 0.07, 0.08], "cell": "stone" },
+      { "shape": "wall", "pos": [0.1, 0, 0.1], "to": [-0.35, 0.08], "height": 0.06, "thickness": 0.025, "cell": "stone" }
+    ] },
+    { "note": "statue", "at": [0.18, -0.36], "parts": [
+      { "shape": "box", "size": [0.03, 0.025, 0.03], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.025, 0], "radius": 0.01, "height": 0.05, "sides": 6, "cell": "stone" }
+    ] },
+    { "note": "flagstone path", "at": [-0.2, -0.22], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.3, 0.006, 0.08], "cell": "stone" }
+    ] },
+    { "note": "stream on the left", "at": [-0.38, -0.12], "yaw": 60, "parts": [
+      { "shape": "box", "size": [0.4, 0.004, 0.04], "cell": "dark" }
+    ] },
+    { "note": "trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.35], "kind": "broadleaf", "height": 0.14, "radius": 0.05, "seed": 2 },
+      { "shape": "tree", "pos": [-0.44, 0, 0.05], "kind": "broadleaf", "height": 0.13, "radius": 0.05, "cell": "trim", "seed": 3 },
+      { "shape": "tree", "pos": [-0.38, 0, -0.18], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 4 },
+      { "shape": "tree", "pos": [-0.3, 0, -0.1], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 5 },
+      { "shape": "tree", "pos": [-0.14, 0, -0.25], "kind": "poplar", "height": 0.12, "radius": 0.025, "seed": 6 },
+      { "shape": "tree", "pos": [0.02, 0, -0.95], "kind": "poplar", "height": 0.16, "radius": 0.025, "seed": 7 },
+      { "shape": "tree", "pos": [-0.09, 0, -0.65], "kind": "poplar", "height": 0.14, "radius": 0.025, "seed": 8 },
+      { "shape": "tree", "pos": [0.12, 0, -0.25], "kind": "poplar", "height": 0.12, "radius": 0.025, "seed": 9 }
+    ] }
+  ]
+}

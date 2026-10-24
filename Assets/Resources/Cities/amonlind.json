@@ -1,0 +1,59 @@
+{
+  "name": "Amon Lind",
+  "description": "A white-stone round temple: a colonnade of pillars under a verdigris-green ribbed dome with a gilded oculus ring, raised on a high circular podium, from which broad stairs descend to a round terrace and a semicircular paved forecourt, all ringed by tall dark cypresses.",
+  "style": "Mannish",
+  "colors":   ["#C2BCA8", "#4E7A72", "", "#A8A290", "#B89A50", "#2A2824", "", "", "#46562C"],
+  "surfaces": ["Ashlar", "Plain", "", "Ashlar", "Plain", "", "", "", ""],
+  "buildings": [
+    { "note": "podium and domed colonnade", "at": [-0.08, 0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.3, "height": 0.14, "sides": 18, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.14, 0.02], "radius": 0.19, "height": 0.02, "sides": 16, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.16, 0.02], "radius": 0.14, "height": 0.13, "sides": 16, "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.16, -0.155], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.11, 0.16, -0.12], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.11, 0.16, -0.12], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.17, 0.16, -0.01], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.17, 0.16, -0.01], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.055, 0.16, -0.15], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.055, 0.16, -0.15], "radius": 0.016, "height": 0.13, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.29, 0.02], "radius": 0.19, "height": 0.03, "sides": 16, "cell": "wall", "top": "trim" },
+      { "shape": "dome", "pos": [0, 0.32, 0.02], "radius": 0.17, "height": 0.13, "sides": 16, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0, 0.44, 0.02], "radius": 0.045, "height": 0.025, "sides": 12, "cell": "trim", "top": "dark" }
+    ] },
+    { "note": "upper stair", "at": [0.17, 0.06], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.04, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.04, 0.03], "size": [0.12, 0.04, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, 0.05], "size": [0.12, 0.04, 0.04], "cell": "wall" }
+    ] },
+    { "note": "round terrace", "at": [0.21, 0.02], "parts": [
+      { "shape": "cylinder", "radius": 0.15, "height": 0.05, "sides": 16, "cell": "stone", "top": "wall" }
+    ] },
+    { "note": "lower stair", "at": [0.08, -0.13], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.14, 0.02, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.02, 0.03], "size": [0.14, 0.02, 0.07], "cell": "wall" }
+    ] },
+    { "note": "semicircular forecourt", "at": [-0.1, -0.22], "parts": [
+      { "shape": "cylinder", "radius": 0.24, "height": 0.012, "sides": 16, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.24, 0, 0.0], "to": [-0.1, 0.12], "height": 0.03, "thickness": 0.02, "cell": "stone" }
+    ] },
+    { "note": "cypresses left", "at": [-0.3, 0.05], "parts": [
+      { "shape": "tree", "pos": [-0.11, 0, 0.3], "kind": "poplar", "height": 0.24, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.03, 0, 0.08], "kind": "poplar", "height": 0.26, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.06, 0, -0.05], "kind": "poplar", "height": 0.25, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.16, 0, -0.05], "kind": "poplar", "height": 0.24, "radius": 0.035, "seed": 4 }
+    ] },
+    { "note": "cypresses right", "at": [0.27, 0.22], "parts": [
+      { "shape": "tree", "pos": [-0.11, 0, 0.15], "kind": "poplar", "height": 0.25, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.04, 0, 0.1], "kind": "poplar", "height": 0.27, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.03, 0, 0.0], "kind": "poplar", "height": 0.24, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.08, 0, -0.12], "kind": "poplar", "height": 0.22, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [0.12, 0, -0.3], "kind": "poplar", "height": 0.2, "radius": 0.035, "seed": 5 }
+    ] },
+    { "note": "cypresses front right", "at": [0.25, -0.3], "parts": [
+      { "shape": "tree", "pos": [-0.09, 0, -0.18], "kind": "poplar", "height": 0.2, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.05], "kind": "poplar", "height": 0.22, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.07, 0, 0.08], "kind": "poplar", "height": 0.2, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.14, 0, 0.2], "kind": "poplar", "height": 0.18, "radius": 0.035, "seed": 4 }
+    ] }
+  ]
+}

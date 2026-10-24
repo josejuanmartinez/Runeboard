@@ -1,0 +1,73 @@
+{
+  "name": "Caras Tolfalas",
+  "description": "A tall pale-stone watchtower on a rocky knoll, topped by a red-timbered lookout storey under a flared blue-slate cone with a gold finial, joined by a timbered gate bridge to a second blue-capped turret; a long straight stone stair climbs to the gate past boulders, a carved white runestone and a white-blossomed tree, with a rushing blue river down the left side and firs all round.",
+  "style": "Mannish",
+  "colors":   ["#CFC4A8", "#3E5A8A", "#8A3A2E", "#A49C88", "#B8963C", "#2A2420", "#4A6E9A", "", "#4A5E2C"],
+  "surfaces": ["Ashlar",  "Slate",   "HalfTimber", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "main tower", "at": [-0.04, 0.18], "parts": [
+      { "shape": "rock", "pos": [0, 0, -0.02], "radius": 0.12, "height": 0.08, "cell": "stone" },
+      { "shape": "cylinder", "radius": 0.085, "height": 0.42, "sides": 4, "twist": 0.125, "taper": 0.85, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.3, -0.055], "size": [0.016, 0.03, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.18, -0.058], "size": [0.014, 0.025, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.42, 0], "radius": 0.09, "height": 0.09, "sides": 8, "cell": "wood" },
+      { "shape": "cone", "pos": [0, 0.51, 0], "radius": 0.13, "height": 0.24, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.75, 0], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.07, 0.3, -0.02], "radius": 0.05, "height": 0.06, "sides": 6, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.79, 0], "height": 0.06 }
+    ] },
+    { "note": "gate turret", "at": [0.17, 0.0], "parts": [
+      { "shape": "rock", "pos": [0.02, 0, 0], "radius": 0.08, "height": 0.08, "cell": "stone", "seed": 1 },
+      { "shape": "cylinder", "radius": 0.07, "height": 0.4, "sides": 4, "twist": 0.125, "taper": 0.8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.4, 0], "size": [0.09, 0.06, 0.09], "cell": "wood" },
+      { "shape": "cone", "pos": [0, 0.46, 0], "radius": 0.075, "height": 0.13, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.59, 0], "radius": 0.006, "height": 0.03, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "gate bridge", "at": [0.08, 0.1], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.27, 0], "size": [0.12, 0.08, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.27, -0.036], "size": [0.05, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.35, 0], "size": [0.12, 0.05, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.4, 0], "size": [0.12, 0.08, 0.08], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "long stair", "at": [-0.07, -0.29], "yaw": -18, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.05], "size": [0.07, 0.04, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.15], "size": [0.07, 0.09, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.25], "size": [0.07, 0.14, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.35], "size": [0.07, 0.19, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.45], "size": [0.07, 0.24, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.55], "size": [0.07, 0.28, 0.1], "cell": "stone" }
+    ] },
+    { "note": "river and waterfall", "at": [-0.4, 0.0], "parts": [
+      { "shape": "wall", "pos": [0.04, 0, 0.6], "to": [-0.04, 0.2], "height": 0.004, "thickness": 0.08, "cell": "accent" },
+      { "shape": "wall", "pos": [-0.04, 0, 0.2], "to": [0.0, -0.4], "height": 0.004, "thickness": 0.09, "cell": "accent" },
+      { "shape": "wall", "pos": [0.0, 0, -0.4], "to": [0.15, -0.8], "height": 0.004, "thickness": 0.1, "cell": "accent" },
+      { "shape": "rock", "pos": [0.08, 0, 0.45], "radius": 0.045, "height": 0.06, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.1, 0, 0.1], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "white blossom tree", "at": [-0.26, -0.13], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.17, "radius": 0.065, "cell": "wall" }
+    ] },
+    { "note": "runestone", "at": [0.17, -0.26], "parts": [
+      { "shape": "box", "size": [0.06, 0.13, 0.035], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.13, 0], "radius": 0.035, "height": 0.025, "cell": "stone" },
+      { "shape": "rock", "pos": [0.05, 0, -0.06], "radius": 0.02, "height": 0.015, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "boulders", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [0.39, 0, 0.35], "radius": 0.06, "height": 0.09, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.42, 0, 0.1], "radius": 0.04, "height": 0.06, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.17, 0, -0.35], "radius": 0.035, "height": 0.06, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [-0.18, 0, -0.1], "radius": 0.035, "height": 0.05, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.34, 0, -0.45], "radius": 0.035, "height": 0.05, "cell": "stone", "seed": 9 }
+    ] },
+    { "note": "firs", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.14, 0, 1.0], "kind": "pine", "height": 0.18, "radius": 0.04 },
+      { "shape": "tree", "pos": [-0.24, 0, 0.75], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 1 },
+      { "shape": "tree", "pos": [0.29, 0, 0.75], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.36, 0, 0.6], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [-0.18, 0, 0.45], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 4 },
+      { "shape": "tree", "pos": [0.43, 0, -0.5], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 5 },
+      { "shape": "tree", "pos": [0.05, 0, -0.55], "kind": "pine", "height": 0.1, "radius": 0.035, "seed": 6 },
+      { "shape": "tree", "pos": [0.24, 0, 0.1], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 7 }
+    ] }
+  ]
+}

@@ -120,7 +120,13 @@ public class HexSeamlessTerrain : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (material != null) ApplyGridLookOverrides();
+        if (material != null)
+        {
+            ApplyGridLookOverrides();
+            material.SetFloat(ReliefId, BoardLookSettings.Instance.terrainRelief);
+            material.SetFloat(BlendBandId, BoardLookSettings.Instance.terrainBlendBand);
+        }
+        ApplyPcLook();
         Flush();
     }
 
@@ -182,9 +188,52 @@ public class HexSeamlessTerrain : MonoBehaviour
         flushBuffer.Clear();
     }
 
+    // ── Settlement art (RetroLOTR/PCArt) ─────────────────────────────────────────────────────
+    // The PC sprite on top of the terrain gets its own material: graded toward the blended terrain
+    // and with its lower ground rim dissolved into it (see PCArt.shader). Look values come from
+    // BoardLookSettings and are re-read every frame, so they can be tuned live.
+    private static Material pcMaterial;
+    private static readonly int HexCenterId = Shader.PropertyToID("_HexCenter");
+    private static readonly int ReliefId = Shader.PropertyToID("_Relief");
+    private static readonly int BlendBandId = Shader.PropertyToID("_BlendBand");
+    private static readonly int HexStepId = Shader.PropertyToID("_HexStep");
+
+    private static bool EnsurePcMaterial()
+    {
+        if (pcMaterial != null) return true;
+        Shader shader = BoardLookSettings.Instance.pcArtShader;
+        if (shader == null) return false;
+        pcMaterial = new Material(shader) { name = "PCArt (runtime)" };
+        ApplyPcLook();
+        return true;
+    }
+
+    private static void ApplyPcLook()
+    {
+        if (pcMaterial == null) return;
+        BoardLookSettings look = BoardLookSettings.Instance;
+        pcMaterial.SetFloat("_Saturation", look.pcSaturation);
+        pcMaterial.SetFloat("_Contrast", look.pcContrast);
+        pcMaterial.SetFloat("_Brightness", look.pcBrightness);
+        pcMaterial.SetFloat("_RimStart", look.pcRimStart);
+    }
+
+    private static void RebuildPc(Hex hex, Board board)
+    {
+        SpriteRenderer renderer = hex.pcTexture;
+        if (renderer == null || !EnsurePcMaterial()) return;
+        if (renderer.sharedMaterial != pcMaterial) renderer.sharedMaterial = pcMaterial;
+        if (mpb == null) mpb = new MaterialPropertyBlock();
+        renderer.GetPropertyBlock(mpb);
+        mpb.SetVector(HexCenterId, hex.transform.position);
+        mpb.SetVector(HexStepId, new Vector4(board.hexSize.x, board.hexSize.y));
+        renderer.SetPropertyBlock(mpb);
+    }
+
     private static void Rebuild(Hex hex, Board board)
     {
         if (hex == null) return;
+        RebuildPc(hex, board);
         SpriteRenderer renderer = hex.terrainTexture;
         if (renderer == null) return;
 

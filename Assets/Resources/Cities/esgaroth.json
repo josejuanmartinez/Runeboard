@@ -1,0 +1,95 @@
+{
+  "name": "Esgaroth",
+  "description": "Lake-town on the Long Lake: steep thatched timber halls with carved crossed-gable finials stand on stilts over blue-grey water, joined by plank boardwalks in a cross; a long causeway bridge enters at the front left between two tall carved gate posts hung with swan banners, rowing boats are moored at the piers, and small grassy islets with dark firs, one bearing a swan banner, dot the lake.",
+  "style": "Northman",
+  "colors":   ["#7A5A3A", "#A28A4C", "#6A4E32", "#7E7A6A", "#A8BCC0", "#2A241C", "#3E6478", "", "#4A5A2E"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the lake", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [1.0, 0.004, 1.19], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, 0.89], "size": [0.5, 0.004, 0.6], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, -0.89], "size": [0.5, 0.004, 0.6], "cell": "accent" }
+    ] },
+    { "note": "fir islet with swan banner, back", "at": [-0.05, 0.4], "parts": [
+      { "shape": "dome", "radius": 0.15, "height": 0.03, "sides": 10, "cell": "foliage" },
+      { "shape": "tree", "pos": [-0.07, 0, 0.05], "kind": "pine", "height": 0.25, "radius": 0.05, "seed": 1 },
+      { "shape": "tree", "pos": [0.1, 0, 0.1], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.15, 0, -0.05], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 3 },
+      { "shape": "flag", "pos": [0.05, 0, -0.1], "height": 0.25, "radius": 0.005 }
+    ] },
+    { "note": "boardwalks in a cross", "at": [0.08, -0.09], "parts": [
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.55, 0.012, 0.06], "cell": "wood", "yaw": 35 },
+      { "shape": "box", "pos": [0.05, 0.04, 0.0], "size": [0.6, 0.012, 0.06], "cell": "wood", "yaw": -35 },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.04, 0.04, 0.04], "cell": "wood" }
+    ] },
+    { "note": "causeway bridge, front left", "at": [-0.15, -0.3], "yaw": -50, "parts": [
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.4, 0.012, 0.06], "cell": "wood" },
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.015, 0.03, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [0.08, 0, 0], "size": [0.015, 0.03, 0.05], "cell": "wood" }
+    ] },
+    { "note": "carved gate posts with swan banners", "at": [-0.06, -0.15], "parts": [
+      { "shape": "cylinder", "pos": [-0.06, 0, 0.04], "radius": 0.025, "height": 0.22, "sides": 4, "twist": 0.125, "cell": "wood" },
+      { "shape": "pyramid", "pos": [-0.06, 0.22, 0.04], "radius": 0.03, "height": 0.07, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.06, 0, -0.08], "radius": 0.025, "height": 0.22, "sides": 4, "twist": 0.125, "cell": "wood" },
+      { "shape": "pyramid", "pos": [0.06, 0.22, -0.08], "radius": 0.03, "height": 0.07, "cell": "wood" },
+      { "shape": "box", "pos": [-0.06, 0.05, 0.01], "size": [0.03, 0.05, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [0.06, 0.05, -0.11], "size": [0.03, 0.05, 0.004], "cell": "trim" }
+    ] },
+    { "note": "great hall with tall carved gable", "at": [0.1, 0.12], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.16, 0.05, 0.14], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.18, 0.1, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.15, 0.17, 0.2], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0.07, -0.076], "size": [0.04, 0.06, 0.004], "cell": "trim" },
+      { "shape": "cone", "pos": [0, 0.32, -0.09], "radius": 0.01, "height": 0.05, "sides": 4, "cell": "wood" },
+      { "shape": "flag", "pos": [0, 0.32, 0.09], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "hall on stilts, back centre", "at": [-0.05, 0.18], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.14, 0.05, 0.12], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.16, 0.08, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.13, 0.13, 0.18], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [0, 0.26, -0.08], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" }
+    ] },
+    { "note": "hall on stilts, back right", "at": [0.24, 0.09], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.14, 0.05, 0.12], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.16, 0.08, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.13, 0.14, 0.18], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [0, 0.27, -0.08], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" }
+    ] },
+    { "note": "long hall on stilts, left", "at": [-0.32, 0.08], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.2, 0.05, 0.12], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.22, 0.08, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.24, 0.13, 0.16], "cell": "roof", "top": "wall" },
+      { "shape": "cone", "pos": [0.12, 0.26, 0], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" }
+    ] },
+    { "note": "hall on stilts, front left", "at": [-0.25, -0.17], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.18, 0.05, 0.12], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.2, 0.08, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.22, 0.12, 0.16], "cell": "roof", "top": "wall" },
+      { "shape": "cone", "pos": [0.11, 0.25, 0], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" }
+    ] },
+    { "note": "hall on stilts, right", "at": [0.36, -0.09], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.13, 0.05, 0.11], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.14, 0.08, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.12, 0.13, 0.17], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [0, 0.26, -0.08], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" }
+    ] },
+    { "note": "moored boats", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.3, 0, -0.71], "size": [0.1, 0.018, 0.035], "cell": "wood", "yaw": 50 },
+      { "shape": "box", "pos": [0.21, 0, -0.45], "size": [0.12, 0.018, 0.035], "cell": "wood", "yaw": -40 },
+      { "shape": "box", "pos": [0.28, 0, -0.62], "size": [0.11, 0.018, 0.035], "cell": "wood", "yaw": -20 },
+      { "shape": "box", "pos": [0.33, 0, 0.62], "size": [0.08, 0.015, 0.03], "cell": "wood", "yaw": -20 }
+    ] },
+    { "note": "fir islets", "at": [0.0, 0.0], "parts": [
+      { "shape": "dome", "pos": [0.1, 0, -0.9], "radius": 0.12, "height": 0.025, "sides": 10, "cell": "foliage" },
+      { "shape": "tree", "pos": [0.08, 0, -0.88], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.14, 0, -0.84], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 5 },
+      { "shape": "dome", "pos": [0.41, 0, -0.55], "radius": 0.1, "height": 0.025, "sides": 10, "cell": "foliage" },
+      { "shape": "tree", "pos": [0.43, 0, -0.45], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 6 },
+      { "shape": "dome", "pos": [-0.42, 0, 0.2], "radius": 0.1, "height": 0.025, "sides": 10, "cell": "foliage" },
+      { "shape": "tree", "pos": [-0.43, 0, 0.3], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 7 },
+      { "shape": "tree", "pos": [-0.42, 0, -0.15], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 8 },
+      { "shape": "dome", "pos": [0.42, 0, 0.45], "radius": 0.1, "height": 0.025, "sides": 10, "cell": "foliage" },
+      { "shape": "tree", "pos": [0.42, 0, 0.45], "kind": "broadleaf", "height": 0.16, "radius": 0.05, "seed": 9 }
+    ] }
+  ]
+}

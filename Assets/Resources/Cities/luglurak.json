@@ -1,0 +1,62 @@
+{
+  "name": "Luglurak",
+  "description": "A dark shrine cut into a soaring spire of fractured grey rock: twin stone stairs climb a rock pedestal to a terrace with violet-flamed braziers and a glowing arched doorway, above which an arched niche bears a purple demon sigil, while clusters of violet crystals jut from the rock and the mossy ground among pines and dead trees.",
+  "style": "Orcish",
+  "colors":   ["#6A6252", "#3A3632", "#4A3A2A", "#4E4A42", "#8A806A", "#1A1618", "#8A4AB0", "", "#4A5A28"],
+  "surfaces": ["Ashlar", "", "", "Fieldstone", "Ashlar", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the rock spire", "at": [0.0, 0.18], "parts": [
+      { "shape": "rock", "radius": 0.27, "height": 0.82, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.25, 0, -0.1], "radius": 0.17, "height": 0.32, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.25, 0, -0.08], "radius": 0.17, "height": 0.34, "cell": "stone", "seed": 3 },
+      { "shape": "cone", "pos": [-0.15, 0.2, -0.2], "radius": 0.02, "height": 0.06, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [0.2, 0.25, -0.18], "radius": 0.02, "height": 0.06, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "rock pedestal and shrine gate", "at": [0.04, -0.17], "yaw": -15, "parts": [
+      { "shape": "box", "size": [0.22, 0.18, 0.14], "cell": "stone", "top": "trim" },
+      { "shape": "box", "pos": [0, 0.18, 0.03], "size": [0.14, 0.13, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0.01, 0.18, -0.006], "size": [0.05, 0.09, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.31, 0.04], "size": [0.1, 0.13, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.33, 0.014], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.39, 0.012], "radius": 0.018, "height": 0.004, "sides": 8, "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.09, 0.18, -0.05], "radius": 0.014, "height": 0.04, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.09, 0.22, -0.05], "radius": 0.01, "height": 0.03, "sides": 5, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.09, 0.18, -0.05], "radius": 0.014, "height": 0.04, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.09, 0.22, -0.05], "radius": 0.01, "height": 0.03, "sides": 5, "cell": "accent" },
+      { "shape": "flag", "pos": [0, 0.44, 0.04], "height": 0.08, "radius": 0.005 }
+    ] },
+    { "note": "left stair", "at": [-0.15, -0.21], "yaw": -50, "parts": [
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.06, 0.05, 0.07], "cell": "trim" },
+      { "shape": "box", "pos": [-0.02, 0, 0], "size": [0.06, 0.1, 0.07], "cell": "trim" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.06, 0.15, 0.07], "cell": "trim" }
+    ] },
+    { "note": "right stair", "at": [0.24, -0.21], "yaw": 50, "parts": [
+      { "shape": "box", "pos": [0.08, 0, 0], "size": [0.06, 0.05, 0.07], "cell": "trim" },
+      { "shape": "box", "pos": [0.02, 0, 0], "size": [0.06, 0.1, 0.07], "cell": "trim" },
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.06, 0.15, 0.07], "cell": "trim" }
+    ] },
+    { "note": "great crystal cluster in front", "at": [0.0, -0.3], "parts": [
+      { "shape": "rock", "radius": 0.06, "height": 0.03, "cell": "dark", "seed": 4 },
+      { "shape": "cylinder", "pos": [0, 0.01, 0], "radius": 0.022, "height": 0.1, "sides": 6, "taper": 0.3, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.04, 0.01, -0.02], "radius": 0.016, "height": 0.07, "sides": 6, "taper": 0.3, "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.04, 0.01, 0.01], "radius": 0.014, "height": 0.05, "sides": 6, "taper": 0.3, "cell": "accent" }
+    ] },
+    { "note": "scattered crystals", "at": [0.0, 0.0], "parts": [
+      { "shape": "cone", "pos": [-0.37, 0, 0.55], "radius": 0.025, "height": 0.06, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.4, 0, 0.0], "radius": 0.025, "height": 0.06, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [0.44, 0, 0.3], "radius": 0.025, "height": 0.06, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.1, 0, -0.45], "radius": 0.02, "height": 0.05, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [0.25, 0, -0.35], "radius": 0.02, "height": 0.05, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "pines and dead trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.44, 0, 0.35], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [-0.46, 0, -0.1], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.32, 0, 0.75], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [0.42, 0, 0.55], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.44, 0, -0.05], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [-0.42, 0, -0.45], "kind": "broadleaf", "height": 0.13, "radius": 0.04, "cell": "wood", "seed": 6 },
+      { "shape": "tree", "pos": [0.43, 0, -0.45], "kind": "broadleaf", "height": 0.11, "radius": 0.035, "cell": "wood", "seed": 7 },
+      { "shape": "tree", "pos": [0.17, 0, -0.55], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 8 }
+    ] }
+  ]
+}

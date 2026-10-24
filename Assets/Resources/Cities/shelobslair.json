@@ -1,0 +1,52 @@
+{
+  "name": "Shelob's Lair",
+  "description": "A twin-peaked, snow-flecked crag of cracked grey rock with a dark gaping cave mouth hung with fang-like stalactites and cobwebs at its foot, a great black spider lurking in the entrance, a wet black trail running out of it, and tall needle spires of rock, boulders and dead thorn bushes all around.",
+  "style": "Orcish",
+  "colors":   ["#6E6A5C", "#5A564A", "#4A3A28", "#7E7868", "#D6D4CA", "#121012", "#3A3A40", "", "#5A5A34"],
+  "surfaces": ["Fieldstone", "Fieldstone", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "twin peaks", "at": [0.0, 0.2], "parts": [
+      { "shape": "rock", "pos": [-0.14, 0, 0.08], "radius": 0.2, "height": 0.46, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.14, 0.34, 0.08], "radius": 0.06, "height": 0.12, "cell": "trim", "seed": 2 },
+      { "shape": "rock", "pos": [0.23, 0, 0.12], "radius": 0.18, "height": 0.48, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.23, 0.36, 0.12], "radius": 0.06, "height": 0.12, "cell": "trim", "seed": 4 },
+      { "shape": "rock", "pos": [0.07, 0, 0.22], "radius": 0.14, "height": 0.3, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.12, 0.22, 0.1], "radius": 0.07, "height": 0.08, "cell": "trim", "seed": 6 },
+      { "shape": "rock", "pos": [-0.33, 0, -0.1], "radius": 0.13, "height": 0.2, "cell": "stone", "seed": 7 }
+    ] },
+    { "note": "cave mouth", "at": [0.0, -0.02], "parts": [
+      { "shape": "rock", "pos": [-0.2, 0, 0.04], "radius": 0.14, "height": 0.24, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.2, 0, 0.04], "radius": 0.14, "height": 0.24, "cell": "stone", "seed": 9 },
+      { "shape": "rock", "pos": [0.0, 0.14, 0.12], "radius": 0.15, "height": 0.13, "cell": "stone", "seed": 10 },
+      { "shape": "box", "pos": [0.0, 0, 0.05], "size": [0.16, 0.15, 0.12], "cell": "dark" },
+      { "shape": "dome", "pos": [-0.04, 0.17, -0.02], "radius": 0.018, "height": -0.05, "sides": 6, "cell": "wall" },
+      { "shape": "dome", "pos": [0.03, 0.17, -0.02], "radius": 0.018, "height": -0.06, "sides": 6, "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.05, -0.012], "size": [0.14, 0.004, 0.004], "cell": "trim", "yaw": 15 }
+    ] },
+    { "note": "great spider", "at": [-0.08, -0.14], "parts": [
+      { "shape": "dome", "pos": [0.0, 0.015, 0.02], "radius": 0.035, "height": 0.035, "sides": 8, "cell": "dark" },
+      { "shape": "dome", "pos": [0.0, 0.015, -0.025], "radius": 0.02, "height": 0.02, "sides": 8, "cell": "dark" },
+      { "shape": "box", "pos": [0.0, 0.01, 0.0], "size": [0.13, 0.006, 0.008], "cell": "dark", "yaw": 25 },
+      { "shape": "box", "pos": [0.0, 0.01, 0.0], "size": [0.13, 0.006, 0.008], "cell": "dark", "yaw": -25 }
+    ] },
+    { "note": "black trail", "at": [0.0, -0.3], "yaw": 70, "parts": [
+      { "shape": "box", "size": [0.45, 0.003, 0.07], "cell": "accent" }
+    ] },
+    { "note": "rock spires", "at": [0.0, 0.0], "parts": [
+      { "shape": "cone", "pos": [0.38, 0, 0.12], "radius": 0.06, "height": 0.38, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.15, 0, -0.5], "radius": 0.025, "height": 0.13, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.16, 0, -0.5], "radius": 0.035, "height": 0.3, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "boulders and dead thorns", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.38, 0, -0.3], "radius": 0.07, "height": 0.07, "cell": "stone", "seed": 11 },
+      { "shape": "rock", "pos": [-0.28, 0, -0.65], "radius": 0.06, "height": 0.05, "cell": "stone", "seed": 12 },
+      { "shape": "rock", "pos": [0.38, 0, -0.25], "radius": 0.07, "height": 0.08, "cell": "stone", "seed": 13 },
+      { "shape": "rock", "pos": [0.3, 0, -0.65], "radius": 0.06, "height": 0.05, "cell": "stone", "seed": 14 },
+      { "shape": "rock", "pos": [-0.1, 0, -0.95], "radius": 0.05, "height": 0.04, "cell": "stone", "seed": 15 },
+      { "shape": "tree", "pos": [-0.4, 0, 0.3], "kind": "broadleaf", "height": 0.07, "radius": 0.025, "cell": "wood" },
+      { "shape": "tree", "pos": [-0.42, 0, -0.55], "kind": "broadleaf", "height": 0.06, "radius": 0.02, "cell": "wood", "seed": 2 },
+      { "shape": "tree", "pos": [0.42, 0, -0.5], "kind": "broadleaf", "height": 0.07, "radius": 0.025, "cell": "wood", "seed": 3 },
+      { "shape": "tree", "pos": [0.22, 0, -0.85], "kind": "broadleaf", "height": 0.06, "radius": 0.02, "cell": "wood", "seed": 4 }
+    ] }
+  ]
+}

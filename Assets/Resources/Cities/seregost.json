@@ -1,0 +1,75 @@
+{
+  "name": "Seregost",
+  "description": "A snowbound hold cut into a jagged icicle-hung crag: a dark stone gatehouse with an arched door stands on a snowy timber-shored terrace, above it a wooden arched portal with a glowing magenta rose window opens into the peak, twin snowy stairways climb the terrace on either side, and clusters of violet crystals and snow-capped boulders litter the ground.",
+  "style": "Dwarven",
+  "colors":   ["#5E605C", "#6A5A8A", "#6A4428", "#7A7C7A", "#E2E2DC", "#1E1E24", "#B0406A", "", "#4A5A40"],
+  "surfaces": ["Ashlar", "Plain", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "snow ground", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "size": [0.9, 0.004, 1.0], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, 0.7], "size": [0.4, 0.004, 0.4], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.7], "size": [0.4, 0.004, 0.4], "cell": "trim" }
+    ] },
+    { "note": "icy crag", "at": [0.0, 0.22], "parts": [
+      { "shape": "rock", "pos": [-0.03, 0, 0.12], "radius": 0.2, "height": 0.6, "cell": "wall" },
+      { "shape": "rock", "pos": [-0.03, 0.45, 0.12], "radius": 0.07, "height": 0.13, "cell": "trim", "seed": 2 },
+      { "shape": "rock", "pos": [-0.2, 0, 0.0], "radius": 0.13, "height": 0.3, "cell": "wall", "seed": 3 },
+      { "shape": "rock", "pos": [0.17, 0, 0.0], "radius": 0.12, "height": 0.25, "cell": "wall", "seed": 4 },
+      { "shape": "rock", "pos": [-0.33, 0, -0.25], "radius": 0.12, "height": 0.14, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.33, 0, -0.2], "radius": 0.12, "height": 0.12, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "timber-shored terrace", "at": [0.0, -0.05], "parts": [
+      { "shape": "box", "size": [0.36, 0.14, 0.34], "cell": "wood", "top": "trim" },
+      { "shape": "box", "pos": [0, 0.1, -0.172], "size": [0.36, 0.04, 0.004], "cell": "trim" }
+    ] },
+    { "note": "left stair", "at": [-0.24, -0.14], "yaw": -35, "parts": [
+      { "shape": "box", "pos": [0, 0, -0.08], "size": [0.08, 0.035, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.08, 0.07, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.08, 0.105, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, 0.07], "size": [0.08, 0.14, 0.05], "cell": "trim" }
+    ] },
+    { "note": "right stair", "at": [0.25, -0.14], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [0, 0, -0.08], "size": [0.08, 0.035, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.08, 0.07, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.08, 0.105, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, 0.07], "size": [0.08, 0.14, 0.05], "cell": "trim" }
+    ] },
+    { "note": "stone gatehouse and rose-window portal", "at": [0.04, 0.04], "parts": [
+      { "shape": "box", "pos": [0, 0.14, 0], "size": [0.15, 0.11, 0.1], "cell": "wall", "top": "trim" },
+      { "shape": "box", "pos": [0.02, 0.14, -0.051], "size": [0.05, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.02, 0.25, 0.04], "size": [0.12, 0.012, 0.08], "cell": "wood" },
+      { "shape": "box", "pos": [-0.07, 0.26, 0.04], "size": [0.02, 0.12, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0.26, 0.04], "size": [0.02, 0.12, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0.27, 0.05], "size": [0.08, 0.1, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.02, 0.38, 0.04], "size": [0.13, 0.05, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0.385, 0.024], "size": [0.04, 0.04, 0.004], "cell": "accent" },
+      { "shape": "flag", "pos": [0.07, 0.25, 0.0], "height": 0.07 }
+    ] },
+    { "note": "crystal lamps", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.15, 0.14, 0.2], "size": [0.008, 0.04, 0.008], "cell": "wood" },
+      { "shape": "cone", "pos": [-0.15, 0.18, 0.2], "radius": 0.012, "height": 0.025, "sides": 4, "cell": "accent" },
+      { "shape": "box", "pos": [0.22, 0.14, 0.42], "size": [0.008, 0.04, 0.008], "cell": "wood" },
+      { "shape": "cone", "pos": [0.22, 0.18, 0.42], "radius": 0.012, "height": 0.025, "sides": 4, "cell": "accent" },
+      { "shape": "box", "pos": [-0.11, 0.14, 0.2], "size": [0.02, 0.05, 0.02], "cell": "wood" }
+    ] },
+    { "note": "violet crystals", "at": [0.0, -0.3], "parts": [
+      { "shape": "cone", "pos": [0.0, 0, -0.2], "radius": 0.035, "height": 0.1, "sides": 5, "cell": "roof" },
+      { "shape": "cone", "pos": [0.04, 0, -0.18], "radius": 0.025, "height": 0.07, "sides": 5, "cell": "roof" },
+      { "shape": "rock", "pos": [-0.06, 0, -0.22], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.08, 0, -0.26], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 8 },
+      { "shape": "cone", "pos": [0.12, 0, 0.12], "radius": 0.025, "height": 0.07, "sides": 5, "cell": "roof" },
+      { "shape": "rock", "pos": [0.09, 0, 0.1], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 9 },
+      { "shape": "rock", "pos": [-0.1, 0, 0.1], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 10 },
+      { "shape": "cone", "pos": [0.36, 0, 0.6], "radius": 0.03, "height": 0.09, "sides": 5, "cell": "roof" },
+      { "shape": "rock", "pos": [0.4, 0, 0.45], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 11 },
+      { "shape": "cone", "pos": [-0.33, 0, 0.35], "radius": 0.02, "height": 0.06, "sides": 5, "cell": "roof" }
+    ] },
+    { "note": "snow-capped boulders", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.42, 0, 0.3], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 12 },
+      { "shape": "rock", "pos": [-0.4, 0, -0.1], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 13 },
+      { "shape": "rock", "pos": [0.42, 0, 0.35], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 14 },
+      { "shape": "rock", "pos": [-0.33, 0, 0.75], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 15 },
+      { "shape": "rock", "pos": [0.35, 0, 0.8], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 16 }
+    ] }
+  ]
+}

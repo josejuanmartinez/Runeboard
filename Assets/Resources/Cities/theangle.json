@@ -1,0 +1,62 @@
+{
+  "name": "The Angle",
+  "description": "A lone, slender grey-stone watchtower with a flared green conical roof stands at the back of a wooded hill, reached by a winding dirt path through dense pines and broadleaf trees past a carved standing stone, a tumbled ruin wall and scattered boulders, with a brook at the front.",
+  "style": "Mannish",
+  "colors":   ["#8E8268", "#4E6A48", "#5A4632", "#7C7666", "#A89A70", "#2C2A24", "#4E7470", "", "#4C5A26"],
+  "surfaces": ["Fieldstone", "Slate", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "tall watchtower", "at": [0.09, 0.3], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.4, "sides": 6, "taper": 0.85, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.052], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.17, -0.048], "size": [0.012, 0.03, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.3, -0.045], "size": [0.012, 0.03, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.36, 0], "radius": 0.055, "height": 0.04, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.4, 0], "radius": 0.07, "height": 0.14, "sides": 8, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.54, 0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "dirt path 1", "at": [0.056, 0.232], "yaw": 102, "parts": [ { "shape": "box", "size": [0.389, 0.005, 0.045], "cell": "wood" } ] },
+    { "note": "dirt path 2", "at": [-0.003, 0.072], "yaw": 96, "parts": [ { "shape": "box", "size": [0.429, 0.005, 0.045], "cell": "wood" } ] },
+    { "note": "dirt path 3", "at": [0.014, -0.085], "yaw": 78, "parts": [ { "shape": "box", "size": [0.372, 0.005, 0.045], "cell": "wood" } ] },
+    { "note": "dirt path 4", "at": [-0.006, -0.255], "yaw": 103, "parts": [ { "shape": "box", "size": [0.502, 0.005, 0.045], "cell": "wood" } ] },
+    { "note": "brook", "at": [-0.068, -0.399], "yaw": -52, "parts": [ { "shape": "box", "size": [0.291, 0.005, 0.03], "cell": "accent" } ] },
+    { "note": "carved standing stone", "at": [-0.28, 0.05], "parts": [
+      { "shape": "box", "size": [0.045, 0.13, 0.025], "cell": "stone" },
+      { "shape": "rock", "pos": [0.12, 0, 0.05], "radius": 0.025, "height": 0.03, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "tumbled ruin wall", "at": [-0.15, -0.05], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.08, 0.06, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.02, 0.06, 0], "size": [0.04, 0.025, 0.03], "cell": "stone" }
+    ] },
+    { "note": "boulder right of path", "at": [0.17, 0.0], "parts": [ { "shape": "rock", "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 2 } ] },
+    { "note": "boulders lower left", "at": [-0.15, -0.22], "parts": [
+      { "shape": "rock", "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.08, 0, -0.2], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "forest behind the tower", "at": [-0.1, 0.42], "parts": [
+      { "shape": "tree", "pos": [-0.15, 0, 0], "kind": "pine", "height": 0.25, "radius": 0.05 },
+      { "shape": "tree", "pos": [0.0, 0, 0.02], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 1 },
+      { "shape": "tree", "pos": [-0.3, 0, -0.05], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [0.35, 0, -0.02], "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.28, 0, 0.04], "kind": "broadleaf", "height": 0.18, "radius": 0.07, "seed": 4 }
+    ] },
+    { "note": "forest left, upper", "at": [-0.42, 0.18], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 5 },
+      { "shape": "tree", "pos": [0.04, 0, -0.15], "kind": "pine", "height": 0.22, "radius": 0.05, "seed": 6 }
+    ] },
+    { "note": "forest left, lower", "at": [-0.38, -0.15], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.24, "radius": 0.05, "seed": 7 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.2], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "seed": 13 }
+    ] },
+    { "note": "forest right, upper", "at": [0.38, 0.2], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 8 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.2], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "cell": "trim", "seed": 9 }
+    ] },
+    { "note": "forest right, lower", "at": [0.4, -0.1], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.07, "seed": 10 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.4], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "cell": "trim", "seed": 11 }
+    ] },
+    { "note": "front pine", "at": [0.1, -0.3], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.18, "radius": 0.04, "seed": 12 }
+    ] }
+  ]
+}

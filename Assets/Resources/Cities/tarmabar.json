@@ -1,0 +1,71 @@
+{
+  "name": "Tarmabar",
+  "description": "A ruined crossroads town: two tall square grey-stone towers with red conical spires still stand at the back right and left, among roofless broken walls with arched doorways, a crumbling stepped gable on the right, a low walled enclosure with a small red-capped turret at the front, and autumn trees and pines along the crossing dirt tracks.",
+  "style": "Mannish",
+  "colors":   ["#A69A84", "#8A4A38", "#5A4430", "#8E8472", "#B08A3A", "#2A241E", "#8A4A38", "", "#4A5A2C"],
+  "surfaces": ["Ashlar", "Tiles", "", "Ashlar", "Plain", "", "Tiles", "", ""],
+  "buildings": [
+    { "note": "red-spired tower, back", "at": [0.13, 0.29], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.3, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.3, 0], "radius": 0.065, "count": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.055, "height": 0.16, "sides": 10, "cell": "roof" },
+      { "shape": "box", "pos": [-0.015, 0.2, -0.043], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.015, 0.13, -0.043], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0, 0.46, 0], "height": 0.06 }
+    ] },
+    { "note": "ruined gate walls, back", "at": [-0.06, 0.24], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0.0, 0, 0.0], "size": [0.18, 0.15, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0, -0.016], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.1, 0, 0.06], "size": [0.03, 0.17, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [0.11, 0, 0.04], "size": [0.03, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.15, 0.0], "size": [0.06, 0.03, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.1, 0, -0.14], "size": [0.06, 0.03, 0.04], "cell": "stone" }
+    ] },
+    { "note": "red-spired tower and gate ruin, left", "at": [-0.3, -0.1], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.15, 0.07, 0.12], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.02, 0.0, 0.0], "radius": 0.065, "height": 0.32, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [-0.02, 0.32, 0], "radius": 0.07, "count": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.02, 0.32, 0], "radius": 0.06, "height": 0.17, "sides": 10, "cell": "roof" },
+      { "shape": "box", "pos": [-0.02, 0.2, -0.047], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.13, 0, 0.05], "size": [0.12, 0.13, 0.06], "cell": "wall", "yaw": -30 },
+      { "shape": "box", "pos": [0.13, 0, 0.018], "size": [0.04, 0.07, 0.004], "cell": "dark", "yaw": -30 }
+    ] },
+    { "note": "arched ruin with stepped gable, right", "at": [0.33, -0.07], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, -0.06], "size": [0.24, 0.1, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.05, 0, -0.076], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.06, 0, -0.076], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.12, 0, 0.04], "size": [0.03, 0.08, 0.18], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0.13], "size": [0.12, 0.17, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.17, 0.13], "size": [0.07, 0.05, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.22, 0.13], "size": [0.03, 0.04, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0.114], "size": [0.04, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.14, 0, -0.06], "size": [0.04, 0.06, 0.03], "cell": "stone" }
+    ] },
+    { "note": "walled enclosure with turret, front", "at": [0.0, -0.22], "yaw": -30, "parts": [
+      { "shape": "wall", "pos": [-0.14, 0, -0.06], "to": [0.14, -0.06], "height": 0.07, "thickness": 0.03, "count": 1, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.14, 0, -0.06], "to": [-0.14, 0.12], "height": 0.06, "thickness": 0.03, "count": 1, "cell": "wall" },
+      { "shape": "wall", "pos": [0.14, 0, -0.06], "to": [0.14, 0.08], "height": 0.05, "thickness": 0.03, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.0, 0, 0.1], "radius": 0.025, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.1, 0.1], "radius": 0.025, "height": 0.05, "sides": 8, "cell": "roof" }
+    ] },
+    { "note": "crossing dirt tracks", "at": [0.0, 0.05], "parts": [
+      { "shape": "box", "size": [0.08, 0.003, 1.1], "cell": "trim", "yaw": -40 },
+      { "shape": "box", "size": [0.08, 0.003, 1.1], "cell": "trim", "yaw": 40 }
+    ] },
+    { "note": "autumn trees and pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.18, 0, 0.9], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "cell": "trim" },
+      { "shape": "tree", "pos": [0.25, 0, 0.8], "kind": "broadleaf", "height": 0.11, "radius": 0.05, "cell": "trim", "seed": 2 },
+      { "shape": "tree", "pos": [-0.43, 0, 0.6], "kind": "broadleaf", "height": 0.1, "radius": 0.045, "cell": "trim", "seed": 3 },
+      { "shape": "tree", "pos": [-0.45, 0, 0.0], "kind": "broadleaf", "height": 0.11, "radius": 0.05, "cell": "trim", "seed": 4 },
+      { "shape": "tree", "pos": [-0.07, 0, 0.1], "kind": "broadleaf", "height": 0.08, "radius": 0.04, "cell": "trim", "seed": 5 },
+      { "shape": "tree", "pos": [0.46, 0, 0.28], "kind": "broadleaf", "height": 0.09, "radius": 0.04, "cell": "trim", "seed": 6 },
+      { "shape": "tree", "pos": [0.24, 0, -0.6], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "cell": "trim", "seed": 7 },
+      { "shape": "tree", "pos": [-0.37, 0, 0.74], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 8 },
+      { "shape": "tree", "pos": [-0.41, 0, 0.4], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 9 },
+      { "shape": "tree", "pos": [0.2, 0, -0.4], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 10 },
+      { "shape": "tree", "pos": [0.15, 0, -0.74], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 11 },
+      { "shape": "rock", "pos": [0.0, 0, -0.95], "radius": 0.03, "height": 0.025, "cell": "stone", "seed": 12 },
+      { "shape": "rock", "pos": [-0.33, 0, -0.55], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 13 }
+    ] }
+  ]
+}

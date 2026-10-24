@@ -1,0 +1,80 @@
+{
+  "name": "Forochel",
+  "description": "A snowbound northern outpost: a dark-stone curtain wall across the back with a gabled gatehouse and a square keep crowned by a steep snowy timber gable and spires, five stone-and-timber houses with snow-heavy roofs and lit windows set around crossing cobbled paths, carved runestones and standing pillars, and a blue snowflake banner in front.",
+  "style": "Northman",
+  "colors":   ["#5E6268", "#D6D8D4", "#4A3A2C", "#6A6E74", "#C8A050", "#24252A", "#2E3A58", "", "#4A5A50"],
+  "surfaces": ["Fieldstone", "Thatch", "", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "back curtain walls", "at": [0, 0], "parts": [
+      { "shape": "wall", "pos": [-0.43, 0, 0.31], "to": [-0.2, 0.74], "height": 0.08, "thickness": 0.035, "count": 6 },
+      { "shape": "wall", "pos": [-0.2, 0, 0.74], "to": [0.08, 0.66], "height": 0.08, "thickness": 0.035, "count": 6 },
+      { "shape": "wall", "pos": [0.16, 0, 0.42], "to": [0.36, 0.69], "height": 0.07, "thickness": 0.035, "count": 5 },
+      { "shape": "wall", "pos": [0.36, 0, 0.69], "to": [0.47, 0.4], "height": 0.06, "thickness": 0.035, "count": 3 }
+    ] },
+    { "note": "corner tower, right", "at": [0.37, 0.28], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.11, "sides": 4, "twist": 0.125, "cell": "wall", "top": "roof" }
+    ] },
+    { "note": "keep, back right", "at": [0.13, 0.27], "parts": [
+      { "shape": "box", "size": [0.14, 0.16, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.06, -0.061], "size": [0.04, 0.08, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.16, 0], "size": [0.1, 0.06, 0.08], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.18, -0.041], "size": [0.03, 0.02, 0.004], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.22, 0], "size": [0.1, 0.1, 0.09], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "pyramid", "pos": [-0.03, 0.22, 0.03], "radius": 0.02, "height": 0.12, "cell": "roof" },
+      { "shape": "flag", "pos": [0.03, 0.3, 0], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "gatehouse, back left", "at": [-0.1, 0.23], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.09, 0.12, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.035, 0.06, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.09, 0.08, 0.06], "cell": "wall", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "house, back left", "at": [-0.26, 0.05], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.13, 0.07, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [0.066, 0, 0], "size": [0.004, 0.045, 0.03], "cell": "dark" },
+      { "shape": "box", "pos": [-0.03, 0.03, -0.046], "size": [0.02, 0.015, 0.004], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.14, 0.06, 0.1], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "house, left front", "at": [-0.32, -0.11], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.14, 0.07, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [0.071, 0, 0], "size": [0.004, 0.045, 0.03], "cell": "dark" },
+      { "shape": "box", "pos": [-0.03, 0.03, -0.046], "size": [0.02, 0.015, 0.004], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.15, 0.06, 0.1], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "house, centre front", "at": [0.0, -0.25], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.09], "cell": "wood" },
+      { "shape": "box", "pos": [-0.061, 0, 0], "size": [0.004, 0.045, 0.03], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.03, -0.046], "size": [0.02, 0.015, 0.004], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.13, 0.06, 0.1], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "longhouse, right", "at": [0.23, 0.01], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.15, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.076, 0, 0], "size": [0.004, 0.05, 0.035], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.035, -0.051], "size": [0.02, 0.015, 0.004], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.16, 0.07, 0.11], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "house, right front", "at": [0.37, -0.1], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [-0.061, 0, 0], "size": [0.004, 0.045, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.13, 0.06, 0.09], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "cobbled path, left branch", "at": [-0.12, -0.03], "yaw": -55, "parts": [
+      { "shape": "box", "size": [0.7, 0.004, 0.06], "cell": "stone" }
+    ] },
+    { "note": "cobbled path, right branch", "at": [0.12, -0.06], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.65, 0.004, 0.06], "cell": "stone" }
+    ] },
+    { "note": "standing pillars", "at": [-0.41, 0.07], "parts": [
+      { "shape": "box", "size": [0.03, 0.07, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.28, 0, 0], "size": [0.03, 0.07, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.8, 0, 0.05], "size": [0.03, 0.06, 0.03], "cell": "stone" }
+    ] },
+    { "note": "runestones, front", "at": [-0.15, -0.29], "parts": [
+      { "shape": "rock", "radius": 0.022, "height": 0.05, "cell": "stone" },
+      { "shape": "rock", "pos": [0.13, 0, -0.14], "radius": 0.022, "height": 0.05, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.24, 0, 0.3], "radius": 0.02, "height": 0.04, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "snowflake banner", "at": [0.14, -0.34], "parts": [
+      { "shape": "flag", "height": 0.12, "radius": 0.005 }
+    ] }
+  ]
+}

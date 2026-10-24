@@ -1,0 +1,31 @@
+{
+  "name": "Caradhras",
+  "description": "The Redhorn itself: a single towering snow-mantled pyramidal peak filling the whole hex, its sharp main summit at the back and a lower, knife-edged spur thrusting forward, with grey rock bands striping the pale snow slopes and lesser snowy shoulders to left and right.",
+  "style": "Dwarven",
+  "colors":   ["#8A8478", "#6E6A62", "", "#D2CAB2", "#BDB6A0", "#4A4A48", "#A4B2B8", "", "#5A6050"],
+  "surfaces": ["Fieldstone", "Slate", "", "Plain", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "main summit", "at": [0.03, 0.22], "parts": [
+      { "shape": "pyramid", "radius": 0.42, "height": 0.85, "cell": "stone", "twist": 0.05 },
+      { "shape": "pyramid", "pos": [-0.04, 0, 0.02], "radius": 0.38, "height": 0.7, "cell": "wall", "twist": 0.2 },
+      { "shape": "rock", "pos": [-0.2, 0, 0.15], "radius": 0.2, "height": 0.45, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "front spur", "at": [-0.06, -0.1], "parts": [
+      { "shape": "pyramid", "radius": 0.28, "height": 0.48, "cell": "stone", "twist": 0.1 },
+      { "shape": "pyramid", "pos": [0.04, 0, -0.02], "radius": 0.22, "height": 0.36, "cell": "wall", "twist": 0.22 }
+    ] },
+    { "note": "left shoulder", "at": [-0.34, 0.08], "parts": [
+      { "shape": "rock", "radius": 0.18, "height": 0.28, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.0, 0, -0.35], "radius": 0.14, "height": 0.18, "cell": "wall", "seed": 3 }
+    ] },
+    { "note": "right shoulder", "at": [0.34, -0.06], "parts": [
+      { "shape": "rock", "radius": 0.18, "height": 0.26, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.02, 0, -0.35], "radius": 0.13, "height": 0.15, "cell": "trim", "seed": 5 }
+    ] },
+    { "note": "front scree", "at": [0.0, -0.36], "parts": [
+      { "shape": "rock", "pos": [-0.15, 0, 0], "radius": 0.12, "height": 0.12, "cell": "trim", "seed": 6 },
+      { "shape": "rock", "pos": [0.17, 0, 0.05], "radius": 0.12, "height": 0.1, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.0, 0, -0.1], "radius": 0.08, "height": 0.06, "cell": "wall", "seed": 8 }
+    ] }
+  ]
+}

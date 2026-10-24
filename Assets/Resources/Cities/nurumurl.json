@@ -1,0 +1,76 @@
+{
+  "name": "Nurumurl",
+  "description": "A Northman steading of five steep, moss-turfed longhouses of fieldstone and dark timber with carved gable boards and smoking chimneys, gathered round a paved yard with a cauldron hung over a fire-ring, enclosed by a pointed-stake palisade with tall carved gateposts, a stream tumbling down the right, and pines.",
+  "style": "Northman",
+  "colors":   ["#A8A49A", "#5E6A34", "#5A3C24", "#8A887E", "#7A5230", "#241C14", "#7E9AA4", "", "#3C5232"],
+  "surfaces": ["Fieldstone", "Turf", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "back longhouse", "at": [-0.01, 0.36], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.22, 0.08, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [-0.04, 0.02, -0.061], "size": [0.02, 0.02, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.24, 0.13, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.12, 0.08, 0], "size": [0.01, 0.15, 0.02], "cell": "trim" },
+      { "shape": "box", "pos": [-0.06, 0.14, 0.03], "size": [0.03, 0.1, 0.03], "cell": "stone" }
+    ] },
+    { "note": "left longhouse", "at": [-0.28, 0.27], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.22, 0.13, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.11, 0.08, 0], "size": [0.01, 0.14, 0.02], "cell": "trim" },
+      { "shape": "box", "pos": [-0.04, 0.14, 0.03], "size": [0.03, 0.09, 0.03], "cell": "stone" }
+    ] },
+    { "note": "right longhouse", "at": [0.29, 0.28], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0.02, -0.061], "size": [0.02, 0.02, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.22, 0.13, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.11, 0.08, 0], "size": [0.01, 0.14, 0.02], "cell": "trim" },
+      { "shape": "box", "pos": [0.04, 0.14, 0.03], "size": [0.03, 0.09, 0.03], "cell": "stone" }
+    ] },
+    { "note": "front-left longhouse", "at": [-0.32, -0.04], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.22, 0.13, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.11, 0.08, 0], "size": [0.01, 0.14, 0.02], "cell": "trim" }
+    ] },
+    { "note": "front-right longhouse", "at": [0.23, -0.09], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0.05, 0.02, -0.061], "size": [0.02, 0.02, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.22, 0.13, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.11, 0.08, 0], "size": [0.01, 0.14, 0.02], "cell": "trim" }
+    ] },
+    { "note": "cauldron over fire-ring", "at": [-0.01, 0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.012, "sides": 12, "cell": "stone", "top": "dark" },
+      { "shape": "cone", "pos": [0, 0, 0], "radius": 0.035, "height": 0.1, "sides": 3, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.02, 0], "radius": 0.02, "height": 0.025, "sides": 8, "cell": "dark" }
+    ] },
+    { "note": "paved lane to the gate", "at": [-0.03, -0.12], "parts": [
+      { "shape": "box", "size": [0.07, 0.004, 0.6], "cell": "stone" }
+    ] },
+    { "note": "palisade", "at": [0.0, 0.0], "parts": [
+      { "shape": "wall", "pos": [-0.48, 0, -0.17], "to": [-0.1, -0.76], "height": 0.08, "thickness": 0.025, "count": 1, "cell": "wood" },
+      { "shape": "wall", "pos": [0.03, 0, -0.76], "to": [0.33, -0.4], "height": 0.08, "thickness": 0.025, "count": 1, "cell": "wood" },
+      { "shape": "box", "pos": [-0.1, 0, -0.62], "size": [0.025, 0.16, 0.025], "cell": "trim" },
+      { "shape": "box", "pos": [0.02, 0, -0.62], "size": [0.025, 0.16, 0.025], "cell": "trim" },
+      { "shape": "cone", "pos": [-0.1, 0.16, -0.62], "radius": 0.018, "height": 0.03, "sides": 4, "cell": "trim" },
+      { "shape": "cone", "pos": [0.02, 0.16, -0.62], "radius": 0.018, "height": 0.03, "sides": 4, "cell": "trim" }
+    ] },
+    { "note": "stream and falls", "at": [0.38, -0.12], "parts": [
+      { "shape": "rock", "pos": [0.04, 0, 0.3], "radius": 0.07, "height": 0.1, "cell": "stone" },
+      { "shape": "box", "pos": [0.02, 0, 0.12], "size": [0.04, 0.004, 0.3], "cell": "accent", "yaw": 20 },
+      { "shape": "box", "pos": [-0.05, 0, -0.3], "size": [0.04, 0.004, 0.3], "cell": "accent", "yaw": 30 },
+      { "shape": "box", "pos": [-0.09, 0, -0.5], "size": [0.05, 0.06, 0.004], "cell": "accent" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.2, 0, 1.15], "kind": "pine", "height": 0.18, "radius": 0.04 },
+      { "shape": "tree", "pos": [0.12, 0, 1.15], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 1 },
+      { "shape": "tree", "pos": [0.25, 0, 1.05], "kind": "pine", "height": 0.17, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [-0.46, 0, 0.75], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [-0.4, 0, -0.55], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.9], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 5 },
+      { "shape": "tree", "pos": [0.15, 0, -0.95], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 6 }
+    ] }
+  ]
+}

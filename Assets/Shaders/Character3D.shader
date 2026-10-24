@@ -159,6 +159,10 @@ Shader "RetroLOTR/Character3D"
             #pragma vertex vert
             #pragma fragment frag
             #pragma target 3.0
+            // The miniature's base (Character3DBase) — adds the selection glow on its top face.
+            #pragma multi_compile_local _ _MINIATURE_BASE
+
+            float _C3D_Focus; // base only: 0 = idle, 0.65 = hovered, 1 = selected (smoothed)
 
             struct appdata
             {
@@ -174,7 +178,22 @@ Shader "RetroLOTR/Character3D"
                 float3 worldNormal : TEXCOORD1;
                 float3 worldPos : TEXCOORD2;
                 float4 screenPos : TEXCOORD3;
+                float3 objectPos : TEXCOORD4;
             };
+
+            #if _MINIATURE_BASE
+            // The selected miniature's base lights up: a soft, slowly breathing warm light over the
+            // whole grey top (object space: unit radius, top at y = 0), brightest under the figure
+            // and fading toward the rim — no ring. Gold motes rise from it (AmbientLife.Motes).
+            float3 BaseGlow(float3 p)
+            {
+                if (_C3D_Focus <= 0.001 || p.y < -0.002) return 0;
+                float r = length(p.xz);
+                float fill = 1.0 - smoothstep(0.1, 0.95, r) * 0.6;
+                float pulse = 0.8 + 0.2 * sin(_Time.y * 2.4);
+                return float3(1.0, 0.78, 0.42) * fill * pulse * _C3D_Focus * 0.55;
+            }
+            #endif
 
             v2f vert(appdata v)
             {
@@ -190,10 +209,11 @@ Shader "RetroLOTR/Character3D"
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
                 o.screenPos = ComputeScreenPos(o.vertex);
+                o.objectPos = v.vertex.xyz;
                 return o;
             }
 
-            fixed4 frag(v2f i, fixed facing : VFACE) : SV_Target
+            float4 frag(v2f i, fixed facing : VFACE) : SV_Target
             {
                 fixed4 albedo = tex2D(_MainTex, i.uv);
                 if (_ShadowDebug > 0.5) discard; // debug: show the whole shadow, unoccluded
@@ -210,6 +230,9 @@ Shader "RetroLOTR/Character3D"
                 // Capped at 1: the lit side shows the texture exactly as baked, only shade darkens it.
                 float3 lit = albedo.rgb * min(ambient + _C3D_KeyColor.rgb * band, 1.0);
                 float3 color = lerp(albedo.rgb, lit, _C3D_Params.x) * _Color.rgb;
+                #if _MINIATURE_BASE
+                color += BaseGlow(i.objectPos);
+                #endif
 
                 // The alignment outline is its own material (Character3DOutline): a fresnel rim here
                 // broke up into patches along every cloth fold.

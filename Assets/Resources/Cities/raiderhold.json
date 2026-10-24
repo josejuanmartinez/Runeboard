@@ -1,0 +1,64 @@
+{
+  "name": "Raider Hold",
+  "description": "A rocky island in a dark teal sea: grey cliffs rise in tiers to a grassy plateau crowned by a lone tall square stone tower with a dark green pyramid cap and broken curtain walls, ringed by jagged sea stacks, with a few trees, a sandy beach and a small jetty and rowboat at the front.",
+  "style": "Mannish",
+  "colors":   ["#8A8072", "#2E4A44", "#5A4430", "#7A7266", "#9A9080", "#221E1A", "#2C5E5A", "", "#5A6430"],
+  "surfaces": ["Fieldstone", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "sea", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "size": [0.94, 0.004, 1.1], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, 0.7], "size": [0.4, 0.004, 0.4], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, -0.7], "size": [0.4, 0.004, 0.4], "cell": "accent" }
+    ] },
+    { "note": "island ground", "at": [0.0, 0.02], "parts": [
+      { "shape": "dome", "radius": 0.33, "height": 0.05, "sides": 12, "cell": "foliage" },
+      { "shape": "dome", "pos": [0, 0, 0.35], "radius": 0.3, "height": 0.05, "sides": 12, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.05, 0, -0.3], "radius": 0.3, "height": 0.04, "sides": 12, "cell": "foliage" },
+      { "shape": "rock", "pos": [-0.25, 0, -0.1], "radius": 0.1, "height": 0.07, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.12, 0, -0.35], "radius": 0.12, "height": 0.06, "cell": "stone", "seed": 2 },
+      { "shape": "box", "pos": [0.08, 0.03, -0.42], "size": [0.22, 0.02, 0.18], "cell": "trim", "yaw": -25 }
+    ] },
+    { "note": "cliff plateau", "at": [0.0, 0.22], "parts": [
+      { "shape": "cylinder", "radius": 0.21, "height": 0.13, "sides": 7, "cell": "stone", "top": "foliage", "twist": 0.05 },
+      { "shape": "rock", "pos": [0.17, 0, -0.18], "radius": 0.11, "height": 0.1, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.18, 0, -0.16], "radius": 0.1, "height": 0.12, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "tall square tower", "at": [0.0, 0.22], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.13, 0], "radius": 0.055, "height": 0.17, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.3, 0], "radius": 0.045, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.43, 0], "size": [0.07, 0.015, 0.07], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.445, 0], "radius": 0.05, "height": 0.07, "cell": "roof" },
+      { "shape": "box", "pos": [0.0, 0.13, -0.04], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.0, 0.34, -0.033], "size": [0.012, 0.03, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0, 0.51, 0], "height": 0.06 }
+    ] },
+    { "note": "broken walls on the plateau", "at": [0.0, 0.22], "parts": [
+      { "shape": "wall", "pos": [-0.18, 0.13, 0.05], "to": [-0.06, 0.18], "height": 0.04, "thickness": 0.025, "count": 1, "cell": "wall" },
+      { "shape": "wall", "pos": [0.07, 0.13, 0.15], "to": [0.17, 0.05], "height": 0.07, "thickness": 0.025, "cell": "wall" },
+      { "shape": "wall", "pos": [0.1, 0.13, -0.08], "to": [0.18, 0.0], "height": 0.05, "thickness": 0.025, "count": 1, "cell": "wall" }
+    ] },
+    { "note": "sea stacks", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.17, 0, 0.78], "radius": 0.04, "height": 0.12, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.2, 0, 0.74], "radius": 0.045, "height": 0.12, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [-0.29, 0, 0.48], "radius": 0.035, "height": 0.1, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [-0.37, 0, 0.12], "radius": 0.04, "height": 0.12, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.37, 0, 0.43], "radius": 0.04, "height": 0.12, "cell": "stone", "seed": 9 },
+      { "shape": "rock", "pos": [0.3, 0, 0.57], "radius": 0.02, "height": 0.04, "cell": "stone", "seed": 10 },
+      { "shape": "rock", "pos": [0.41, 0, -0.33], "radius": 0.035, "height": 0.1, "cell": "stone", "seed": 11 },
+      { "shape": "rock", "pos": [-0.37, 0, -0.52], "radius": 0.04, "height": 0.11, "cell": "stone", "seed": 12 },
+      { "shape": "rock", "pos": [-0.13, 0, -0.83], "radius": 0.035, "height": 0.08, "cell": "stone", "seed": 13 },
+      { "shape": "rock", "pos": [0.3, 0, -0.5], "radius": 0.07, "height": 0.13, "cell": "stone", "seed": 14 }
+    ] },
+    { "note": "trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.26, 0, 0.24], "kind": "broadleaf", "height": 0.1, "radius": 0.05 },
+      { "shape": "tree", "pos": [-0.18, 0, -0.02], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "seed": 2 },
+      { "shape": "tree", "pos": [-0.21, 0, 0.45], "kind": "poplar", "height": 0.14, "radius": 0.02, "seed": 3 },
+      { "shape": "tree", "pos": [0.17, 0, -0.43], "kind": "broadleaf", "height": 0.08, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [0.3, 0, -0.42], "kind": "broadleaf", "height": 0.08, "radius": 0.035, "seed": 5 }
+    ] },
+    { "note": "jetty and rowboat", "at": [0.05, -0.3], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.015, 0], "size": [0.1, 0.01, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [-0.06, 0, -0.13], "size": [0.06, 0.015, 0.025], "cell": "wood" }
+    ] }
+  ]
+}

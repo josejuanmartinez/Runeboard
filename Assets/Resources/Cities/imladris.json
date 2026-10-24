@@ -1,0 +1,89 @@
+{
+  "name": "Imladris",
+  "description": "The Last Homely House in its valley: a long ivory-stone elven hall with tall pointed arches under a blue-slate roof, a great domed rotunda with a gold spire on its right, small domed and gabled pavilions, two arched bridges over a stream that falls from a cliff waterfall on the left, and pines, cypresses and gold autumn trees all round.",
+  "style": "Elven",
+  "colors":   ["#BDB49C", "#4C6070", "", "#A8A08A", "#B89A5C", "", "#8CAEB4", "", "#3E5530"],
+  "surfaces": ["Ashlar",  "Slate",   "", "",        "Plain",   "", "Plain",   "", ""],
+  "buildings": [
+    { "note": "great hall", "at": [-0.02, 0.2], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.42, 0.13, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.035, -0.061], "size": [0.36, 0.07, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.42, 0.1, 0.12], "cell": "roof", "top": "wall" },
+      { "shape": "cone", "pos": [-0.21, 0.13, 0], "radius": 0.012, "height": 0.07, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [0.21, 0.13, 0], "radius": 0.012, "height": 0.07, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.07, 0.13, -0.06], "radius": 0.008, "height": 0.05, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [0.07, 0.13, -0.06], "radius": 0.008, "height": 0.05, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "domed rotunda", "at": [0.27, 0.05], "parts": [
+      { "shape": "cylinder", "radius": 0.15, "height": 0.08, "sides": 14, "cell": "stone", "top": "roof" },
+      { "shape": "cylinder", "pos": [0, 0.08, 0.01], "radius": 0.11, "height": 0.1, "sides": 14, "cell": "wall", "top": "roof" },
+      { "shape": "box", "pos": [0, 0.1, -0.1], "size": [0.12, 0.05, 0.004], "cell": "dark" },
+      { "shape": "dome", "pos": [0, 0.18, 0.01], "radius": 0.11, "height": 0.1, "sides": 14, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.27, 0.01], "radius": 0.014, "height": 0.08, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "entrance porch", "at": [0.12, -0.04], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.08, 0.08, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.08, 0.06, 0.06], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "domed pavilion by the bridge", "at": [-0.2, 0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.08, "sides": 8, "cell": "wall" },
+      { "shape": "dome", "pos": [0, 0.08, 0], "radius": 0.055, "height": 0.06, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.135, 0], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "left pavilion", "at": [-0.42, 0.01], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.07, "sides": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.05, "height": 0.06, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.125, 0], "radius": 0.007, "height": 0.03, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "right pavilion", "at": [0.45, 0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.07, "sides": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.045, "height": 0.06, "sides": 8, "cell": "roof" }
+    ] },
+    { "note": "front chapel", "at": [0.25, -0.2], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.06, 0.06, 0.05], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.06, 0.05, 0.05], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [0, 0.11, 0], "radius": 0.006, "height": 0.03, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "cliffs and waterfall, back left", "at": [-0.36, 0.36], "parts": [
+      { "shape": "rock", "radius": 0.13, "height": 0.2, "cell": "stone" },
+      { "shape": "rock", "pos": [0.12, 0, 0.12], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 3 },
+      { "shape": "box", "pos": [0.05, 0, -0.08], "size": [0.04, 0.17, 0.01], "cell": "accent" }
+    ] },
+    { "note": "upper bridge", "at": [-0.3, -0.08], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.18, 0.012, 0.04], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0.032, -0.018], "size": [0.18, 0.01, 0.004], "cell": "wall" },
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.012, 0.02, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.012, 0.02, 0.03], "cell": "wall" }
+    ] },
+    { "note": "lower arched bridge", "at": [-0.24, -0.25], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.025, 0], "size": [0.22, 0.012, 0.045], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0.037, -0.02], "size": [0.22, 0.012, 0.004], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.03, 0.025, 0.035], "cell": "wall" }
+    ] },
+    { "note": "stream", "at": [-0.22, -0.18], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.34, 0.004, 0.09], "cell": "accent" }
+    ] },
+    { "note": "trees behind", "at": [-0.2, 0.46], "parts": [
+      { "shape": "tree", "pos": [-0.16, 0, 0.02], "kind": "pine", "height": 0.18, "radius": 0.04 },
+      { "shape": "tree", "pos": [-0.04, 0, 0], "kind": "poplar", "height": 0.24, "radius": 0.035 },
+      { "shape": "tree", "pos": [0.04, 0, 0.03], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "cell": "trim", "seed": 1 },
+      { "shape": "tree", "pos": [0.33, 0, 0.02], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [0.42, 0, -0.05], "kind": "pine", "height": 0.16, "radius": 0.035, "seed": 3 }
+    ] },
+    { "note": "trees left", "at": [-0.45, 0.13], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.2, "radius": 0.03 },
+      { "shape": "tree", "pos": [0.05, 0, -0.12], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 4 }
+    ] },
+    { "note": "trees front", "at": [0.05, -0.27], "parts": [
+      { "shape": "tree", "pos": [-0.1, 0, 0.12], "kind": "poplar", "height": 0.18, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [0.02, 0, 0], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 6 },
+      { "shape": "tree", "pos": [0.08, 0, -0.05], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 7 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.28], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 8 }
+    ] },
+    { "note": "trees right", "at": [0.42, -0.14], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.06, "cell": "trim", "seed": 9 },
+      { "shape": "tree", "pos": [-0.1, 0, -0.1], "kind": "poplar", "height": 0.17, "radius": 0.03, "seed": 10 }
+    ] }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "name": "Lag-vrasfotak",
+  "description": "A single black-stone keep on a craggy outcrop in a scorched land: a tall square tower with a crenellated crown and fire-lit windows over a broader base with two arched doors, reached by a long stone stair, with glowing lava cracks, jagged dark rock spires, a ruined pillared shrine platform and a charred dead tree around it.",
+  "style": "Orcish",
+  "colors":   ["#3E3A36", "#2E2A28", "#4A3A2A", "#4E4844", "#6A5E52", "#161412", "#C8562A", "", "#3A3028"],
+  "surfaces": ["Fieldstone", "", "", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "rock outcrop", "at": [0.0, -0.06], "parts": [
+      { "shape": "rock", "radius": 0.18, "height": 0.09, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "the black tower", "at": [0.0, -0.04], "yaw": 45, "parts": [
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.24, 0.2, 0.24], "cell": "wall" },
+      { "shape": "box", "pos": [0.121, 0.04, -0.04], "size": [0.004, 0.09, 0.045], "cell": "accent" },
+      { "shape": "box", "pos": [-0.04, 0.04, -0.121], "size": [0.045, 0.09, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.24, 0], "size": [0.17, 0.34, 0.17], "cell": "wall" },
+      { "shape": "box", "pos": [0.086, 0.46, 0.03], "size": [0.004, 0.05, 0.025], "cell": "accent" },
+      { "shape": "box", "pos": [-0.03, 0.46, -0.086], "size": [0.025, 0.05, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.086, 0.28, -0.04], "size": [0.004, 0.12, 0.008], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.58, 0], "size": [0.2, 0.05, 0.2], "cell": "wall", "top": "accent" },
+      { "shape": "battlements", "pos": [0, 0.63, 0], "radius": 0.1, "count": 8 },
+      { "shape": "flag", "pos": [0, 0.63, 0], "height": 0.08, "radius": 0.005 }
+    ] },
+    { "note": "stair up from the left", "at": [-0.17, -0.03], "yaw": -40, "parts": [
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.06, 0.03, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [-0.02, 0, 0], "size": [0.06, 0.06, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.06, 0.09, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [-0.1, 0, -0.05], "size": [0.015, 0.06, 0.015], "cell": "wall" }
+    ] },
+    { "note": "jagged rock spires", "at": [0.0, 0.0], "parts": [
+      { "shape": "cone", "pos": [-0.15, 0, 0.83], "radius": 0.05, "height": 0.2, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.35, 0, 0.55], "radius": 0.05, "height": 0.16, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.3, 0, 0.6], "radius": 0.035, "height": 0.1, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.45, 0, 0.19], "radius": 0.05, "height": 0.14, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.34, 0, 0.4], "radius": 0.07, "height": 0.26, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.42, 0, 0.3], "radius": 0.05, "height": 0.16, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.23, 0, 0.69], "radius": 0.04, "height": 0.1, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.13, 0, 1.0], "radius": 0.03, "height": 0.1, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.46, 0, -0.2], "radius": 0.04, "height": 0.1, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.39, 0, -0.57], "radius": 0.045, "height": 0.13, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.11, 0, -1.0], "radius": 0.04, "height": 0.08, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "ruined shrine platform", "at": [-0.18, -0.31], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.2, 0.03, 0.14], "cell": "stone", "top": "trim" },
+      { "shape": "box", "pos": [-0.08, 0.03, 0.05], "size": [0.025, 0.12, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.03, 0.06], "size": [0.025, 0.1, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [0.08, 0.03, -0.05], "size": [0.025, 0.05, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [-0.08, 0.03, -0.05], "size": [0.025, 0.04, 0.025], "cell": "wall" }
+    ] },
+    { "note": "charred dead tree", "at": [0.37, -0.14], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.05, "cell": "dark", "seed": 1 }
+    ] },
+    { "note": "lava crack to the front", "at": [0.12, -0.3], "yaw": 70, "parts": [
+      { "shape": "box", "size": [0.6, 0.004, 0.025], "cell": "accent" }
+    ] },
+    { "note": "lava crack to the right", "at": [0.3, -0.05], "yaw": -50, "parts": [
+      { "shape": "box", "size": [0.5, 0.004, 0.025], "cell": "accent" }
+    ] },
+    { "note": "lava channel to the left", "at": [-0.3, 0.12], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.4, 0.004, 0.03], "cell": "accent" },
+      { "shape": "box", "pos": [0.05, 0, 0.35], "size": [0.35, 0.004, 0.03], "cell": "accent", "yaw": -80 }
+    ] }
+  ]
+}

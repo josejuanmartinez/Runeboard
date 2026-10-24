@@ -57,6 +57,24 @@ public class MovementCostManager : MonoBehaviour
         if (dot != null) dot.color = Color.Lerp(dotBaseColor, costColor, 0.12f);
     }
 
+    // A step the unit cannot reach this turn: a red X instead of the movement left.
+    public void ShowBlocked()
+    {
+        if (!gameObject.activeSelf) gameObject.SetActive(true);
+        if (movementText != null)
+        {
+            if (!movementText.gameObject.activeSelf) movementText.gameObject.SetActive(true);
+            movementText.text = "X";
+            movementText.color = new Color(1f, 0.35f, 0.28f);
+        }
+        if (terrainText != null) terrainText.gameObject.SetActive(false);
+        if (dot != null)
+        {
+            if (!dot.gameObject.activeSelf) dot.gameObject.SetActive(true);
+            dot.color = Color.Lerp(dotBaseColor, new Color(0.6f, 0.08f, 0.06f), 0.6f);
+        }
+    }
+
     public void Hide()
     {
         gameObject.SetActive(false);

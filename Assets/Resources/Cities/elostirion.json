@@ -1,0 +1,71 @@
+{
+  "name": "Elostirion",
+  "description": "Three slender white elven towers, tapering from buttressed bases to crenellated collars capped by tall green-scaled ogive domes with finials, rise from rolling olive grassland; the tallest stands at the back, and a sunny grove on the left holds cypresses, golden trees, white banners and two pointed white stone markers along a pale path.",
+  "style": "Elven",
+  "colors":   ["#DCD6C2", "#8CAA94", "#6A5236", "#BEB8A4", "#E4DECC", "#3A3428", "#C8C49A", "", "#7E8432"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Ashlar", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "tallest tower, back", "at": [0.04, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.095, "height": 0.12, "sides": 8, "taper": 0.8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.12, 0], "radius": 0.07, "height": 0.52, "sides": 12, "taper": 0.8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.08], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0.4, -0.062], "size": [0.015, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0.4, -0.062], "size": [0.015, 0.07, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.64, 0], "radius": 0.07, "height": 0.04, "sides": 12, "cell": "trim" },
+      { "shape": "battlements", "pos": [0, 0.68, 0], "radius": 0.07, "count": 10, "cell": "trim" },
+      { "shape": "dome", "pos": [0, 0.68, 0], "radius": 0.06, "height": 0.14, "sides": 12, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.81, 0], "radius": 0.01, "height": 0.03, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "left tower", "at": [-0.24, -0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.09, "height": 0.12, "sides": 8, "taper": 0.8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.12, 0], "radius": 0.066, "height": 0.46, "sides": 12, "taper": 0.8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.076], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.33, -0.058], "size": [0.015, 0.07, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.58, 0], "radius": 0.066, "height": 0.04, "sides": 12, "cell": "trim" },
+      { "shape": "battlements", "pos": [0, 0.62, 0], "radius": 0.066, "count": 10, "cell": "trim" },
+      { "shape": "dome", "pos": [0, 0.62, 0], "radius": 0.056, "height": 0.13, "sides": 12, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.74, 0], "radius": 0.01, "height": 0.03, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "right tower", "at": [0.27, -0.27], "parts": [
+      { "shape": "cylinder", "radius": 0.085, "height": 0.1, "sides": 8, "taper": 0.8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.1, 0], "radius": 0.062, "height": 0.44, "sides": 12, "taper": 0.85, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.072], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.33, -0.055], "size": [0.015, 0.07, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.54, 0], "radius": 0.064, "height": 0.04, "sides": 12, "cell": "trim" },
+      { "shape": "battlements", "pos": [0, 0.58, 0], "radius": 0.064, "count": 10, "cell": "trim" },
+      { "shape": "dome", "pos": [0, 0.58, 0], "radius": 0.054, "height": 0.12, "sides": 12, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.69, 0], "radius": 0.01, "height": 0.03, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "pale path in the grove", "at": [-0.25, -0.25], "yaw": 50, "parts": [
+      { "shape": "box", "size": [0.35, 0.004, 0.08], "cell": "accent" }
+    ] },
+    { "note": "pointed white stone markers", "at": [-0.42, -0.15], "parts": [
+      { "shape": "cylinder", "radius": 0.022, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.1, 0], "radius": 0.022, "height": 0.04, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.31, 0, -0.25], "radius": 0.022, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.31, 0.1, -0.25], "radius": 0.022, "height": 0.04, "cell": "wall" }
+    ] },
+    { "note": "white banners", "at": [-0.4, 0.05], "parts": [
+      { "shape": "flag", "height": 0.2, "radius": 0.004 },
+      { "shape": "flag", "pos": [0.04, 0, -0.42], "height": 0.2, "radius": 0.004 },
+      { "shape": "flag", "pos": [0.28, 0, -0.38], "height": 0.2, "radius": 0.004 },
+      { "shape": "flag", "pos": [0.3, 0, 0.18], "height": 0.2, "radius": 0.004 }
+    ] },
+    { "note": "cypresses and golden trees in the grove", "at": [-0.3, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.07, 0, 0.35], "kind": "poplar", "height": 0.2, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [-0.12, 0, 0.3], "kind": "broadleaf", "height": 0.2, "radius": 0.05, "cell": "accent", "seed": 2 },
+      { "shape": "tree", "pos": [0.12, 0, 0.2], "kind": "poplar", "height": 0.2, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [-0.16, 0, -0.1], "kind": "poplar", "height": 0.15, "radius": 0.022, "seed": 4 },
+      { "shape": "tree", "pos": [0.17, 0, -0.35], "kind": "broadleaf", "height": 0.16, "radius": 0.05, "cell": "accent", "seed": 5 },
+      { "shape": "tree", "pos": [0.25, 0, -0.45], "kind": "poplar", "height": 0.16, "radius": 0.022, "seed": 6 },
+      { "shape": "tree", "pos": [0.05, 0, -0.7], "kind": "poplar", "height": 0.13, "radius": 0.022, "seed": 7 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.75], "kind": "poplar", "height": 0.12, "radius": 0.02, "seed": 8 },
+      { "shape": "tree", "pos": [0.22, 0, 0.6], "kind": "poplar", "height": 0.18, "radius": 0.022, "seed": 9 }
+    ] },
+    { "note": "rolling grass tussocks", "at": [0.2, 0.0], "parts": [
+      { "shape": "dome", "pos": [0.0, 0, -0.5], "radius": 0.12, "height": 0.03, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.2, 0, 0.3], "radius": 0.12, "height": 0.03, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.05, 0, -0.95], "radius": 0.12, "height": 0.03, "sides": 10, "cell": "foliage" }
+    ] }
+  ]
+}

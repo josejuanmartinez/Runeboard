@@ -1,0 +1,64 @@
+{
+  "name": "Barad Harn",
+  "description": "A small frontier village of thatched half-timber cottages on stone footings with green market awnings, along a flagstone lane with a lantern post and a hand cart, watched over by a slender square grey-stone bell tower with a slate spire and a green banner, dark pines behind.",
+  "style": "Mannish",
+  "colors":   ["#B8AA88", "#8A7448", "#4A3622", "#7E7C74", "#5A4630", "#3A3A3E", "#4E6040", "", "#3E5430"],
+  "surfaces": ["HalfTimber", "Thatch", "Planks", "Ashlar", "", "Slate", "Cloth", "", ""],
+  "buildings": [
+    { "note": "watch tower with spire", "at": [0.33, 0.09], "parts": [
+      { "shape": "cylinder", "radius": 0.075, "height": 0.3, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "box", "pos": [-0.02, 0.22, -0.054], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0.14, -0.054], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.3, 0], "radius": 0.085, "height": 0.12, "cell": "dark" },
+      { "shape": "flag", "pos": [0, 0.42, 0], "height": 0.1, "radius": 0.035 }
+    ] },
+    { "note": "back cottage with chimney", "at": [-0.01, 0.22], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.22, 0.09, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.24, 0.11, 0.15], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.04, 0, -0.066], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.11, 0.06, 0.04], "size": [0.04, 0.18, 0.04], "cell": "stone" }
+    ] },
+    { "note": "left cottage with awning", "at": [-0.27, 0.04], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.22, 0.03, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.22, 0.08, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.24, 0.12, 0.16], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.071], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0.07, -0.1], "size": [0.09, 0.008, 0.06], "cell": "accent" }
+    ] },
+    { "note": "woodshed, front left", "at": [-0.39, -0.13], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.06, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.13, 0.07, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.08, 0, -0.03], "size": [0.04, 0.035, 0.05], "cell": "wood" }
+    ] },
+    { "note": "front right cottage with market stall", "at": [0.3, -0.17], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.22, 0.03, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.22, 0.08, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.24, 0.13, 0.16], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.06, 0, -0.071], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.08, 0.1, 0.04], "size": [0.04, 0.16, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [-0.15, 0, -0.04], "size": [0.1, 0.04, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.15, 0.07, -0.04], "size": [0.11, 0.03, 0.09], "cell": "accent", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "flagstone lane", "at": [0.0, 0.0], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.9, 0.003, 0.12], "cell": "stone" }
+    ] },
+    { "note": "lantern post", "at": [0.0, -0.18], "parts": [
+      { "shape": "box", "size": [0.012, 0.1, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0.06, 0], "size": [0.015, 0.02, 0.015], "cell": "trim" }
+    ] },
+    { "note": "hand cart with barrels", "at": [-0.07, -0.35], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.11, 0.02, 0.06], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.022, "height": 0.03, "sides": 8, "cell": "wood" },
+      { "shape": "cylinder", "pos": [-0.04, 0, -0.035], "radius": 0.022, "height": 0.006, "sides": 8, "cell": "dark" }
+    ] },
+    { "note": "broken wall stub", "at": [0.21, 0.33], "parts": [
+      { "shape": "wall", "pos": [-0.04, 0, 0], "to": [0.06, 0.06], "height": 0.04, "thickness": 0.025, "cell": "stone" }
+    ] },
+    { "note": "pines behind", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.36, 0, 0.9], "kind": "pine", "height": 0.24, "radius": 0.05 },
+      { "shape": "tree", "pos": [-0.14, 0, 0.95], "kind": "pine", "height": 0.25, "radius": 0.05, "seed": 2 },
+      { "shape": "tree", "pos": [-0.44, 0, 0.4], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.43, 0, 0.35], "kind": "pine", "height": 0.18, "radius": 0.04, "seed": 4 }
+    ] }
+  ]
+}

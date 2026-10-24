@@ -1,0 +1,84 @@
+{
+  "name": "Harlond",
+  "description": "An elven haven-palace of cream stone and sea-green roofs: a long dormered arcade hall with a rounded balcony at its left end, a tall gothic tower of clustered spires and a slender turret behind, a second steep-roofed wing on the right ending in a round bastion, a circular garden court holding a white-blossomed tree, and a gabled water-gate chapel with steps down to a moored boat and an arched bridge on the river at the front.",
+  "style": "Elven",
+  "colors":   ["#D2C49A", "#5E8E80", "", "#A89C7C", "#DCD6C0", "#2C2E26", "#4E7A86", "", "#5A6C2E"],
+  "surfaces": ["Ashlar", "Slate", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "long dormered hall, back left", "at": [-0.2, 0.17], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.38, 0.11, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.01, -0.061], "size": [0.34, 0.075, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.38, 0.1, 0.12], "cell": "roof", "top": "wall" },
+      { "shape": "pyramid", "pos": [-0.06, 0.13, -0.045], "radius": 0.02, "height": 0.05, "cell": "roof" },
+      { "shape": "pyramid", "pos": [0.06, 0.13, -0.045], "radius": 0.02, "height": 0.05, "cell": "roof" },
+      { "shape": "cone", "pos": [-0.19, 0.11, 0], "radius": 0.01, "height": 0.06, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "rounded balcony, left end", "at": [-0.38, 0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.09, "sides": 12, "cell": "stone", "top": "accent" },
+      { "shape": "box", "pos": [0, 0.02, -0.078], "size": [0.09, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "slender turret, back", "at": [-0.18, 0.4], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.2, "sides": 8, "taper": 0.85, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.2, 0], "radius": 0.04, "height": 0.06, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.24, 0], "radius": 0.01, "height": 0.05, "sides": 6, "cell": "roof" }
+    ] },
+    { "note": "great gothic tower", "at": [0.1, 0.28], "parts": [
+      { "shape": "box", "size": [0.13, 0.28, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0.06, -0.051], "size": [0.03, 0.18, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.06, -0.051], "size": [0.03, 0.18, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [-0.035, 0.28, 0], "radius": 0.035, "height": 0.12, "cell": "roof" },
+      { "shape": "pyramid", "pos": [0.035, 0.28, 0], "radius": 0.035, "height": 0.11, "cell": "roof" },
+      { "shape": "pyramid", "pos": [0, 0.28, 0.035], "radius": 0.03, "height": 0.09, "cell": "roof" },
+      { "shape": "flag", "pos": [-0.035, 0.4, 0], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "right wing", "at": [0.21, 0.08], "yaw": -50, "parts": [
+      { "shape": "box", "size": [0.3, 0.11, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.015, -0.056], "size": [0.24, 0.07, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.3, 0.1, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "pyramid", "pos": [0.04, 0.13, -0.04], "radius": 0.02, "height": 0.05, "cell": "roof" },
+      { "shape": "box", "pos": [0, -0.0, 0], "size": [0.32, 0.03, 0.15], "cell": "stone" }
+    ] },
+    { "note": "round bastion, right", "at": [0.37, 0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.08, "sides": 12, "cell": "stone", "top": "accent" }
+    ] },
+    { "note": "circular garden court with blossom tree", "at": [-0.04, 0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.055, "sides": 14, "cell": "wall", "top": "foliage" },
+      { "shape": "box", "pos": [0, 0.005, -0.1], "size": [0.12, 0.035, 0.004], "cell": "dark" },
+      { "shape": "tree", "pos": [0, 0.055, 0.01], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "cell": "trim" }
+    ] },
+    { "note": "water-gate chapel with steps", "at": [-0.02, -0.27], "yaw": -40, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.04, 0.065, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.12, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.08], "size": [0.08, 0.02, 0.06], "cell": "stone" }
+    ] },
+    { "note": "terrace rock under the court", "at": [-0.22, -0.1], "parts": [
+      { "shape": "rock", "radius": 0.12, "height": 0.05, "cell": "stone" }
+    ] },
+    { "note": "river along the front", "at": [-0.22, -0.34], "yaw": 44, "parts": [
+      { "shape": "box", "size": [0.6, 0.004, 0.2], "cell": "accent" }
+    ] },
+    { "note": "moored boat", "at": [-0.22, -0.34], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.09, 0.015, 0.03], "cell": "wood" }
+    ] },
+    { "note": "arched bridge, front right", "at": [0.16, -0.3], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.035, 0], "size": [0.16, 0.012, 0.045], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.02, 0.035, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.02, 0.035, 0.04], "cell": "wall" }
+    ] },
+    { "note": "trees, left", "at": [-0.43, -0.1], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.13, "radius": 0.055 },
+      { "shape": "tree", "pos": [0.12, 0, 0.18], "kind": "poplar", "height": 0.15, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [0.0, 0, 0.45], "kind": "poplar", "height": 0.13, "radius": 0.025, "seed": 2 }
+    ] },
+    { "note": "trees, right", "at": [0.4, -0.12], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.14, "radius": 0.055, "seed": 3 },
+      { "shape": "tree", "pos": [-0.12, 0, -0.15], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 4 },
+      { "shape": "tree", "pos": [0.05, 0, 0.35], "kind": "pine", "height": 0.14, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [-0.1, 0, 0.1], "kind": "poplar", "height": 0.13, "radius": 0.022, "seed": 6 }
+    ] },
+    { "note": "tree, front", "at": [0.06, -0.43], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.11, "radius": 0.05, "seed": 7 }
+    ] }
+  ]
+}

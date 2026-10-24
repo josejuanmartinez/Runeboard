@@ -1,0 +1,80 @@
+{
+  "name": "Treforn",
+  "description": "A woodmen's steading deep in a forest clearing: a timber-plank longhouse under steep straw-thatched cross-gabled roofs with a carved beast-head pole rising above, a smaller thatched shed by the path, a log drying rack, stacked logs and a chopping stump, all hemmed in by tall pines and yellow-green and russet broadleaf trees.",
+  "style": "Northman",
+  "colors":   ["#A08A66", "#B8A066", "#7A6040", "#7E7664", "#A08A5A", "#2A2218", "#A0582E", "", "#5E6A2C"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "timber longhouse, front gable", "at": [-0.02, 0.15], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.16, 0.1, 0.24], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, -0.121], "size": [0.05, 0.07, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.18, 0.11, 0.26], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "longhouse back wing, cross gable", "at": [0.08, 0.3], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.16, 0.12, 0.12], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0.06, -0.061], "size": [0.02, 0.025, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.18, 0.1, 0.13], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "carved beast-head pole", "at": [-0.07, 0.24], "parts": [
+      { "shape": "cylinder", "radius": 0.012, "height": 0.4, "sides": 6, "cell": "wood" },
+      { "shape": "box", "pos": [0.01, 0.4, 0], "size": [0.04, 0.03, 0.02], "cell": "wood", "yaw": 20 },
+      { "shape": "flag", "pos": [0, 0.43, 0], "height": 0.04, "radius": 0.016 }
+    ] },
+    { "note": "thatched shed", "at": [0.03, -0.12], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.09, 0.07, 0.12], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.035, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.1, 0.09, 0.13], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "log drying rack", "at": [-0.24, 0.1], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.01, 0.1, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.01, 0.1, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.1, 0], "size": [0.1, 0.01, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, 0.01], "size": [0.1, 0.035, 0.04], "cell": "wood" }
+    ] },
+    { "note": "stacked logs", "at": [0.0, -0.25], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.03, 0.025, 0.1], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0, 0], "size": [0.03, 0.025, 0.1], "cell": "wood" },
+      { "shape": "box", "pos": [0.015, 0.025, 0], "size": [0.03, 0.025, 0.1], "cell": "wood" },
+      { "shape": "box", "pos": [-0.05, 0, 0.18], "size": [0.025, 0.025, 0.08], "cell": "wood" }
+    ] },
+    { "note": "chopping stump", "at": [-0.22, -0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.02, "height": 0.03, "sides": 8, "cell": "wood" },
+      { "shape": "box", "pos": [0.005, 0.03, 0], "size": [0.004, 0.035, 0.02], "cell": "stone" },
+      { "shape": "rock", "pos": [-0.07, 0, -0.07], "radius": 0.02, "height": 0.02, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "dirt path 1", "at": [-0.133, 0.078], "yaw": 102, "parts": [ { "shape": "box", "size": [0.348, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "dirt path 2", "at": [-0.14, -0.065], "yaw": 82, "parts": [ { "shape": "box", "size": [0.407, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "dirt path 3", "at": [-0.068, -0.209], "yaw": 74, "parts": [ { "shape": "box", "size": [0.354, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "dirt path 4", "at": [0.01, -0.379], "yaw": 83, "parts": [ { "shape": "box", "size": [0.45, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "forest behind", "at": [-0.05, 0.47], "parts": [
+      { "shape": "tree", "pos": [-0.3, 0, -0.05], "kind": "broadleaf", "height": 0.24, "radius": 0.07 },
+      { "shape": "tree", "pos": [-0.1, 0, 0.0], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 1 },
+      { "shape": "tree", "pos": [0.1, 0, 0.02], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.28, 0, 0.0], "kind": "broadleaf", "height": 0.22, "radius": 0.07, "seed": 3 },
+      { "shape": "tree", "pos": [0.4, 0, -0.06], "kind": "pine", "height": 0.28, "radius": 0.05, "seed": 4 }
+    ] },
+    { "note": "forest left, upper", "at": [-0.4, 0.25], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.26, "radius": 0.045, "seed": 5 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.18], "kind": "broadleaf", "height": 0.2, "radius": 0.07, "seed": 6 }
+    ] },
+    { "note": "forest left, lower", "at": [-0.36, -0.05], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.22, "radius": 0.09, "seed": 7 },
+      { "shape": "tree", "pos": [-0.08, 0, 0.12], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "cell": "accent", "seed": 8 },
+      { "shape": "tree", "pos": [0.05, 0, -0.35], "kind": "broadleaf", "height": 0.14, "radius": 0.07, "seed": 9 }
+    ] },
+    { "note": "forest right, upper", "at": [0.36, 0.22], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.24, "radius": 0.08, "seed": 10 },
+      { "shape": "tree", "pos": [0.1, 0, -0.1], "kind": "broadleaf", "height": 0.18, "radius": 0.05, "cell": "accent", "seed": 11 }
+    ] },
+    { "note": "forest right, lower", "at": [0.33, -0.12], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.27, "radius": 0.05, "seed": 12 },
+      { "shape": "tree", "pos": [-0.12, 0, 0.05], "kind": "broadleaf", "height": 0.2, "radius": 0.07, "seed": 13 },
+      { "shape": "tree", "pos": [0.12, 0, 0.12], "kind": "broadleaf", "height": 0.22, "radius": 0.07, "seed": 14 },
+      { "shape": "rock", "pos": [0.12, 0, -0.1], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 15 }
+    ] },
+    { "note": "front trees", "at": [-0.1, -0.36], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.18, "radius": 0.035, "seed": 16 },
+      { "shape": "tree", "pos": [-0.12, 0, 0.0], "kind": "broadleaf", "height": 0.1, "radius": 0.05, "seed": 17 }
+    ] }
+  ]
+}

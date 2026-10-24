@@ -1,0 +1,92 @@
+{
+  "name": "Durthang",
+  "description": "A grim grey-stone castle crowded with round and square towers under steep blue-slate cone roofs, the tallest a central keep with dormer windows, rises from a nest of jagged grey crags; a long stair on an arched causeway climbs from a carved warrior statue in a niche at the front left to the arched gate, a crenellated bastion juts to the right, and dark pines and a dirt path wind round the rocks.",
+  "style": "Mannish",
+  "colors":   ["#8E8C82", "#4A5664", "#5A4632", "#9C988A", "#B0AC9C", "#24262A", "#C89A4A", "", "#3A4A2C"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "crag plinth under the castle", "at": [0.04, 0.16], "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.44, 0.13, 0.22], "cell": "stone" },
+      { "shape": "rock", "pos": [-0.2, 0, -0.1], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "central keep", "at": [0.04, 0.2], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.13, 0], "radius": 0.085, "height": 0.36, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.49, 0], "radius": 0.085, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.3, -0.061], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.49, 0], "radius": 0.07, "height": 0.26, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.75, 0], "height": 0.08, "radius": 0.004 }
+    ] },
+    { "note": "left tall tower", "at": [-0.1, 0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.44, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.44, 0], "radius": 0.06, "height": 0.19, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "right tall tower", "at": [0.19, 0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.43, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.43, 0], "radius": 0.06, "height": 0.17, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "gate block with arched door", "at": [-0.07, 0.05], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.13, 0.27, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.13, -0.051], "size": [0.045, 0.08, 0.004], "cell": "dark" },
+      { "shape": "wallBattlements", "pos": [0, 0.27, 0], "length": 0.13, "thickness": 0.1, "cell": "wall" }
+    ] },
+    { "note": "left front tower", "at": [-0.14, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.045, "height": 0.3, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.055, "height": 0.15, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "front great tower", "at": [0.01, -0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.4, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.3, -0.043], "size": [0.03, 0.04, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.4, 0], "radius": 0.065, "height": 0.2, "cell": "roof" }
+    ] },
+    { "note": "middle tower", "at": [0.14, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.26, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.26, 0], "radius": 0.05, "height": 0.13, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "right front tower", "at": [0.24, 0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.045, "height": 0.3, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.055, "height": 0.15, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "crenellated bastion, right", "at": [0.24, -0.02], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.24, 0.17, 0.1], "cell": "wall" },
+      { "shape": "wallBattlements", "pos": [0, 0.17, 0], "length": 0.24, "thickness": 0.1, "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.1, 0.17, 0], "radius": 0.035, "height": 0.08, "cell": "roof" }
+    ] },
+    { "note": "stair causeway", "at": [-0.1, -0.33], "yaw": -10, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.0], "size": [0.07, 0.03, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.1], "size": [0.07, 0.08, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.2], "size": [0.07, 0.13, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.3], "size": [0.07, 0.18, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.4], "size": [0.07, 0.23, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0.036, 0, 0.25], "size": [0.004, 0.06, 0.04], "cell": "dark" }
+    ] },
+    { "note": "carved warrior statue in a niche", "at": [-0.26, -0.24], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.11, 0.17, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.02, -0.026], "size": [0.06, 0.11, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.02, -0.03], "size": [0.035, 0.09, 0.02], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.17, 0], "size": [0.05, 0.04, 0.12], "cell": "stone", "top": "stone", "yaw": 90 }
+    ] },
+    { "note": "crags behind and around", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.22, 0, 0.75], "radius": 0.15, "height": 0.42, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.28, 0, 0.85], "radius": 0.14, "height": 0.4, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.34, 0, 0.25], "radius": 0.14, "height": 0.34, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.4, 0, 0.3], "radius": 0.11, "height": 0.28, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.38, 0, -0.25], "radius": 0.09, "height": 0.15, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.11, 0, -0.32], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.24, 0, -0.25], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.12, 0, -0.75], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 9 },
+      { "shape": "rock", "pos": [0.36, 0, -0.55], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 10 }
+    ] },
+    { "note": "dirt path, front right", "at": [0.2, -0.3], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.5, 0.004, 0.08], "cell": "trim" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.3], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [-0.43, 0, -0.1], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [-0.33, 0, -0.45], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [0.42, 0, 0.0], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [0.33, 0, -0.1], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [0.44, 0, 0.6], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 6 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.75], "kind": "broadleaf", "height": 0.05, "radius": 0.04, "seed": 7 }
+    ] }
+  ]
+}

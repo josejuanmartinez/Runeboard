@@ -1,0 +1,55 @@
+{
+  "name": "An Karagmir",
+  "description": "A crumbling stepped sandstone ziggurat banded with red glyphs, its summit broken open, with a pillared doorway flanked by red sun banners, a ruined altar with a bronze brazier, crescent-horned totem poles, a red war tent and a dead tree on the desert sand.",
+  "style": "Southron",
+  "colors":   ["#B08A5C", "#8A6A44", "#5A3E26", "#9C7A50", "#7A5A36", "#2A1A12", "#8E2E22", "", "#6A5A3A"],
+  "surfaces": ["Ashlar", "", "Planks", "Ashlar", "", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "stepped ziggurat", "at": [0.03, 0.14], "yaw": 45, "parts": [
+      { "shape": "box", "size": [0.5, 0.06, 0.5], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.42, 0.06, 0.42], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.12, 0], "size": [0.34, 0.06, 0.34], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.18, 0], "size": [0.26, 0.06, 0.26], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.24, 0], "size": [0.18, 0.06, 0.18], "cell": "wall", "top": "dark" },
+      { "shape": "box", "pos": [-0.06, 0.3, -0.06], "size": [0.05, 0.1, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0.3, 0.06], "size": [0.05, 0.13, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [-0.06, 0.3, 0.06], "size": [0.05, 0.07, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0.07, 0.3, -0.06], "size": [0.04, 0.05, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.04, -0.252], "size": [0.48, 0.008, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.16, -0.172], "size": [0.32, 0.008, 0.004], "cell": "accent" }
+    ] },
+    { "note": "pillared doorway with sun banners", "at": [-0.13, 0.05], "yaw": -45, "parts": [
+      { "shape": "box", "size": [0.12, 0.11, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.1, 0.03, -0.026], "size": [0.04, 0.09, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.1, 0.0, -0.026], "size": [0.04, 0.09, 0.004], "cell": "accent" }
+    ] },
+    { "note": "ruined altar with brazier", "at": [-0.28, -0.24], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.16, 0.07, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.06, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.08, 0, 0], "size": [0.04, 0.1, 0.04], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.02, 0.07, 0], "radius": 0.025, "height": 0.03, "sides": 8, "taper": 1.4, "cell": "trim", "top": "dark" }
+    ] },
+    { "note": "crescent totems", "at": [0, 0], "parts": [
+      { "shape": "cylinder", "pos": [-0.43, 0, -0.4], "radius": 0.012, "height": 0.2, "sides": 6, "cell": "wood" },
+      { "shape": "cone", "pos": [-0.43, 0.2, -0.4], "radius": 0.025, "height": 0.04, "sides": 6, "cell": "stone" },
+      { "shape": "box", "pos": [-0.41, 0.12, -0.41], "size": [0.02, 0.06, 0.004], "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.09, 0, -0.64], "radius": 0.012, "height": 0.18, "sides": 6, "cell": "wood" },
+      { "shape": "cone", "pos": [-0.09, 0.18, -0.64], "radius": 0.025, "height": 0.04, "sides": 6, "cell": "stone" },
+      { "shape": "box", "pos": [-0.07, 0.1, -0.65], "size": [0.02, 0.06, 0.004], "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.47, 0, 0.4], "radius": 0.012, "height": 0.22, "sides": 6, "cell": "wood" },
+      { "shape": "cone", "pos": [-0.47, 0.22, 0.4], "radius": 0.025, "height": 0.04, "sides": 6, "cell": "stone" }
+    ] },
+    { "note": "red war tent", "at": [0.33, -0.25], "yaw": -30, "parts": [
+      { "shape": "gable", "size": [0.16, 0.09, 0.1], "cell": "accent", "top": "accent" },
+      { "shape": "flag", "pos": [0.1, 0, 0], "height": 0.13, "radius": 0.025 }
+    ] },
+    { "note": "rubble block and pot", "at": [0.11, -0.22], "parts": [
+      { "shape": "box", "size": [0.06, 0.05, 0.05], "cell": "stone", "yaw": 20 },
+      { "shape": "cylinder", "pos": [0.04, 0, -0.35], "radius": 0.02, "height": 0.03, "sides": 8, "cell": "accent" }
+    ] },
+    { "note": "dead tree", "at": [0.41, -0.01], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.14, "radius": 0.04, "cell": "wood" }
+    ] }
+  ]
+}

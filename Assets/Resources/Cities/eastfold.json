@@ -1,0 +1,85 @@
+{
+  "name": "Eastfold",
+  "description": "A plain Rohirric farming hamlet: about ten weathered plank cottages with steep grey-brown shingle roofs and a few stone chimneys crowd round a winding dirt lane, with a timber-framed well, a grassy green with a small tree, split-rail fences and yellow-green shrubs at the edges.",
+  "style": "Northman",
+  "colors":   ["#7A5838", "#76685A", "#5E4430", "#8E887C", "#9A7E5A", "#2A2018", "#B89A48", "", "#6E7A2E"],
+  "surfaces": ["Planks", "Tiles", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "house, back left", "at": [-0.21, 0.42], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.17, 0.1, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.19, 0.09, 0.14], "cell": "roof", "top": "roof" }
+    ] },
+    { "note": "house, back centre, with chimney", "at": [0.07, 0.48], "yaw": 15, "parts": [
+      { "shape": "box", "size": [0.22, 0.1, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.056], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.23, 0.09, 0.13], "cell": "roof", "top": "roof" },
+      { "shape": "box", "pos": [-0.13, 0, 0.0], "size": [0.04, 0.24, 0.04], "cell": "stone" }
+    ] },
+    { "note": "long house, back right", "at": [0.33, 0.29], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.24, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.121, 0, 0], "size": [0.004, 0.06, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.24, 0.1, 0.12], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "timber well", "at": [-0.28, 0.33], "parts": [
+      { "shape": "box", "size": [0.06, 0.03, 0.06], "cell": "wood" },
+      { "shape": "box", "pos": [-0.025, 0, 0], "size": [0.008, 0.08, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.025, 0, 0], "size": [0.008, 0.08, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.08, 0], "size": [0.06, 0.008, 0.008], "cell": "wood" }
+    ] },
+    { "note": "cottage, left", "at": [-0.39, 0.12], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.13, 0.09, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.12, 0.08, 0.15], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "house, middle left", "at": [-0.14, 0.0], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.2, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.101, 0.03, 0], "size": [0.004, 0.03, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.21, 0.1, 0.12], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "house with stone chimney, front left", "at": [-0.27, -0.24], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.22, 0.11, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.23, 0.11, 0.13], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.12, 0, -0.05], "size": [0.045, 0.24, 0.045], "cell": "stone" }
+    ] },
+    { "note": "house, middle right", "at": [0.15, 0.02], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.2, 0.11, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.101, 0.03, 0], "size": [0.004, 0.03, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.21, 0.1, 0.12], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "house with chimney, right", "at": [0.37, -0.05], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.2, 0.11, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.04, -0.061], "size": [0.1, 0.03, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.21, 0.09, 0.14], "cell": "roof", "top": "roof" },
+      { "shape": "box", "pos": [-0.11, 0, -0.06], "size": [0.04, 0.2, 0.04], "cell": "stone" }
+    ] },
+    { "note": "house, front right", "at": [0.18, -0.3], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.2, 0.11, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.21, 0.09, 0.14], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.04, 0, -0.08], "size": [0.09, 0.09, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0.04, 0.09, -0.08], "size": [0.08, 0.07, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "cottage, front", "at": [-0.04, -0.45], "yaw": 60, "parts": [
+      { "shape": "box", "size": [0.14, 0.12, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.071, 0.04, 0], "size": [0.004, 0.03, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.15, 0.09, 0.13], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "winding dirt lane", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [0.02, 0, 0.55], "size": [0.35, 0.004, 0.1], "cell": "trim", "yaw": -20 },
+      { "shape": "box", "pos": [0.02, 0, -0.1], "size": [0.08, 0.004, 0.9], "cell": "trim", "yaw": 15 }
+    ] },
+    { "note": "green with tree and fence", "at": [0.06, 0.25], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.07, "radius": 0.04, "cell": "accent", "seed": 1 },
+      { "shape": "wall", "pos": [-0.04, 0, -0.1], "to": [0.04, -0.3], "height": 0.035, "thickness": 0.01, "cell": "wood" }
+    ] },
+    { "note": "fences at the edges", "at": [0.0, 0.0], "parts": [
+      { "shape": "wall", "pos": [-0.47, 0, -0.35], "to": [-0.35, -0.2], "height": 0.035, "thickness": 0.01, "cell": "wood" },
+      { "shape": "wall", "pos": [0.38, 0, -0.35], "to": [0.47, -0.45], "height": 0.035, "thickness": 0.01, "cell": "wood" }
+    ] },
+    { "note": "shrubs and trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.44, 0, 1.0], "kind": "broadleaf", "height": 0.14, "radius": 0.05, "cell": "accent", "seed": 2 },
+      { "shape": "tree", "pos": [-0.36, 0, 1.05], "kind": "broadleaf", "height": 0.11, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [0.45, 0, 0.85], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "cell": "accent", "seed": 4 },
+      { "shape": "tree", "pos": [0.46, 0, 0.45], "kind": "broadleaf", "height": 0.08, "radius": 0.04, "seed": 5 }
+    ] }
+  ]
+}

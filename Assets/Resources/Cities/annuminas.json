@@ -1,0 +1,79 @@
+{
+  "name": "Annuminas",
+  "description": "The ruined royal city of Arnor: slender pale stone spire-towers with pointed Gothic arches and slate-blue star banners stand at the corners of a grassy square of broken arcaded walls, round a star-mosaic plaza, a dark pool and a stream with a little stone bridge, among pines and one golden autumn tree.",
+  "style": "Mannish",
+  "colors":   ["#B4B4A2", "#4A5A68", "", "#9C9C8C", "#B0944C", "#262A2C", "#3E5468", "", "#3E5A30"],
+  "surfaces": ["Ashlar", "Slate", "", "Ashlar", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "great spire tower, back centre", "at": [-0.01, 0.24], "parts": [
+      { "shape": "box", "size": [0.16, 0.04, 0.12], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.075, "height": 0.34, "sides": 4, "twist": 0.125, "taper": 0.8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.12, -0.055], "size": [0.04, 0.16, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.3, -0.05], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.38, 0], "radius": 0.065, "height": 0.13, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.5, 0], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.1], "size": [0.08, 0.03, 0.08], "cell": "stone" }
+    ] },
+    { "note": "back arcade walls", "at": [-0.01, 0.26], "parts": [
+      { "shape": "wall", "pos": [-0.1, 0, 0.0], "to": [-0.32, 0.12], "height": 0.12, "thickness": 0.025, "cell": "wall" },
+      { "shape": "wall", "pos": [0.1, 0, 0.0], "to": [0.3, -0.25], "height": 0.12, "thickness": 0.025, "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.2, 0.12, 0.06], "radius": 0.025, "height": 0.05, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.2, 0.12, -0.12], "radius": 0.025, "height": 0.05, "cell": "wall" }
+    ] },
+    { "note": "left spire tower", "at": [-0.43, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.26, "sides": 4, "twist": 0.125, "taper": 0.85, "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.08, -0.044], "size": [0.03, 0.12, 0.004], "cell": "accent" },
+      { "shape": "pyramid", "pos": [0, 0.26, 0], "radius": 0.055, "height": 0.1, "cell": "wall" }
+    ] },
+    { "note": "right spire tower", "at": [0.4, 0.04], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.26, "sides": 4, "twist": 0.125, "taper": 0.85, "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.08, -0.044], "size": [0.03, 0.12, 0.004], "cell": "accent" },
+      { "shape": "pyramid", "pos": [0, 0.26, 0], "radius": 0.055, "height": 0.1, "cell": "wall" },
+      { "shape": "flag", "pos": [0, 0.36, 0], "height": 0.08, "radius": 0.025 }
+    ] },
+    { "note": "front left corner tower and wall", "at": [-0.41, -0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.18, 0], "radius": 0.045, "height": 0.07, "cell": "wall" },
+      { "shape": "wall", "pos": [0.04, 0, -0.02], "to": [0.18, -0.12], "height": 0.08, "thickness": 0.025, "cell": "wall" }
+    ] },
+    { "note": "front arcade wall with great arch gate", "at": [0.2, -0.27], "parts": [
+      { "shape": "wall", "pos": [-0.33, 0, -0.1], "to": [0.2, 0.25], "height": 0.09, "thickness": 0.025, "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0.12], "size": [0.12, 0.16, 0.04], "cell": "wall", "yaw": -35 },
+      { "shape": "box", "pos": [0.04, 0, 0.098], "size": [0.07, 0.12, 0.004], "cell": "dark", "yaw": -35 },
+      { "shape": "pyramid", "pos": [0.04, 0.16, 0.12], "radius": 0.05, "height": 0.05, "cell": "wall" }
+    ] },
+    { "note": "front spire tower", "at": [-0.01, -0.35], "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.06, -0.04], "size": [0.03, 0.1, 0.004], "cell": "accent" },
+      { "shape": "pyramid", "pos": [0, 0.2, 0], "radius": 0.05, "height": 0.08, "cell": "wall" }
+    ] },
+    { "note": "front right corner tower", "at": [0.41, -0.18], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.2, 0], "radius": 0.045, "height": 0.08, "cell": "wall" }
+    ] },
+    { "note": "star mosaic plaza", "at": [0.06, 0.04], "parts": [
+      { "shape": "cylinder", "radius": 0.12, "height": 0.006, "sides": 16, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.006, 0], "radius": 0.05, "height": 0.003, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "pool", "at": [0.03, -0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.005, "sides": 12, "cell": "accent" },
+      { "shape": "rock", "pos": [-0.08, 0, -0.05], "radius": 0.025, "height": 0.02, "cell": "stone" }
+    ] },
+    { "note": "stream and bridge", "at": [-0.24, 0.12], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.08, 0.004, 0.7], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.02, -0.1], "size": [0.14, 0.012, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.1], "size": [0.03, 0.02, 0.035], "cell": "wall" }
+    ] },
+    { "note": "trees", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.2, 0, 0.95], "kind": "broadleaf", "height": 0.18, "radius": 0.07, "cell": "trim" },
+      { "shape": "tree", "pos": [0.13, 0, 0.95], "kind": "broadleaf", "height": 0.15, "radius": 0.05 },
+      { "shape": "tree", "pos": [0.27, 0, 0.75], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [-0.15, 0, 0.45], "kind": "pine", "height": 0.12, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [-0.47, 0, -0.1], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [-0.25, 0, -0.35], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [-0.15, 0, -0.75], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [0.45, 0, -0.1], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 7 },
+      { "shape": "tree", "pos": [0.33, 0, -0.95], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 8 }
+    ] }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "Beorn House",
+  "description": "Beorn's homestead: a great dark-timber hall with a mossy shingle roof and a carved bear's head over its gabled door, a tall bear-topped totem pole beside it, two plank barns with open gable doors, pines and a dirt path, all enclosed by a ring palisade of sharpened logs with a plank gate at the front.",
+  "style": "Northman",
+  "colors":   ["#6A4E30", "#7A7048", "#5A4028", "#7A766A", "#8A6A40", "#1E1610", "", "", "#3E5A2E"],
+  "surfaces": ["Planks", "Planks", "Planks", "Fieldstone", "", "", "", "", ""],
+  "buildings": [
+    { "note": "great hall", "at": [-0.01, 0.1], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.38, 0.1, 0.18], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.4, 0.13, 0.2], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.21, 0, 0], "size": [0.04, 0.16, 0.1], "cell": "wood" },
+      { "shape": "box", "pos": [-0.232, 0, 0], "size": [0.004, 0.08, 0.04], "cell": "dark" },
+      { "shape": "box", "pos": [-0.15, 0, -0.095], "size": [0.02, 0.12, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0.0, 0, -0.095], "size": [0.02, 0.12, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0.15, 0, -0.095], "size": [0.02, 0.12, 0.02], "cell": "wood" },
+      { "shape": "dome", "pos": [-0.2, 0.2, 0], "radius": 0.025, "height": 0.03, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "bear totem pole", "at": [0.16, 0.38], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.2, "sides": 8, "cell": "wood" },
+      { "shape": "dome", "pos": [0, 0.2, 0], "radius": 0.03, "height": 0.04, "sides": 8, "cell": "trim" },
+      { "shape": "flag", "pos": [0.04, 0, 0], "height": 0.14, "radius": 0.025 }
+    ] },
+    { "note": "left barn", "at": [-0.23, -0.12], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.18, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.2, 0.08, 0.12], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.091, 0, 0], "size": [0.004, 0.05, 0.04], "cell": "dark" }
+    ] },
+    { "note": "right barn", "at": [0.25, -0.15], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.18, 0.07, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.2, 0.09, 0.13], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.091, 0, 0], "size": [0.004, 0.05, 0.045], "cell": "dark" }
+    ] },
+    { "note": "ring palisade", "at": [0, 0], "parts": [
+      { "shape": "wall", "pos": [-0.44, 0, 0.4], "to": [-0.44, -0.53], "height": 0.08, "thickness": 0.025, "count": 12, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.44, 0, -0.53], "to": [-0.06, -0.9], "height": 0.08, "thickness": 0.025, "count": 8, "cell": "wood" },
+      { "shape": "wall", "pos": [0.04, 0, -0.88], "to": [0.45, -0.65], "height": 0.08, "thickness": 0.025, "count": 8, "cell": "wood" },
+      { "shape": "wall", "pos": [0.45, 0, -0.65], "to": [0.45, 0.59], "height": 0.08, "thickness": 0.025, "count": 14, "cell": "wood" },
+      { "shape": "wall", "pos": [0.45, 0, 0.59], "to": [0.15, 0.9], "height": 0.08, "thickness": 0.025, "count": 5, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.24, 0, 0.84], "to": [-0.44, 0.4], "height": 0.08, "thickness": 0.025, "count": 6, "cell": "wood" },
+      { "shape": "box", "pos": [-0.01, 0, -0.89], "size": [0.09, 0.06, 0.015], "cell": "trim", "yaw": -25 }
+    ] },
+    { "note": "back stair", "at": [0.33, 0.13], "yaw": 60, "parts": [
+      { "shape": "box", "size": [0.05, 0.02, 0.12], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.02, 0.03], "size": [0.05, 0.02, 0.06], "cell": "wood" }
+    ] },
+    { "note": "dirt path", "at": [-0.02, -0.2], "parts": [
+      { "shape": "box", "size": [0.07, 0.003, 0.45], "cell": "trim" }
+    ] },
+    { "note": "pines", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.4, 0, 0.4], "kind": "pine", "height": 0.18, "radius": 0.045 },
+      { "shape": "tree", "pos": [-0.33, 0, 0.18], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [-0.31, 0, 0.75], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [-0.13, 0, -0.1], "kind": "pine", "height": 0.16, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [0.19, 0, 0.12], "kind": "pine", "height": 0.17, "radius": 0.04, "seed": 5 },
+      { "shape": "tree", "pos": [0.36, 0, 0.05], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 6 },
+      { "shape": "tree", "pos": [0.5, 0, 0.45], "kind": "pine", "height": 0.17, "radius": 0.045, "seed": 7 },
+      { "shape": "tree", "pos": [0.5, 0, -0.25], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 8 }
+    ] }
+  ]
+}

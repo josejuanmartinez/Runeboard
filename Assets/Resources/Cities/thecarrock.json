@@ -1,0 +1,41 @@
+{
+  "name": "The Carrock",
+  "description": "The Carrock: a single towering flat-topped crag of columnar grey-brown rock with a mossy summit, rising from a small grassy islet ringed by a dirt path, with a few pines at its foot and a wooden palisade and posts at the front.",
+  "style": "Northman",
+  "colors":   ["#8A7A5E", "#5C5038", "#6A5234", "#8C8068", "#A69C78", "#2E2A24", "#5E7468", "", "#7A7A3A"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the great crag", "at": [0.06, -0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.3, "height": 0.5, "sides": 9, "taper": 0.72, "cell": "stone", "top": "foliage" },
+      { "shape": "cylinder", "pos": [0.04, 0.5, 0.02], "radius": 0.2, "height": 0.08, "sides": 8, "taper": 0.9, "cell": "stone", "top": "foliage" },
+      { "shape": "dome", "pos": [0.04, 0.58, 0.02], "radius": 0.17, "height": 0.03, "sides": 8, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [-0.12, 0, -0.18], "radius": 0.1, "height": 0.36, "sides": 6, "taper": 0.8, "cell": "stone", "top": "foliage" },
+      { "shape": "cylinder", "pos": [0.0, 0, -0.24], "radius": 0.08, "height": 0.26, "sides": 6, "taper": 0.8, "cell": "stone", "top": "foliage" },
+      { "shape": "cylinder", "pos": [0.22, 0, -0.08], "radius": 0.12, "height": 0.42, "sides": 6, "taper": 0.75, "cell": "stone", "top": "stone" }
+    ] },
+    { "note": "scree at the foot", "at": [-0.15, -0.3], "parts": [
+      { "shape": "rock", "radius": 0.08, "height": 0.08, "cell": "stone" },
+      { "shape": "rock", "pos": [0.3, 0, -0.05], "radius": 0.07, "height": 0.06, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.55, 0, 0.3], "radius": 0.06, "height": 0.09, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "front palisade posts", "at": [0.05, -0.42], "parts": [
+      { "shape": "wall", "pos": [-0.2, 0, 0], "to": [0.2, 0], "height": 0.04, "thickness": 0.015, "cell": "wood" },
+      { "shape": "box", "pos": [-0.1, 0, -0.01], "size": [0.015, 0.05, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0.0, 0, -0.01], "size": [0.015, 0.05, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0.1, 0, -0.01], "size": [0.015, 0.05, 0.015], "cell": "wood" }
+    ] },
+    { "note": "wooden fence on the left shore", "at": [-0.42, 0.0], "yaw": -60, "parts": [
+      { "shape": "wall", "pos": [-0.07, 0, 0], "to": [0.07, 0], "height": 0.07, "thickness": 0.015, "cell": "wood" }
+    ] },
+    { "note": "dirt path round the islet", "at": [-0.32, 0.12], "yaw": -70, "parts": [
+      { "shape": "box", "size": [0.3, 0.004, 0.03], "cell": "trim" }
+    ] },
+    { "note": "pines at the right foot", "at": [0.4, -0.08], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.11, "radius": 0.03 },
+      { "shape": "tree", "pos": [0.06, 0, 0.18], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 1 }
+    ] },
+    { "note": "flag on the summit", "at": [0.1, 0.08], "parts": [
+      { "shape": "flag", "pos": [0, 0.58, 0], "height": 0.06, "radius": 0.02 }
+    ] }
+  ]
+}

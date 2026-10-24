@@ -30,7 +30,8 @@ public class ZoomScaledLabel : MonoBehaviour
             if (factorFrame == Time.frameCount) return factor;
             factorFrame = Time.frameCount;
             Camera cam = Camera.main;
-            float zoom = cam != null && cam.orthographic ? cam.orthographicSize : ReferenceZoom;
+            // orthographicSize is the board zoom even while the camera is tilted into perspective (BoardNavigator).
+            float zoom = cam != null ? cam.orthographicSize : ReferenceZoom;
             factor = Mathf.Clamp(Mathf.Pow(zoom / ReferenceZoom, Response), MinScale, MaxScale);
             return factor;
         }

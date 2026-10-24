@@ -1,0 +1,94 @@
+{
+  "name": "Vamag",
+  "description": "A vine-covered stone shrine lost in the southern jungle: a small block temple with a dark arched doorway and a carved pointed obelisk on top, a lone carved obelisk and a broken pillar beside it, worn steps and a red-earth path leading out between palm trees, broad-canopied jungle trees behind and bright red, blue and yellow fan plants all round.",
+  "style": "Southron",
+  "colors":   ["#8A8668", "#2E5A64", "#6A4A2E", "#7A7A5E", "#B0952E", "#1A1A14", "#9A3A2A", "", "#3E5A26"],
+  "surfaces": ["Fieldstone", "Leaves", "", "Fieldstone", "Leaves", "", "Leaves", "", ""],
+  "buildings": [
+    { "note": "block shrine with obelisk top", "at": [0.13, 0.07], "parts": [
+      { "shape": "box", "size": [0.14, 0.15, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.05, 0.09, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.15, 0], "size": [0.1, 0.04, 0.09], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.19, 0], "radius": 0.045, "height": 0.2, "sides": 4, "twist": 0.125, "taper": 0.15, "cell": "stone" },
+      { "shape": "flag", "pos": [0, 0.39, 0], "height": 0.04, "radius": 0.016 }
+    ] },
+    { "note": "front steps", "at": [0.05, -0.0], "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.12, 0.04, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.12, 0.02, 0.05], "cell": "stone" }
+    ] },
+    { "note": "carved obelisk, left", "at": [0.0, 0.22], "parts": [
+      { "shape": "box", "size": [0.06, 0.03, 0.05], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.03, 0], "radius": 0.035, "height": 0.16, "sides": 4, "twist": 0.125, "taper": 0.4, "cell": "wall" }
+    ] },
+    { "note": "broken pillar and urn, right", "at": [0.23, 0.03], "parts": [
+      { "shape": "box", "size": [0.045, 0.15, 0.045], "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.07, 0, -0.03], "radius": 0.02, "height": 0.03, "sides": 8, "taper": 1.3, "cell": "stone" }
+    ] },
+    { "note": "jungle path 1", "at": [0.017, -0.072], "yaw": 99, "parts": [ { "shape": "box", "size": [0.371, 0.005, 0.05], "cell": "wood" } ] },
+    { "note": "jungle path 2", "at": [-0.048, -0.196], "yaw": 107, "parts": [ { "shape": "box", "size": [0.286, 0.005, 0.05], "cell": "wood" } ] },
+    { "note": "jungle path 3", "at": [-0.146, -0.314], "yaw": 111, "parts": [ { "shape": "box", "size": [0.358, 0.005, 0.05], "cell": "wood" } ] },
+    { "note": "great jungle trees behind", "at": [0.12, 0.44], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.28, "radius": 0.12 },
+      { "shape": "tree", "pos": [0.14, 0, -0.05], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 1 }
+    ] },
+    { "note": "palm, back left", "at": [-0.18, 0.26], "parts": [
+      { "shape": "cylinder", "radius": 0.012, "height": 0.28, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [0, 0.27, 0], "radius": 0.08, "height": 0.025, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [0, 0.28, 0], "radius": 0.08, "height": -0.035, "sides": 7, "cell": "foliage" }
+    ] },
+    { "note": "palm, left", "at": [-0.36, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.011, "height": 0.24, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [0, 0.23, 0], "radius": 0.07, "height": 0.022, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [0, 0.24, 0], "radius": 0.07, "height": -0.03, "sides": 7, "cell": "foliage" }
+    ] },
+    { "note": "palm, front left", "at": [-0.24, -0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.011, "height": 0.22, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [0, 0.21, 0], "radius": 0.07, "height": 0.022, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [0, 0.22, 0], "radius": 0.07, "height": -0.03, "sides": 7, "cell": "foliage" }
+    ] },
+    { "note": "palms, front", "at": [0.12, -0.3], "parts": [
+      { "shape": "cylinder", "pos": [-0.08, 0, 0.0], "radius": 0.01, "height": 0.17, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [-0.08, 0.16, 0.0], "radius": 0.06, "height": 0.02, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.08, 0.17, 0.0], "radius": 0.06, "height": -0.025, "sides": 7, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [0.09, 0, 0.0], "radius": 0.011, "height": 0.21, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [0.09, 0.2, 0.0], "radius": 0.07, "height": 0.022, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.09, 0.21, 0.0], "radius": 0.07, "height": -0.03, "sides": 7, "cell": "foliage" }
+    ] },
+    { "note": "palms, right", "at": [0.36, 0.1], "parts": [
+      { "shape": "cylinder", "pos": [-0.04, 0, 0.25], "radius": 0.011, "height": 0.2, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [-0.04, 0.19, 0.25], "radius": 0.065, "height": 0.02, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.04, 0.2, 0.25], "radius": 0.065, "height": -0.028, "sides": 7, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [0.04, 0, -0.3], "radius": 0.011, "height": 0.2, "sides": 5, "taper": 0.7, "cell": "wood" },
+      { "shape": "dome", "pos": [0.04, 0.19, -0.3], "radius": 0.07, "height": 0.022, "sides": 7, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.04, 0.2, -0.3], "radius": 0.07, "height": -0.03, "sides": 7, "cell": "foliage" }
+    ] },
+    { "note": "red fan plants", "at": [-0.2, 0.08], "parts": [
+      { "shape": "cone", "pos": [-0.0, 0, 0.2], "radius": 0.04, "height": 0.045, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.23, 0, 0.0], "radius": 0.04, "height": 0.04, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.2, 0, -0.5], "radius": 0.05, "height": 0.045, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "red fan plants, right", "at": [0.36, -0.15], "parts": [
+      { "shape": "cone", "pos": [-0.06, 0, 0.12], "radius": 0.03, "height": 0.035, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [0.07, 0, -0.08], "radius": 0.04, "height": 0.04, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "blue fan plants", "at": [0.0, -0.2], "parts": [
+      { "shape": "cone", "pos": [-0.19, 0, 0.0], "radius": 0.045, "height": 0.04, "sides": 5, "cell": "roof" },
+      { "shape": "cone", "pos": [0.15, 0, -0.15], "radius": 0.05, "height": 0.045, "sides": 5, "cell": "roof" },
+      { "shape": "cone", "pos": [0.3, 0, 0.6], "radius": 0.04, "height": 0.045, "sides": 5, "cell": "roof" },
+      { "shape": "cone", "pos": [-0.4, 0, -0.05], "radius": 0.045, "height": 0.04, "sides": 5, "cell": "roof" }
+    ] },
+    { "note": "yellow fan plants", "at": [0.0, -0.4], "parts": [
+      { "shape": "cone", "pos": [0.02, 0, 0.0], "radius": 0.04, "height": 0.04, "sides": 5, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.31, 0, 0.25], "radius": 0.04, "height": 0.035, "sides": 5, "cell": "trim" },
+      { "shape": "cone", "pos": [0.37, 0, 0.35], "radius": 0.04, "height": 0.04, "sides": 5, "cell": "trim" }
+    ] },
+    { "note": "yellow fan plants, back", "at": [0.1, 0.25], "parts": [
+      { "shape": "cone", "pos": [-0.16, 0, -0.05], "radius": 0.035, "height": 0.035, "sides": 5, "cell": "trim" },
+      { "shape": "cone", "pos": [0.28, 0, -0.2], "radius": 0.035, "height": 0.035, "sides": 5, "cell": "trim" }
+    ] },
+    { "note": "fallen carved stone and boulder, left", "at": [-0.4, -0.07], "parts": [
+      { "shape": "box", "size": [0.05, 0.06, 0.04], "cell": "wall", "yaw": 20 },
+      { "shape": "rock", "pos": [0.22, 0, -0.02], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 1 }
+    ] }
+  ]
+}

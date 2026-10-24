@@ -1,0 +1,82 @@
+{
+  "name": "Eagle's Eyrie",
+  "description": "A mountain stronghold among snow-capped grey peaks: a round walled plateau on a rock pillar carries a gabled blue-roofed hall and a tall column crowned by a carved eagle, entered through an arched gate tower; walled switchback terraces with small timber-and-slate houses and long stairs zig-zag down to the front, beside a mountain stream, with dark pines on the green lower slopes.",
+  "style": "Northman",
+  "colors":   ["#B4A88C", "#3C4A62", "#5E4632", "#8E887A", "#E2DED2", "#22242A", "#9AA8AC", "", "#34482A"],
+  "surfaces": ["HalfTimber", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "snowy peak, back right", "at": [0.24, 0.24], "parts": [
+      { "shape": "rock", "radius": 0.2, "height": 0.6, "cell": "stone", "seed": 1 },
+      { "shape": "cone", "pos": [0, 0.42, 0], "radius": 0.08, "height": 0.18, "sides": 7, "cell": "trim" }
+    ] },
+    { "note": "snowy peak, back left", "at": [-0.27, 0.17], "parts": [
+      { "shape": "rock", "radius": 0.18, "height": 0.46, "cell": "stone", "seed": 2 },
+      { "shape": "cone", "pos": [0, 0.32, 0], "radius": 0.07, "height": 0.14, "sides": 7, "cell": "trim" }
+    ] },
+    { "note": "peak, back centre", "at": [-0.06, 0.34], "parts": [
+      { "shape": "rock", "radius": 0.15, "height": 0.36, "cell": "stone", "seed": 3 },
+      { "shape": "cone", "pos": [0, 0.26, 0], "radius": 0.05, "height": 0.1, "sides": 7, "cell": "trim" }
+    ] },
+    { "note": "snowy spur, front left", "at": [-0.28, -0.2], "parts": [
+      { "shape": "rock", "radius": 0.15, "height": 0.28, "cell": "stone", "seed": 4 },
+      { "shape": "cone", "pos": [0, 0.19, 0], "radius": 0.06, "height": 0.09, "sides": 7, "cell": "trim" }
+    ] },
+    { "note": "snowy crags, right", "at": [0.33, -0.05], "parts": [
+      { "shape": "rock", "radius": 0.11, "height": 0.24, "cell": "stone", "seed": 5 },
+      { "shape": "cone", "pos": [0, 0.17, 0], "radius": 0.045, "height": 0.07, "sides": 7, "cell": "trim" },
+      { "shape": "rock", "pos": [0.06, 0, -0.3], "radius": 0.1, "height": 0.2, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "round plateau on the rock pillar", "at": [0.1, 0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.14, "height": 0.25, "sides": 14, "taper": 0.9, "cell": "stone", "top": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.25, 0.03], "size": [0.12, 0.07, 0.08], "cell": "wall" },
+      { "shape": "gable", "pos": [-0.02, 0.32, 0.03], "size": [0.12, 0.06, 0.09], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.0, 0.25, -0.02], "size": [0.05, 0.06, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0.0, 0.31, -0.02], "size": [0.06, 0.05, 0.06], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cylinder", "pos": [0.08, 0.25, 0.06], "radius": 0.022, "height": 0.22, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "dome", "pos": [0.08, 0.47, 0.06], "radius": 0.035, "height": 0.03, "sides": 6, "cell": "wood" },
+      { "shape": "flag", "pos": [-0.08, 0.38, 0.05], "height": 0.08, "radius": 0.004 }
+    ] },
+    { "note": "arched gate tower", "at": [0.0, 0.03], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.14, 0.24, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.06, 0.1, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.065, 0, -0.01], "size": [0.025, 0.27, 0.025], "cell": "stone" },
+      { "shape": "box", "pos": [0.065, 0, -0.01], "size": [0.025, 0.27, 0.025], "cell": "stone" }
+    ] },
+    { "note": "terrace house, upper left", "at": [-0.22, 0.09], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.07, 0.06, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.07, 0.05, 0.07], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "terrace house, middle", "at": [-0.11, 0.02], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.06, 0.05, 0.05], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.05, 0], "size": [0.06, 0.045, 0.06], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "terrace houses, lower right", "at": [0.12, -0.08], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [-0.07, 0, -0.04], "size": [0.07, 0.06, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [-0.07, 0.06, -0.04], "size": [0.07, 0.05, 0.07], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.07, 0, 0.12], "size": [0.08, 0.06, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0.07, 0.06, 0.12], "size": [0.07, 0.05, 0.08], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "terrace walls", "at": [-0.3, 0.06], "parts": [
+      { "shape": "wall", "to": [0.3, -0.3], "height": 0.04, "thickness": 0.025, "cell": "stone" },
+      { "shape": "wall", "pos": [0.25, 0, -0.18], "to": [0.55, -0.55], "height": 0.04, "thickness": 0.025, "cell": "stone" },
+      { "shape": "wall", "pos": [0.42, 0, -0.5], "to": [0.62, -0.75], "height": 0.04, "thickness": 0.025, "cell": "stone" }
+    ] },
+    { "note": "stairs down the front", "at": [0.08, -0.3], "yaw": -50, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.2, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [-0.15, 0, 0.25], "size": [0.12, 0.06, 0.05], "cell": "stone" }
+    ] },
+    { "note": "mountain stream", "at": [-0.08, -0.37], "yaw": 70, "parts": [
+      { "shape": "box", "size": [0.3, 0.004, 0.04], "cell": "accent" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.0], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [-0.38, 0, -0.35], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.42, 0, -0.65], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [-0.25, 0, -0.75], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.4, 0, -0.55], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [0.3, 0, -0.75], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [0.44, 0, 0.25], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 7 },
+      { "shape": "tree", "pos": [-0.42, 0, 0.45], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 8 }
+    ] }
+  ]
+}

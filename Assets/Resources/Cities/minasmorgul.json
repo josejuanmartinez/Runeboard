@@ -1,0 +1,62 @@
+{
+  "name": "Minas Morgul",
+  "description": "A jagged mountain of dark spire-like crags carved with a snarling red-eyed face above an arched gate glowing sickly green, flanked by two black watchtowers on short battlemented walls, with a green pool and dead trees on a grim moor.",
+  "style": "Orcish",
+  "colors":   ["#4A4840", "#3A3832", "", "#5C584C", "#6A6656", "#141410", "#7FB89A", "", "#2C2A22"],
+  "surfaces": ["Fieldstone", "", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "spire mountain", "at": [0.0, 0.12], "parts": [
+      { "shape": "rock", "radius": 0.3, "height": 0.22, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0, 0.1], "radius": 0.13, "height": 0.85, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.08, 0, -0.05], "radius": 0.1, "height": 0.62, "sides": 5, "cell": "wall" },
+      { "shape": "cone", "pos": [0.12, 0, 0.05], "radius": 0.1, "height": 0.6, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.22, 0, 0.0], "radius": 0.09, "height": 0.42, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.25, 0, -0.08], "radius": 0.09, "height": 0.45, "sides": 5, "cell": "wall" },
+      { "shape": "cone", "pos": [0.32, 0, 0.12], "radius": 0.08, "height": 0.34, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.3, 0, -0.18], "radius": 0.07, "height": 0.26, "sides": 5, "cell": "wall" },
+      { "shape": "cone", "pos": [0.14, 0, -0.32], "radius": 0.08, "height": 0.32, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.28, 0, -0.38], "radius": 0.06, "height": 0.22, "sides": 5, "cell": "wall" },
+      { "shape": "box", "pos": [-0.11, 0.42, -0.125], "size": [0.025, 0.015, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.05, 0.42, -0.125], "size": [0.025, 0.015, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.08, 0.34, -0.13], "size": [0.06, 0.03, 0.004], "cell": "dark" }
+    ] },
+    { "note": "arched cave gate", "at": [-0.08, -0.02], "parts": [
+      { "shape": "box", "size": [0.12, 0.13, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.07, 0.1, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.004, -0.2], "size": [0.06, 0.004, 0.3], "cell": "stone" }
+    ] },
+    { "note": "left watchtower", "at": [-0.4, -0.16], "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.2, 0], "radius": 0.055, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.04], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0, 0.21, 0], "height": 0.08 }
+    ] },
+    { "note": "left wall", "at": [-0.27, -0.26], "parts": [
+      { "shape": "wall", "pos": [-0.13, 0, 0.12], "to": [0.13, -0.12], "height": 0.05, "thickness": 0.025, "count": 1, "cell": "wall" },
+      { "shape": "cone", "pos": [0.13, 0, -0.12], "radius": 0.02, "height": 0.08, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.25, 0, 0.18], "radius": 0.02, "height": 0.07, "sides": 4, "cell": "stone" }
+    ] },
+    { "note": "right watchtower", "at": [0.41, 0.02], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.2, 0], "radius": 0.05, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.04], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0, 0.21, 0], "height": 0.08 }
+    ] },
+    { "note": "right wall", "at": [0.24, -0.04], "parts": [
+      { "shape": "wall", "pos": [-0.12, 0, 0.12], "to": [0.12, -0.04], "height": 0.05, "thickness": 0.025, "count": 1, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.12, 0, 0.12], "radius": 0.02, "height": 0.08, "sides": 4, "cell": "stone" }
+    ] },
+    { "note": "green pool", "at": [0.3, 0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.004, "sides": 10, "cell": "accent" },
+      { "shape": "rock", "pos": [0.08, 0, 0.05], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "dead trees", "at": [0.0, -0.3], "parts": [
+      { "shape": "tree", "pos": [0.05, 0, 0], "kind": "poplar", "height": 0.08, "radius": 0.02, "cell": "dark" },
+      { "shape": "tree", "pos": [0.2, 0, 0.1], "kind": "poplar", "height": 0.08, "radius": 0.02, "cell": "dark", "seed": 1 },
+      { "shape": "tree", "pos": [0.4, 0, 0.3], "kind": "poplar", "height": 0.08, "radius": 0.02, "cell": "dark", "seed": 2 },
+      { "shape": "tree", "pos": [-0.44, 0, 0.9], "kind": "poplar", "height": 0.08, "radius": 0.02, "cell": "dark", "seed": 3 },
+      { "shape": "tree", "pos": [-0.38, 0, 1.2], "kind": "poplar", "height": 0.08, "radius": 0.02, "cell": "dark", "seed": 4 },
+      { "shape": "tree", "pos": [0.35, 0, 1.3], "kind": "poplar", "height": 0.08, "radius": 0.02, "cell": "dark", "seed": 5 }
+    ] }
+  ]
+}

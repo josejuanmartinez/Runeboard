@@ -1,0 +1,119 @@
+{
+  "name": "Woodmen Town",
+  "description": "A Woodmen stockade town in the forest: a pointed-stake log palisade with timber watchtowers under steep green-shingled spires at every corner and a twin-towered gate, enclosing a great carved sacred tree, a steep-roofed timber hall with a white-tree banner, small shingled houses, an open shed and a campfire, with dense pines all round and a plank bridge over a brook outside the gate.",
+  "style": "Northman",
+  "colors":   ["#6E5A3E", "#5A6A48", "#5E4A30", "#7A766A", "#A08A5C", "#221C14", "#5A7A80", "", "#3E5228"],
+  "surfaces": ["Planks", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "palisade 1", "at": [-0.159, 0.392], "yaw": 137, "parts": [ { "shape": "box", "size": [0.561, 0.08, 0.02], "cell": "wood" } ] },
+    { "note": "palisade 2", "at": [-0.352, 0.176], "yaw": 88, "parts": [ { "shape": "box", "size": [0.664, 0.08, 0.02], "cell": "wood" } ] },
+    { "note": "palisade 3", "at": [-0.202, -0.069], "yaw": 61, "parts": [ { "shape": "box", "size": [0.595, 0.08, 0.02], "cell": "wood" } ] },
+    { "note": "palisade e 1", "at": [0.278, -0.056], "yaw": -62, "parts": [ { "shape": "box", "size": [0.519, 0.08, 0.02], "cell": "wood" } ] },
+    { "note": "palisade e 2", "at": [0.393, 0.17], "yaw": -91, "parts": [ { "shape": "box", "size": [0.633, 0.08, 0.02], "cell": "wood" } ] },
+    { "note": "palisade e 3", "at": [0.216, 0.386], "yaw": -131, "parts": [ { "shape": "box", "size": [0.543, 0.08, 0.02], "cell": "wood" } ] },
+    { "note": "back watchtower", "at": [0.04, 0.43], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.26, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "box", "pos": [0, 0.18, -0.036], "size": [0.03, 0.04, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.26, 0], "radius": 0.06, "height": 0.13, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.39, 0], "height": 0.06, "radius": 0.025 }
+    ] },
+    { "note": "left corner tower", "at": [-0.36, 0.26], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.22, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.22, 0], "radius": 0.05, "height": 0.1, "cell": "roof" }
+    ] },
+    { "note": "back-left tower", "at": [-0.21, 0.38], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.18, 0], "radius": 0.04, "height": 0.08, "cell": "roof" }
+    ] },
+    { "note": "back-right tower", "at": [0.29, 0.34], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.18, 0], "radius": 0.04, "height": 0.08, "cell": "roof" }
+    ] },
+    { "note": "right corner tower", "at": [0.4, 0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.2, 0], "radius": 0.05, "height": 0.1, "cell": "roof" }
+    ] },
+    { "note": "gate towers and gate", "at": [0.03, -0.17], "yaw": -5, "parts": [
+      { "shape": "cylinder", "pos": [-0.1, 0, 0], "radius": 0.04, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "pyramid", "pos": [-0.1, 0.2, 0], "radius": 0.05, "height": 0.1, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.1, 0, 0], "radius": 0.04, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall", "top": "wood" },
+      { "shape": "pyramid", "pos": [0.1, 0.2, 0], "radius": 0.05, "height": 0.1, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.16, 0.07, 0.015], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.07, 0], "size": [0.16, 0.015, 0.02], "cell": "wood" }
+    ] },
+    { "note": "sacred carved tree", "at": [-0.04, 0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.02, "sides": 12, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0, 0], "radius": 0.045, "height": 0.2, "sides": 8, "taper": 0.8, "cell": "wood" },
+      { "shape": "tree", "pos": [0, 0.08, 0], "kind": "broadleaf", "height": 0.24, "radius": 0.11 }
+    ] },
+    { "note": "great hall with steep roof", "at": [0.12, 0.1], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.22, 0.09, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.24, 0.17, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.121, 0, 0], "size": [0.004, 0.06, 0.04], "cell": "dark" },
+      { "shape": "gable", "pos": [-0.14, 0.0, 0], "size": [0.05, 0.08, 0.06], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "white-tree banner", "at": [0.23, 0.14], "parts": [
+      { "shape": "flag", "height": 0.2, "radius": 0.04 }
+    ] },
+    { "note": "house, back left", "at": [-0.18, 0.2], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.061, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.13, 0.08, 0.11], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "open shed", "at": [-0.26, 0.07], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.1, 0.05, 0.04], "cell": "wood" },
+      { "shape": "box", "pos": [-0.045, 0, -0.03], "size": [0.008, 0.07, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.045, 0, -0.03], "size": [0.008, 0.07, 0.008], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.12, 0.05, 0.1], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "house, front left", "at": [-0.14, -0.07], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.12, 0.06, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [-0.061, 0, 0], "size": [0.004, 0.045, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.13, 0.09, 0.1], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "house, right", "at": [0.27, 0.0], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.061, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.13, 0.08, 0.11], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "small hut, right", "at": [0.33, 0.2], "parts": [
+      { "shape": "box", "size": [0.06, 0.05, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.05, 0], "size": [0.07, 0.04, 0.07], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "campfire", "at": [0.04, -0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.01, "sides": 8, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.01, 0], "radius": 0.012, "height": 0.03, "sides": 5, "cell": "trim" }
+    ] },
+    { "note": "road", "at": [0.04, -0.268], "yaw": 93, "parts": [ { "shape": "box", "size": [0.4, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "stream 1", "at": [-0.225, -0.314], "yaw": 40, "parts": [ { "shape": "box", "size": [0.31, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 2", "at": [0.03, -0.399], "yaw": 37, "parts": [ { "shape": "box", "size": [0.381, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "plank bridge", "at": [-0.04, -0.37], "yaw": -40, "parts": [
+      { "shape": "box", "pos": [0, 0.012, 0], "size": [0.05, 0.01, 0.14], "cell": "wood" }
+    ] },
+    { "note": "forest behind", "at": [0.0, 0.47], "parts": [
+      { "shape": "tree", "pos": [-0.3, 0, 0.0], "kind": "pine", "height": 0.25, "radius": 0.05 },
+      { "shape": "tree", "pos": [-0.12, 0, 0.04], "kind": "broadleaf", "height": 0.2, "radius": 0.06, "seed": 1 },
+      { "shape": "tree", "pos": [-0.04, 0, 0.08], "kind": "pine", "height": 0.3, "radius": 0.05, "seed": 2 },
+      { "shape": "tree", "pos": [0.17, 0, 0.0], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.3, 0, -0.05], "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 4 }
+    ] },
+    { "note": "forest left", "at": [-0.43, 0.05], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.35], "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 5 },
+      { "shape": "tree", "pos": [0.02, 0, -0.05], "kind": "broadleaf", "height": 0.18, "radius": 0.07, "seed": 6 },
+      { "shape": "tree", "pos": [0.04, 0, -0.4], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 7 }
+    ] },
+    { "note": "forest front left", "at": [-0.22, -0.25], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 8 },
+      { "shape": "tree", "pos": [0.1, 0, -0.1], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 9 }
+    ] },
+    { "note": "forest right", "at": [0.44, 0.05], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.3], "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 10 },
+      { "shape": "tree", "pos": [0.0, 0, -0.25], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 11 }
+    ] },
+    { "note": "forest front right", "at": [0.3, -0.25], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.22, "radius": 0.05, "seed": 12 },
+      { "shape": "tree", "pos": [-0.12, 0, -0.1], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "seed": 13 },
+      { "shape": "tree", "pos": [0.12, 0, 0.1], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "cell": "trim", "seed": 14 }
+    ] }
+  ]
+}

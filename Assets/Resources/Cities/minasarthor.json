@@ -1,0 +1,80 @@
+{
+  "name": "Minas Arthor",
+  "description": "A grey-stone castle bristling with red-tiled conical turrets: four round towers ring a tall square keep, a long gabled hall with a red roof and chimney stands at the back left, plank-roofed outbuildings and a square chimney tower to the right, and a crenellated curtain wall with two round red-capped towers and a square gate tower closes the front, with a slim flag tower at the left and a few pines.",
+  "style": "Mannish",
+  "colors":   ["#A49E90", "#9A4A36", "#8A6438", "#948E80", "#7A6A50", "#2A2420", "#B07A3A", "", "#3E5A30"],
+  "surfaces": ["Fieldstone", "Tiles", "Planks", "Fieldstone", "", "", "Planks", "", ""],
+  "buildings": [
+    { "note": "great hall at the back left", "at": [-0.22, 0.2], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.3, 0.17, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [-0.12, 0.1, -0.071], "size": [0.04, 0.04, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.17, 0], "size": [0.3, 0.14, 0.14], "cell": "roof", "top": "wall" },
+      { "shape": "cylinder", "pos": [0.14, 0.17, 0.04], "radius": 0.022, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "gable", "pos": [0.05, 0.08, -0.08], "size": [0.07, 0.08, 0.06], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "back turrets", "at": [0.07, 0.36], "parts": [
+      { "shape": "cylinder", "pos": [-0.13, 0, -0.1], "radius": 0.05, "height": 0.38, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.13, 0.38, -0.1], "radius": 0.064, "height": 0.16, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.0, 0, 0.05], "radius": 0.055, "height": 0.42, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.42, 0.05], "radius": 0.07, "height": 0.17, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.14, 0, -0.06], "radius": 0.05, "height": 0.36, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.14, 0.36, -0.06], "radius": 0.064, "height": 0.15, "sides": 10, "cell": "roof" },
+      { "shape": "cone", "pos": [0.0, 0.59, 0.05], "radius": 0.005, "height": 0.03, "sides": 4, "cell": "trim" }
+    ] },
+    { "note": "square keep with front turret", "at": [0.03, 0.12], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.17, 0.32, 0.15], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0.2, -0.076], "size": [0.02, 0.035, 0.004], "cell": "dark" },
+      { "shape": "wallBattlements", "pos": [0, 0.32, -0.07], "length": 0.17, "thickness": 0.02 },
+      { "shape": "cylinder", "pos": [0.05, 0.14, -0.07], "radius": 0.05, "height": 0.2, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.05, 0.34, -0.07], "radius": 0.062, "height": 0.15, "sides": 10, "cell": "roof" },
+      { "shape": "box", "pos": [-0.12, 0, -0.03], "size": [0.06, 0.1, 0.05], "cell": "stone" }
+    ] },
+    { "note": "left round tower", "at": [-0.32, 0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.22, "sides": 12, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.22, 0], "radius": 0.07, "count": 8 },
+      { "shape": "box", "pos": [0, 0.04, -0.07], "size": [0.025, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "slim flag tower at the far left", "at": [-0.43, 0.05], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "flag", "pos": [0, 0.2, 0], "height": 0.14, "radius": 0.006 }
+    ] },
+    { "note": "red pyramid-roof house", "at": [0.17, 0.11], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.12, 0.16, 0.1], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.16, 0], "radius": 0.09, "height": 0.13, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.11, 0, 0.0], "radius": 0.025, "height": 0.22, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "plank-roofed range at the back right", "at": [0.33, 0.22], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.14, 0.18, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.18, 0], "size": [0.14, 0.07, 0.12], "cell": "accent", "top": "wall" }
+    ] },
+    { "note": "plank-roofed barn by the yard", "at": [0.22, 0.0], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.13, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.051], "size": [0.04, 0.07, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.13, 0.07, 0.1], "cell": "accent", "top": "wall" }
+    ] },
+    { "note": "square gate tower front right", "at": [0.33, -0.27], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.13, 0.22, 0.12], "cell": "wall" },
+      { "shape": "wallBattlements", "pos": [0, 0.22, -0.055], "length": 0.13, "thickness": 0.02 },
+      { "shape": "wallBattlements", "pos": [0, 0.22, 0.055], "length": 0.13, "thickness": 0.02 },
+      { "shape": "box", "pos": [-0.04, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "dark" }
+    ] },
+    { "note": "front round towers and curtain walls", "at": [-0.13, -0.35], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.17, "sides": 12, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.17, 0], "radius": 0.08, "count": 9 },
+      { "shape": "pyramid", "pos": [0.02, 0.17, 0.06], "radius": 0.08, "height": 0.11, "cell": "roof" },
+      { "shape": "cylinder", "pos": [-0.18, 0, 0.24], "radius": 0.08, "height": 0.19, "sides": 12, "cell": "wall" },
+      { "shape": "battlements", "pos": [-0.18, 0.19, 0.24], "radius": 0.08, "count": 9 },
+      { "shape": "pyramid", "pos": [-0.16, 0.19, 0.3], "radius": 0.08, "height": 0.12, "cell": "roof" },
+      { "shape": "wall", "pos": [0.07, 0, 0.02], "to": [0.4, 0.17], "height": 0.11, "thickness": 0.035, "count": 8, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.18, 0, 0.3], "to": [-0.19, 0.95], "height": 0.1, "thickness": 0.03, "count": 7, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.1, 0, 0.12], "to": [-0.02, 0.06], "height": 0.12, "thickness": 0.03, "count": 3, "cell": "wall" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.42, 0, -0.35], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [-0.38, 0, -0.42], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.42, 0, 0.3], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [0.44, 0, -0.3], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.05, 0, -1.0], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 5 }
+    ] }
+  ]
+}

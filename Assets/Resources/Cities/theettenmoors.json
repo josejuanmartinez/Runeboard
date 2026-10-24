@@ -1,0 +1,68 @@
+{
+  "name": "The Ettenmoors",
+  "description": "A bleak snow-covered moor crossed by two winding icy streams, each spanned by a small humped stone bridge, with a twin-peaked grey crag and a tall carved standing stone at the back, scattered boulders and dry scrub, and a few snow-dusted pines.",
+  "style": "Northman",
+  "colors":   ["#7A746A", "#5C5850", "#5A4A38", "#6E6A62", "#E2DED4", "#2A2A28", "#8AA6BC", "", "#2E3E2A"],
+  "surfaces": ["Fieldstone", "Slate", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "twin-peaked crag, back", "at": [-0.1, 0.46], "parts": [
+      { "shape": "rock", "radius": 0.09, "height": 0.2, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.08, 0, -0.03], "radius": 0.06, "height": 0.12, "cell": "stone", "seed": 1 },
+      { "shape": "cone", "pos": [0.0, 0.17, 0.0], "radius": 0.035, "height": 0.04, "sides": 6, "cell": "trim" },
+      { "shape": "rock", "pos": [0.28, 0, -0.02], "radius": 0.05, "height": 0.06, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "tall carved standing stone", "at": [0.04, 0.46], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.25, "sides": 5, "taper": 0.6, "cell": "stone", "top": "trim" },
+      { "shape": "box", "pos": [0, 0.06, -0.035], "size": [0.025, 0.12, 0.004], "cell": "dark" }
+    ] },
+    { "note": "pines, back left", "at": [-0.3, 0.44], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.11, "radius": 0.03 },
+      { "shape": "tree", "pos": [0.05, 0, 0.03], "kind": "pine", "height": 0.08, "radius": 0.022, "seed": 1 }
+    ] },
+    { "note": "west stream 1", "at": [-0.388, 0.48], "yaw": 50, "parts": [ { "shape": "box", "size": [0.264, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "west stream 2", "at": [-0.277, 0.373], "yaw": 82, "parts": [ { "shape": "box", "size": [0.491, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "west stream 3", "at": [-0.310, 0.183], "yaw": 107, "parts": [ { "shape": "box", "size": [0.475, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "west stream 4", "at": [-0.349, -0.013], "yaw": 84, "parts": [ { "shape": "box", "size": [0.521, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "west stream 5", "at": [-0.244, -0.163], "yaw": 54, "parts": [ { "shape": "box", "size": [0.288, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "west stream 6", "at": [-0.088, -0.255], "yaw": 54, "parts": [ { "shape": "box", "size": [0.288, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "west stream 7", "at": [0.030, -0.366], "yaw": 76, "parts": [ { "shape": "box", "size": [0.341, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "east stream 1", "at": [0.331, 0.471], "yaw": 136, "parts": [ { "shape": "box", "size": [0.201, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "east stream 2", "at": [0.272, 0.359], "yaw": 88, "parts": [ { "shape": "box", "size": [0.425, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "east stream 3", "at": [0.331, 0.183], "yaw": 77, "parts": [ { "shape": "box", "size": [0.468, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "east stream 4", "at": [0.409, 0.0], "yaw": 83, "parts": [ { "shape": "box", "size": [0.459, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "east stream 5", "at": [0.461, -0.118], "yaw": 67, "parts": [ { "shape": "box", "size": [0.155, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "side channel", "at": [0.154, 0.428], "yaw": -19, "parts": [ { "shape": "box", "size": [0.25, 0.005, 0.03], "cell": "accent" } ] },
+    { "note": "east stone bridge", "at": [0.31, 0.1], "yaw": 20, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.14, 0.018, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [-0.05, 0, 0], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.038, -0.022], "size": [0.14, 0.012, 0.006], "cell": "stone" }
+    ] },
+    { "note": "west stone bridge", "at": [-0.32, -0.21], "yaw": -35, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.13, 0.018, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [-0.045, 0, 0], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0.045, 0, 0], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.038, -0.022], "size": [0.13, 0.012, 0.006], "cell": "stone" }
+    ] },
+    { "note": "central boulder", "at": [0.06, 0.22], "parts": [
+      { "shape": "rock", "radius": 0.04, "height": 0.04, "cell": "stone" },
+      { "shape": "rock", "pos": [0.05, 0, -0.03], "radius": 0.012, "height": 0.01, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "boulders left", "at": [-0.4, 0.2], "parts": [
+      { "shape": "rock", "radius": 0.03, "height": 0.03, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.05, 0, -0.15], "radius": 0.022, "height": 0.02, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "small rocks, middle", "at": [-0.23, -0.0], "parts": [
+      { "shape": "rock", "radius": 0.018, "height": 0.015, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.27, 0, 0.0], "radius": 0.015, "height": 0.012, "cell": "wood", "seed": 5 }
+    ] },
+    { "note": "pines, front right", "at": [0.36, -0.26], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.17, "radius": 0.04 },
+      { "shape": "tree", "pos": [0.06, 0, -0.04], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 2 }
+    ] },
+    { "note": "pines, front", "at": [0.2, -0.38], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.09, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.03], "kind": "pine", "height": 0.07, "radius": 0.02, "seed": 4 }
+    ] }
+  ]
+}

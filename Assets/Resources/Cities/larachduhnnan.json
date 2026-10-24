@@ -1,0 +1,56 @@
+{
+  "name": "Larach Duhnnan",
+  "description": "A kiln-works farmstead: a huge stone bottle kiln and a smaller one tower over a cluster of half-timbered buildings with blue-slate and brown-shingle roofs around a lantern-lit cobbled passage, with a lean-to shed in front, a hanging lantern post on stones at the entrance, and a leafy tree and rail fence on the left.",
+  "style": "Mannish",
+  "colors":   ["#BCAE8E", "#4E5868", "#5A4430", "#9A8E74", "#6E5034", "#2A2218", "#E0A040", "", "#5E7030"],
+  "surfaces": ["HalfTimber", "Slate", "Planks", "Ashlar", "Tiles", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great bottle kiln", "at": [-0.14, 0.34], "parts": [
+      { "shape": "cylinder", "radius": 0.14, "height": 0.56, "sides": 14, "taper": 0.32, "cell": "stone", "top": "dark" }
+    ] },
+    { "note": "small bottle kiln", "at": [0.33, 0.3], "parts": [
+      { "shape": "cylinder", "radius": 0.085, "height": 0.34, "sides": 12, "taper": 0.4, "cell": "stone", "top": "dark" }
+    ] },
+    { "note": "slate-roofed hall at the back", "at": [0.1, 0.33], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.16, 0.12, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.07, -0.071], "size": [0.03, 0.025, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.16, 0.13, 0.14], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [0, 0.25, -0.05], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "dark" },
+      { "shape": "box", "pos": [0.22, 0, 0.05], "size": [0.12, 0.1, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0.22, 0.1, 0.05], "size": [0.12, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "brown-roofed left wing", "at": [-0.11, 0.3], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.12, 0.09, 0.1], "cell": "trim", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "gatehouse range with lit passage", "at": [0.06, 0.16], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.26, 0.1, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [0.01, 0, -0.046], "size": [0.05, 0.08, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.26, 0.07, 0.09], "cell": "trim", "top": "wall" }
+    ] },
+    { "note": "front-left lean-to shed", "at": [-0.2, -0.13], "yaw": -40, "parts": [
+      { "shape": "box", "size": [0.22, 0.09, 0.1], "cell": "wood" },
+      { "shape": "box", "pos": [-0.05, 0.02, -0.051], "size": [0.03, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.0, 0.02, -0.051], "size": [0.03, 0.04, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.22, 0.07, 0.1], "cell": "trim", "top": "wood" }
+    ] },
+    { "note": "slate-roofed house on the right", "at": [0.35, -0.07], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.2, 0.12, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [-0.05, 0, -0.056], "size": [0.035, 0.08, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.2, 0.1, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "gable", "pos": [-0.07, 0.12, -0.03], "size": [0.07, 0.08, 0.08], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "lantern post on stones", "at": [0.16, -0.38], "parts": [
+      { "shape": "box", "size": [0.016, 0.22, 0.016], "cell": "wood" },
+      { "shape": "box", "pos": [-0.035, 0.19, 0], "size": [0.08, 0.014, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [-0.07, 0.11, 0], "size": [0.02, 0.04, 0.02], "cell": "accent" },
+      { "shape": "rock", "pos": [-0.06, 0, -0.02], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.04, 0, -0.03], "radius": 0.03, "height": 0.035, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "tree and fence on the left", "at": [-0.38, 0.14], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 1 },
+      { "shape": "tree", "pos": [0.14, 0, -0.05], "kind": "broadleaf", "height": 0.12, "radius": 0.06, "seed": 2 },
+      { "shape": "wall", "pos": [-0.08, 0, 0.0], "to": [0.0, -0.7], "height": 0.04, "thickness": 0.01, "cell": "wood" }
+    ] }
+  ]
+}

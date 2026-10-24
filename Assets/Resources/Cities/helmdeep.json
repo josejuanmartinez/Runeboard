@@ -1,0 +1,73 @@
+{
+  "name": "Helm Deep",
+  "description": "A dark-grey stone fortress climbing a snow-covered mountain spur: a front gatehouse of two stout octagonal towers with green banners either side of an arched gate reached by a narrow ramp, another octagonal tower to the right, zig-zag walls up the left flank, an open octagonal keep mid-slope and two more octagonal towers high on the snowy rock, with firs around the foot.",
+  "style": "Northman",
+  "colors":   ["#504E4A", "#3E3C38", "#5A4632", "#7A7468", "#E0DED6", "#1E1E1C", "#3A5A3A", "", "#2E3E28"],
+  "surfaces": ["Fieldstone", "Slate", "", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "the mountain spur", "at": [0.05, 0.2], "parts": [
+      { "shape": "rock", "radius": 0.45, "height": 0.3, "cell": "stone" },
+      { "shape": "cone", "pos": [0.05, 0.18, 0.15], "radius": 0.26, "height": 0.4, "sides": 6, "cell": "trim" },
+      { "shape": "rock", "pos": [0.25, 0, 0.05], "radius": 0.2, "height": 0.3, "cell": "trim", "seed": 1 },
+      { "shape": "rock", "pos": [-0.05, 0.1, -0.2], "radius": 0.14, "height": 0.12, "cell": "trim", "seed": 2 }
+    ] },
+    { "note": "front-left foothill rocks", "at": [-0.3, -0.12], "parts": [
+      { "shape": "rock", "radius": 0.16, "height": 0.12, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.65, 0, 0.0], "radius": 0.14, "height": 0.1, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "gatehouse with two octagonal towers", "at": [-0.02, -0.22], "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.22, 0.12, 0.08], "cell": "wall" },
+      { "shape": "wallBattlements", "pos": [0, 0.12, 0.02], "length": 0.22, "thickness": 0.08, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.021], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.14, 0, 0], "radius": 0.07, "height": 0.18, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [-0.14, 0.18, 0], "radius": 0.07, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [-0.09, 0.05, -0.06], "size": [0.02, 0.06, 0.004], "cell": "accent", "yaw": 20 },
+      { "shape": "cylinder", "pos": [0.14, 0, 0], "radius": 0.07, "height": 0.18, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0.14, 0.18, 0], "radius": 0.07, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0.09, 0.05, -0.06], "size": [0.02, 0.06, 0.004], "cell": "accent", "yaw": -20 },
+      { "shape": "flag", "pos": [0.14, 0.18, 0], "height": 0.07, "radius": 0.004 }
+    ] },
+    { "note": "ramp to the gate", "at": [0.0, -0.4], "yaw": -70, "parts": [
+      { "shape": "box", "size": [0.22, 0.012, 0.04], "cell": "stone" }
+    ] },
+    { "note": "octagonal tower, right", "at": [0.31, -0.02], "parts": [
+      { "shape": "cylinder", "radius": 0.065, "height": 0.2, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.2, 0], "radius": 0.065, "count": 8, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.06, 0, -0.05], "to": [-0.18, -0.18], "height": 0.1, "thickness": 0.035, "count": 4 }
+    ] },
+    { "note": "zig-zag walls, left flank", "at": [-0.3, 0.12], "parts": [
+      { "shape": "wall", "pos": [0.05, 0, -0.45], "to": [-0.05, -0.1], "height": 0.12, "thickness": 0.04, "count": 4 },
+      { "shape": "wall", "pos": [-0.05, 0, -0.1], "to": [0.06, 0.12], "height": 0.12, "thickness": 0.04, "count": 4 },
+      { "shape": "box", "pos": [-0.03, 0, -0.32], "size": [0.04, 0.06, 0.004], "cell": "dark", "yaw": 70 },
+      { "shape": "cylinder", "pos": [0.12, 0.08, 0.12], "radius": 0.05, "height": 0.08, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "wall", "pos": [0.12, 0.12, 0.12], "to": [0.28, 0.12], "height": 0.06, "thickness": 0.03, "count": 3 }
+    ] },
+    { "note": "open octagonal keep, mid-slope", "at": [0.0, 0.18], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.1, 0], "radius": 0.11, "height": 0.12, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.22, 0], "radius": 0.11, "count": 12, "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0.12, -0.1], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.12, -0.1], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0.06, 0.22, 0.06], "height": 0.07, "radius": 0.004 }
+    ] },
+    { "note": "high tower, back left", "at": [-0.2, 0.35], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.12, 0], "radius": 0.065, "height": 0.16, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.28, 0], "radius": 0.065, "count": 8, "cell": "wall" }
+    ] },
+    { "note": "high tower, back right", "at": [0.1, 0.4], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.18, 0], "radius": 0.065, "height": 0.16, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.34, 0], "radius": 0.065, "count": 8, "cell": "wall" }
+    ] },
+    { "note": "firs, left foot", "at": [-0.45, -0.15], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.08, 0, -0.12], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [0.04, 0, 0.3], "kind": "pine", "height": 0.09, "radius": 0.022, "seed": 2 },
+      { "shape": "tree", "pos": [0.25, 0, -0.35], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 3 }
+    ] },
+    { "note": "firs, right foot", "at": [0.42, -0.15], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 4 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.15], "kind": "pine", "height": 0.09, "radius": 0.022, "seed": 5 },
+      { "shape": "tree", "pos": [0.04, 0, 0.35], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 6 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.35], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 7 }
+    ] }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "Dead Marshes",
+  "description": "A desolate bog of dark mossy tussock mounds and pale dry grass, broken by murky blue-grey pools and winding rills, with grey dead snags, broken reeds and a fallen rotten log; no buildings at all.",
+  "style": "Mannish",
+  "colors":   ["#6E6650", "#5C5640", "#6A5C46", "#5E5A48", "#A89A70", "#2E2C24", "#6E8A8A", "", "#5A5636"],
+  "surfaces": ["Plain", "Turf", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "large pool, back left", "at": [-0.27, 0.1], "yaw": -15, "parts": [
+      { "shape": "box", "size": [0.26, 0.004, 0.18], "cell": "accent" },
+      { "shape": "box", "pos": [0.06, 0, 0.12], "size": [0.1, 0.004, 0.12], "cell": "accent" }
+    ] },
+    { "note": "rill through the middle", "at": [0.03, -0.12], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.26, 0.004, 0.05], "cell": "accent" }
+    ] },
+    { "note": "rill on the right", "at": [0.3, -0.21], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.26, 0.004, 0.06], "cell": "accent" }
+    ] },
+    { "note": "front pools", "at": [-0.36, -0.31], "parts": [
+      { "shape": "box", "size": [0.14, 0.004, 0.14], "cell": "accent" },
+      { "shape": "box", "pos": [0.31, 0, -0.15], "size": [0.08, 0.004, 0.08], "cell": "accent" },
+      { "shape": "box", "pos": [0.51, 0, -0.25], "size": [0.12, 0.004, 0.08], "cell": "accent", "yaw": 20 }
+    ] },
+    { "note": "tussock mounds", "at": [0.0, 0.0], "parts": [
+      { "shape": "dome", "pos": [-0.02, 0, 0.0], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.28, 0, 0.1], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.33, 0, -0.25], "radius": 0.12, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.12, 0, -0.55], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.15, 0, -0.75], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.4, 0, -0.35], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.05, 0, 0.6], "radius": 0.14, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.42, 0, 0.55], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "pale dry grass tufts", "at": [0.0, 0.0], "parts": [
+      { "shape": "cone", "pos": [0.0, 0.04, -0.3], "radius": 0.035, "height": 0.04, "sides": 7, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.35, 0.03, 0.15], "radius": 0.035, "height": 0.04, "sides": 7, "cell": "trim" },
+      { "shape": "cone", "pos": [0.42, 0.03, 0.55], "radius": 0.04, "height": 0.05, "sides": 7, "cell": "trim" },
+      { "shape": "cone", "pos": [0.2, 0.03, -0.75], "radius": 0.035, "height": 0.04, "sides": 7, "cell": "trim" }
+    ] },
+    { "note": "fallen rotten log", "at": [-0.02, 0.24], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.3, 0.03, 0.035], "cell": "wood" }
+    ] },
+    { "note": "dead snags and broken reeds", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.09, 0, 0.83], "radius": 0.012, "height": 0.12, "sides": 5, "taper": 0.3, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.2, 0, 0.52], "radius": 0.012, "height": 0.1, "sides": 5, "taper": 0.3, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.37, 0, 0.4], "radius": 0.012, "height": 0.13, "sides": 5, "taper": 0.3, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.16, 0, 0.19], "radius": 0.012, "height": 0.1, "sides": 5, "taper": 0.3, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.44, 0, 0.17], "radius": 0.01, "height": 0.11, "sides": 5, "taper": 0.3, "cell": "wood" },
+      { "shape": "cylinder", "pos": [-0.15, 0, -0.35], "radius": 0.008, "height": 0.07, "sides": 5, "taper": 0.3, "cell": "wood" }
+    ] }
+  ]
+}

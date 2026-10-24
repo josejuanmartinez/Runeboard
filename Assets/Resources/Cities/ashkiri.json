@@ -1,0 +1,70 @@
+{
+  "name": "Ashkiri",
+  "description": "A tribal hamlet of round wattle-and-timber huts under shaggy conical straw thatch, two big ones at the back with timber porches and a stone chimney, clustered round a stone well with a sweep pole, with rail fences, a woodpile and a chopping stump.",
+  "style": "Northman",
+  "colors":   ["#6A5236", "#A89058", "#5A4028", "#7A766A", "#7A6A44", "#1E1810", "", "", "#5E6A2E"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "", "", "", "", ""],
+  "buildings": [
+    { "note": "great roundhouse, back left", "at": [-0.19, 0.25], "parts": [
+      { "shape": "cylinder", "radius": 0.14, "height": 0.08, "sides": 14, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.08, 0], "radius": 0.16, "height": 0.14, "sides": 14, "cell": "roof" },
+      { "shape": "box", "pos": [0.02, 0, -0.14], "size": [0.07, 0.09, 0.04], "cell": "wood" },
+      { "shape": "gable", "pos": [0.02, 0.09, -0.14], "size": [0.08, 0.05, 0.05], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0.02, 0, -0.162], "size": [0.035, 0.06, 0.004], "cell": "dark" }
+    ] },
+    { "note": "great roundhouse with chimney, back centre", "at": [0.07, 0.26], "parts": [
+      { "shape": "cylinder", "radius": 0.14, "height": 0.08, "sides": 14, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.08, 0], "radius": 0.16, "height": 0.15, "sides": 14, "cell": "roof" },
+      { "shape": "box", "pos": [0.02, 0, -0.14], "size": [0.09, 0.1, 0.04], "cell": "wood" },
+      { "shape": "gable", "pos": [0.02, 0.1, -0.14], "size": [0.1, 0.06, 0.05], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0.02, 0, -0.162], "size": [0.045, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.15, 0.04], "size": [0.03, 0.12, 0.03], "cell": "stone" }
+    ] },
+    { "note": "hut, right", "at": [0.33, 0.16], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.07, "sides": 12, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.12, "height": 0.12, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [-0.05, 0, -0.09], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "chimney house with lean-to, left", "at": [-0.33, -0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.12, "height": 0.08, "sides": 12, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.08, 0], "radius": 0.14, "height": 0.13, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [-0.02, 0.15, 0.03], "size": [0.035, 0.12, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0.09, 0.07, -0.1], "size": [0.08, 0.008, 0.06], "cell": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [0.12, 0, -0.12], "size": [0.008, 0.07, 0.008], "cell": "wood" }
+    ] },
+    { "note": "hut behind the chimney house", "at": [-0.21, -0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.07, "sides": 12, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.12, "height": 0.12, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0.02, 0, -0.098], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "front hut on stone ring", "at": [-0.14, -0.38], "parts": [
+      { "shape": "cylinder", "radius": 0.12, "height": 0.012, "sides": 14, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.012, 0], "radius": 0.1, "height": 0.06, "sides": 12, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.072, 0], "radius": 0.12, "height": 0.13, "sides": 12, "cell": "roof" }
+    ] },
+    { "note": "pointed hut in the fold", "at": [0.11, -0.2], "parts": [
+      { "shape": "cylinder", "radius": 0.09, "height": 0.06, "sides": 12, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.06, 0], "radius": 0.1, "height": 0.15, "sides": 12, "cell": "roof" },
+      { "shape": "wall", "pos": [-0.14, 0, 0.05], "to": [-0.14, -0.15], "height": 0.04, "thickness": 0.008, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.14, 0, -0.15], "to": [0.15, -0.15], "height": 0.04, "thickness": 0.008, "cell": "wood" }
+    ] },
+    { "note": "hut, front right", "at": [0.34, -0.2], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.07, "sides": 12, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.12, "height": 0.12, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0.02, 0, -0.098], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "well with sweep pole", "at": [0.02, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.04, "sides": 10, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [0.07, 0, 0.0], "size": [0.01, 0.1, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.02, 0.09, 0.0], "size": [0.14, 0.008, 0.008], "cell": "wood", "yaw": 20 }
+    ] },
+    { "note": "woodpile and stump", "at": [0.42, 0.07], "parts": [
+      { "shape": "box", "size": [0.07, 0.03, 0.04], "cell": "wood", "yaw": 30 },
+      { "shape": "cylinder", "pos": [-0.27, 0, -0.95], "radius": 0.02, "height": 0.02, "sides": 8, "cell": "wood" }
+    ] },
+    { "note": "bushes", "at": [0.3, 0.35], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.1, "radius": 0.06 },
+      { "shape": "tree", "pos": [0.14, 0, -0.75], "kind": "broadleaf", "height": 0.1, "radius": 0.04, "seed": 2 }
+    ] }
+  ]
+}

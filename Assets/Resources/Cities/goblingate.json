@@ -1,0 +1,45 @@
+{
+  "name": "Goblin Gate",
+  "description": "A towering snow-streaked grey mountain fills the whole hex, with a lesser snowy shoulder to the right; at its foot a dark, fanged cave mouth opens behind tumbled boulders, a rough track leads out of it, and a tattered dark-red goblin banner hangs from a crooked spear beside the entrance.",
+  "style": "Orcish",
+  "colors":   ["#6E685C", "#4A3E34", "#5A4632", "#9C9480", "#DCDCD4", "#141210", "#6E2620", "", "#4A5430"],
+  "surfaces": ["Fieldstone", "", "", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "great mountain", "at": [-0.04, 0.24], "parts": [
+      { "shape": "rock", "radius": 0.42, "height": 0.36, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.05, 0.2, 0.05], "radius": 0.26, "height": 0.5, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.05, 0.5, 0.05], "radius": 0.11, "height": 0.21, "sides": 6, "cell": "trim" },
+      { "shape": "rock", "pos": [-0.25, 0, -0.05], "radius": 0.18, "height": 0.3, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.18, 0, -0.1], "radius": 0.15, "height": 0.28, "cell": "stone", "seed": 2 },
+      { "shape": "cone", "pos": [0.18, 0.2, -0.1], "radius": 0.06, "height": 0.07, "sides": 5, "cell": "trim" }
+    ] },
+    { "note": "snowy shoulder, right", "at": [0.33, 0.2], "parts": [
+      { "shape": "rock", "radius": 0.15, "height": 0.25, "cell": "stone", "seed": 3 },
+      { "shape": "cone", "pos": [0, 0.2, 0], "radius": 0.08, "height": 0.1, "sides": 5, "cell": "trim" }
+    ] },
+    { "note": "cave gate", "at": [-0.06, -0.1], "parts": [
+      { "shape": "rock", "radius": 0.16, "height": 0.2, "cell": "stone", "seed": 4 },
+      { "shape": "box", "pos": [0, 0, -0.14], "size": [0.12, 0.11, 0.03], "cell": "dark" },
+      { "shape": "cone", "pos": [-0.03, 0.08, -0.16], "radius": 0.008, "height": 0.03, "sides": 4, "cell": "trim" },
+      { "shape": "cone", "pos": [0.03, 0.08, -0.16], "radius": 0.008, "height": 0.03, "sides": 4, "cell": "trim" }
+    ] },
+    { "note": "boulders, front left", "at": [-0.3, -0.18], "parts": [
+      { "shape": "rock", "radius": 0.12, "height": 0.18, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.2, 0, -0.25], "radius": 0.1, "height": 0.12, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "rocks, right flank", "at": [0.36, -0.06], "parts": [
+      { "shape": "rock", "radius": 0.11, "height": 0.16, "cell": "stone", "seed": 7 }
+    ] },
+    { "note": "track out of the cave", "at": [0.08, -0.3], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.25, 0.004, 0.07], "cell": "wood" }
+    ] },
+    { "note": "goblin banner", "at": [0.19, -0.27], "parts": [
+      { "shape": "flag", "height": 0.18, "radius": 0.005 },
+      { "shape": "box", "pos": [0.03, 0.06, 0], "size": [0.05, 0.09, 0.004], "cell": "accent" }
+    ] },
+    { "note": "scrub", "at": [-0.42, -0.02], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.06, "radius": 0.04 },
+      { "shape": "tree", "pos": [0.83, 0, -0.1], "kind": "broadleaf", "height": 0.06, "radius": 0.04, "seed": 1 }
+    ] }
+  ]
+}

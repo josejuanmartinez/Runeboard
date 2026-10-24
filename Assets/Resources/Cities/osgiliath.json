@@ -1,0 +1,88 @@
+{
+  "name": "Osgiliath",
+  "description": "The ruined grey-stone city astride a river: broken arcaded walls and roofless halls on both banks and an island between, a square crenellated tower at the back left, two tall towers with pointed stone spires, a statue beside a white-blossomed tree, and a towered, arched stone bridge crossing the river in front.",
+  "style": "Mannish",
+  "colors":   ["#8E8B80", "#5E5E5A", "#5A4A38", "#7A786E", "#A8A496", "#26241E", "#5E7686", "", "#4A5A30"],
+  "surfaces": ["Ashlar",  "Slate",   "", "Ashlar",  "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "river", "at": [0.0, 0.0], "parts": [
+      { "shape": "wall", "pos": [-0.26, 0, 0.45], "to": [-0.05, -0.22], "height": 0.004, "thickness": 0.14, "cell": "accent" },
+      { "shape": "wall", "pos": [-0.05, 0, -0.22], "to": [0.13, -0.95], "height": 0.004, "thickness": 0.14, "cell": "accent" },
+      { "shape": "wall", "pos": [-0.05, 0, -0.1], "to": [0.17, 0.12], "height": 0.004, "thickness": 0.12, "cell": "accent" },
+      { "shape": "wall", "pos": [0.17, 0, 0.12], "to": [0.32, 0.7], "height": 0.004, "thickness": 0.1, "cell": "accent" }
+    ] },
+    { "note": "square tower back-left", "at": [-0.3, 0.22], "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.34, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.2, -0.04], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "battlements", "pos": [0, 0.34, 0], "radius": 0.055, "count": 8, "cell": "wall" },
+      { "shape": "flag", "pos": [0, 0.35, 0], "height": 0.07 }
+    ] },
+    { "note": "ruined back wall left", "at": [-0.15, 0.26], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.2, 0.16, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.021], "size": [0.05, 0.1, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0, 0], "size": [0.08, 0.1, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [-0.25, 0, -0.06], "size": [0.12, 0.09, 0.04], "cell": "wall" }
+    ] },
+    { "note": "spire tower back", "at": [0.04, 0.38], "parts": [
+      { "shape": "cylinder", "radius": 0.045, "height": 0.28, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.2, -0.033], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.28, 0], "radius": 0.05, "height": 0.13, "cell": "stone" }
+    ] },
+    { "note": "ruined back wall right", "at": [0.22, 0.28], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.18, 0.1, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.021], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0, 0], "size": [0.04, 0.14, 0.04], "cell": "wall" }
+    ] },
+    { "note": "statue and white tree", "at": [0.07, 0.24], "parts": [
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.04, 0.025, 0.04], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.04, 0.025, 0], "radius": 0.012, "height": 0.07, "sides": 6, "cell": "stone" },
+      { "shape": "tree", "pos": [0.06, 0, 0.05], "kind": "broadleaf", "height": 0.13, "radius": 0.06, "cell": "trim" },
+      { "shape": "tree", "pos": [0.17, 0, 0.12], "kind": "poplar", "height": 0.16, "radius": 0.025, "seed": 1 }
+    ] },
+    { "note": "island ruins", "at": [-0.02, 0.1], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.2, 0.025, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [-0.07, 0.025, 0], "size": [0.025, 0.08, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.025, 0], "size": [0.025, 0.06, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [-0.045, 0.085, 0], "size": [0.07, 0.015, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0.025, 0.03], "size": [0.05, 0.05, 0.04], "cell": "wall" }
+    ] },
+    { "note": "spire tower right", "at": [0.39, 0.06], "parts": [
+      { "shape": "box", "size": [0.12, 0.08, 0.1], "cell": "wall" },
+      { "shape": "cylinder", "radius": 0.05, "height": 0.33, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.037], "size": [0.025, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.22, -0.037], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.33, 0], "radius": 0.055, "height": 0.14, "cell": "stone" }
+    ] },
+    { "note": "right bank ruins", "at": [0.25, -0.1], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.08, 0.14, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.03, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0, 0.02], "size": [0.06, 0.09, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0.12, 0, -0.08], "size": [0.05, 0.03, 0.04], "cell": "stone" }
+    ] },
+    { "note": "arched bridge", "at": [0.1, -0.22], "yaw": -28, "parts": [
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.26, 0.025, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.025, 0.06, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.025, 0.06, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.085, -0.022], "size": [0.26, 0.012, 0.006], "cell": "wall" }
+    ] },
+    { "note": "bridge gate tower", "at": [-0.06, -0.27], "yaw": -28, "parts": [
+      { "shape": "box", "size": [0.08, 0.18, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.036], "size": [0.035, 0.08, 0.004], "cell": "dark" },
+      { "shape": "wallBattlements", "pos": [0, 0.18, -0.03], "length": 0.08, "cell": "wall" }
+    ] },
+    { "note": "left bank ruined house", "at": [-0.38, -0.12], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.08, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.041], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.1, 0.05, 0.08], "cell": "wood", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.12, 0, 0.02], "size": [0.06, 0.07, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [-0.1, 0, 0.25], "size": [0.04, 0.12, 0.2], "cell": "wall" }
+    ] },
+    { "note": "trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.35], "kind": "poplar", "height": 0.14, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.31, 0, 0.1], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.46, 0, -0.55], "kind": "broadleaf", "height": 0.11, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.41, 0, -0.45], "kind": "broadleaf", "height": 0.13, "radius": 0.05, "seed": 4 },
+      { "shape": "tree", "pos": [0.1, 0, -0.95], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 5 }
+    ] }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "name": "Fanuilond",
+  "description": "An elven shrine: a cream-stone rotunda of pointed open arches under a ribbed teal dome with gold trim and an oculus, raised on a round terraced drum; a grand balustraded stair sweeps down to a round plaza inlaid with a star-flower and on to a lower paved court, flanked by teal star banners on pointed posts, dark cypresses and golden trees, with a waterfall stream cascading over rocks on the left.",
+  "style": "Elven",
+  "colors":   ["#D8CCAE", "#4E8A84", "#6A5638", "#BEB298", "#C8A040", "#2E2E26", "#8CC0C8", "", "#3E5A2A"],
+  "surfaces": ["Ashlar", "Plain", "Planks", "Ashlar", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "domed rotunda on its drum", "at": [-0.01, 0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.2, "height": 0.12, "sides": 18, "cell": "stone", "top": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.12, 0.02], "radius": 0.13, "height": 0.15, "sides": 12, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.13, -0.11], "size": [0.14, 0.1, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.27, 0.02], "radius": 0.14, "height": 0.02, "sides": 12, "cell": "trim" },
+      { "shape": "dome", "pos": [0, 0.29, 0.02], "radius": 0.135, "height": 0.13, "sides": 16, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0, 0.41, 0.02], "radius": 0.025, "height": 0.02, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "upper grand stair", "at": [0.15, 0.04], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.1, 0.09, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.1, 0.06, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.14, 0, 0], "size": [0.1, 0.03, 0.1], "cell": "wall" }
+    ] },
+    { "note": "round star plaza", "at": [0.25, -0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.15, "height": 0.035, "sides": 18, "cell": "stone", "top": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.035, 0], "radius": 0.06, "height": 0.003, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "lower stair", "at": [0.09, -0.2], "yaw": -35, "parts": [
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.1, 0.03, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.05, 0, 0], "size": [0.1, 0.015, 0.1], "cell": "wall" }
+    ] },
+    { "note": "lower paved court", "at": [-0.03, -0.32], "parts": [
+      { "shape": "cylinder", "radius": 0.16, "height": 0.008, "sides": 18, "cell": "wall" }
+    ] },
+    { "note": "star banners on pointed posts", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.15, 0, -0.29], "size": [0.035, 0.07, 0.035], "cell": "wall" },
+      { "shape": "flag", "pos": [-0.15, 0.07, -0.29], "height": 0.17, "radius": 0.004 },
+      { "shape": "box", "pos": [-0.05, 0, -0.02], "size": [0.035, 0.07, 0.035], "cell": "wall" },
+      { "shape": "flag", "pos": [-0.05, 0.07, -0.02], "height": 0.17, "radius": 0.004 },
+      { "shape": "box", "pos": [0.27, 0, 0.29], "size": [0.035, 0.07, 0.035], "cell": "wall" },
+      { "shape": "flag", "pos": [0.27, 0.07, 0.29], "height": 0.17, "radius": 0.004 },
+      { "shape": "box", "pos": [0.15, 0, -0.83], "size": [0.035, 0.07, 0.035], "cell": "wall" },
+      { "shape": "flag", "pos": [0.15, 0.07, -0.83], "height": 0.17, "radius": 0.004 }
+    ] },
+    { "note": "waterfall stream over rocks, left", "at": [-0.3, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.04, 0, 0.55], "size": [0.05, 0.004, 0.4], "cell": "accent", "yaw": -10 },
+      { "shape": "box", "pos": [0.0, 0, 0.05], "size": [0.05, 0.004, 0.5], "cell": "accent", "yaw": 15 },
+      { "shape": "box", "pos": [0.05, 0, -0.55], "size": [0.06, 0.004, 0.6], "cell": "accent", "yaw": -15 },
+      { "shape": "rock", "pos": [-0.1, 0, 0.45], "radius": 0.05, "height": 0.07, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.06, 0, 0.2], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.07, 0, -0.2], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.1, 0, -0.5], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "cypresses", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.2, 0, 0.75], "kind": "poplar", "height": 0.24, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [-0.15, 0, 0.6], "kind": "poplar", "height": 0.22, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.1, 0, 0.0], "kind": "poplar", "height": 0.2, "radius": 0.028, "seed": 3 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.1], "kind": "poplar", "height": 0.18, "radius": 0.028, "seed": 4 },
+      { "shape": "tree", "pos": [0.0, 0, 0.05], "kind": "poplar", "height": 0.16, "radius": 0.026, "seed": 5 },
+      { "shape": "tree", "pos": [0.19, 0, 0.6], "kind": "poplar", "height": 0.24, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [0.26, 0, 0.55], "kind": "poplar", "height": 0.2, "radius": 0.028, "seed": 7 },
+      { "shape": "tree", "pos": [0.31, 0, 0.6], "kind": "poplar", "height": 0.23, "radius": 0.03, "seed": 8 },
+      { "shape": "tree", "pos": [0.39, 0, 0.25], "kind": "poplar", "height": 0.2, "radius": 0.028, "seed": 9 },
+      { "shape": "tree", "pos": [0.34, 0, -0.45], "kind": "poplar", "height": 0.2, "radius": 0.028, "seed": 10 },
+      { "shape": "tree", "pos": [0.27, 0, -0.65], "kind": "poplar", "height": 0.16, "radius": 0.026, "seed": 11 },
+      { "shape": "tree", "pos": [0.22, 0, -0.75], "kind": "poplar", "height": 0.14, "radius": 0.024, "seed": 12 }
+    ] },
+    { "note": "golden trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.15], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "cell": "trim", "seed": 13 },
+      { "shape": "tree", "pos": [-0.36, 0, -0.45], "kind": "broadleaf", "height": 0.13, "radius": 0.05, "cell": "trim", "seed": 14 },
+      { "shape": "tree", "pos": [-0.3, 0, -0.55], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 15 },
+      { "shape": "tree", "pos": [0.44, 0, 0.35], "kind": "broadleaf", "height": 0.12, "radius": 0.045, "cell": "trim", "seed": 16 },
+      { "shape": "tree", "pos": [0.44, 0, -0.15], "kind": "broadleaf", "height": 0.11, "radius": 0.045, "cell": "trim", "seed": 17 },
+      { "shape": "tree", "pos": [0.0, 0, -1.05], "kind": "broadleaf", "height": 0.05, "radius": 0.03, "cell": "trim", "seed": 18 }
+    ] }
+  ]
+}

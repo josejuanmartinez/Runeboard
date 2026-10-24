@@ -2078,10 +2078,12 @@ public class Army
 
             float totalCasualtyPercent = (longRangeArmies.Count * 0.10f) + (shortRangeArmies.Count * 0.20f);
             totalCasualtyPercent = Mathf.Clamp(totalCasualtyPercent, 0.05f, 0.95f);
+            // Read the name first: casualties can destroy the army and clear its commander.
+            string targetName = target.commander.characterName;
             target.ReceiveCasualties(totalCasualtyPercent, leader, false);
 
             string sourceText = $"{longRangeArmies.Count} long-range" + (shortRangeArmies.Count > 0 ? $", {shortRangeArmies.Count} short-range" : string.Empty);
-            MessageDisplayNoUI.ShowMessage(character.hex, character, $"Turn-start volley: {sourceText} army group(s) strike {target.commander.characterName}'s army.", Color.yellow);
+            MessageDisplayNoUI.ShowMessage(character.hex, character, $"Turn-start volley: {sourceText} army group(s) strike {targetName}'s army.", Color.yellow);
         }
     }
 

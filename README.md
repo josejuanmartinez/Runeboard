@@ -41,17 +41,17 @@ The war is played with miniatures on one continuous hand-painted map:
 <table>
 <tr>
 <td align="center" width="33%">
-<img src="docs/images/gameplay/26-FreePeople.png" width="220"><br>
+<img src="docs/images/v2/cards/gandalf.jpg" width="200"><br>
 <b>The Free Peoples</b><br>
 <sub>Rally scattered realms and stand against the gathering dark.</sub>
 </td>
 <td align="center" width="33%">
-<img src="docs/images/gameplay/28-DarkServants.png" width="220"><br>
+<img src="docs/images/v2/cards/sauron.jpg" width="200"><br>
 <b>The Dark Lord</b><br>
 <sub>Unleash vast hosts and break the strongholds of the Free People.</sub>
 </td>
 <td align="center" width="33%">
-<img src="docs/images/gameplay/27-Neutral.png" width="220"><br>
+<img src="docs/images/v2/cards/saruman.jpg" width="200"><br>
 <b>Neutral Nations</b><br>
 <sub>Scheme, industrialize, and strike where rival powers are weakest.</sub>
 </td>
@@ -73,24 +73,24 @@ The war is played with miniatures on one continuous hand-painted map:
 Every character doubles as a card — hover a leader's name to see their full stats and portrait, or an underlined army name to see its card. Move hex by hex with the arrow keys or WASD; spotted enemies are traced in red, spotted neutrals in grey.
 
 <div align="center">
-<img src="docs/images/gameplay/20-card-bloom.png" width="720"><br>
-<sub>Orthanc, the Gap of Rohan, Arthedain, Fangorn's Camp — every place is a card too</sub>
+<img src="docs/images/v2/shots/places-bloom.jpg" width="720"><br>
+<sub>Carn Dûm, Angmar, Barad-dûr, Gorgoroth, the Misty Mountains — every place is a card too</sub>
 </div>
 
 ## Gallery
 
 <table>
 <tr>
-<td><img src="docs/images/gameplay/05-mordor-turn0.png" width="380"></td>
-<td><img src="docs/images/gameplay/21-combat.png" width="380"></td>
+<td><img src="docs/images/v2/shots/shire-turn.jpg" width="380"></td>
+<td><img src="docs/images/v2/shots/witch-king.jpg" width="380"></td>
 </tr>
 <tr>
-<td><img src="docs/images/gameplay/12-environmental-card.png" width="380"></td>
-<td><img src="docs/images/gameplay/06-event-card.png" width="380"></td>
+<td><img src="docs/images/v2/shots/nazgul-hobbiton.jpg" width="380"></td>
+<td><img src="docs/images/v2/shots/saruman.jpg" width="380"></td>
 </tr>
 <tr>
-<td><img src="docs/images/gameplay/11-army-card.png" width="380"></td>
-<td><img src="docs/images/gameplay/03-leader-carousel.png" width="380"></td>
+<td><img src="docs/images/v2/shots/objective.jpg" width="380"></td>
+<td><img src="docs/images/v2/shots/leader-gandalf.jpg" width="380"></td>
 </tr>
 </table>
 

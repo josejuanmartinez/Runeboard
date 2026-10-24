@@ -102,7 +102,7 @@ h1, h2, h3 { margin: 0; font-weight: 400; }
 .section { max-width: var(--max); margin: 0 auto; padding: 110px 28px; text-align: center; }
 .section--tight { padding-top: 70px; padding-bottom: 70px; }
 .section--dark { max-width: none; background: linear-gradient(180deg, var(--ink-2), var(--ink-3) 50%, var(--ink-2)); }
-.section--dark > * { max-width: var(--max); margin-left: auto; margin-right: auto; }
+.section--dark > * { max-width: var(--max); margin-left: auto !important; margin-right: auto !important; }
 .rule { height: 34px; margin: 0 auto 26px; max-width: 520px; background: url("images/v2/ui/star.png") center / contain no-repeat; opacity: 0.9; }
 .eyebrow { margin: 0 0 6px; font: 1.05rem var(--label); letter-spacing: 0.18em; color: var(--bronze); text-transform: uppercase; }
 .title { font: 3.6rem/1.05 var(--display); color: var(--parchment); text-shadow: 0 2px 0 rgba(0, 0, 0, 0.6); }

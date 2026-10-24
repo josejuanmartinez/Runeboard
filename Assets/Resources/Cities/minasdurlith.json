@@ -6,9 +6,9 @@
   "surfaces": ["Ashlar",  "Fieldstone", "", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "mountains behind", "at": [-0.32, 0.36], "parts": [
-      { "shape": "rock", "radius": 0.14, "height": 0.26, "cell": "stone" },
-      { "shape": "rock", "pos": [0.68, 0, -0.05], "radius": 0.13, "height": 0.24, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [-0.12, 0, -0.25], "radius": 0.08, "height": 0.15, "cell": "stone", "seed": 3 }
+      { "shape": "peak", "radius": 0.14, "height": 0.26, "cell": "stone", "seed": 20 },
+      { "shape": "peak", "pos": [0.68, 0, -0.05], "radius": 0.13, "height": 0.24, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [-0.12, 0, -0.25], "radius": 0.08, "height": 0.15, "cell": "stone", "seed": 3 }
     ] },
     { "note": "stepped ziggurat", "at": [0.03, 0.08], "yaw": 30, "parts": [
       { "shape": "box", "size": [0.46, 0.18, 0.3], "cell": "wall" },

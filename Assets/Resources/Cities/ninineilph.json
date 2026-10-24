@@ -22,27 +22,49 @@
       { "shape": "cylinder", "pos": [0.3, 0, -0.1], "radius": 0.05, "height": 0.004, "sides": 10, "cell": "accent" }
     ] },
     { "note": "mossy hummocks", "at": [0.0, 0.0], "parts": [
-      { "shape": "dome", "pos": [-0.25, 0, 0.75], "radius": 0.12, "height": 0.06, "sides": 10, "cell": "wall" },
-      { "shape": "dome", "pos": [0.0, 0, 0.6], "radius": 0.14, "height": 0.07, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.22, 0, 0.45], "radius": 0.12, "height": 0.06, "sides": 10, "cell": "wall" },
-      { "shape": "dome", "pos": [0.35, 0, 0.1], "radius": 0.12, "height": 0.06, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [-0.02, 0, 0.12], "radius": 0.16, "height": 0.07, "sides": 10, "cell": "wall" },
-      { "shape": "dome", "pos": [-0.42, 0, -0.2], "radius": 0.1, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [-0.15, 0, -0.42], "radius": 0.14, "height": 0.06, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.2, 0, -0.6], "radius": 0.15, "height": 0.07, "sides": 10, "cell": "wall" },
-      { "shape": "dome", "pos": [0.42, 0, -0.25], "radius": 0.09, "height": 0.05, "sides": 10, "cell": "wall" },
-      { "shape": "dome", "pos": [-0.1, 0, -0.95], "radius": 0.12, "height": 0.05, "sides": 10, "cell": "wall" },
-      { "shape": "dome", "pos": [0.12, 0, -1.0], "radius": 0.09, "height": 0.04, "sides": 10, "cell": "foliage" }
+      { "shape": "dome", "pos": [-0.25, 0, 0.75], "radius": 0.12, "height": 0.09, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [0.0, 0, 0.6], "radius": 0.14, "height": 0.11, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.22, 0, 0.45], "radius": 0.12, "height": 0.09, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [0.35, 0, 0.1], "radius": 0.12, "height": 0.1, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.02, 0, 0.12], "radius": 0.16, "height": 0.1, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [-0.42, 0, -0.2], "radius": 0.1, "height": 0.08, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.15, 0, -0.42], "radius": 0.14, "height": 0.09, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.2, 0, -0.6], "radius": 0.15, "height": 0.1, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [0.42, 0, -0.25], "radius": 0.09, "height": 0.07, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [-0.1, 0, -0.95], "radius": 0.12, "height": 0.07, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [0.12, 0, -1.0], "radius": 0.09, "height": 0.06, "sides": 10, "cell": "foliage" }
     ] },
-    { "note": "reeds and bulrushes", "at": [0.0, 0.0], "parts": [
-      { "shape": "cone", "pos": [-0.07, 0.04, 0.88], "radius": 0.02, "height": 0.12, "sides": 5, "cell": "trim" },
-      { "shape": "cone", "pos": [-0.03, 0.04, 0.95], "radius": 0.018, "height": 0.1, "sides": 5, "cell": "foliage" },
-      { "shape": "cone", "pos": [0.19, 0.03, 0.3], "radius": 0.02, "height": 0.12, "sides": 5, "cell": "trim" },
-      { "shape": "cone", "pos": [0.16, 0.03, 0.25], "radius": 0.016, "height": 0.09, "sides": 5, "cell": "foliage" },
-      { "shape": "cone", "pos": [0.38, 0.03, 0.48], "radius": 0.02, "height": 0.12, "sides": 5, "cell": "trim" },
-      { "shape": "cone", "pos": [0.12, 0.03, 0.7], "radius": 0.015, "height": 0.07, "sides": 5, "cell": "stone" },
-      { "shape": "cone", "pos": [-0.13, 0.03, -0.5], "radius": 0.012, "height": 0.05, "sides": 5, "cell": "stone" },
-      { "shape": "cone", "pos": [0.13, 0.03, -0.75], "radius": 0.012, "height": 0.05, "sides": 5, "cell": "stone" }
+    { "note": "tall tussock with bulrushes, back", "at": [-0.04, 0.42], "parts": [
+      { "shape": "dome", "radius": 0.07, "height": 0.08, "sides": 9, "cell": "foliage" },
+      { "shape": "reeds", "pos": [0, 0.05, 0], "radius": 0.05, "height": 0.26, "count": 11, "cell": "roof", "top": "trim", "seed": 1 },
+      { "shape": "reeds", "pos": [0.08, 0.02, 0.06], "radius": 0.03, "height": 0.17, "count": 7, "cell": "foliage", "top": "trim", "seed": 2 }
+    ] },
+    { "note": "bulrushes, middle right", "at": [0.16, 0.14], "parts": [
+      { "shape": "dome", "radius": 0.06, "height": 0.07, "sides": 9, "cell": "wall" },
+      { "shape": "reeds", "pos": [0, 0.04, 0], "radius": 0.045, "height": 0.24, "count": 10, "cell": "roof", "top": "trim", "seed": 3 }
+    ] },
+    { "note": "bulrushes, right", "at": [0.36, 0.2], "parts": [
+      { "shape": "dome", "radius": 0.055, "height": 0.06, "sides": 9, "cell": "foliage" },
+      { "shape": "reeds", "pos": [0, 0.03, 0], "radius": 0.04, "height": 0.22, "count": 9, "cell": "roof", "top": "trim", "seed": 4 }
+    ] },
+    { "note": "bog-cotton tufts", "at": [0.0, 0.0], "parts": [
+      { "shape": "reeds", "pos": [0.19, 0.05, 0.52], "radius": 0.03, "height": 0.12, "count": 7, "cell": "foliage", "top": "accent", "seed": 5 },
+      { "shape": "reeds", "pos": [0.08, 0.06, 0.29], "radius": 0.03, "height": 0.12, "count": 7, "cell": "foliage", "top": "accent", "seed": 6 },
+      { "shape": "reeds", "pos": [-0.14, 0.05, -0.6], "radius": 0.03, "height": 0.11, "count": 6, "cell": "foliage", "top": "accent", "seed": 7 },
+      { "shape": "reeds", "pos": [0.13, 0.05, -0.74], "radius": 0.03, "height": 0.11, "count": 6, "cell": "foliage", "top": "accent", "seed": 8 },
+      { "shape": "reeds", "pos": [0.43, 0.04, -0.17], "radius": 0.03, "height": 0.12, "count": 7, "cell": "stone", "seed": 9 }
+    ] },
+    { "note": "sedge on the left hummocks", "at": [-0.36, 0.0], "parts": [
+      { "shape": "reeds", "pos": [-0.06, 0.04, 0.05], "radius": 0.035, "height": 0.16, "count": 8, "cell": "stone", "seed": 10 },
+      { "shape": "reeds", "pos": [0.1, 0.03, -0.45], "radius": 0.03, "height": 0.13, "count": 7, "cell": "foliage", "seed": 11 }
+    ] },
+    { "note": "stunted dead alder, back right", "at": [0.3, 0.33], "parts": [
+      { "shape": "tree", "kind": "dead", "height": 0.26, "radius": 0.06, "seed": 12 },
+      { "shape": "rock", "pos": [0.06, 0, -0.03], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 13 }
+    ] },
+    { "note": "mossy boulders, front", "at": [0.0, -0.28], "parts": [
+      { "shape": "rock", "pos": [-0.3, 0, 0.05], "radius": 0.05, "height": 0.06, "cell": "stone", "seed": 14 },
+      { "shape": "rock", "pos": [0.42, 0, 0.1], "radius": 0.04, "height": 0.05, "cell": "wall", "seed": 15 }
     ] }
   ]
 }

@@ -53,14 +53,16 @@ Every part has a `shape`, a `pos` (default [0,0,0]) and a `cell` (default `wall`
 | `box` | `size: [w, h, d]` | stands on pos, centred on x/z |
 | `gable` | `size: [w, rise, d]` | gable roof, ridge along x; `top` = gable-end cell |
 | `pyramid` | `radius, height` | 4-sided roof or spire, squared to the view |
-| `cone` | `radius, height, sides` | round roof, spire, tent |
+| `cone` | `radius, height, sides` | round roof, spire, tent (not mountains: use `peak`) |
 | `cylinder` | `radius, height, sides, taper, twist` | tower or drum; `taper` = top/bottom radius; `sides: 4, twist: 0.125` = square tower |
-| `dome` | `radius, height, sides` | dome, hill, mound (a negative height hangs down) |
+| `dome` | `radius, height, sides` | dome, hill, mound, tussock (a negative height hangs down) |
 | `battlements` | `radius, count` | merlons round a tower top (pos = top centre) |
 | `wallBattlements` | `length, thickness` | merlons along x (pos = wall top centre) |
 | `flag` | `height, radius` | pole and flag in the owner's colour |
-| `tree` | `kind: pine/broadleaf/poplar, height, radius, cell` | `cell` = foliage colour (e.g. `accent` for autumn gold) |
-| `rock` | `radius, height, cell` | boulder, crag or cliff (big ones make mountain holds) |
+| `tree` | `kind: pine/broadleaf/poplar/dead, height, radius, cell` | `cell` = foliage colour (e.g. `accent` for autumn gold); `dead` = a bare snag with crooked branches, `cell` defaults to `wood` |
+| `rock` | `radius, height, cell` | boulder, crag or cliff; a lumpy mound |
+| `peak` | `radius, height, sides, cell, top, snow, length, taper` | mountain or sharp crag: many-sided, ridged and jagged. `top` = snow cell (none = bare rock), `snow` = snowline as a fraction of the height (default 0.6; lower along the ridges), `length` draws it out along x into a ridge, `taper` = shoulder fullness (default 0.35; ~1.2 keeps a rock's bulk where buildings sit on the slopes) |
+| `reeds` | `radius, height, count, cell, top` | clump of reeds, rushes or dry grass: `count` thin leaning blades (default 7); `top` = bulrush/flower head cell |
 | `wall` | `to: [x, z], height, thickness, count` | straight wall from pos to `to` on the ground; `count > 0` adds merlons |
 
 Typical sizes (hex widths):
@@ -68,4 +70,6 @@ Typical sizes (hex widths):
 - **Houses:** cottage walls 0.06–0.1 wide and 0.05–0.08 high, roof rise 0.04–0.06.
 - **Defences:** towers r 0.03–0.06 and 0.2–0.45 high; great halls 0.3–0.45 long. Town walls are about 0.025 thick and 0.04–0.08 high.
 - **Trees:** 0.1–0.25 tall.
+- **Mountains:** `peak` 0.2–0.9 tall; give mountains a snow `top` rather than stacking a small cone on the summit.
+- **Wetlands and open land** still need things that stand up: reed clumps 0.12–0.26 tall, dead or stunted trees, tussocks 0.07–0.11 tall, rocks. Flat pools and paths alone read as a stain on the board.
 - **Most paintings** need 10–40 parts. Capture what makes the place recognisable: its silhouette, main buildings, towers, walls, trees, rocks and water.

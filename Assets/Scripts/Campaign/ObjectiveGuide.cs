@@ -204,16 +204,20 @@ public class ObjectiveGuide : MonoBehaviour
             if (home != null) { world = home.transform.position; BoardNavigator.Instance?.LookAt(world.Value, 0.9f); }
         }
 
-        string reward = o.decisive ? $"<color={UiTheme.GoldHex}>WINS THE WAR</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color> POINTS";
+        string reward = o.milestone ? $"MILESTONE · <color={UiTheme.GoldHex}>+{o.reward}</color> GOLD"
+            : o.decisive ? $"<color={UiTheme.GoldHex}>WINS THE WAR</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color> POINTS";
         string step = index > 0 ? $"<color={UiTheme.MutedHex}>{index} / {total}</color>   " : "";
         string places = targets.Count > 1 ? $"\n<color={UiTheme.MutedHex}>{targets.Count} places, all marked on the map</color>" : "";
         string how = objectives != null ? objectives.HowTo(game.player, o) : string.Empty;
         bool met = objectives != null && objectives.IsMet(game.player, o);
         string status = met ? $"\n<color={UiTheme.GoodHex}>Currently held</color>" : "";
 
-        ShowCallout($"{step}<size=78%><cspace=0.1em>OBJECTIVE · {reward}</cspace></size>",
+        string body = o.milestone
+            ? $"Builds your {ScoreAspects.Icon(CampaignObjectives.AspectOf(o))} {ScoreAspects.Name(CampaignObjectives.AspectOf(o))}: {ScoreAspects.Describe(CampaignObjectives.AspectOf(o))}. Look for its icon on the map hints when a character is selected."
+            : $"{o.description}{places}{status}";
+        ShowCallout($"{step}<size=78%><cspace=0.1em>{(o.milestone ? string.Empty : "OBJECTIVE · ")}{reward}</cspace></size>",
             o.title,
-            $"{o.description}{places}{status}",
+            body,
             string.IsNullOrWhiteSpace(how) ? null : how,
             lastStep ? "Got it" : "Next",
             showSkip: !lastStep && index > 0);
@@ -228,7 +232,7 @@ public class ObjectiveGuide : MonoBehaviour
     {
         ShowCallout($"<color={UiTheme.MutedHex}>{total} / {total}</color>",
             "Your war at a glance",
-            "Your objectives and score live here. Click any objective to fly back to it and see how to achieve it.",
+            $"Your objectives, your score by aspect and your next steps live here. Click any of them to see how to achieve it.\nSelect a character and the map shows what it can do nearby, marked with the same icons: {ScoreAspects.Icon(ScoreAspect.Military)} Military, {ScoreAspects.Icon(ScoreAspect.Economy)} Economy, {ScoreAspects.Icon(ScoreAspect.Realm)} Realm, {ScoreAspects.Icon(ScoreAspect.Heroes)} Heroes.",
             null, "Begin", showSkip: false);
         anchorWorld = null;
         anchorUi = tracker;

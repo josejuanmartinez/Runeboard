@@ -6,14 +6,14 @@
   "surfaces": ["Planks", "Planks", "Planks", "Fieldstone", "Plain", "", "Cloth", "", ""],
   "buildings": [
     { "note": "snowy mountain", "at": [0.0, 0.2], "parts": [
-      { "shape": "rock", "pos": [0.0, 0, 0.1], "radius": 0.26, "height": 0.6, "cell": "stone" },
+      { "shape": "peak", "pos": [0.0, 0, 0.1], "radius": 0.26, "height": 0.6, "taper": 1.2, "cell": "stone", "seed": 20 },
       { "shape": "rock", "pos": [0.0, 0.42, 0.1], "radius": 0.08, "height": 0.16, "cell": "trim", "seed": 2 },
-      { "shape": "rock", "pos": [-0.2, 0, 0.05], "radius": 0.14, "height": 0.33, "cell": "stone", "seed": 3 },
+      { "shape": "peak", "pos": [-0.2, 0, 0.05], "radius": 0.14, "height": 0.33, "cell": "stone", "seed": 3 },
       { "shape": "rock", "pos": [-0.2, 0.22, 0.05], "radius": 0.06, "height": 0.1, "cell": "trim", "seed": 4 },
-      { "shape": "rock", "pos": [0.28, 0, -0.08], "radius": 0.14, "height": 0.28, "cell": "stone", "seed": 5 },
+      { "shape": "peak", "pos": [0.28, 0, -0.08], "radius": 0.14, "height": 0.28, "cell": "stone", "seed": 5 },
       { "shape": "rock", "pos": [0.28, 0.18, -0.08], "radius": 0.06, "height": 0.09, "cell": "trim", "seed": 6 },
-      { "shape": "rock", "pos": [-0.12, 0, -0.18], "radius": 0.12, "height": 0.2, "cell": "stone", "seed": 7 },
-      { "shape": "rock", "pos": [0.12, 0, -0.2], "radius": 0.12, "height": 0.18, "cell": "stone", "seed": 8 }
+      { "shape": "peak", "pos": [-0.12, 0, -0.18], "radius": 0.12, "height": 0.2, "cell": "stone", "seed": 7 },
+      { "shape": "peak", "pos": [0.12, 0, -0.2], "radius": 0.12, "height": 0.18, "cell": "stone", "seed": 8 }
     ] },
     { "note": "crag with mine adit, front left", "at": [-0.22, -0.12], "parts": [
       { "shape": "rock", "pos": [0.0, 0, 0.08], "radius": 0.11, "height": 0.22, "cell": "stone", "seed": 9 },

@@ -8,7 +8,7 @@
     { "note": "the mountain spur", "at": [0.05, 0.2], "parts": [
       { "shape": "rock", "radius": 0.45, "height": 0.3, "cell": "stone" },
       { "shape": "cone", "pos": [0.05, 0.18, 0.15], "radius": 0.26, "height": 0.4, "sides": 6, "cell": "trim" },
-      { "shape": "rock", "pos": [0.25, 0, 0.05], "radius": 0.2, "height": 0.3, "cell": "trim", "seed": 1 },
+      { "shape": "peak", "pos": [0.25, 0, 0.05], "radius": 0.2, "height": 0.3, "taper": 1.2, "cell": "trim", "seed": 1 },
       { "shape": "rock", "pos": [-0.05, 0.1, -0.2], "radius": 0.14, "height": 0.12, "cell": "trim", "seed": 2 }
     ] },
     { "note": "front-left foothill rocks", "at": [-0.3, -0.12], "parts": [

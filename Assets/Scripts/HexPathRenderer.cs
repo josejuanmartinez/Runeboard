@@ -492,6 +492,8 @@ public class HexPathRenderer : MonoBehaviour
     {
         StopOpportunityHintCycle();
         if (character == null || character.hex == null || targetHexes == null || targetHexes.Count == 0) return;
+        EnsureHintLineRenderer();
+        hintLineRenderer.sharedMaterial = hintPathMaterial != null ? hintPathMaterial : lineRenderer.sharedMaterial;
 
         opportunityHintCoroutine = StartCoroutine(OpportunityHintCycleRoutine(character, targetHexes));
     }
@@ -504,6 +506,19 @@ public class HexPathRenderer : MonoBehaviour
             opportunityHintCoroutine = null;
         }
         HideOpportunityHintPath();
+    }
+
+    // The route to one opportunity, held while its hint chip is hovered (OpportunityHexHinter):
+    // drawn once in the movement path's own look, with no "?" marker, since the chip already
+    // says what is there.
+    public void ShowHintRoute(Character character, Vector2Int targetHex)
+    {
+        StopOpportunityHintCycle();
+        if (character == null || character.hex == null) return;
+        EnsureHintLineRenderer();
+        hintLineRenderer.sharedMaterial = lineRenderer.sharedMaterial;
+        ShowOpportunityHintPath(character.hex.v2, targetHex, character);
+        HideHintMarker();
     }
 
     // One-shot version of the opportunity-hint cycle for a single hex that auto-stops after

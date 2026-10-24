@@ -6,11 +6,11 @@
   "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "the great black crag", "at": [0.0, 0.06], "parts": [
-      { "shape": "rock", "pos": [0, 0, 0.08], "radius": 0.28, "height": 0.95, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [-0.2, 0, 0.12], "radius": 0.17, "height": 0.48, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [0.2, 0, 0.12], "radius": 0.16, "height": 0.42, "cell": "stone", "seed": 3 },
-      { "shape": "rock", "pos": [-0.26, 0, -0.2], "radius": 0.12, "height": 0.22, "cell": "stone", "seed": 4 },
-      { "shape": "rock", "pos": [0.26, 0, -0.2], "radius": 0.12, "height": 0.22, "cell": "stone", "seed": 5 }
+      { "shape": "peak", "pos": [0, 0, 0.08], "radius": 0.28, "height": 0.95, "taper": 1.2, "cell": "stone", "seed": 1 },
+      { "shape": "peak", "pos": [-0.2, 0, 0.12], "radius": 0.17, "height": 0.48, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [0.2, 0, 0.12], "radius": 0.16, "height": 0.42, "cell": "stone", "seed": 3 },
+      { "shape": "peak", "pos": [-0.26, 0, -0.2], "radius": 0.12, "height": 0.22, "cell": "stone", "seed": 4 },
+      { "shape": "peak", "pos": [0.26, 0, -0.2], "radius": 0.12, "height": 0.22, "cell": "stone", "seed": 5 }
     ] },
     { "note": "terraced gates and stairs", "at": [0.0, -0.11], "parts": [
       { "shape": "box", "pos": [0, 0, 0], "size": [0.2, 0.12, 0.1], "cell": "wall" },

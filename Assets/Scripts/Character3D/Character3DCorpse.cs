@@ -20,6 +20,7 @@ public class Character3DCorpse : MonoBehaviour
         model.RimColor = Color.clear; // no alignment outline on the dead
         model.Focus = 0f;             // nor a selection glow on its base
         model.Animation.PlayOnce(deathClip, 0.1f, 1f, hold: true);
+        GetComponent<Character3DRegiment>()?.FallWithLeader(); // an army's troopers fall with it
     }
 
     private void Update()

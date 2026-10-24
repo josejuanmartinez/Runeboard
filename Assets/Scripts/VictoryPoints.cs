@@ -49,6 +49,8 @@ public class VictoryPoints
                 RefreshIconVictoryPoints(kvp.Key, kvp.Value.RelativeScore);
             }
         }
+        // Milestones are measured on the same state, so they're checked whenever it is scored.
+        CampaignObjectives.Instance?.CheckMilestones();
     }
 
     public static VictoryPointsBreakdown CalculateBreakdown(PlayableLeader leader)
@@ -212,4 +214,92 @@ public class VictoryPointsBreakdown
         ArmyXpBonusPoints +
         ArtifactPoints +
         MapControlPoints;
+}
+
+/// <summary>The four sides of a realm the score is made of, each with its own icon: the
+/// campaign HUD shows them per aspect, opportunity hints and milestones carry the icon of the
+/// aspect they feed.</summary>
+public enum ScoreAspect
+{
+    Military,
+    Economy,
+    Realm,
+    Heroes,
+}
+
+public static class ScoreAspects
+{
+    public static readonly ScoreAspect[] All = { ScoreAspect.Military, ScoreAspect.Economy, ScoreAspect.Realm, ScoreAspect.Heroes };
+
+    public static string Name(ScoreAspect aspect) => aspect.ToString();
+
+    // Sprite names in the common TMP sprite sheet.
+    public static string IconName(ScoreAspect aspect) => aspect switch
+    {
+        ScoreAspect.Military => "sword",
+        ScoreAspect.Economy => "gold",
+        ScoreAspect.Realm => "pc",
+        _ => "crown",
+    };
+
+    public static string Icon(ScoreAspect aspect) => $"<sprite name=\"{IconName(aspect)}\">";
+
+    public static string Describe(ScoreAspect aspect) => aspect switch
+    {
+        ScoreAspect.Military => "armies, their experience and your fortifications",
+        ScoreAspect.Economy => "production, gold income and stores",
+        ScoreAspect.Realm => "the places you hold and the land you have explored",
+        _ => "your characters' skills and the artifacts they carry",
+    };
+
+    public static int Score(VictoryPointsBreakdown b, ScoreAspect aspect)
+    {
+        if (b == null) return 0;
+        return aspect switch
+        {
+            ScoreAspect.Military => b.ArmyPoints + b.ArmyXpBonusPoints + b.FortificationPoints,
+            ScoreAspect.Economy => b.ProductionPoints + b.GoldProductionPoints + b.StorePoints + b.GoldStorePoints,
+            ScoreAspect.Realm => b.PcPoints + b.MapControlPoints,
+            _ => b.CharacterLevels + b.ArtifactPoints,
+        };
+    }
+
+    public static int Score(PlayableLeader leader, ScoreAspect aspect) =>
+        leader?.victoryPoints != null ? Score(leader.victoryPoints.Breakdown, aspect) : 0;
+
+    /// <summary>Which aspect an opportunity card works on: explicit for the actions whose
+    /// situation says little (an agent stealing gold is Economy), otherwise by who plays it.</summary>
+    public static ScoreAspect ForCard(CardData card)
+    {
+        if (card == null) return ScoreAspect.Realm;
+        if (card.GetCardType() == CardTypeEnum.Character) return ScoreAspect.Heroes;
+        string action = card.GetActionRef() ?? string.Empty;
+        if (action.StartsWith("Steal") && action != "StealArtifact") return ScoreAspect.Economy;
+        if (action.StartsWith("Buy") || action.StartsWith("Sell")) return ScoreAspect.Economy;
+        switch (action)
+        {
+            case "Attack": case "Block": case "SiegePC": case "FortifyPC": case "DestroyFortifications":
+            case "RemoveFortifications": case "SummonMA": case "Halt": case "Root":
+                return ScoreAspect.Military;
+            case "SabotageStorage": case "CreatePort": case "DestroyPort": case "RemovePort": case "ConjureMounts":
+            case "AskRansom": case "WhiteHorsesFoam":
+                return ScoreAspect.Economy;
+            case "InfluenceUpPC": case "InfluenceDownPC": case "StateAllegiance": case "RevealRumours": case "GuardPC":
+            case "RevealPC": case "Fireworks": case "ScryArea": case "PerceiveDanger": case "Teleport": case "ReturnToCapital":
+                return ScoreAspect.Realm;
+            case "FindArtifact": case "StealArtifact": case "ScryArtifact":
+                return ScoreAspect.Heroes;
+        }
+        switch (card.GetSituation())
+        {
+            case CardSituationEnum.ArmyAtEnemyPC: case CardSituationEnum.ArmyAtFriendlyPC: case CardSituationEnum.ArmyAtHexWithEnemyArmyAndNoPC:
+            case CardSituationEnum.ArmyAtEnemyPCorEnemyArmy: case CardSituationEnum.CommanderAtOwnPC:
+                return ScoreAspect.Military;
+            case CardSituationEnum.EmmissaryAtEnemyPC: case CardSituationEnum.EmmissaryAtOwnPC: case CardSituationEnum.EmmissaryAtFriendlyPC:
+            case CardSituationEnum.AgentAtOwnPC: case CardSituationEnum.MageAtOwnPC: case CardSituationEnum.MageAtEnemyPC:
+                return ScoreAspect.Realm;
+            default:
+                return ScoreAspect.Heroes;
+        }
+    }
 }

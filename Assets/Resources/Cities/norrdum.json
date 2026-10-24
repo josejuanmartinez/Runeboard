@@ -6,13 +6,10 @@
   "surfaces": ["Planks",  "Planks",  "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "snowy peaks", "at": [0.0, 0.24], "parts": [
-      { "shape": "cone", "pos": [-0.02, 0, 0.0], "radius": 0.17, "height": 0.52, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [-0.02, 0.36, 0.0], "radius": 0.056, "height": 0.17, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [0.2, 0, -0.1], "radius": 0.2, "height": 0.58, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0.2, 0.38, -0.1], "radius": 0.073, "height": 0.21, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [-0.24, 0, 0.08], "radius": 0.14, "height": 0.4, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [-0.24, 0.28, 0.08], "radius": 0.044, "height": 0.13, "sides": 6, "cell": "trim" },
-      { "shape": "rock", "pos": [0.36, 0, -0.3], "radius": 0.1, "height": 0.2, "cell": "stone" }
+      { "shape": "peak", "pos": [-0.02, 0, 0.0], "radius": 0.17, "height": 0.52, "cell": "stone", "top": "trim", "snow": 0.77, "seed": 20 },
+      { "shape": "peak", "pos": [0.2, 0, -0.1], "radius": 0.2, "height": 0.58, "cell": "stone", "top": "trim", "snow": 0.74, "seed": 22 },
+      { "shape": "peak", "pos": [-0.24, 0, 0.08], "radius": 0.14, "height": 0.4, "cell": "stone", "top": "trim", "snow": 0.78, "seed": 24 },
+      { "shape": "peak", "pos": [0.36, 0, -0.3], "radius": 0.1, "height": 0.2, "cell": "stone", "seed": 26 }
     ] },
     { "note": "tall headframe", "at": [-0.32, 0.1], "yaw": 30, "parts": [
       { "shape": "box", "size": [0.1, 0.4, 0.09], "cell": "wall" },

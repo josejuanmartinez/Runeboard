@@ -9,13 +9,11 @@
       { "shape": "rock", "radius": 0.42, "height": 0.36, "cell": "stone" },
       { "shape": "cone", "pos": [-0.05, 0.2, 0.05], "radius": 0.26, "height": 0.5, "sides": 6, "cell": "stone" },
       { "shape": "cone", "pos": [-0.05, 0.5, 0.05], "radius": 0.11, "height": 0.21, "sides": 6, "cell": "trim" },
-      { "shape": "rock", "pos": [-0.25, 0, -0.05], "radius": 0.18, "height": 0.3, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [0.18, 0, -0.1], "radius": 0.15, "height": 0.28, "cell": "stone", "seed": 2 },
-      { "shape": "cone", "pos": [0.18, 0.2, -0.1], "radius": 0.06, "height": 0.07, "sides": 5, "cell": "trim" }
+      { "shape": "peak", "pos": [-0.25, 0, -0.05], "radius": 0.18, "height": 0.3, "cell": "stone", "seed": 1 },
+      { "shape": "peak", "pos": [0.18, 0, -0.1], "radius": 0.15, "height": 0.28, "cell": "stone", "top": "trim", "snow": 0.79, "seed": 2 }
     ] },
     { "note": "snowy shoulder, right", "at": [0.33, 0.2], "parts": [
-      { "shape": "rock", "radius": 0.15, "height": 0.25, "cell": "stone", "seed": 3 },
-      { "shape": "cone", "pos": [0, 0.2, 0], "radius": 0.08, "height": 0.1, "sides": 5, "cell": "trim" }
+      { "shape": "peak", "radius": 0.15, "height": 0.25, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 3 }
     ] },
     { "note": "cave gate", "at": [-0.06, -0.1], "parts": [
       { "shape": "rock", "radius": 0.16, "height": 0.2, "cell": "stone", "seed": 4 },

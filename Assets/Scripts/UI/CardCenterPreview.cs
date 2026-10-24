@@ -9,6 +9,9 @@ using UnityEngine.UI;
 // unfold into a full card on hover, per the same visual language (fly-in, backdrop fade).
 // Also supports previewing several cards at once (e.g. a character card plus its army's
 // cards), laid out in a horizontal row that scales down to stay within the screen width.
+// By default (dockToSide) the preview is docked in the free column on the right of the HUD
+// instead — no backdrop, a soft shadow per card, sliding in from the right edge — so the board
+// stays visible; worldAnchor is ignored there. Turning dockToSide off restores the centred mode.
 public class CardCenterPreview : MonoBehaviour
 {
     public static CardCenterPreview Instance { get; private set; }
@@ -32,6 +35,29 @@ public class CardCenterPreview : MonoBehaviour
     [Tooltip("Fraction of the available canvas width the combined row of cards is allowed to occupy before being scaled down to fit.")]
     [Range(0.5f, 1f)][SerializeField] private float multiCardMaxWidthFraction = 0.92f;
 
+    [Header("Side Dock")]
+    [Tooltip("Show previews docked in the free column on the right of the HUD (between the " +
+        "turn/calendar panel and the view toggles above the minimap), with no darkening " +
+        "backdrop, so the board stays visible. Off restores the old centred, backdrop-dimmed preview.")]
+    [SerializeField] private bool dockToSide = true;
+    [Tooltip("Gap (canvas units) between the dock and the right edge of the screen — the HUD's own margin.")]
+    [SerializeField] private float dockRightInset = 24f;
+    [Tooltip("Fallback top of the dock, as a fraction of the canvas height down from the top, used " +
+        "when the top-right HUD panel (Top/HudTopRightPanel) can't be found.")]
+    [Range(0f, 0.5f)][SerializeField] private float dockTopFraction = 0.17f;
+    [Tooltip("Gap (canvas units) kept under the top-right HUD panel (its bottom ornament pokes out a little).")]
+    [SerializeField] private float dockTopGap = 18f;
+    [Tooltip("Bottom of the dock, as a fraction of the canvas height up from the bottom: just above " +
+        "the view toggles box that sits over the minimap (its top is ~0.345 of the height).")]
+    [Range(0f, 0.6f)][SerializeField] private float dockBottomFraction = 0.37f;
+    [Tooltip("Widest the docked row may get, as a fraction of the canvas width; beyond it the cards " +
+        "shrink a little, then overlap into a stack with the first card on top.")]
+    [Range(0.15f, 0.6f)][SerializeField] private float dockMaxWidthFraction = 0.34f;
+    [Tooltip("How far right (canvas units) a docked card starts before sliding into place.")]
+    [SerializeField] private float dockIntroSlide = 90f;
+    [Tooltip("Opacity of the soft shadow drawn behind each docked card.")]
+    [Range(0f, 1f)][SerializeField] private float dockShadowAlpha = 0.55f;
+
     [Header("Center Preview Transition")]
     [Tooltip("Full-screen black backdrop (with CanvasGroup) faded in while a card is previewed and faded out when hidden.")]
     [SerializeField] private CanvasGroup centerPreviewBackdrop;
@@ -53,6 +79,10 @@ public class CardCenterPreview : MonoBehaviour
     private readonly List<RectTransform> centerPreviewRects = new();
     private readonly List<CanvasGroup> centerPreviewGroups = new();
     private readonly List<Vector2> centerPreviewTargetPositions = new();
+    private readonly List<Image> centerPreviewShadows = new(); // docked mode only, one behind each card
+    private bool dockedActive;
+    private RectTransform hudTopRightPanel;
+    private static Sprite shadowSprite;
     private float centerPreviewFinalScale;
     private float previewIntroT;
     private float backdropAlpha;
@@ -65,7 +95,7 @@ public class CardCenterPreview : MonoBehaviour
     // Resolved at runtime so newly-added serialized fields left at 0 still animate instead
     // of leaving the preview stuck invisible at alpha 0.
     private float TransitionSpeed => (previewTransitionSpeed > 0.01f ? previewTransitionSpeed : 9f) * previewSpeedMultiplier;
-    private float BackdropMax => Mathf.Min(backdropMaxAlpha > 0.001f ? backdropMaxAlpha : 0.55f, hoverDrivenActive ? 0.38f : 0.62f);
+    private float BackdropMax => dockedActive ? 0f : Mathf.Min(backdropMaxAlpha > 0.001f ? backdropMaxAlpha : 0.55f, hoverDrivenActive ? 0.38f : 0.62f);
     private float IntroStartScale => previewIntroStartScale > 0.001f ? previewIntroStartScale : 0.55f;
 
     public RectTransform CurrentPreviewRect => centerPreviewRects.Count > 0 ? centerPreviewRects[0] : null;
@@ -193,20 +223,32 @@ public class CardCenterPreview : MonoBehaviour
         float contentWidth = count > 1 ? (count - 1) * step + cardWidth : cardWidth;
 
         Rect viewport = ResolveViewport(parent as RectTransform);
-        float availableWidth = viewport.width * multiCardMaxWidthFraction;
-        float scale = centerPreviewScale;
-        if (availableWidth > 0f && contentWidth * scale > availableWidth)
-            scale = availableWidth / contentWidth;
-        scale = Mathf.Min(scale, viewport.height * .84f / Card.CenterPreviewSize.y);
-        scale = Mathf.Max(.01f, scale);
+        dockedActive = dockToSide && parent is RectTransform;
+        List<Vector2> dockPositions = null;
+        float scale;
+        if (dockedActive)
+        {
+            dockPositions = LayoutDock((RectTransform)parent, viewport, count, out scale);
+        }
+        else
+        {
+            float availableWidth = viewport.width * multiCardMaxWidthFraction;
+            scale = centerPreviewScale;
+            if (availableWidth > 0f && contentWidth * scale > availableWidth)
+                scale = availableWidth / contentWidth;
+            scale = Mathf.Min(scale, viewport.height * .84f / Card.CenterPreviewSize.y);
+            scale = Mathf.Max(.01f, scale);
+            float halfWidth = contentWidth * scale * .5f;
+            float halfHeight = Card.CenterPreviewSize.y * scale * .5f;
+            anchorOffset.x = Mathf.Clamp(anchorOffset.x, viewport.xMin + halfWidth, viewport.xMax - halfWidth);
+            anchorOffset.y = Mathf.Clamp(anchorOffset.y, viewport.yMin + halfHeight, viewport.yMax - halfHeight);
+        }
         centerPreviewFinalScale = scale;
-        float halfWidth = contentWidth * scale * .5f;
-        float halfHeight = Card.CenterPreviewSize.y * scale * .5f;
-        anchorOffset.x = Mathf.Clamp(anchorOffset.x, viewport.xMin + halfWidth, viewport.xMax - halfWidth);
-        anchorOffset.y = Mathf.Clamp(anchorOffset.y, viewport.yMin + halfHeight, viewport.yMax - halfHeight);
 
         for (int i = 0; i < count; i++)
         {
+            // Docked: a soft shadow behind each card instead of a full-screen backdrop.
+            Image shadow = dockedActive ? CreateShadow(parent) : null;
             GameObject instance = Instantiate(template, parent, false);
             instance.name = $"CardCenterPreview_{validCards[i].name}";
             instance.SetActive(true);
@@ -220,8 +262,15 @@ public class CardCenterPreview : MonoBehaviour
                 rect.anchorMax = center;
                 rect.pivot = center;
 
-                float unscaledX = count > 1 ? (i * step) - contentWidth * 0.5f + cardWidth * 0.5f : 0f;
-                targetPos = new Vector2(unscaledX * scale, 0f) + anchorOffset;
+                if (dockedActive)
+                {
+                    targetPos = dockPositions[i];
+                }
+                else
+                {
+                    float unscaledX = count > 1 ? (i * step) - contentWidth * 0.5f + cardWidth * 0.5f : 0f;
+                    targetPos = new Vector2(unscaledX * scale, 0f) + anchorOffset;
+                }
             }
 
             Card previewCard = instance.GetComponent<Card>();
@@ -248,15 +297,135 @@ public class CardCenterPreview : MonoBehaviour
             centerPreviewRects.Add(rect);
             centerPreviewGroups.Add(group);
             centerPreviewTargetPositions.Add(targetPos);
+            centerPreviewShadows.Add(shadow);
         }
 
         previewActive = true;
         exitProgress = 0f;
         previewIntroT = 0f;
         ApplyPreviewPose(0f);
-        PlaceBackdropBehindPreview(parent);
-        for (int i = 0; i < centerPreviewRects.Count; i++)
-            centerPreviewRects[i]?.SetAsLastSibling();
+        if (dockedActive)
+        {
+            // Back to front: the later cards sit further left, under the first one (the card
+            // itself — character, PC — over its army or land cards), each over its own shadow.
+            for (int i = centerPreviewRects.Count - 1; i >= 0; i--)
+            {
+                if (centerPreviewShadows[i] != null) centerPreviewShadows[i].rectTransform.SetAsLastSibling();
+                centerPreviewRects[i]?.SetAsLastSibling();
+            }
+        }
+        else
+        {
+            PlaceBackdropBehindPreview(parent);
+            for (int i = 0; i < centerPreviewRects.Count; i++)
+                centerPreviewRects[i]?.SetAsLastSibling();
+        }
+    }
+
+    // The docked row: right-aligned in the free column on the right of the HUD, between the
+    // top-right turn/calendar panel and the view toggles over the minimap, vertically centred
+    // in that band and scaled to its height. Card 0 sits rightmost, the rest to its left; a row
+    // too wide for dockMaxWidthFraction first shrinks a little, then overlaps into a stack.
+    // Positions are anchoredPositions (centre anchors) in the preview parent, like the viewport.
+    private List<Vector2> LayoutDock(RectTransform parent, Rect viewport, int count, out float scale)
+    {
+        Vector2 cardSize = Card.CenterPreviewSize;
+        float canvasHeight = viewport.height;
+
+        float top = viewport.yMax - canvasHeight * dockTopFraction;
+        RectTransform panel = FindHudTopRightPanel();
+        if (panel != null)
+        {
+            Vector3[] corners = new Vector3[4];
+            panel.GetWorldCorners(corners);
+            float panelBottom = float.MaxValue;
+            foreach (Vector3 corner in corners)
+                panelBottom = Mathf.Min(panelBottom, parent.InverseTransformPoint(corner).y - parent.rect.center.y);
+            // Only trust it if it's a sane top-band panel (not hidden off-screen or mid-rebuild).
+            if (panelBottom < viewport.yMax && panelBottom > viewport.center.y)
+                top = panelBottom - dockTopGap;
+        }
+        float bottom = viewport.yMin + canvasHeight * dockBottomFraction;
+        if (top - bottom < canvasHeight * 0.25f) // degenerate band: fall back to a centred slab
+        {
+            float mid = (top + bottom) * 0.5f;
+            top = mid + canvasHeight * 0.125f;
+            bottom = mid - canvasHeight * 0.125f;
+        }
+        float bandHeight = top - bottom;
+
+        scale = Mathf.Min(centerPreviewScale, bandHeight / cardSize.y);
+        float maxWidth = Mathf.Max(cardSize.x * scale, viewport.width * dockMaxWidthFraction);
+        float gap = multiCardSpacing * 0.5f;
+        float natural = count * cardSize.x + (count - 1) * gap;
+        if (natural * scale > maxWidth)
+            scale = Mathf.Max(scale * 0.8f, maxWidth / natural); // shrink a little, no further
+        scale = Mathf.Max(.01f, scale);
+
+        float cardWidth = cardSize.x * scale;
+        float step = cardWidth + gap * scale;
+        if (count > 1 && cardWidth + (count - 1) * step > maxWidth)
+            step = Mathf.Max(cardWidth * 0.18f, (maxWidth - cardWidth) / (count - 1)); // overlap
+
+        float right = viewport.xMax - dockRightInset;
+        float y = (top + bottom) * 0.5f;
+        var positions = new List<Vector2>(count);
+        for (int i = 0; i < count; i++)
+            positions.Add(new Vector2(right - cardWidth * 0.5f - i * step, y));
+        return positions;
+    }
+
+    private RectTransform FindHudTopRightPanel()
+    {
+        if (hudTopRightPanel != null)
+            return hudTopRightPanel.gameObject.activeInHierarchy ? hudTopRightPanel : null;
+        Transform root = parentCanvas != null ? parentCanvas.transform : null;
+        if (root == null) return null;
+        hudTopRightPanel = root.Find("Top/HudTopRightPanel") as RectTransform;
+        if (hudTopRightPanel == null)
+        {
+            foreach (RectTransform rt in root.GetComponentsInChildren<RectTransform>(true))
+                if (rt.name == "HudTopRightPanel") { hudTopRightPanel = rt; break; }
+        }
+        return hudTopRightPanel != null && hudTopRightPanel.gameObject.activeInHierarchy ? hudTopRightPanel : null;
+    }
+
+    // A soft dark shadow, a little larger than the card, that rides along with it (ApplyPreviewPose).
+    private Image CreateShadow(Transform parent)
+    {
+        var go = new GameObject("CardPreviewShadow", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RectTransform rt = (RectTransform)go.transform;
+        rt.SetParent(parent, false);
+        Vector2 center = new(0.5f, 0.5f);
+        rt.anchorMin = rt.anchorMax = rt.pivot = center;
+        const float Spread = 26f;
+        rt.sizeDelta = Card.CenterPreviewSize + new Vector2(Spread * 2f, Spread * 2f);
+        Image image = go.GetComponent<Image>();
+        image.sprite = ShadowSprite();
+        image.type = Image.Type.Sliced;
+        image.color = new Color(0f, 0f, 0f, 0f);
+        image.raycastTarget = false;
+        return image;
+    }
+
+    // A 64px soft-edged square, 9-sliced so the falloff keeps its width at any card size.
+    private static Sprite ShadowSprite()
+    {
+        if (shadowSprite != null) return shadowSprite;
+        const int Size = 64, Edge = 28;
+        var texture = new Texture2D(Size, Size, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp, name = "CardPreviewShadow" };
+        var pixels = new Color32[Size * Size];
+        for (int y = 0; y < Size; y++)
+        for (int x = 0; x < Size; x++)
+        {
+            float d = Mathf.Min(Mathf.Min(x, Size - 1 - x), Mathf.Min(y, Size - 1 - y)); // distance to the edge
+            float a = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(d / Edge));
+            pixels[y * Size + x] = new Color32(255, 255, 255, (byte)Mathf.RoundToInt(a * a * 255f));
+        }
+        texture.SetPixels32(pixels);
+        texture.Apply(false, true);
+        shadowSprite = Sprite.Create(texture, new Rect(0, 0, Size, Size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(Edge, Edge, Edge, Edge));
+        return shadowSprite;
     }
 
     public void HidePreview()
@@ -279,6 +448,9 @@ public class CardCenterPreview : MonoBehaviour
                 Destroy(centerPreviewInstances[i]);
             }
         }
+        foreach (Image shadow in centerPreviewShadows)
+            if (shadow != null) Destroy(shadow.gameObject);
+        centerPreviewShadows.Clear();
         centerPreviewInstances.Clear();
         centerPreviewRects.Clear();
         centerPreviewGroups.Clear();
@@ -319,6 +491,8 @@ public class CardCenterPreview : MonoBehaviour
             exitProgress = Mathf.MoveTowards(exitProgress, 1f, Time.unscaledDeltaTime / .14f);
             foreach (CanvasGroup group in centerPreviewGroups)
                 if (group != null) group.alpha = Mathf.Min(group.alpha, 1f - exitProgress);
+            foreach (Image shadow in centerPreviewShadows)
+                if (shadow != null) shadow.color = new Color(0f, 0f, 0f, Mathf.Min(shadow.color.a, dockShadowAlpha * (1f - exitProgress)));
             if (exitProgress >= 1f) ClearPreview();
             return;
         }
@@ -344,13 +518,26 @@ public class CardCenterPreview : MonoBehaviour
             if (rect == null) continue;
 
             Vector2 target = centerPreviewTargetPositions[i];
-            Vector2 introPos = target + Vector2.ClampMagnitude(previewIntroOffset, 28f);
+            // Docked cards slide in from the right edge; centred ones rise a little into place.
+            Vector2 introPos = dockedActive
+                ? target + new Vector2(dockIntroSlide, 0f)
+                : target + Vector2.ClampMagnitude(previewIntroOffset, 28f);
             rect.anchoredPosition = Vector2.LerpUnclamped(introPos, target, eased);
             rect.localScale = Vector3.one * scale;
             rect.localRotation = Quaternion.Euler(0f, 0f, rotation);
 
             CanvasGroup group = centerPreviewGroups[i];
             if (group != null) group.alpha = alpha;
+
+            Image shadow = i < centerPreviewShadows.Count ? centerPreviewShadows[i] : null;
+            if (shadow != null)
+            {
+                RectTransform shadowRect = shadow.rectTransform;
+                shadowRect.anchoredPosition = rect.anchoredPosition + new Vector2(-6f, -8f) * scale;
+                shadowRect.localScale = rect.localScale;
+                shadowRect.localRotation = rect.localRotation;
+                shadow.color = new Color(0f, 0f, 0f, dockShadowAlpha * alpha);
+            }
         }
     }
 

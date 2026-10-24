@@ -6,13 +6,13 @@
   "surfaces": ["Ashlar",  "Slate",   "", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "crags back-left", "at": [-0.3, 0.32], "parts": [
-      { "shape": "rock", "radius": 0.1, "height": 0.28, "cell": "stone" },
-      { "shape": "rock", "pos": [-0.08, 0, -0.3], "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [0.04, 0, 0.12], "radius": 0.06, "height": 0.22, "cell": "stone", "seed": 2 }
+      { "shape": "peak", "radius": 0.1, "height": 0.28, "cell": "stone", "seed": 20 },
+      { "shape": "peak", "pos": [-0.08, 0, -0.3], "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 1 },
+      { "shape": "peak", "pos": [0.04, 0, 0.12], "radius": 0.06, "height": 0.22, "cell": "stone", "seed": 2 }
     ] },
     { "note": "crag right", "at": [0.3, 0.26], "parts": [
-      { "shape": "rock", "radius": 0.08, "height": 0.24, "cell": "stone", "seed": 3 },
-      { "shape": "rock", "pos": [0.06, 0, 0.1], "radius": 0.05, "height": 0.16, "cell": "stone", "seed": 4 }
+      { "shape": "peak", "radius": 0.08, "height": 0.24, "cell": "stone", "seed": 3 },
+      { "shape": "peak", "pos": [0.06, 0, 0.1], "radius": 0.05, "height": 0.16, "cell": "stone", "seed": 4 }
     ] },
     { "note": "cypresses behind", "at": [-0.05, 0.4], "parts": [
       { "shape": "tree", "pos": [-0.08, 0, 0.02], "kind": "poplar", "height": 0.24, "radius": 0.035 },

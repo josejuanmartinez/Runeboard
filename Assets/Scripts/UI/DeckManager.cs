@@ -1409,6 +1409,54 @@ public class DeckManager : MonoBehaviour
         return state.situationPool.Any(c => c != null && c.MatchesAnySituation(activeSituations));
     }
 
+    // What the character could actually play if it walked to `hex` now and can't where it
+    // stands, best first: the opportunity cards the hand tray would offer there
+    // (GetSituationCardOffers) and the hand cards that become playable there. Each is judged exactly as on
+    // arrival — skills, resources, command points, the action's own conditions — so a hint never
+    // leads a character somewhere it then can't act. Drives the opportunity hint chips.
+    public List<(CardData card, bool fromHand)> GetPlayableCardsAtHex(PlayableLeader leader, Character character, Hex hex)
+    {
+        var result = new List<(CardData card, bool fromHand)>();
+        if (leader == null || character == null || hex == null || character.hex == null) return result;
+        if (!playerDecks.ContainsKey(leader)) return result;
+        ActionsManager actionsManager = FindAnyObjectByType<ActionsManager>();
+        if (actionsManager == null) return result;
+
+        // What is already on offer where the character stands (spells and events are offered
+        // anywhere) is no reason to walk either.
+        HashSet<string> seen = new(StringComparer.OrdinalIgnoreCase);
+        foreach (SituationCardOffer offer in GetSituationCardOffers(leader, character, character.hex))
+            if (offer.IsPlayable && offer.Card != null) seen.Add(offer.Card.name ?? GetOfferCardKey(offer.Card));
+        var handCandidates = new List<CardData>();
+        foreach (CardData c in GetHand(leader))
+        {
+            if (c == null) continue;
+            CardTypeEnum type = c.GetCardType();
+            if (type != CardTypeEnum.Action && type != CardTypeEnum.Spell && type != CardTypeEnum.Character && type != CardTypeEnum.Army) continue;
+            // Playable anywhere (or already here) is no reason to walk.
+            if (IsFullyPlayableOpportunityCard(CloneCard(c), character, actionsManager)) continue;
+            handCandidates.Add(c);
+        }
+
+        // With the character standing on the target hex for the moment: the very offer the hand
+        // tray would show on arrival (same ranking, same hand-size cap, playable ones only), then
+        // hand cards judged on clones so the real cards' playability flags don't change.
+        Hex here = character.hex;
+        try
+        {
+            character.hex = hex;
+            foreach (SituationCardOffer offer in GetSituationCardOffers(leader, character, hex))
+                if (offer.IsPlayable && offer.Card != null && seen.Add(offer.Card.name ?? GetOfferCardKey(offer.Card))) result.Add((offer.Card, false));
+            foreach (CardData c in handCandidates)
+                if (seen.Add(c.name ?? GetOfferCardKey(c)) && IsFullyPlayableOpportunityCard(CloneCard(c), character, actionsManager)) result.Add((c, true));
+        }
+        finally
+        {
+            character.hex = here;
+        }
+        return result;
+    }
+
     public bool TryPayOpportunityCardCosts(PlayableLeader leader, CardData card)
     {
         if (leader == null || card == null) return false;

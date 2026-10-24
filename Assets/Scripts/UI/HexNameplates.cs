@@ -7,8 +7,11 @@ using UnityEngine.UI;
 /// Screen-space city banners, one per labelled hex, pinned under the hex and redrawn crisp at any
 /// zoom — built from the game's own UI art (pieces cut from Art/UI/bokshi_mockup.png into
 /// Resources/UI/CityBanner): dark weathered ink, fine bronze filigree, torn edges.
-///   • a spiked bronze medallion holding the owner's true nation colour and the settlement size;
-///     capitals carry the compass-star ornament above it
+///   • a spiked bronze medallion holding the settlement's own painting (its PC art from
+///     Art/Hexes/PCs, cropped to the medallion's round window) inside a ring of the owner's true
+///     nation colour, with the settlement size on a small badge; capitals carry the compass-star
+///     ornament above it. Hovering the medallion shows the PC's card (and its land card) in the
+///     CardCenterPreview dock — the only place the PC card preview comes from
 ///   • a torn ink name plate with filigree lines (9-sliced to the name), the name in parchment-gold
 ///     (BoardLookSettings.bannerFont) — brighter gold for objective targets — plus port / hidden marks
 ///   • the fortification level on a filigree shield at the plate's end, when there is one
@@ -17,12 +20,12 @@ using UnityEngine.UI;
 ///   • after the name, behind a bronze rule, everything else on the hex: chips for the armies and
 ///     characters present, then a bronze-ringed medallion for each marker on the hex (an artifact,
 ///     a pending event, an underground way — Hex.CollectHudMarkers), whose tooltip shows in a
-///     matching plate on hover (the strip's medallions are the canvas's only raycast targets)
+///     matching plate on hover (these and the city medallion are the canvas's only raycast targets)
 /// Hexes with units or markers but no settlement get them alone, on a small strip of the same ink
 /// (the unitsPlate). Hex owns the content
 /// (RefreshHexLabel fills a PlateData) and calls Show/Hide; this class only builds, places and
-/// draws. Banners sit on their own overlay canvas below the HUD; apart from the markers nothing
-/// takes raycasts, so clicks and hovers still reach the board underneath.
+/// draws. Banners sit on their own overlay canvas below the HUD; apart from the markers and the
+/// city medallion nothing takes raycasts, so clicks and hovers still reach the board underneath.
 /// </summary>
 public class HexNameplates : MonoBehaviour
 {
@@ -38,6 +41,7 @@ public class HexNameplates : MonoBehaviour
         public int loyalty;         // 0 .. 100
         public bool port;
         public bool hidden;
+        public Sprite painting;     // the settlement's PC art (Hex.pcTexture); null = plain nation field
         public string unitsRichText; // inline <sprite> + count groups, may be empty
         public List<Marker> markers;  // artifact, event, underground… shown after the units; may be null
     }
@@ -54,7 +58,19 @@ public class HexNameplates : MonoBehaviour
     private const float ReferenceHeight = 1080f;
     private const float PlateHeight = 36f;
     private const float PlateSourceHeight = 180f;            // plate.png's height, for its 9-slice ends
-    private const float MedalWidth = 46f, MedalHeight = 62f;  // medallion.png is 145 × 195
+    // The medallion is drawn well larger than the plate is tall, so the painting and the size read.
+    private const float MedalScale = 1.5f;
+    private const float MedalWidth = 46f * MedalScale, MedalHeight = 62f * MedalScale;  // medallion.png is 145 × 195
+    // The frame's round window is ~30 × 33 (94 × 105 px of the source). The nation ring is an
+    // annulus a little larger than the window (the frame hides its outer edge); the painting is a
+    // rectangle whose corners stay inside the ring's outer edge and whose edges reach past its hole,
+    // so the ring alone crops it round — no stencil mask, so banners still batch.
+    private static readonly Vector2 RingSize = new Vector2(32f, 35f) * MedalScale;
+    private const float RingHole = 0.66f;                      // hole radius / outer radius
+    private static readonly Vector2 PaintingSize = new Vector2(22f, 24f) * MedalScale;
+    private const float PaintingCropWidth = 0.62f;             // of the PC art's width, round the town
+    private const float PaintingCropCentreY = 0.56f;           // up from the art's bottom edge
+    private const float SizeBadge = 16f * MedalScale;
     private const float StarWidth = 66f, StarHeight = 35f;    // star.png is 132 × 70
     private const float FortWidth = 28f, FortHeight = 33f;    // shield.png is 115 × 135
     private const float NameSize = 20f;
@@ -73,6 +89,7 @@ public class HexNameplates : MonoBehaviour
     private readonly Dictionary<Hex, Plate> plates = new();
 
     private static Sprite plateSprite, medalFrameSprite, medalFillSprite, shieldSprite, starSprite, ringSprite;
+    private static Sprite nationRingSprite, discSprite; // generated: white annulus and disc, tinted per nation
 
     private const float MarkerSize = 26f;
 
@@ -93,6 +110,23 @@ public class HexNameplates : MonoBehaviour
         private void OnDisable() => HideTooltip();
     }
 
+    // Hovering a city's medallion shows its PC card (+ land card); leaving hides it. Hex owns the
+    // preview (delay, visibility checks), as it did when the hex itself was the hover target.
+    private sealed class MedalHover : MonoBehaviour, UnityEngine.EventSystems.IPointerEnterHandler, UnityEngine.EventSystems.IPointerExitHandler
+    {
+        public Hex hex;
+        private bool hovered;
+        public void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData) => Set(true);
+        public void OnPointerExit(UnityEngine.EventSystems.PointerEventData eventData) => Set(false);
+        private void OnDisable() => Set(false);
+        private void Set(bool on)
+        {
+            if (hovered == on) return;
+            hovered = on;
+            if (hex != null) hex.SetPcMedallionHovered(on);
+        }
+    }
+
     private sealed class Plate
     {
         public RectTransform rect;
@@ -100,6 +134,10 @@ public class HexNameplates : MonoBehaviour
         public TextMeshProUGUI name;
         public RectTransform medal;
         public Image medalFill;
+        public Image paintingBack;
+        public RawImage painting;
+        public Image nationRing;
+        public Image sizeBadge;
         public TextMeshProUGUI popText;
         public RectTransform star;
         public RectTransform fortBadge;
@@ -209,14 +247,30 @@ public class HexNameplates : MonoBehaviour
         plate.barFill = fillRect.gameObject.AddComponent<Image>();
         plate.barFill.raycastTarget = false;
 
-        // The medallion: the nation colour behind the bronze frame, the size on top.
+        // The medallion: the nation colour behind the bronze frame, the settlement's painting in its
+        // window inside a ring of that colour, and the size on a small badge at its lower left.
         plate.medal = NewRect("Medallion", plate.rect);
         plate.medal.sizeDelta = new Vector2(MedalWidth, MedalHeight);
         plate.medalFill = NewImage("Field", plate.medal, medalFillSprite, Color.white, 0f, Vector2.zero);
         Stretch(plate.medalFill.rectTransform);
+        plate.paintingBack = NewImage("PaintingBack", plate.medal, null, Ink, 0f, Vector2.zero);
+        plate.paintingBack.rectTransform.sizeDelta = PaintingSize;
+        RectTransform paintingRect = NewRect("Painting", plate.medal);
+        paintingRect.anchorMin = paintingRect.anchorMax = new Vector2(0.5f, 0.5f);
+        paintingRect.sizeDelta = PaintingSize;
+        plate.painting = paintingRect.gameObject.AddComponent<RawImage>();
+        plate.painting.raycastTarget = false;
+        plate.nationRing = NewImage("NationRing", plate.medal, NationRingSprite(), Color.white, 0f, Vector2.zero);
+        plate.nationRing.rectTransform.sizeDelta = RingSize;
         Image frame = NewImage("Frame", plate.medal, medalFrameSprite, Color.white, 0f, Vector2.zero);
         Stretch(frame.rectTransform);
-        plate.popText = NewText("Size", plate.medal, 26f, FontStyles.Normal);
+        // The whole medallion is the hover target for the PC card preview.
+        frame.raycastTarget = true;
+        frame.gameObject.AddComponent<MedalHover>().hex = hex;
+        Vector2 badgeAt = new(-MedalWidth * 0.5f + SizeBadge * 0.5f - 1f, -MedalHeight * 0.5f + SizeBadge * 0.5f + 6f * MedalScale);
+        plate.sizeBadge = NewImage("SizeBadge", plate.medal, DiscSprite(), Color.white, SizeBadge, badgeAt);
+        NewImage("Ring", plate.sizeBadge.rectTransform, ringSprite, Color.white, SizeBadge + 3f, Vector2.zero);
+        plate.popText = NewText("Size", plate.sizeBadge.rectTransform, 14f * MedalScale, FontStyles.Normal);
         Stretch((RectTransform)plate.popText.transform);
 
         plate.star = NewRect("Capital", plate.rect);
@@ -332,6 +386,9 @@ public class HexNameplates : MonoBehaviour
             Color nation = data.nationColor.a > 0f ? data.nationColor : Unowned;
             nation.a = 1f;
             plate.medalFill.color = nation;
+            plate.nationRing.color = nation;   // a plain white ring, tinted: the true colour, undarkened
+            plate.sizeBadge.color = nation;
+            ApplyPainting(plate, data.painting);
 
             // The size: dark ink on light nation colours, parchment on dark ones.
             float luma = 0.2126f * nation.r + 0.7152f * nation.g + 0.0722f * nation.b;
@@ -413,18 +470,79 @@ public class HexNameplates : MonoBehaviour
         {
             // No settlement: the chips and markers on their own small ink strip under the hex.
             const float Padding = 17f;
-            plate.unitsPlate.enabled = true;
+            // Markers alone (an artifact, an event, an underground way) float as their round icons;
+            // the ink strip only backs unit chips.
+            plate.unitsPlate.enabled = hasUnitText;
             plate.units.anchorMin = plate.units.anchorMax = new Vector2(0.5f, 1f);
             plate.units.pivot = new Vector2(0.5f, 1f);
-            plate.units.sizeDelta = new Vector2(contentWidth + Padding * 2f, markerCount > 0 ? MarkerSize + 2f : 24f);
+            float padding = hasUnitText ? Padding : 0f;
+            plate.units.sizeDelta = new Vector2(contentWidth + padding * 2f, markerCount > 0 ? MarkerSize + 2f : 24f);
             plate.units.anchoredPosition = new Vector2(0f, -y);
-            LayoutStripContent(plate, data, textWidth, gap, markerCount, Padding);
+            LayoutStripContent(plate, data, textWidth, gap, markerCount, padding);
             y += plate.units.sizeDelta.y + 2f;
             width = Mathf.Max(width, plate.units.sizeDelta.x);
         }
 
         plate.rect.sizeDelta = new Vector2(width, y);
         plate.height = y;
+    }
+
+    // The settlement's painting in the medallion window: a crop round the town, centred on the hex
+    // tile's top face, read straight from the sprite's texture (atlas-aware) by a RawImage.
+    private static void ApplyPainting(Plate plate, Sprite sprite)
+    {
+        bool show = sprite != null && sprite.texture != null;
+        plate.painting.enabled = show;
+        plate.paintingBack.enabled = show;
+        if (!show) { plate.painting.texture = null; return; }
+
+        Texture texture = sprite.texture;
+        Rect source = sprite.rect;
+        if (sprite.packed && sprite.packingMode == SpritePackingMode.Rectangle) source = sprite.textureRect;
+        float aspect = source.width / Mathf.Max(1f, source.height);
+        float cropW = PaintingCropWidth;
+        float cropH = Mathf.Min(1f, cropW * aspect * (PaintingSize.y / PaintingSize.x));
+        float cropY = Mathf.Clamp(PaintingCropCentreY - cropH * 0.5f, 0f, 1f - cropH);
+        float cropX = (1f - cropW) * 0.5f;
+        float texW = Mathf.Max(1f, texture.width), texH = Mathf.Max(1f, texture.height);
+        plate.painting.texture = texture;
+        plate.painting.uvRect = new Rect(
+            (source.x + cropX * source.width) / texW,
+            (source.y + cropY * source.height) / texH,
+            cropW * source.width / texW,
+            cropH * source.height / texH);
+    }
+
+    // A white annulus (hole RingHole of the radius), anti-aliased, for the medallion's nation ring.
+    private static Sprite NationRingSprite()
+    {
+        if (nationRingSprite == null) nationRingSprite = RoundSprite("CityBannerNationRing", RingHole);
+        return nationRingSprite;
+    }
+
+    private static Sprite DiscSprite()
+    {
+        if (discSprite == null) discSprite = RoundSprite("CityBannerDisc", 0f);
+        return discSprite;
+    }
+
+    private static Sprite RoundSprite(string name, float hole)
+    {
+        const int Size = 128;
+        var texture = new Texture2D(Size, Size, TextureFormat.RGBA32, true) { name = name, wrapMode = TextureWrapMode.Clamp };
+        var pixels = new Color32[Size * Size];
+        float radius = Size * 0.5f, inner = radius * hole;
+        for (int y = 0; y < Size; y++)
+        for (int x = 0; x < Size; x++)
+        {
+            float d = Vector2.Distance(new Vector2(x + 0.5f, y + 0.5f), new Vector2(radius, radius));
+            float a = Mathf.Clamp01(radius - d);                        // soft outer edge
+            if (hole > 0f) a = Mathf.Min(a, Mathf.Clamp01(d - inner));  // and inner edge
+            pixels[y * Size + x] = new Color32(255, 255, 255, (byte)Mathf.RoundToInt(a * 255f));
+        }
+        texture.SetPixels32(pixels);
+        texture.Apply(true, true);
+        return Sprite.Create(texture, new Rect(0, 0, Size, Size), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect);
     }
 
     // Unit chips text, then a medallion per marker, left to right from `start` inside plate.units.
@@ -459,6 +577,8 @@ public class HexNameplates : MonoBehaviour
     {
         var view = new MarkerView { rect = NewRect("Marker", strip) };
         view.rect.sizeDelta = new Vector2(MarkerSize, MarkerSize);
+        // A dark disc behind the icon, so it reads on the board without a strip behind it.
+        NewImage("Back", view.rect, DiscSprite(), new Color(0.06f, 0.05f, 0.04f, 0.92f), MarkerSize - 2f, Vector2.zero);
         view.icon = NewImage("Icon", view.rect, null, Color.white, MarkerSize * 0.62f, Vector2.zero);
         view.icon.preserveAspect = true;
         Image ring = NewImage("Ring", view.rect, ringSprite, Color.white, MarkerSize, Vector2.zero);

@@ -23,38 +23,46 @@
       { "shape": "cylinder", "pos": [0.22, 0, -0.05], "radius": 0.05, "height": 0.006, "sides": 10, "cell": "accent" }
     ] },
     { "note": "tussocks, back", "at": [-0.05, 0.3], "parts": [
-      { "shape": "dome", "pos": [-0.2, 0, 0.0], "radius": 0.11, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.05, 0, 0.1], "radius": 0.12, "height": 0.06, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.3, 0, -0.05], "radius": 0.1, "height": 0.045, "sides": 10, "cell": "foliage" }
+      { "shape": "dome", "pos": [-0.2, 0, 0.0], "radius": 0.11, "height": 0.08, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.05, 0, 0.1], "radius": 0.12, "height": 0.1, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.3, 0, -0.05], "radius": 0.1, "height": 0.08, "sides": 10, "cell": "stone" }
     ] },
     { "note": "tussocks, middle", "at": [0.05, 0.05], "parts": [
-      { "shape": "dome", "pos": [-0.05, 0, 0], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.3, 0, 0.05], "radius": 0.12, "height": 0.055, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [-0.42, 0, -0.25], "radius": 0.08, "height": 0.04, "sides": 10, "cell": "foliage" }
+      { "shape": "dome", "pos": [-0.05, 0, 0], "radius": 0.13, "height": 0.09, "sides": 10, "cell": "stone" },
+      { "shape": "dome", "pos": [0.3, 0, 0.05], "radius": 0.12, "height": 0.09, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.42, 0, -0.25], "radius": 0.08, "height": 0.07, "sides": 10, "cell": "foliage" }
     ] },
     { "note": "tussocks, front", "at": [0.0, -0.24], "parts": [
-      { "shape": "dome", "pos": [-0.12, 0, 0], "radius": 0.13, "height": 0.045, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.18, 0, -0.08], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.4, 0, 0.25], "radius": 0.08, "height": 0.04, "sides": 10, "cell": "foliage" }
+      { "shape": "dome", "pos": [-0.12, 0, 0], "radius": 0.13, "height": 0.08, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.18, 0, -0.08], "radius": 0.1, "height": 0.07, "sides": 10, "cell": "stone" },
+      { "shape": "dome", "pos": [0.4, 0, 0.25], "radius": 0.08, "height": 0.07, "sides": 10, "cell": "foliage" }
     ] },
-    { "note": "flowering reeds, back", "at": [-0.06, 0.36], "parts": [
-      { "shape": "tree", "kind": "poplar", "height": 0.09, "radius": 0.012 },
-      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.008, "height": 0.04, "sides": 5, "cell": "roof" },
-      { "shape": "tree", "pos": [0.04, 0, 0.04], "kind": "poplar", "height": 0.1, "radius": 0.012, "seed": 1 },
-      { "shape": "cone", "pos": [0.04, 0.08, 0.04], "radius": 0.008, "height": 0.04, "sides": 5, "cell": "roof" },
-      { "shape": "tree", "pos": [0.17, 0, 0.05], "kind": "poplar", "height": 0.07, "radius": 0.01, "seed": 2 },
-      { "shape": "cone", "pos": [0.17, 0.06, 0.05], "radius": 0.007, "height": 0.03, "sides": 5, "cell": "roof" }
+    { "note": "flowering reeds, back", "at": [-0.06, 0.4], "parts": [
+      { "shape": "dome", "radius": 0.07, "height": 0.07, "sides": 9, "cell": "foliage" },
+      { "shape": "reeds", "pos": [0, 0.04, 0], "radius": 0.05, "height": 0.26, "count": 11, "cell": "foliage", "top": "roof", "seed": 1 },
+      { "shape": "reeds", "pos": [0.14, 0.02, 0.06], "radius": 0.035, "height": 0.18, "count": 7, "cell": "foliage", "top": "roof", "seed": 2 }
     ] },
     { "note": "flowering reeds, right", "at": [0.19, 0.14], "parts": [
-      { "shape": "tree", "kind": "poplar", "height": 0.08, "radius": 0.012, "seed": 3 },
-      { "shape": "cone", "pos": [0, 0.065, 0], "radius": 0.008, "height": 0.035, "sides": 5, "cell": "roof" },
-      { "shape": "tree", "pos": [0.2, 0, 0.12], "kind": "poplar", "height": 0.08, "radius": 0.012, "seed": 4 },
-      { "shape": "cone", "pos": [0.2, 0.065, 0.12], "radius": 0.008, "height": 0.035, "sides": 5, "cell": "roof" }
+      { "shape": "dome", "radius": 0.06, "height": 0.06, "sides": 9, "cell": "foliage" },
+      { "shape": "reeds", "pos": [0, 0.03, 0], "radius": 0.045, "height": 0.23, "count": 10, "cell": "foliage", "top": "roof", "seed": 3 }
+    ] },
+    { "note": "flowering reeds, far right", "at": [0.39, 0.2], "parts": [
+      { "shape": "dome", "radius": 0.05, "height": 0.05, "sides": 9, "cell": "stone" },
+      { "shape": "reeds", "pos": [0, 0.03, 0], "radius": 0.04, "height": 0.21, "count": 9, "cell": "foliage", "top": "roof", "seed": 4 }
     ] },
     { "note": "pale sedge clumps", "at": [-0.12, -0.22], "parts": [
-      { "shape": "tree", "kind": "poplar", "height": 0.04, "radius": 0.012, "cell": "trim", "seed": 5 },
-      { "shape": "tree", "pos": [0.25, 0, -0.15], "kind": "poplar", "height": 0.04, "radius": 0.012, "cell": "trim", "seed": 6 },
-      { "shape": "tree", "pos": [0.18, 0, 0.75], "kind": "poplar", "height": 0.04, "radius": 0.012, "cell": "trim", "seed": 7 }
+      { "shape": "reeds", "pos": [0, 0.04, 0], "radius": 0.035, "height": 0.12, "count": 8, "cell": "trim", "seed": 5 },
+      { "shape": "reeds", "pos": [0.25, 0.04, -0.15], "radius": 0.035, "height": 0.12, "count": 8, "cell": "trim", "seed": 6 },
+      { "shape": "reeds", "pos": [0.18, 0.05, 0.75], "radius": 0.035, "height": 0.13, "count": 8, "cell": "trim", "seed": 7 },
+      { "shape": "reeds", "pos": [0.31, 0.05, 0.95], "radius": 0.03, "height": 0.12, "count": 7, "cell": "trim", "seed": 8 },
+      { "shape": "reeds", "pos": [0.5, 0.04, 0.4], "radius": 0.03, "height": 0.11, "count": 7, "cell": "trim", "seed": 9 }
+    ] },
+    { "note": "rushes on the left", "at": [-0.4, 0.0], "parts": [
+      { "shape": "reeds", "pos": [0.0, 0.03, 0.1], "radius": 0.04, "height": 0.17, "count": 8, "cell": "foliage", "seed": 10 },
+      { "shape": "rock", "pos": [0.06, 0, -0.3], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 11 }
+    ] },
+    { "note": "stunted willow, back left edge", "at": [-0.32, 0.36], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.2, "radius": 0.065, "seed": 12 }
     ] }
   ]
 }

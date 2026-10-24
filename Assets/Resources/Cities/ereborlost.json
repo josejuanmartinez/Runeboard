@@ -6,10 +6,9 @@
   "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "the Lonely Mountain", "at": [0.04, 0.06], "parts": [
-      { "shape": "rock", "pos": [0, 0, 0.1], "radius": 0.28, "height": 0.95, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [-0.12, 0, 0.0], "radius": 0.18, "height": 0.45, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [0.14, 0, 0.0], "radius": 0.18, "height": 0.4, "cell": "stone", "seed": 3 },
-      { "shape": "cone", "pos": [0, 0.74, 0.1], "radius": 0.07, "height": 0.21, "sides": 7, "cell": "trim" },
+      { "shape": "peak", "pos": [0, 0, 0.1], "radius": 0.28, "height": 0.95, "taper": 1.2, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 1 },
+      { "shape": "peak", "pos": [-0.12, 0, 0.0], "radius": 0.18, "height": 0.45, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [0.14, 0, 0.0], "radius": 0.18, "height": 0.4, "cell": "stone", "seed": 3 },
       { "shape": "box", "pos": [-0.06, 0.2, -0.16], "size": [0.01, 0.4, 0.004], "cell": "accent" },
       { "shape": "box", "pos": [0.09, 0.15, -0.15], "size": [0.01, 0.35, 0.004], "cell": "accent" }
     ] },
@@ -23,28 +22,22 @@
       { "shape": "box", "pos": [0, 0, -0.06], "size": [0.05, 0.015, 0.06], "cell": "stone" }
     ] },
     { "note": "snowy peak, back left", "at": [-0.26, 0.33], "parts": [
-      { "shape": "rock", "radius": 0.15, "height": 0.36, "cell": "stone", "seed": 4 },
-      { "shape": "cone", "pos": [0, 0.26, 0], "radius": 0.05, "height": 0.1, "sides": 7, "cell": "trim" }
+      { "shape": "peak", "radius": 0.15, "height": 0.36, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 4 }
     ] },
     { "note": "snowy peak, back right", "at": [0.27, 0.46], "parts": [
-      { "shape": "rock", "radius": 0.13, "height": 0.28, "cell": "stone", "seed": 5 },
-      { "shape": "cone", "pos": [0, 0.2, 0], "radius": 0.045, "height": 0.08, "sides": 7, "cell": "trim" }
+      { "shape": "peak", "radius": 0.13, "height": 0.28, "cell": "stone", "top": "trim", "snow": 0.79, "seed": 5 }
     ] },
     { "note": "snowy peak, middle left", "at": [-0.15, 0.08], "parts": [
-      { "shape": "rock", "radius": 0.13, "height": 0.3, "cell": "stone", "seed": 6 },
-      { "shape": "cone", "pos": [0, 0.22, 0], "radius": 0.045, "height": 0.08, "sides": 7, "cell": "trim" }
+      { "shape": "peak", "radius": 0.13, "height": 0.3, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 6 }
     ] },
     { "note": "snowy peak, front left", "at": [-0.36, -0.1], "parts": [
-      { "shape": "rock", "radius": 0.14, "height": 0.31, "cell": "stone", "seed": 7 },
-      { "shape": "cone", "pos": [0, 0.23, 0], "radius": 0.045, "height": 0.08, "sides": 7, "cell": "trim" }
+      { "shape": "peak", "radius": 0.14, "height": 0.31, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 7 }
     ] },
     { "note": "snowy peak, middle right", "at": [0.27, 0.21], "parts": [
-      { "shape": "rock", "radius": 0.12, "height": 0.24, "cell": "stone", "seed": 8 },
-      { "shape": "cone", "pos": [0, 0.17, 0], "radius": 0.04, "height": 0.07, "sides": 7, "cell": "trim" }
+      { "shape": "peak", "radius": 0.12, "height": 0.24, "cell": "stone", "top": "trim", "snow": 0.79, "seed": 8 }
     ] },
     { "note": "snowy peak, front right", "at": [0.41, -0.13], "parts": [
-      { "shape": "rock", "radius": 0.1, "height": 0.2, "cell": "stone", "seed": 9 },
-      { "shape": "cone", "pos": [0, 0.14, 0], "radius": 0.035, "height": 0.06, "sides": 7, "cell": "trim" }
+      { "shape": "peak", "radius": 0.1, "height": 0.2, "cell": "stone", "top": "trim", "snow": 0.78, "seed": 9 }
     ] },
     { "note": "gold rune tiles", "at": [0.0, 0.0], "parts": [
       { "shape": "box", "pos": [-0.43, 0, 0.69], "size": [0.06, 0.006, 0.12], "cell": "accent", "yaw": 45 },

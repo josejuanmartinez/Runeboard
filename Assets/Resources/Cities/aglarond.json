@@ -6,9 +6,9 @@
   "surfaces": ["Fieldstone", "", "Planks", "", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "great crag, back left", "at": [-0.22, 0.3], "parts": [
-      { "shape": "rock", "radius": 0.16, "height": 0.3, "cell": "stone" },
-      { "shape": "rock", "pos": [-0.12, 0, -0.06], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [0.17, 0, 0.04], "radius": 0.11, "height": 0.18, "cell": "stone", "seed": 3 }
+      { "shape": "peak", "radius": 0.16, "height": 0.3, "cell": "stone", "seed": 20 },
+      { "shape": "peak", "pos": [-0.12, 0, -0.06], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [0.17, 0, 0.04], "radius": 0.11, "height": 0.18, "cell": "stone", "seed": 3 }
     ] },
     { "note": "left cave gate", "at": [-0.15, 0.16], "parts": [
       { "shape": "box", "size": [0.15, 0.12, 0.06], "cell": "stone" },

@@ -6,10 +6,9 @@
   "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "snow-capped peak behind", "at": [0.0, 0.42], "parts": [
-      { "shape": "cone", "radius": 0.42, "height": 0.62, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.42, 0], "radius": 0.14, "height": 0.2, "sides": 6, "cell": "trim" },
-      { "shape": "rock", "pos": [0.3, 0, -0.1], "radius": 0.18, "height": 0.35, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [-0.3, 0, -0.08], "radius": 0.16, "height": 0.3, "cell": "stone", "seed": 2 }
+      { "shape": "peak", "radius": 0.42, "height": 0.62, "cell": "stone", "top": "trim", "snow": 0.76, "seed": 20 },
+      { "shape": "peak", "pos": [0.3, 0, -0.1], "radius": 0.18, "height": 0.35, "cell": "stone", "seed": 1 },
+      { "shape": "peak", "pos": [-0.3, 0, -0.08], "radius": 0.16, "height": 0.3, "cell": "stone", "seed": 2 }
     ] },
     { "note": "half-timbered great hall, left", "at": [-0.17, 0.17], "yaw": -30, "parts": [
       { "shape": "box", "size": [0.22, 0.16, 0.12], "cell": "stone" },

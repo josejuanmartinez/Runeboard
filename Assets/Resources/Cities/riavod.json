@@ -6,11 +6,11 @@
   "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Slate", "", ""],
   "buildings": [
     { "note": "granite crags", "at": [0.0, 0.24], "parts": [
-      { "shape": "rock", "pos": [-0.02, 0, 0.05], "radius": 0.11, "height": 0.33, "cell": "stone" },
-      { "shape": "rock", "pos": [-0.15, 0, -0.03], "radius": 0.08, "height": 0.2, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [-0.26, 0, -0.08], "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 3 },
+      { "shape": "peak", "pos": [-0.02, 0, 0.05], "radius": 0.11, "height": 0.33, "cell": "stone", "seed": 20 },
+      { "shape": "peak", "pos": [-0.15, 0, -0.03], "radius": 0.08, "height": 0.2, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [-0.26, 0, -0.08], "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 3 },
       { "shape": "rock", "pos": [-0.36, 0, -0.22], "radius": 0.08, "height": 0.1, "cell": "stone", "seed": 4 },
-      { "shape": "rock", "pos": [0.29, 0, -0.2], "radius": 0.09, "height": 0.21, "cell": "stone", "seed": 5 },
+      { "shape": "peak", "pos": [0.29, 0, -0.2], "radius": 0.09, "height": 0.21, "cell": "stone", "seed": 5 },
       { "shape": "rock", "pos": [0.16, 0, 0.05], "radius": 0.06, "height": 0.13, "cell": "stone", "seed": 6 }
     ] },
     { "note": "carved mead-hall", "at": [0.07, 0.11], "yaw": 30, "parts": [

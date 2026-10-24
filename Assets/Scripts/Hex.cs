@@ -769,6 +769,7 @@ public class Hex : MonoBehaviour
             plate.loyalty = Math.Max(0, pc.loyalty);
             plate.port = pc.hasPort;
             plate.hidden = pc.isHidden;
+            plate.painting = pcTexture != null ? pcTexture.sprite : null; // the medallion shows the settlement's art
         }
 
         // Drawn by the screen-space city banner widget; the world-space label stays hidden and only
@@ -1112,9 +1113,8 @@ public class Hex : MonoBehaviour
         }
 
         framesColors?.SetHovered(true);
-        // The place label is a non-interactive screen widget now, so hovering the hex itself
-        // brings up the PC card preview the label band used to.
-        SetPcTextHovered(true);
+        // No PC card preview from hovering the hex itself: it comes only from the city banner's
+        // medallion (HexNameplates → SetPcMedallionHovered).
 
         if (s_hexInfoActiveHex != null && s_hexInfoActiveHex != this && s_hexInfoActiveHex.IsMouseOverHexOrPanel())
             return;
@@ -1125,12 +1125,13 @@ public class Hex : MonoBehaviour
         }
     }
 
-    // Shows the PC's card alongside its region's Land card while hovering the HexPcText
-    // label/Band of a hex that holds a currently-visible PC (see SetPcTextHovered) — mirrors
-    // the character/army hover preview, but for hexes. Only appears after
-    // pcCardPreviewHoverDelay seconds of uninterrupted hover (see ShowPcCardPreviewAfterDelay)
-    // rather than immediately, so glancing across PC hexes while moving the cursor doesn't
-    // spam the preview.
+    // Shows the PC's card alongside its region's Land card while hovering the city banner's
+    // medallion of a hex that holds a currently-visible PC (see SetPcMedallionHovered) — mirrors
+    // the character/army hover preview, but for hexes. Only appears after a short uninterrupted
+    // hover (pcCardPreviewHoverDelay, capped at PcCardPreviewMaxDelay — the medallion is a
+    // deliberate target; see ShowPcCardPreviewAfterDelay) so sweeping the cursor across banners
+    // doesn't spam the preview.
+    private const float PcCardPreviewMaxDelay = 0.2f;
     private void TryShowPcCardPreview()
     {
         // A hovered character sprite sits visually on top of the hex and drives its own
@@ -1152,7 +1153,7 @@ public class Hex : MonoBehaviour
 
     private IEnumerator ShowPcCardPreviewAfterDelay(PC pcData)
     {
-        yield return new WaitForSeconds(pcCardPreviewHoverDelay);
+        yield return new WaitForSeconds(Mathf.Min(pcCardPreviewHoverDelay, PcCardPreviewMaxDelay));
         pcCardPreviewCoroutine = null;
 
         if (_deckManager == null) _deckManager = DeckManager.Instance != null ? DeckManager.Instance : DeckManager.Instance;
@@ -1206,8 +1207,8 @@ public class Hex : MonoBehaviour
             board?.UIHover?.Hide();
             s_hexInfoActiveHex = null;
         }
-        SetPcTextHovered(false);
-        CancelPcCardPreview();
+        // The PC card preview is the banner medallion's (SetPcMedallionHovered): the pointer on the
+        // medallion counts as over UI, which unhovers the hex, so it must not be cancelled here.
     }
 
 
@@ -3146,10 +3147,10 @@ public class Hex : MonoBehaviour
         */
     }
 
-    // Driven by HexPcTextHover (mouse over the HexPcText label/Band), not by hovering the hex at
+    // Driven by the city banner's medallion (HexNameplates.MedalHover), not by hovering the hex at
     // large — the PC/Region card preview only shows up for that specific, small hover target
     // instead of blanketing the whole tile.
-    public void SetPcTextHovered(bool hovered)
+    public void SetPcMedallionHovered(bool hovered)
     {
         if (isPcTextHovered == hovered) return;
         isPcTextHovered = hovered;
@@ -3157,6 +3158,10 @@ public class Hex : MonoBehaviour
         if (hovered) TryShowPcCardPreview();
         else CancelPcCardPreview();
     }
+
+    // The old world-space HexPcText label (HexPcTextHover) is hidden — the banner draws the name —
+    // and no longer drives the PC card preview; kept so its hover component still compiles.
+    public void SetPcTextHovered(bool hovered) { }
 
     // Renderer.isVisible reflects whether THIS sprite was actually drawn by any camera last
     // frame (i.e. on-screen and unculled) — exactly the "in the player's current view" signal

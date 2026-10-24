@@ -50,6 +50,8 @@ public class Character3DView : MonoBehaviour
     private string lastSpriteState;
     private float suppressSpriteEchoUntil;
     private bool wasSelected;
+    private Character armedFor;
+    private Character3DWeapons.Loadout loadout = Character3DWeapons.Unarmed;
 
     public static Character3DView For(Character character) =>
         character != null && byCharacter.TryGetValue(character, out Character3DView view) && view != null ? view : null;
@@ -135,6 +137,13 @@ public class Character3DView : MonoBehaviour
         Leader owner = character != null ? character.GetOwner() : null;
         model.SetBase(settings.showBase ? owner != null ? owner.nationColor : Color.clear : null, settings.baseRadius);
         UpdateBaseFocus();
+        if (character != armedFor)
+        {
+            armedFor = character;
+            loadout = Character3DWeapons.For(character);
+        }
+        model.Arm(loadout);
+        UpdateRegiment(character);
         Animate(settings);
         KickUpDust();
 
@@ -148,6 +157,28 @@ public class Character3DView : MonoBehaviour
     // Strategic zoom: the figure dithers away and its token takes its place on the base.
     private UnitToken token;
 
+    // An army commander leads a small regiment on one oval stand (Character3DRegiment); a lone
+    // character is one figure on its round base.
+    private Character3DRegiment regiment;
+    private Character regimentFor;
+    private int troopCount;
+
+    private void UpdateRegiment(Character character)
+    {
+        Army army = character != null && character.IsArmyCommander() ? character.GetArmy() : null;
+        troopCount = Character3DRegiment.TroopCount(army);
+        bool sameUnit = character == regimentFor;
+        regimentFor = character;
+        if (regiment == null || regiment.gameObject != model.gameObject)
+        {
+            if (troopCount == 0) return;
+            regiment = model.GetComponent<Character3DRegiment>();
+            if (regiment == null) regiment = model.gameObject.AddComponent<Character3DRegiment>();
+        }
+        if (troopCount == 0) regiment.Sync(null, TroopsTypeEnum.ma, 0, sameUnit);
+        else regiment.Sync(Character3DRegiment.TroopFolder(character), Character3DRegiment.MainTroopType(army), troopCount, sameUnit);
+    }
+
     private void UpdateToken(Character3DSettings settings, Character character, Leader owner)
     {
         float amount = model.BaseWorldRadius > 0f ? UnitToken.Amount(settings) : 0f;
@@ -159,7 +190,7 @@ public class Character3DView : MonoBehaviour
         }
         if (token == null) token = UnitToken.Create(transform);
         token.Show(character, owner != null ? owner.nationColor : Color.clear, model.transform.position, model.BaseWorldRadius,
-            amount * sprite.color.a, sprite.sortingLayerID, sprite.sortingOrder, settings);
+            amount * sprite.color.a, sprite.sortingLayerID, sprite.sortingOrder, settings, Mathf.Min(troopCount, 2));
     }
 
     // ── Animation ───────────────────────────────────────────────────────────────────────────
@@ -178,12 +209,14 @@ public class Character3DView : MonoBehaviour
             ? hidden ? "Crouch Walk Forward" : moveSpeed > settings.runSpeed ? "Standing Run Forward" : "Standing Walk Forward"
             : hidden ? "Crouch Idle" : Idle;
         if (!anim.IsHolding) anim.SetBaseLoop(loop, 0.2f);
+        if (regiment != null) regiment.Mirror(loop);
 
         // Gameplay events (UnitAnimations) take priority over the sprite's own one-shot states.
         if (UnitAnimations.TryTake(character, out UnitAnimations.Move move, out string clip, out Vector3? facing))
         {
             if (facing.HasValue) FaceToward(facing.Value);
             UnitAnimations.Perform(anim, move, clip, hidden);
+            if (regiment != null) regiment.Follow(move, hidden);
             suppressSpriteEchoUntil = Time.time + SpriteEchoSuppress;
         }
 
@@ -192,13 +225,19 @@ public class Character3DView : MonoBehaviour
         {
             lastSpriteState = spriteState;
             if (Time.time > suppressSpriteEchoUntil && UnitAnimations.IsHumans(character) && SpriteStateMove(spriteState, out UnitAnimations.Move echo))
+            {
                 UnitAnimations.Perform(anim, echo, UnitAnimations.Pick(echo), hidden);
+                if (regiment != null) regiment.Follow(echo, hidden);
+            }
         }
 
         // Selecting a unit gets a "ready" acknowledgement — it raises its guard and lowers it again.
         bool selected = character != null && Board.Instance != null && Board.Instance.selectedCharacter == character;
         if (selected && !wasSelected && !anim.IsBusy && !moving && UnitAnimations.IsHumans(character))
+        {
             UnitAnimations.Perform(anim, UnitAnimations.Move.Rally, null, hidden);
+            if (regiment != null) regiment.Follow(UnitAnimations.Move.Rally, hidden);
+        }
         wasSelected = selected;
     }
 
@@ -223,6 +262,7 @@ public class Character3DView : MonoBehaviour
         Character3DModel body = model;
         model = null;
         modelFolder = null; // a fresh model if this slot shows a unit again
+        regiment = null;    // goes with the body (Character3DCorpse fells it)
         body.transform.SetParent(null, true);
         body.gameObject.AddComponent<Character3DCorpse>().Begin(clip);
         SetSpriteHidden(false);

@@ -39,22 +39,25 @@ public static class CityRecipes
     [Serializable]
     public class Part
     {
-        public string shape;         // box, gable, pyramid, cone, cylinder, dome, battlements, wallBattlements, flag, tree, rock, wall
+        public string shape;         // box, gable, pyramid, cone, cylinder, dome, battlements, wallBattlements, flag, tree, rock, peak, reeds, wall
         public float[] pos;          // [x, y, z] in the building's frame (y up, z back)
         public float[] size;         // box: [width, height, depth]; gable: [width, rise, depth]
         public float radius;
         public float height;
-        public int sides;            // polygon sides for cone/cylinder/dome (0 = a sensible default)
-        public float taper;          // cylinder: top radius / bottom radius (0 = straight)
+        public int sides;            // polygon sides for cone/cylinder/dome/peak (0 = a sensible default for the size)
+        public float taper;          // cylinder: top radius / bottom radius (0 = straight); peak: shoulder
+                                     // fullness (0 = 0.35, a near cone; ~1.2 keeps a rock's bulk)
         public float twist;          // turns the polygon (0.125 squares a 4-sided one to the view)
         public float yaw;            // extra degrees for this part, about its own pos
         public string cell;          // wall, roof, wood, stone, trim, dark, accent, nation, foliage
-        public string top;           // box/cylinder: the cap's cell (default: same as cell)
-        public int count;            // battlements: merlons around the ring
-        public float length;         // wallBattlements: run length
+        public string top;           // box/cylinder: the cap's cell (default: same as cell); peak: the snow cell
+                                     // (none = bare rock); reeds: the bulrush heads' cell (none = plain blades)
+        public float snow;           // peak: snowline as a fraction of the height (0 = 0.6)
+        public int count;            // battlements: merlons around the ring; reeds: blades in the clump (0 = 7)
+        public float length;         // wallBattlements: run length; peak: ridge length along x (stretches the footprint)
         public float thickness;      // wallBattlements / wall
-        public string kind;          // tree: pine, broadleaf, poplar
-        public int seed;             // tree / rock variation
+        public string kind;          // tree: pine, broadleaf, poplar, dead (a bare snag; its cell defaults to wood)
+        public int seed;             // tree / rock / peak / reeds variation
         public float[] to;           // wall: end point [x, z] in the building's frame; starts at pos
     }
 
@@ -136,7 +139,8 @@ public static class CityRecipes
         Cell cell = ParseCell(p.cell, Cell.Wall);
         Cell top = ParseCell(p.top, cell);
         float radius = p.radius * s, height = p.height * s;
-        int sides = p.sides > 0 ? p.sides : 8;
+        // Unspecified sides: more for big round shapes (hills, great domes and cones), which show their facets.
+        int sides = p.sides > 0 ? p.sides : p.radius >= 0.15f ? 12 : 8;
         switch ((p.shape ?? "").ToLowerInvariant())
         {
             case "box":
@@ -158,7 +162,7 @@ public static class CityRecipes
                 b.Cylinder(Vector3.zero, radius, height, sides, cell, top, p.taper > 0f ? p.taper : 1f, p.twist);
                 break;
             case "dome":
-                b.Dome(Vector3.zero, radius, height, Mathf.Max(sides, 6), 3, cell);
+                b.Dome(Vector3.zero, radius, height, Mathf.Max(sides, 6), p.radius >= 0.12f ? 4 : 3, cell);
                 break;
             case "battlements":
                 b.RoundBattlements(Vector3.zero, radius, Mathf.Max(p.count, 4), (p.thickness > 0f ? p.thickness : 0.014f) * s, cell);
@@ -172,12 +176,28 @@ public static class CityRecipes
             case "tree":
             {
                 CityMeshBuilder.TreeKind kind = Enum.TryParse(p.kind, true, out CityMeshBuilder.TreeKind k) ? k : CityMeshBuilder.TreeKind.Broadleaf;
-                b.Tree(Vector3.zero, height > 0f ? height : 0.12f * s, radius > 0f ? radius : 0.04f * s, kind, seed + p.seed, ParseCell(p.cell, Cell.Foliage));
+                Cell leaves = ParseCell(p.cell, kind == CityMeshBuilder.TreeKind.Dead ? Cell.Wood : Cell.Foliage);
+                b.Tree(Vector3.zero, height > 0f ? height : 0.12f * s, radius > 0f ? radius : 0.04f * s, kind, seed + p.seed, leaves);
                 break;
             }
             case "rock":
                 b.Rock(Vector3.zero, radius, height, seed + p.seed, ParseCell(p.cell, Cell.Stone));
                 break;
+            case "peak":
+            {
+                Cell? snow = string.IsNullOrEmpty(p.top) ? null : top;
+                float stretch = p.radius > 0f ? Mathf.Max(1f, p.length / (2f * p.radius)) : 1f;
+                b.Peak(Vector3.zero, radius, height, p.sides > 0 ? p.sides : 11, seed + p.seed, ParseCell(p.cell, Cell.Stone),
+                    snow, p.snow > 0f ? p.snow : 0.6f, stretch, p.taper > 0f ? p.taper : 0.35f);
+                break;
+            }
+            case "reeds":
+            {
+                Cell? head = string.IsNullOrEmpty(p.top) ? null : top;
+                b.Reeds(Vector3.zero, radius > 0f ? radius : 0.03f * s, height > 0f ? height : 0.16f * s, p.count > 0 ? p.count : 7,
+                    seed + p.seed, ParseCell(p.cell, Cell.Foliage), head);
+                break;
+            }
             case "wall":
             {
                 // A straight wall from pos to `to` (both on the ground, [x, z]).

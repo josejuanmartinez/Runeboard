@@ -6,9 +6,9 @@
   "surfaces": ["Ashlar",  "Slate",   "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "mountain", "at": [0.0, 0.36], "parts": [
-      { "shape": "rock", "pos": [0, 0, 0.05], "radius": 0.36, "height": 0.62, "cell": "stone" },
-      { "shape": "rock", "pos": [-0.25, 0, -0.05], "radius": 0.22, "height": 0.3, "cell": "trim", "seed": 1 },
-      { "shape": "rock", "pos": [0.27, 0, -0.08], "radius": 0.2, "height": 0.32, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [0, 0, 0.05], "radius": 0.36, "height": 0.62, "taper": 1.2, "cell": "stone", "seed": 20 },
+      { "shape": "peak", "pos": [-0.25, 0, -0.05], "radius": 0.22, "height": 0.3, "taper": 1.2, "cell": "trim", "seed": 1 },
+      { "shape": "peak", "pos": [0.27, 0, -0.08], "radius": 0.2, "height": 0.32, "taper": 1.2, "cell": "stone", "seed": 2 },
       { "shape": "rock", "pos": [0.05, 0.45, 0.06], "radius": 0.12, "height": 0.2, "cell": "trim", "seed": 3 }
     ] },
     { "note": "fortress facade", "at": [0.06, 0.2], "parts": [

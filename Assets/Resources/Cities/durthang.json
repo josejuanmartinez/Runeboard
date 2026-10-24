@@ -66,13 +66,13 @@
       { "shape": "gable", "pos": [0, 0.17, 0], "size": [0.05, 0.04, 0.12], "cell": "stone", "top": "stone", "yaw": 90 }
     ] },
     { "note": "crags behind and around", "at": [0.0, 0.0], "parts": [
-      { "shape": "rock", "pos": [-0.22, 0, 0.75], "radius": 0.15, "height": 0.42, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [0.28, 0, 0.85], "radius": 0.14, "height": 0.4, "cell": "stone", "seed": 3 },
-      { "shape": "rock", "pos": [-0.34, 0, 0.25], "radius": 0.14, "height": 0.34, "cell": "stone", "seed": 4 },
-      { "shape": "rock", "pos": [0.4, 0, 0.3], "radius": 0.11, "height": 0.28, "cell": "stone", "seed": 5 },
-      { "shape": "rock", "pos": [-0.38, 0, -0.25], "radius": 0.09, "height": 0.15, "cell": "stone", "seed": 6 },
-      { "shape": "rock", "pos": [0.11, 0, -0.32], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 7 },
-      { "shape": "rock", "pos": [0.24, 0, -0.25], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 8 },
+      { "shape": "peak", "pos": [-0.22, 0, 0.75], "radius": 0.15, "height": 0.42, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [0.28, 0, 0.85], "radius": 0.14, "height": 0.4, "cell": "stone", "seed": 3 },
+      { "shape": "peak", "pos": [-0.34, 0, 0.25], "radius": 0.14, "height": 0.34, "cell": "stone", "seed": 4 },
+      { "shape": "peak", "pos": [0.4, 0, 0.3], "radius": 0.11, "height": 0.28, "cell": "stone", "seed": 5 },
+      { "shape": "peak", "pos": [-0.38, 0, -0.25], "radius": 0.09, "height": 0.15, "cell": "stone", "seed": 6 },
+      { "shape": "peak", "pos": [0.11, 0, -0.32], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 7 },
+      { "shape": "peak", "pos": [0.24, 0, -0.25], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 8 },
       { "shape": "rock", "pos": [0.12, 0, -0.75], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 9 },
       { "shape": "rock", "pos": [0.36, 0, -0.55], "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 10 }
     ] },

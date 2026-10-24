@@ -8,7 +8,7 @@
     { "note": "snowy peak", "at": [0.02, 0.18], "parts": [
       { "shape": "rock", "radius": 0.4, "height": 0.42, "cell": "stone" },
       { "shape": "rock", "pos": [0.02, 0.18, 0.08], "radius": 0.22, "height": 0.4, "cell": "trim", "seed": 2 },
-      { "shape": "rock", "pos": [0.22, 0, 0.0], "radius": 0.2, "height": 0.3, "cell": "trim", "seed": 3 },
+      { "shape": "peak", "pos": [0.22, 0, 0.0], "radius": 0.2, "height": 0.3, "taper": 1.2, "cell": "trim", "seed": 3 },
       { "shape": "rock", "pos": [-0.25, 0, -0.05], "radius": 0.2, "height": 0.2, "cell": "stone", "seed": 4 }
     ] },
     { "note": "central octagonal keep", "at": [0.02, 0.05], "parts": [

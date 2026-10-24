@@ -7,10 +7,9 @@
   "buildings": [
     { "note": "snowy peak", "at": [0.03, 0.3], "parts": [
       { "shape": "rock", "radius": 0.38, "height": 0.36, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0, 0.08], "radius": 0.22, "height": 0.85, "sides": 7, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.62, 0.08], "radius": 0.062, "height": 0.24, "sides": 7, "cell": "roof" },
-      { "shape": "rock", "pos": [0.3, 0, -0.15], "radius": 0.12, "height": 0.4, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [-0.32, 0, -0.1], "radius": 0.1, "height": 0.3, "cell": "stone", "seed": 3 }
+      { "shape": "peak", "pos": [0, 0, 0.08], "radius": 0.22, "height": 0.85, "cell": "stone", "top": "roof", "snow": 0.8, "seed": 21 },
+      { "shape": "peak", "pos": [0.3, 0, -0.15], "radius": 0.12, "height": 0.4, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [-0.32, 0, -0.1], "radius": 0.1, "height": 0.3, "cell": "stone", "seed": 3 }
     ] },
     { "note": "terrace cliff", "at": [-0.01, 0.02], "yaw": 0, "parts": [
       { "shape": "box", "size": [0.44, 0.34, 0.3], "cell": "wall", "top": "roof" },

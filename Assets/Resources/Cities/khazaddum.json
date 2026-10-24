@@ -6,19 +6,15 @@
   "surfaces": ["Ashlar",  "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "great peaks behind", "at": [0.0, 0.3], "parts": [
-      { "shape": "rock", "pos": [-0.2, 0, 0.05], "radius": 0.24, "height": 0.6, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [0.22, 0, 0.08], "radius": 0.26, "height": 0.66, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [0.02, 0, 0.2], "radius": 0.2, "height": 0.5, "cell": "stone", "seed": 3 },
-      { "shape": "cone", "pos": [-0.2, 0.46, 0.05], "radius": 0.08, "height": 0.15, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [0.22, 0.5, 0.08], "radius": 0.09, "height": 0.17, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [0.02, 0.38, 0.2], "radius": 0.07, "height": 0.13, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "pos": [-0.2, 0, 0.05], "radius": 0.24, "height": 0.6, "taper": 1.2, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 1 },
+      { "shape": "peak", "pos": [0.22, 0, 0.08], "radius": 0.26, "height": 0.66, "taper": 1.2, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 2 },
+      { "shape": "peak", "pos": [0.02, 0, 0.2], "radius": 0.2, "height": 0.5, "taper": 1.2, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 3 }
     ] },
     { "note": "side crags", "at": [0.0, 0.02], "parts": [
-      { "shape": "rock", "pos": [-0.36, 0, 0.05], "radius": 0.13, "height": 0.3, "cell": "stone", "seed": 4 },
-      { "shape": "rock", "pos": [0.36, 0, 0.0], "radius": 0.14, "height": 0.34, "cell": "stone", "seed": 5 },
-      { "shape": "rock", "pos": [-0.19, 0, -0.1], "radius": 0.11, "height": 0.28, "cell": "stone", "seed": 6 },
-      { "shape": "rock", "pos": [0.2, 0, -0.12], "radius": 0.11, "height": 0.26, "cell": "stone", "seed": 7 },
-      { "shape": "cone", "pos": [0.36, 0.25, 0.0], "radius": 0.06, "height": 0.1, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "pos": [-0.36, 0, 0.05], "radius": 0.13, "height": 0.3, "cell": "stone", "seed": 4 },
+      { "shape": "peak", "pos": [0.36, 0, 0.0], "radius": 0.14, "height": 0.34, "cell": "stone", "top": "trim", "snow": 0.8, "seed": 5 },
+      { "shape": "peak", "pos": [-0.19, 0, -0.1], "radius": 0.11, "height": 0.28, "cell": "stone", "seed": 6 },
+      { "shape": "peak", "pos": [0.2, 0, -0.12], "radius": 0.11, "height": 0.26, "cell": "stone", "seed": 7 }
     ] },
     { "note": "the gate facade", "at": [-0.01, -0.2], "parts": [
       { "shape": "box", "size": [0.24, 0.28, 0.07], "cell": "wall" },

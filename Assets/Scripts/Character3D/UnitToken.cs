@@ -43,8 +43,10 @@ public class UnitToken : MonoBehaviour
     }
 
     // Stands the medallion on the base: diameter a little wider than the base, bottom at the feet.
+    // An army's token is a stack of counters (stack = how many peek out behind it, 0 for a lone
+    // character), the way a board game piles counters for a bigger force.
     public void Show(Character character, Color nation, Vector3 feet, float baseRadius, float alpha,
-        int sortingLayerId, int sortingOrder, Character3DSettings settings)
+        int sortingLayerId, int sortingOrder, Character3DSettings settings, int stack = 0)
     {
         if (character != shownFor || !hasArt) // retried until the illustrations have loaded
         {
@@ -53,6 +55,7 @@ public class UnitToken : MonoBehaviour
         }
         bool visible = hasArt && alpha > 0.01f && baseRadius > 0f;
         if (meshRenderer.enabled != visible) meshRenderer.enabled = visible;
+        ShowStack(visible ? stack : 0);
         if (!visible) return;
 
         float diameter = baseRadius * 2.2f;
@@ -67,11 +70,47 @@ public class UnitToken : MonoBehaviour
         block.SetColor(RingColorId, nation.a > 0f ? nation : new Color(0.36f, 0.33f, 0.28f));
         block.SetFloat(AlphaId, alpha);
         meshRenderer.SetPropertyBlock(block);
+
+        // The counters underneath: the same medallion, each a little up and to the right, drawn behind.
+        for (int i = 0; i < stackShown; i++)
+        {
+            MeshRenderer counter = stackRenderers[i];
+            counter.transform.localPosition = new Vector3(0.09f * (i + 1), 0.07f * (i + 1), 0.002f * (i + 1));
+            if (counter.sharedMaterial != meshRenderer.sharedMaterial) counter.sharedMaterial = meshRenderer.sharedMaterial;
+            counter.sortingLayerID = sortingLayerId;
+            counter.sortingOrder = sortingOrder - 1 - i;
+            counter.SetPropertyBlock(block);
+        }
     }
 
     public void Hide()
     {
         if (meshRenderer != null && meshRenderer.enabled) meshRenderer.enabled = false;
+        ShowStack(0);
+    }
+
+    private const int MaxStack = 2;
+    private readonly MeshRenderer[] stackRenderers = new MeshRenderer[MaxStack];
+    private int stackShown;
+
+    private void ShowStack(int count)
+    {
+        count = Mathf.Clamp(count, 0, MaxStack);
+        for (int i = 0; i < MaxStack; i++)
+        {
+            bool on = i < count;
+            if (on && stackRenderers[i] == null)
+            {
+                var go = new GameObject("Counter", typeof(MeshFilter), typeof(MeshRenderer));
+                go.transform.SetParent(transform, false);
+                go.GetComponent<MeshFilter>().sharedMesh = Quad();
+                stackRenderers[i] = go.GetComponent<MeshRenderer>();
+                stackRenderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                stackRenderers[i].receiveShadows = false;
+            }
+            if (stackRenderers[i] != null && stackRenderers[i].enabled != on) stackRenderers[i].enabled = on;
+        }
+        stackShown = count;
     }
 
     private bool Bind(Character character, Character3DSettings settings)

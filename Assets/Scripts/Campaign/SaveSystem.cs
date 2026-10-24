@@ -184,20 +184,27 @@ public static class SaveSystem
 
     // ------------------------------------------------------------------ Load: restart
 
-    /// <summary>Reads the save file and restarts the scene into it.</summary>
+    /// <summary>Reads the save file and restarts the scene into it. The loading screen goes up
+    /// immediately and stays until the restored campaign's first human turn can start.</summary>
     public static bool BeginLoad(out string error)
     {
         error = null;
         if (!HasSave) { error = "There is no saved campaign."; return false; }
+        if (SessionLoadingScreen.IsActive) { error = "A campaign is already loading."; return false; }
         try
         {
             SaveGame data = JsonUtility.FromJson<SaveGame>(File.ReadAllText(SavePath));
             if (data == null || data.version != Version) { error = "The saved campaign is from an incompatible version."; return false; }
-            PendingLoad = data;
-            GameConfig.ScenarioToLoad = data.scenario;
-            GameConfig.ScenarioChosen = true;
-            GameConfig.SkipIntro = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            // The scene reloads asynchronously behind the loading screen. The load state is only
+            // applied once the new scene exists (before any Start runs): setting ScenarioChosen
+            // any earlier would let the old title scene start generating a board while it waits.
+            SessionLoadingScreen.ReloadScene(SessionLoadingScreen.Kind.RestoreCampaign, SceneManager.GetActiveScene().buildIndex, () =>
+            {
+                PendingLoad = data;
+                GameConfig.ScenarioToLoad = data.scenario;
+                GameConfig.ScenarioChosen = true;
+                GameConfig.SkipIntro = true;
+            });
             return true;
         }
         catch (Exception e)

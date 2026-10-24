@@ -21,31 +21,38 @@
       { "shape": "box", "pos": [0.51, 0, -0.25], "size": [0.12, 0.004, 0.08], "cell": "accent", "yaw": 20 }
     ] },
     { "note": "tussock mounds", "at": [0.0, 0.0], "parts": [
-      { "shape": "dome", "pos": [-0.02, 0, 0.0], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.28, 0, 0.1], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [-0.33, 0, -0.25], "radius": 0.12, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.12, 0, -0.55], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [-0.15, 0, -0.75], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.4, 0, -0.35], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [0.05, 0, 0.6], "radius": 0.14, "height": 0.05, "sides": 10, "cell": "foliage" },
-      { "shape": "dome", "pos": [-0.42, 0, 0.55], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" }
+      { "shape": "dome", "pos": [-0.02, 0, 0.0], "radius": 0.13, "height": 0.09, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.28, 0, 0.1], "radius": 0.13, "height": 0.09, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.33, 0, -0.25], "radius": 0.12, "height": 0.08, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [0.12, 0, -0.55], "radius": 0.13, "height": 0.09, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.15, 0, -0.75], "radius": 0.1, "height": 0.07, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [0.4, 0, -0.35], "radius": 0.1, "height": 0.07, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.05, 0, 0.6], "radius": 0.14, "height": 0.09, "sides": 10, "cell": "wall" },
+      { "shape": "dome", "pos": [-0.42, 0, 0.55], "radius": 0.1, "height": 0.07, "sides": 10, "cell": "foliage" }
     ] },
     { "note": "pale dry grass tufts", "at": [0.0, 0.0], "parts": [
-      { "shape": "cone", "pos": [0.0, 0.04, -0.3], "radius": 0.035, "height": 0.04, "sides": 7, "cell": "trim" },
-      { "shape": "cone", "pos": [-0.35, 0.03, 0.15], "radius": 0.035, "height": 0.04, "sides": 7, "cell": "trim" },
-      { "shape": "cone", "pos": [0.42, 0.03, 0.55], "radius": 0.04, "height": 0.05, "sides": 7, "cell": "trim" },
-      { "shape": "cone", "pos": [0.2, 0.03, -0.75], "radius": 0.035, "height": 0.04, "sides": 7, "cell": "trim" }
+      { "shape": "reeds", "pos": [0.0, 0.06, -0.3], "radius": 0.04, "height": 0.13, "count": 9, "cell": "trim", "seed": 1 },
+      { "shape": "reeds", "pos": [-0.35, 0.04, 0.15], "radius": 0.04, "height": 0.13, "count": 9, "cell": "trim", "seed": 2 },
+      { "shape": "reeds", "pos": [0.42, 0.04, 0.55], "radius": 0.045, "height": 0.15, "count": 9, "cell": "trim", "seed": 3 },
+      { "shape": "reeds", "pos": [0.2, 0.05, -0.75], "radius": 0.04, "height": 0.12, "count": 8, "cell": "trim", "seed": 4 },
+      { "shape": "reeds", "pos": [-0.3, 0.05, -0.3], "radius": 0.035, "height": 0.12, "count": 8, "cell": "trim", "seed": 5 }
     ] },
     { "note": "fallen rotten log", "at": [-0.02, 0.24], "yaw": -20, "parts": [
-      { "shape": "box", "pos": [0, 0, 0], "size": [0.3, 0.03, 0.035], "cell": "wood" }
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.3, 0.04, 0.045], "cell": "wood" },
+      { "shape": "rock", "pos": [-0.17, 0, 0], "radius": 0.045, "height": 0.07, "cell": "wood", "seed": 15 },
+      { "shape": "tree", "pos": [-0.16, 0, 0], "kind": "dead", "height": 0.1, "radius": 0.05, "seed": 6 }
     ] },
-    { "note": "dead snags and broken reeds", "at": [0.0, 0.0], "parts": [
-      { "shape": "cylinder", "pos": [-0.09, 0, 0.83], "radius": 0.012, "height": 0.12, "sides": 5, "taper": 0.3, "cell": "wood" },
-      { "shape": "cylinder", "pos": [0.2, 0, 0.52], "radius": 0.012, "height": 0.1, "sides": 5, "taper": 0.3, "cell": "wood" },
-      { "shape": "cylinder", "pos": [0.37, 0, 0.4], "radius": 0.012, "height": 0.13, "sides": 5, "taper": 0.3, "cell": "wood" },
-      { "shape": "cylinder", "pos": [0.16, 0, 0.19], "radius": 0.012, "height": 0.1, "sides": 5, "taper": 0.3, "cell": "wood" },
-      { "shape": "cylinder", "pos": [0.44, 0, 0.17], "radius": 0.01, "height": 0.11, "sides": 5, "taper": 0.3, "cell": "wood" },
-      { "shape": "cylinder", "pos": [-0.15, 0, -0.35], "radius": 0.008, "height": 0.07, "sides": 5, "taper": 0.3, "cell": "wood" }
+    { "note": "dead snags", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.09, 0.04, 0.83], "kind": "dead", "height": 0.3, "radius": 0.07, "seed": 7 },
+      { "shape": "tree", "pos": [0.2, 0.03, 0.52], "kind": "dead", "height": 0.22, "radius": 0.05, "seed": 8 },
+      { "shape": "tree", "pos": [0.37, 0.03, 0.4], "kind": "dead", "height": 0.28, "radius": 0.06, "seed": 9 },
+      { "shape": "tree", "pos": [0.44, 0.02, 0.17], "kind": "dead", "height": 0.18, "radius": 0.05, "seed": 10 },
+      { "shape": "tree", "pos": [-0.15, 0.03, -0.35], "kind": "dead", "height": 0.14, "radius": 0.04, "seed": 11 }
+    ] },
+    { "note": "broken grey reeds", "at": [0.0, 0.0], "parts": [
+      { "shape": "reeds", "pos": [0.16, 0.05, 0.19], "radius": 0.035, "height": 0.2, "count": 8, "cell": "wood", "seed": 12 },
+      { "shape": "reeds", "pos": [-0.02, 0.06, 0.55], "radius": 0.035, "height": 0.18, "count": 7, "cell": "wood", "seed": 13 },
+      { "shape": "reeds", "pos": [0.3, 0.05, 0.85], "radius": 0.03, "height": 0.16, "count": 7, "cell": "trim", "seed": 14 }
     ] }
   ]
 }

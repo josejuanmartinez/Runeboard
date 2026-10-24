@@ -1,4 +1,5 @@
 using RetroLOTR.Scenarios;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TMPro;
@@ -165,7 +166,7 @@ public class CampaignHud : MonoBehaviour
         if (link >= 0 && objectives != null && Game.Instance?.player != null)
         {
             string id = trackerText.textInfo.linkInfo[link].GetLinkID();
-            foreach (CampaignObjective o in objectives.GetObjectives(Game.Instance.player))
+            foreach (CampaignObjective o in objectives.GetObjectives(Game.Instance.player).Concat(objectives.GetMilestones(Game.Instance.player)))
             {
                 if (o.id != id) continue;
                 ObjectiveGuide.Instance?.FocusObjective(o);
@@ -195,6 +196,7 @@ public class CampaignHud : MonoBehaviour
             sb.Append(rival.killed ? $"   <color={UiTheme.MutedHex}><s>{name}</s></color>" : $"   <color={UiTheme.MutedHex}>{name} {objectives.Score(rival)}</color>");
         }
         sb.Append("</size>\n");
+        AppendAspects(sb, player);
 
         foreach (CampaignObjective o in objectives.GetObjectives(player))
         {
@@ -205,10 +207,47 @@ public class CampaignHud : MonoBehaviour
             if (expanded && !string.IsNullOrWhiteSpace(o.description))
                 sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{o.description}</color></size>");
         }
+        AppendMilestones(sb, player);
         sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>Click an objective to see where and how</color></size>");
         trackerText.text = sb.ToString();
 
         FindAnyObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
+    }
+
+    // The score by aspect, two to a row; an aspect you lead every living rival in shows in gold.
+    // The same icons mark the opportunity hints on the map and the milestones below.
+    private void AppendAspects(StringBuilder sb, PlayableLeader player)
+    {
+        sb.Append("<size=88%>");
+        for (int i = 0; i < ScoreAspects.All.Length; i++)
+        {
+            ScoreAspect aspect = ScoreAspects.All[i];
+            int mine = ScoreAspects.Score(player, aspect);
+            bool leading = objectives.AllLeaders().Where(l => l != player && !l.killed).All(l => ScoreAspects.Score(l, aspect) < mine);
+            string value = leading ? $"<color={UiTheme.GoldHex}>{mine}</color>" : mine.ToString();
+            sb.Append($"{ScoreAspects.Icon(aspect)} <color={UiTheme.MutedHex}>{ScoreAspects.Name(aspect)}</color> {value}");
+            sb.Append(i % 2 == 0 ? "<pos=50%>" : "\n");
+        }
+        sb.Append("</size>");
+    }
+
+    // The next few milestones in order, with their progress; the reached ones only as a count.
+    private void AppendMilestones(StringBuilder sb, PlayableLeader player)
+    {
+        IReadOnlyList<CampaignObjective> milestones = objectives.GetMilestones(player);
+        if (milestones.Count == 0) return;
+        int reached = milestones.Count(m => objectives.IsMet(player, m));
+        sb.Append($"\n\n{UiTheme.Eyebrow("Next steps")}  <size=80%><color={UiTheme.MutedHex}>{reached}/{milestones.Count} reached</color></size>");
+        int shown = 0;
+        foreach (CampaignObjective m in milestones)
+        {
+            if (objectives.IsMet(player, m)) continue;
+            if (shown++ >= (expanded ? 3 : 2)) break;
+            string reward = m.reward > 0 ? $"  <size=80%><color={UiTheme.MutedHex}>+{m.reward}</color><sprite name=\"gold\"></size>" : string.Empty;
+            sb.Append($"\n{ScoreAspects.Icon(CampaignObjectives.AspectOf(m))} <link=\"{m.id}\"><u>{m.title}</u></link>  <size=80%><color={UiTheme.MutedHex}>{objectives.ProgressText(player, m)}</color></size>{reward}");
+            if (expanded && shown == 1 && !string.IsNullOrWhiteSpace(m.how))
+                sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{m.how}</color></size>");
+        }
     }
 
     // ---------------------------------------------------------------- End screen

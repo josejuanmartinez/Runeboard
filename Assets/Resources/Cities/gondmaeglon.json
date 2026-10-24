@@ -7,31 +7,24 @@
   "buildings": [
     { "note": "great peak, back centre", "at": [0.03, 0.36], "parts": [
       { "shape": "rock", "radius": 0.24, "height": 0.2, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.1, 0], "radius": 0.17, "height": 0.48, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.34, 0], "radius": 0.087, "height": 0.245, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "pos": [0, 0.1, 0], "radius": 0.17, "height": 0.48, "cell": "stone", "top": "trim", "snow": 0.58, "seed": 21 }
     ] },
     { "note": "peaks, back left and right", "at": [-0.15, 0.42], "parts": [
-      { "shape": "cone", "radius": 0.1, "height": 0.26, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.15, 0], "radius": 0.045, "height": 0.11, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [0.33, 0, -0.1], "radius": 0.09, "height": 0.22, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0.33, 0.13, -0.1], "radius": 0.042, "height": 0.1, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "radius": 0.1, "height": 0.26, "cell": "stone", "top": "trim", "snow": 0.66, "seed": 20 },
+      { "shape": "peak", "pos": [0.33, 0, -0.1], "radius": 0.09, "height": 0.22, "cell": "stone", "top": "trim", "snow": 0.67, "seed": 22 }
     ] },
     { "note": "peak, left", "at": [-0.37, 0.2], "parts": [
       { "shape": "rock", "radius": 0.13, "height": 0.08, "cell": "stone", "seed": 1 },
-      { "shape": "cone", "radius": 0.12, "height": 0.25, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.15, 0], "radius": 0.048, "height": 0.1, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "radius": 0.12, "height": 0.25, "cell": "stone", "top": "trim", "snow": 0.68, "seed": 21 }
     ] },
     { "note": "peak, right", "at": [0.36, 0.22], "parts": [
       { "shape": "rock", "radius": 0.12, "height": 0.08, "cell": "stone", "seed": 2 },
-      { "shape": "cone", "radius": 0.11, "height": 0.24, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.14, 0], "radius": 0.046, "height": 0.1, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "radius": 0.11, "height": 0.24, "cell": "stone", "top": "trim", "snow": 0.66, "seed": 21 }
     ] },
     { "note": "front peaks over the gate", "at": [-0.04, 0.03], "parts": [
       { "shape": "rock", "radius": 0.17, "height": 0.12, "cell": "stone", "seed": 3 },
-      { "shape": "cone", "radius": 0.15, "height": 0.33, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.2, 0], "radius": 0.06, "height": 0.13, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [0.16, 0, 0.18], "radius": 0.11, "height": 0.27, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0.16, 0.17, 0.18], "radius": 0.042, "height": 0.1, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "radius": 0.15, "height": 0.33, "cell": "stone", "top": "trim", "snow": 0.69, "seed": 21 },
+      { "shape": "peak", "pos": [0.16, 0, 0.18], "radius": 0.11, "height": 0.27, "cell": "stone", "top": "trim", "snow": 0.71, "seed": 23 }
     ] },
     { "note": "gatehouse and wall", "at": [0.0, -0.1], "yaw": -25, "parts": [
       { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.07, 0.08, 0.05], "cell": "wall" },
@@ -43,8 +36,7 @@
     ] },
     { "note": "small peak, front right", "at": [0.34, -0.17], "parts": [
       { "shape": "rock", "radius": 0.1, "height": 0.06, "cell": "stone", "seed": 4 },
-      { "shape": "cone", "radius": 0.1, "height": 0.2, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.12, 0], "radius": 0.04, "height": 0.08, "sides": 6, "cell": "trim" }
+      { "shape": "peak", "radius": 0.1, "height": 0.2, "cell": "stone", "top": "trim", "snow": 0.68, "seed": 21 }
     ] },
     { "note": "river and bridge", "at": [0.08, -0.22], "yaw": 35, "parts": [
       { "shape": "box", "pos": [-0.04, 0, -0.05], "size": [0.55, 0.004, 0.045], "cell": "accent" },

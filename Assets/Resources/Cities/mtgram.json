@@ -7,20 +7,14 @@
   "buildings": [
     { "note": "main peak", "at": [-0.02, 0.14], "parts": [
       { "shape": "rock", "radius": 0.34, "height": 0.2, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0, 0.05], "radius": 0.16, "height": 0.82, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0, 0.5, 0.05], "radius": 0.064, "height": 0.33, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [0.07, 0, 0.12], "radius": 0.12, "height": 0.62, "sides": 6, "cell": "stone" },
-      { "shape": "cone", "pos": [0.07, 0.42, 0.12], "radius": 0.04, "height": 0.21, "sides": 6, "cell": "trim" },
-      { "shape": "cone", "pos": [-0.16, 0, -0.05], "radius": 0.1, "height": 0.45, "sides": 5, "cell": "stone" },
-      { "shape": "cone", "pos": [-0.16, 0.3, -0.05], "radius": 0.035, "height": 0.16, "sides": 5, "cell": "trim" },
-      { "shape": "cone", "pos": [0.24, 0, -0.1], "radius": 0.09, "height": 0.38, "sides": 5, "cell": "stone" },
-      { "shape": "cone", "pos": [0.24, 0.25, -0.1], "radius": 0.033, "height": 0.13, "sides": 5, "cell": "trim" }
+      { "shape": "peak", "pos": [0, 0, 0.05], "radius": 0.16, "height": 0.82, "cell": "stone", "top": "trim", "snow": 0.69, "seed": 21 },
+      { "shape": "peak", "pos": [0.07, 0, 0.12], "radius": 0.12, "height": 0.62, "cell": "stone", "top": "trim", "snow": 0.76, "seed": 23 },
+      { "shape": "peak", "pos": [-0.16, 0, -0.05], "radius": 0.1, "height": 0.45, "cell": "stone", "top": "trim", "snow": 0.75, "seed": 25 },
+      { "shape": "peak", "pos": [0.24, 0, -0.1], "radius": 0.09, "height": 0.38, "cell": "stone", "top": "trim", "snow": 0.74, "seed": 27 }
     ] },
     { "note": "side peaks", "at": [0.0, 0.18], "parts": [
-      { "shape": "cone", "pos": [-0.36, 0, 0.0], "radius": 0.09, "height": 0.3, "sides": 5, "cell": "stone" },
-      { "shape": "cone", "pos": [-0.36, 0.2, 0.0], "radius": 0.032, "height": 0.1, "sides": 5, "cell": "trim" },
-      { "shape": "cone", "pos": [0.38, 0, -0.05], "radius": 0.09, "height": 0.28, "sides": 5, "cell": "stone" },
-      { "shape": "cone", "pos": [0.38, 0.18, -0.05], "radius": 0.034, "height": 0.1, "sides": 5, "cell": "trim" }
+      { "shape": "peak", "pos": [-0.36, 0, 0.0], "radius": 0.09, "height": 0.3, "cell": "stone", "top": "trim", "snow": 0.75, "seed": 20 },
+      { "shape": "peak", "pos": [0.38, 0, -0.05], "radius": 0.09, "height": 0.28, "cell": "stone", "top": "trim", "snow": 0.72, "seed": 22 }
     ] },
     { "note": "mountain keep", "at": [0.07, 0.02], "parts": [
       { "shape": "rock", "radius": 0.1, "height": 0.2, "cell": "stone", "seed": 5 },

@@ -8,6 +8,10 @@ using UnityEngine;
 /// (Resources/Campaign/CampaignObjectives.json) across an Age of a fixed number of turns.
 /// A decisive objective wins the war at once; otherwise the leader with the most objective
 /// points when the Age ends wins (victory points break ties). Eliminating every rival still wins.
+/// Each leader also has milestones: smaller steps in their own style (raise an army, fill the
+/// treasury, gather companions), measured as a gain over where they started, each feeding one
+/// score aspect (ScoreAspects) and paying a little gold when first reached. They don't count
+/// toward the objective score.
 /// </summary>
 public class CampaignObjectives : MonoBehaviour
 {
@@ -22,6 +26,8 @@ public class CampaignObjectives : MonoBehaviour
     private Game game;
     private readonly Dictionary<string, Hex> pcHexByName = new(StringComparer.Ordinal);
     private readonly HashSet<string> achievedOnce = new();
+    // Each leader's measures when the war began (milestones count the gain since).
+    private readonly Dictionary<string, int> baselines = new();
     private bool resolved;
     private float nextDecisiveCheck;
 
@@ -40,6 +46,14 @@ public class CampaignObjectives : MonoBehaviour
         pcHexByName.Clear();
         TextAsset json = Resources.Load<TextAsset>("Campaign/CampaignObjectives");
         data = json != null ? JsonUtility.FromJson<CampaignObjectivesData>(json.text) : new CampaignObjectivesData();
+        foreach (CampaignLeaderObjectives entry in data.leaders)
+            if (entry?.milestones != null) foreach (CampaignObjective m in entry.milestones) if (m != null) m.milestone = true;
+        // Begin runs once the starting realms are on the board (a loaded game rebuilds the same
+        // start before restoring the save), so this is where every leader began.
+        baselines.Clear();
+        foreach (PlayableLeader leader in AllLeaders())
+            foreach (CampaignObjective m in GetMilestones(leader))
+                baselines[BaselineKey(leader, m)] = Measure(leader, m);
         game.NewTurnStarted -= OnNewTurn;
         game.NewTurnStarted += OnNewTurn;
         CampaignHud.Ensure(this);
@@ -65,22 +79,29 @@ public class CampaignObjectives : MonoBehaviour
     {
         if (resolved) return;
         RecordStickyObjectives();
+        CheckMilestones();
         Changed?.Invoke();
         if (CheckDecisive()) return;
         if (turn >= AgeLength) ResolveEndOfAge();
     }
 
-    public IReadOnlyList<CampaignObjective> GetObjectives(PlayableLeader leader)
+    public IReadOnlyList<CampaignObjective> GetObjectives(PlayableLeader leader) =>
+        Entry(leader)?.objectives ?? (IReadOnlyList<CampaignObjective>)Array.Empty<CampaignObjective>();
+
+    public IReadOnlyList<CampaignObjective> GetMilestones(PlayableLeader leader) =>
+        Entry(leader)?.milestones ?? (IReadOnlyList<CampaignObjective>)Array.Empty<CampaignObjective>();
+
+    private CampaignLeaderObjectives Entry(PlayableLeader leader)
     {
         string key = LeaderKey(leader);
-        CampaignLeaderObjectives entry = data?.leaders?.FirstOrDefault(l => string.Equals(l.leader, key, StringComparison.OrdinalIgnoreCase));
-        return entry?.objectives ?? (IReadOnlyList<CampaignObjective>)Array.Empty<CampaignObjective>();
+        return data?.leaders?.FirstOrDefault(l => string.Equals(l.leader, key, StringComparison.OrdinalIgnoreCase));
     }
 
     public bool IsMet(PlayableLeader leader, CampaignObjective objective)
     {
         if (leader == null || objective == null || leader.killed) return false;
         if (achievedOnce.Contains(StickyKey(leader, objective))) return true;
+        if (objective.milestone) return false; // reached only once CheckMilestones records it
         switch (objective.type)
         {
             case "HoldPC": return Holds(leader, objective.pc, objective.side);
@@ -111,6 +132,7 @@ public class CampaignObjectives : MonoBehaviour
     {
         if (o == null) return string.Empty;
         bool met = IsMet(leader, o);
+        if (o.milestone) return met ? "Reached." : $"{ProgressText(leader, o)}. {o.how}";
         switch (o.type)
         {
             case "ReachPC": return met ? "Reached." : "Move any of your characters onto it.";
@@ -126,6 +148,91 @@ public class CampaignObjectives : MonoBehaviour
             default: return string.Empty;
         }
     }
+
+    // ---------------------------------------------------------------- milestones
+
+    /// <summary>How far a leader has come on a milestone: the gain in its measure since the war began.</summary>
+    public int Progress(PlayableLeader leader, CampaignObjective m)
+    {
+        if (leader == null || m == null) return 0;
+        if (achievedOnce.Contains(StickyKey(leader, m))) return Mathf.Max(1, m.count);
+        int start = baselines.TryGetValue(BaselineKey(leader, m), out int b) ? b : Measure(leader, m);
+        return Mathf.Max(0, Measure(leader, m) - start);
+    }
+
+    public string ProgressText(PlayableLeader leader, CampaignObjective m) =>
+        $"{Mathf.Min(Progress(leader, m), Mathf.Max(1, m.count))}/{Mathf.Max(1, m.count)} {MeasureUnit(m)}";
+
+    public static ScoreAspect AspectOf(CampaignObjective m) =>
+        Enum.TryParse(m?.aspect, true, out ScoreAspect aspect) ? aspect : ScoreAspect.Realm;
+
+    // What a milestone counts, now.
+    private static int Measure(PlayableLeader leader, CampaignObjective m)
+    {
+        if (leader == null || m == null) return 0;
+        IEnumerable<Character> living = leader.controlledCharacters.Where(c => c != null && !c.killed);
+        IEnumerable<Army> armies = living.Where(c => c.IsArmyCommander()).Select(c => c.GetArmy()).Where(a => a != null && !a.killed);
+        IEnumerable<PC> pcs = leader.controlledPcs.Where(pc => pc != null && pc.owner == leader);
+        switch (m.type)
+        {
+            case "Armies": return armies.Count();
+            case "Troops": return armies.Sum(a => a.ma + a.ar + a.li + a.hi + a.lc + a.hc + a.ca + a.ws);
+            case "Gold": return leader.goldAmount;
+            case "Production": return leader.GetLeatherPerTurn() + leader.GetTimberPerTurn() + leader.GetIronPerTurn()
+                + leader.GetSteelPerTurn() + leader.GetMithrilPerTurn() + leader.GetMountsPerTurn();
+            case "Characters": return living.Count();
+            case "Levels": return living.Sum(c => c.GetCommander() + c.GetAgent() + c.GetEmmissary() + c.GetMage());
+            case "Artifacts": return living.Sum(c => c.objects.Count);
+            case "PCs": return pcs.Count();
+            case "Fortifications": return pcs.Sum(pc => Mathf.Max(0, (int)pc.fortSize));
+            case "Aspect": return ScoreAspects.Score(leader, AspectOf(m));
+            default: return 0;
+        }
+    }
+
+    private static string MeasureUnit(CampaignObjective m) => m.type switch
+    {
+        "Armies" => "new armies",
+        "Troops" => "more troops",
+        "Gold" => "more gold",
+        "Production" => "more goods a turn",
+        "Characters" => "new characters",
+        "Levels" => "skill levels gained",
+        "Artifacts" => "new artifacts",
+        "PCs" => "new PCs",
+        "Fortifications" => "fortification levels",
+        "Aspect" => $"{ScoreAspects.Name(AspectOf(m))} gained",
+        _ => string.Empty,
+    };
+
+    /// <summary>Records milestones reached since the last check and pays their reward. Called
+    /// whenever victory points are recalculated (after every action, at turn start, after a
+    /// load) and at each new turn.</summary>
+    public void CheckMilestones()
+    {
+        if (resolved || game == null || !game.started) return;
+        bool any = false;
+        foreach (PlayableLeader leader in AllLeaders())
+        {
+            if (leader.killed) continue;
+            foreach (CampaignObjective m in GetMilestones(leader))
+            {
+                string key = StickyKey(leader, m);
+                if (achievedOnce.Contains(key) || Progress(leader, m) < Mathf.Max(1, m.count)) continue;
+                achievedOnce.Add(key);
+                any = true;
+                if (m.reward > 0) leader.AddGold(m.reward, showMessage: false);
+                if (leader == game.player)
+                {
+                    string reward = m.reward > 0 ? $"  +{m.reward} <sprite name=\"gold\">" : string.Empty;
+                    MessageDisplay.ShowMessage($"Milestone reached: {ScoreAspects.Icon(AspectOf(m))} {m.title}{reward}", UiTheme.Gold);
+                }
+            }
+        }
+        if (any) Changed?.Invoke();
+    }
+
+    private static string BaselineKey(PlayableLeader leader, CampaignObjective m) => $"{LeaderKey(leader)}/{m.type}/{m.aspect}";
 
     private bool Holds(PlayableLeader leader, string pcName, bool sideCounts)
     {
@@ -230,6 +337,7 @@ public class CampaignLeaderObjectives
 {
     public string leader;
     public List<CampaignObjective> objectives = new();
+    public List<CampaignObjective> milestones = new();
 }
 
 [Serializable]
@@ -245,4 +353,12 @@ public class CampaignObjective
     public bool side;
     public int points;
     public bool decisive;
+    // Milestones only (CampaignLeaderObjectives.milestones): type is the measure (Armies, Troops,
+    // Gold, Production, Characters, Levels, Artifacts, PCs, Fortifications, Aspect), count the
+    // gain over the start of the war, aspect the score aspect it feeds (and, for type Aspect, the
+    // one measured), how the advice shown with it, reward the gold paid when first reached.
+    [NonSerialized] public bool milestone;
+    public string aspect;
+    public string how;
+    public int reward;
 }

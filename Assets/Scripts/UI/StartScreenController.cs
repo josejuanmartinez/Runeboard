@@ -74,13 +74,26 @@ public sealed class StartScreenController : MonoBehaviour
             Sprite art = CampaignSelectionManager.FindRepresentativeArt(info.representativeCardName);
             UnityEngine.UI.Image img = cardMenu.AddPlaque(art ?? TitleCardMenu.MenuArt("NewCampaign"), info.title,
                 string.IsNullOrWhiteSpace(info.description) ? "A scripted campaign" : info.description,
-                () => campaignSelection.ChooseScenario(captured));
+                () => BeginCampaign(captured));
             if (art == null && !string.IsNullOrWhiteSpace(info.representativeCardName)) pending.Add((img, info.representativeCardName));
         }
         cardMenu.AddPlaque(TitleCardMenu.MenuArt("Continue"), "Random Middle-earth", "A freshly drawn board, leaders and fortunes",
-            () => campaignSelection.ChooseScenario(null));
+            () => BeginCampaign(null));
         cardMenu.AddBackLink("‹  Back", ShowMainMenu);
         if (pending.Count > 0) artLoader = StartCoroutine(FillArtWhenLoaded(pending));
+    }
+
+    // Choosing a campaign kicks off scenario parsing, game-UI activation and board generation,
+    // which used to freeze the title on its last frame. Put the loading screen up first and
+    // only make the choice once it has rendered (it fades when the intro or leader screen shows).
+    private void BeginCampaign(string scenario)
+    {
+        if (SessionLoadingScreen.IsActive || GameConfig.ScenarioChosen) return;
+        SessionLoadingScreen.ShowThen(SessionLoadingScreen.Kind.NewCampaign, () =>
+        {
+            if (campaignSelection != null) campaignSelection.ChooseScenario(scenario);
+            else SessionLoadingScreen.Hide("campaign selection is missing");
+        });
     }
 
     // Card art arrives through Addressables; on the first screen it is often not loaded yet.

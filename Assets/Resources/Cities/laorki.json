@@ -6,8 +6,8 @@
   "surfaces": ["Ashlar", "Tiles", "", "Fieldstone", "Plain", "", "Cloth", "", ""],
   "buildings": [
     { "note": "crags at the back", "at": [-0.1, 0.4], "parts": [
-      { "shape": "rock", "pos": [-0.2, 0, 0], "radius": 0.15, "height": 0.2, "cell": "stone", "seed": 1 },
-      { "shape": "rock", "pos": [-0.02, 0, 0.12], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 2 },
+      { "shape": "peak", "pos": [-0.2, 0, 0], "radius": 0.15, "height": 0.2, "cell": "stone", "seed": 1 },
+      { "shape": "peak", "pos": [-0.02, 0, 0.12], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 2 },
       { "shape": "rock", "pos": [0.42, 0, -0.08], "radius": 0.11, "height": 0.14, "cell": "stone", "seed": 3 }
     ] },
     { "note": "stepped watchtower on the crag", "at": [-0.12, 0.5], "parts": [
@@ -49,7 +49,7 @@
       { "shape": "box", "pos": [0.14, 0, 0.25], "size": [0.06, 0.05, 0.02], "cell": "wood" }
     ] },
     { "note": "red crags in the middle", "at": [-0.1, -0.1], "parts": [
-      { "shape": "rock", "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 4 },
+      { "shape": "peak", "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 4 },
       { "shape": "rock", "pos": [-0.14, 0, 0.12], "radius": 0.07, "height": 0.13, "cell": "stone", "seed": 5 },
       { "shape": "rock", "pos": [-0.28, 0, -0.1], "radius": 0.07, "height": 0.11, "cell": "stone", "seed": 6 },
       { "shape": "rock", "pos": [-0.23, 0, -0.35], "radius": 0.06, "height": 0.08, "cell": "stone", "seed": 7 }

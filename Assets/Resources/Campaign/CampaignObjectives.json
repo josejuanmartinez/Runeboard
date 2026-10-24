@@ -8,6 +8,14 @@
         { "id": "gandalf_minas_tirith", "title": "The White City Stands", "description": "Minas Tirith is held by the Free Peoples when the Age ends.", "type": "HoldPC", "pc": "Minas Tirith", "side": true, "points": 3 },
         { "id": "gandalf_imladris", "title": "The Last Homely House", "description": "Imladris is held by the Free Peoples when the Age ends.", "type": "HoldPC", "pc": "Imladris", "side": true, "points": 1 },
         { "id": "gandalf_rally", "title": "Rally the West", "description": "Your own realm holds 5 or more PCs when the Age ends.", "type": "PCCount", "count": 5, "points": 2 }
+      ],
+      "milestones": [
+        { "id": "gandalf_m_companions", "title": "Gather the Company", "type": "Characters", "count": 1, "aspect": "Heroes", "reward": 15, "how": "Walk a character to the home of a Free Peoples hero — their character card is offered there — and recruit them." },
+        { "id": "gandalf_m_rumours", "title": "Ears in Every Inn", "type": "Gold", "count": 20, "aspect": "Economy", "reward": 10, "how": "With an emissary at one of your own PCs, Sell goods you have spare; Hear Stories there to learn what the Enemy is about." },
+        { "id": "gandalf_m_relic", "title": "Relics of the Elder Days", "type": "Artifacts", "count": 1, "aspect": "Heroes", "reward": 20, "how": "Take a mage where an artifact lies (Scry Artifact shows where) and play Find Artifact." },
+        { "id": "gandalf_m_wisdom", "title": "Counsel of the Wise", "type": "Levels", "count": 3, "aspect": "Heroes", "reward": 15, "how": "Keep your characters busy: every action they play has a chance to raise the skill it uses." },
+        { "id": "gandalf_m_allies", "title": "Friends in Every Hall", "type": "PCs", "count": 1, "aspect": "Realm", "reward": 20, "how": "Found a new PC from a PC card in your hand, or bring a host to a Shadow-held PC and play Siege." },
+        { "id": "gandalf_m_riders", "title": "The West Answers", "type": "Armies", "count": 1, "aspect": "Military", "reward": 25, "how": "Play an army card with a commander at one of your PCs to raise a new host." }
       ]
     },
     {
@@ -17,6 +25,14 @@
         { "id": "saruman_edoras", "title": "Lord of the Mark", "description": "You hold Edoras when the Age ends.", "type": "HoldPC", "pc": "Edoras", "points": 3 },
         { "id": "saruman_orthanc", "title": "Orthanc Unbroken", "description": "You hold Orthanc when the Age ends.", "type": "HoldPC", "pc": "Orthanc", "points": 1 },
         { "id": "saruman_industry", "title": "Industry of Isengard", "description": "Your own realm holds 6 or more PCs when the Age ends.", "type": "PCCount", "count": 6, "points": 2 }
+      ],
+      "milestones": [
+        { "id": "saruman_m_uruks", "title": "Fighting Uruk-hai", "type": "Armies", "count": 1, "aspect": "Military", "reward": 15, "how": "Play an army card with a commander at Orthanc or another of your PCs." },
+        { "id": "saruman_m_furnaces", "title": "The Furnaces of Isengard", "type": "Gold", "count": 30, "aspect": "Economy", "reward": 15, "how": "Have emissaries Sell iron, timber and steel at your own PCs, and send agents to Steal Gold from rival PCs." },
+        { "id": "saruman_m_muster", "title": "Ten Thousand Strong", "type": "Troops", "count": 5, "aspect": "Military", "reward": 20, "how": "Keep playing army cards at your PCs to add troops to your hosts — and keep them alive." },
+        { "id": "saruman_m_voice", "title": "The Voice of Saruman", "type": "PCs", "count": 1, "aspect": "Realm", "reward": 20, "how": "Found a new PC from a PC card, or bring a host to a rival PC and play Siege; emissaries can Decrease Loyalty there first." },
+        { "id": "saruman_m_wheels", "title": "Wheels and Engines", "type": "Production", "count": 3, "aspect": "Economy", "reward": 20, "how": "Every PC you add produces goods each turn: found new ones from PC cards or take them by force." },
+        { "id": "saruman_m_spies", "title": "Crebain and Spies", "type": "Levels", "count": 3, "aspect": "Heroes", "reward": 15, "how": "Use your agents and emissaries often: every action has a chance to raise the skill it uses." }
       ]
     },
     {
@@ -26,6 +42,14 @@
         { "id": "sauron_osgiliath", "title": "Osgiliath Burns", "description": "Osgiliath is held by the Dark Servants when the Age ends.", "type": "HoldPC", "pc": "Osgiliath", "side": true, "points": 2 },
         { "id": "sauron_barad_dur", "title": "The Dark Tower Stands", "description": "You hold Barad-dur when the Age ends.", "type": "HoldPC", "pc": "Barad-dur", "points": 1 },
         { "id": "sauron_darkness", "title": "Darkness Spreads", "description": "Your own realm holds 6 or more PCs when the Age ends.", "type": "PCCount", "count": 6, "points": 3 }
+      ],
+      "milestones": [
+        { "id": "sauron_m_host", "title": "The Host of Mordor", "type": "Armies", "count": 1, "aspect": "Military", "reward": 15, "how": "Play an army card with a commander at one of your PCs to raise another host." },
+        { "id": "sauron_m_iron", "title": "An Iron Grip", "type": "Fortifications", "count": 1, "aspect": "Military", "reward": 15, "how": "With an emissary at one of your own PCs, play Increase Fortifications." },
+        { "id": "sauron_m_tribute", "title": "Tribute of the East", "type": "Gold", "count": 30, "aspect": "Economy", "reward": 15, "how": "Send agents to Steal Gold at enemy PCs; have emissaries Sell surplus goods at your own." },
+        { "id": "sauron_m_gates", "title": "The Black Gate Opens", "type": "Troops", "count": 6, "aspect": "Military", "reward": 20, "how": "Keep playing army cards at your PCs to swell your hosts, and don't throw them away." },
+        { "id": "sauron_m_shadow", "title": "The Shadow Spreads", "type": "PCs", "count": 2, "aspect": "Realm", "reward": 25, "how": "March a host to an enemy PC and play Siege; emissaries can Decrease Loyalty there first to weaken it." },
+        { "id": "sauron_m_nine", "title": "The Nine Abroad", "type": "Levels", "count": 3, "aspect": "Heroes", "reward": 15, "how": "Keep your servants acting: every action has a chance to raise the skill it uses." }
       ]
     }
   ]

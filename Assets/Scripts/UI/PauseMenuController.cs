@@ -213,12 +213,17 @@ public sealed class PauseMenuController : MonoBehaviour
         Game.Instance?.AutoplayOneTurn();
     }
 
+    // The reload rebuilds the whole scene (decks, illustrations, title); show the loading screen
+    // instead of a frozen pause menu, and reset the campaign choice only once the new scene exists.
     private static void ReturnToStart()
     {
-        GameConfig.ScenarioChosen = false;
-        GameConfig.ScenarioToLoad = null;
-        GameConfig.SkipIntro = false;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (SessionLoadingScreen.IsActive) return;
+        SessionLoadingScreen.ReloadScene(SessionLoadingScreen.Kind.ReturnToTitle, SceneManager.GetActiveScene().buildIndex, () =>
+        {
+            GameConfig.ScenarioChosen = false;
+            GameConfig.ScenarioToLoad = null;
+            GameConfig.SkipIntro = false;
+        });
     }
 
     private static void Quit()

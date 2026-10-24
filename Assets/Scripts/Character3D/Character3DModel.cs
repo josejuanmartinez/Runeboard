@@ -61,7 +61,8 @@ public class Character3DModel : DepthSlabbed
     private static readonly bool ShadowDebug =
         System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "-char3d-shadowdebug") >= 0;
 
-    // Every character model, by folder (Assets/Art/3D/fbx/[Folder]/[any].fbx, weapons excluded),
+    // Every character model, by folder (Assets/Art/3D/fbx/[Folder]/[any].fbx; the Weapons folder
+    // is the units' held weapons, see Character3DWeapons),
     // read from the Addressables catalog once it's up.
     private static Dictionary<string, string> addressByFolder;
 
@@ -154,6 +155,45 @@ public class Character3DModel : DepthSlabbed
         return created;
     }
 
+    // ── Regiment troopers (see Character3DRegiment) ─────────────────────────────────────────
+
+    // A trooper is a full model (animator, weapons) standing under its leader's root, but drawn as
+    // part of the leader: no depth slab of its own, and the leader's LateUpdate gives its renderers
+    // the leader's tint, fade, outline, slab, lighting and sorting — so the regiment occludes
+    // itself in real 3D, stands in front of its one base, and fades and dies as one miniature.
+    public bool IsTrooper { get; private set; }
+    public readonly List<Character3DModel> Troops = new();
+    // A trooper's own extra fade (casualties dissolving), on top of the leader's.
+    public float Fade = 1f;
+    // Regiment base footprint, in ModelHeights: half width, half depth, centre offset along the
+    // facing (z). Zero = the plain round base.
+    public Vector3 Footprint;
+
+    private static bool spawningTrooper;
+
+    private void Awake() => IsTrooper = spawningTrooper;
+
+    protected override void OnEnable()
+    {
+        if (!IsTrooper) base.OnEnable();
+    }
+
+    public static Character3DModel CreateTrooper(GameObject prefab, string folder, Character3DModel leader)
+    {
+        spawningTrooper = true;
+        try
+        {
+            Character3DModel trooper = Create(prefab, folder, leader.transform);
+            trooper.name = $"Trooper {folder}";
+            leader.Troops.Add(trooper);
+            return trooper;
+        }
+        finally
+        {
+            spawningTrooper = false;
+        }
+    }
+
     private void Init(GameObject model, string folder)
     {
         Character3DSettings settings = Character3DSettings.Instance;
@@ -167,20 +207,8 @@ public class Character3DModel : DepthSlabbed
         // Clips are played straight from the library through a Playables graph — no controller.
         Animation = model.AddComponent<Character3DAnimator>();
 
-        renderers = model.GetComponentsInChildren<Renderer>(true);
-        foreach (Renderer r in renderers)
-        {
-            Material[] source = r.sharedMaterials;
-            // One extra slot for the alignment outline: Unity draws the last submesh again with
-            // each surplus material (single-submesh models — nearly all of them — get it whole).
-            var materials = new Material[source.Length + (settings.outlineShader != null && source.Length > 0 ? 1 : 0)];
-            for (int i = 0; i < source.Length; i++) materials[i] = Convert(source[i], settings);
-            if (materials.Length > source.Length) materials[^1] = OutlineFor(source[^1], settings);
-            r.sharedMaterials = materials;
-            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            r.receiveShadows = false;
-            if (r is SkinnedMeshRenderer skinned) skinned.updateWhenOffscreen = false;
-        }
+        renderers = bodyRenderers = model.GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer r in renderers) Dress(r, settings);
 
         // Measured with the root still unrotated at scale 1: feet go to the root origin, so the
         // owner places the root where the feet should stand. Humanoids measure from the skeleton
@@ -200,6 +228,157 @@ public class Character3DModel : DepthSlabbed
             ModelHeight = Mathf.Max(bounds.size.y / scale, 1e-4f);
             model.transform.localPosition = new Vector3(0f, -(bounds.min.y - transform.position.y) / scale, 0f);
         }
+
+        // Still in the bind pose: where each hand closes, for the weapons (Arm).
+        rightGrip = MeasureGrip(model.transform, HumanBodyBones.RightHand, HumanBodyBones.RightLowerArm, "right", 0.3f, -0.08f);
+        leftGrip = MeasureGrip(model.transform, HumanBodyBones.LeftHand, HumanBodyBones.LeftLowerArm, "left", -0.35f, 0.12f);
+    }
+
+    // The Character3D materials (+ alignment outline) on one of this unit's renderers.
+    private static void Dress(Renderer r, Character3DSettings settings)
+    {
+        Material[] source = r.sharedMaterials;
+        // One extra slot for the alignment outline: Unity draws the last submesh again with
+        // each surplus material (single-submesh models — nearly all of them — get it whole).
+        var materials = new Material[source.Length + (settings.outlineShader != null && source.Length > 0 ? 1 : 0)];
+        for (int i = 0; i < source.Length; i++) materials[i] = Convert(source[i], settings);
+        if (materials.Length > source.Length) materials[^1] = OutlineFor(source[^1], settings);
+        r.sharedMaterials = materials;
+        r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        r.receiveShadows = false;
+        if (r is SkinnedMeshRenderer skinned) skinned.updateWhenOffscreen = false;
+    }
+
+    // ── Weapons (see Character3DWeapons) ────────────────────────────────────────────────────
+
+    // A hand's frame in the bind pose, kept in the hand bone's own space so it holds through
+    // every clip: the fist's centre and three directions — the way the figure faces (the line of
+    // the knuckles in a palms-down T/A-pose, so a handle crosses the palm), down the forearm
+    // toward the fingers, and out of the back of the hand.
+    private struct Grip
+    {
+        public Transform Hand;
+        public Vector3 Point, Forward, Forearm, Back;
+        public float Unit; // hand-local units per root-local unit
+    }
+
+    private Grip rightGrip, leftGrip;
+    private Renderer[] bodyRenderers;
+    private Character3DWeapons.Loadout loadout = Character3DWeapons.Unarmed;
+    private readonly List<GameObject> weapons = new();
+    private bool armed = true;
+
+    // reach / back: where the grip sits from the wrist, in forearm lengths, down the forearm and
+    // out of the back of the hand (negative = into the palm).
+    private Grip MeasureGrip(Transform model, HumanBodyBones handBone, HumanBodyBones forearmBone, string side, float reach, float back)
+    {
+        Transform hand = animator.isHuman ? animator.GetBoneTransform(handBone) : null;
+        if (hand == null) hand = FindBone(model, side + "hand", "hand" + side[0], side[0] + "hand");
+        if (hand == null) return default;
+        Transform elbow = animator.isHuman ? animator.GetBoneTransform(forearmBone) : null;
+        if (elbow == null) elbow = hand.parent;
+        if (elbow == null) return default;
+
+        Vector3 along = hand.position - elbow.position;
+        float forearm = along.magnitude;
+        if (forearm < 1e-5f) return default;
+        along /= forearm;
+        Vector3 forward = Vector3.ProjectOnPlane(transform.forward, along);
+        if (forward.sqrMagnitude < 1e-4f) return default;
+        forward.Normalize();
+        // Palms down in the bind pose, so the back of the hand faces up.
+        Vector3 up = Vector3.ProjectOnPlane(Vector3.ProjectOnPlane(transform.up, along), forward);
+        if (up.sqrMagnitude < 1e-4f) return default;
+        up.Normalize();
+
+        return new Grip
+        {
+            Hand = hand,
+            Point = hand.InverseTransformPoint(hand.position + forearm * (along * reach + up * back)),
+            Forward = hand.InverseTransformDirection(forward),
+            Forearm = hand.InverseTransformDirection(along),
+            Back = hand.InverseTransformDirection(up),
+            Unit = transform.lossyScale.y / Mathf.Max(hand.lossyScale.y, 1e-6f),
+        };
+    }
+
+    // Rigs without a Humanoid avatar: the first bone whose name (letters only) ends in one of these.
+    private static Transform FindBone(Transform root, params string[] endings)
+    {
+        foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+        {
+            string letters = new string(System.Array.FindAll(t.name.ToLowerInvariant().ToCharArray(), char.IsLetter));
+            foreach (string ending in endings)
+                if (letters.EndsWith(ending)) return t;
+        }
+        return null;
+    }
+
+    // What this unit holds (Character3DWeapons.For); cheap to call every frame.
+    public void Arm(Character3DWeapons.Loadout wanted)
+    {
+        if (wanted.Equals(loadout)) return;
+        loadout = wanted;
+        foreach (GameObject weapon in weapons) Destroy(weapon);
+        weapons.Clear();
+        renderers = bodyRenderers;
+        armed = false;
+        TryArm();
+    }
+
+    // Attaches the loadout once its meshes have loaded — all at once, so a unit never shows half armed.
+    private void TryArm()
+    {
+        Character3DWeapons.Parts right = loadout.Right != Character3DWeapons.Weapon.None && rightGrip.Hand != null
+            ? Character3DWeapons.Request(loadout.Right) : null;
+        Character3DWeapons.Parts shield = loadout.Shield && leftGrip.Hand != null
+            ? Character3DWeapons.Request(Character3DWeapons.Weapon.Shield) : null;
+        if ((right != null && !right.Done) || (shield != null && !shield.Done)) return;
+        armed = true;
+
+        Character3DSettings settings = Character3DSettings.Instance;
+        var all = new List<Renderer>(bodyRenderers);
+        if (right != null && right.Mesh != null)
+        {
+            // Square to the fist, raised toward the elbow by the tilt; the edge leads down the forearm.
+            Character3DWeapons.Spec spec = Character3DWeapons.Specs[loadout.Right];
+            float tilt = spec.Tilt * Mathf.Deg2Rad;
+            Vector3 blade = rightGrip.Forward * Mathf.Cos(tilt) - rightGrip.Forearm * Mathf.Sin(tilt);
+            all.Add(Hold(right, spec, rightGrip, Quaternion.LookRotation(blade, rightGrip.Forearm), loadout.Scale, settings));
+        }
+        if (shield != null && shield.Mesh != null)
+        {
+            // Strapped on the forearm: its face out of the back of the arm, its top toward the elbow.
+            Character3DWeapons.Spec spec = Character3DWeapons.Specs[Character3DWeapons.Weapon.Shield];
+            all.Add(Hold(shield, spec, leftGrip, Quaternion.LookRotation(leftGrip.Back, -leftGrip.Forearm), 1f, settings));
+        }
+        renderers = all.ToArray();
+    }
+
+    // One weapon mesh under the hand bone: the spec's grip point at the grip, its grip → tip axis
+    // along the frame's forward and its edge toward the frame's up, sized to the figure.
+    private Renderer Hold(Character3DWeapons.Parts parts, Character3DWeapons.Spec spec, Grip grip, Quaternion frame, float scale, Character3DSettings settings)
+    {
+        var go = new GameObject($"Weapon {parts.Mesh.name}", typeof(MeshFilter), typeof(MeshRenderer));
+        go.layer = gameObject.layer;
+        go.GetComponent<MeshFilter>().sharedMesh = parts.Mesh;
+        var r = go.GetComponent<MeshRenderer>();
+        r.sharedMaterial = parts.Material;
+        Dress(r, settings);
+
+        Bounds bounds = parts.Mesh.bounds;
+        Vector3 gripPoint = bounds.min + Vector3.Scale(spec.Grip, bounds.size);
+        Vector3 tipPoint = bounds.min + Vector3.Scale(spec.Tip, bounds.size);
+        Quaternion meshFrame = Quaternion.LookRotation(tipPoint - gripPoint, spec.Edge);
+        float size = spec.Length * scale * ModelHeight * grip.Unit / Mathf.Max(bounds.size.y, 1e-6f);
+
+        Transform t = go.transform;
+        t.SetParent(grip.Hand, false);
+        t.localRotation = frame * Quaternion.Inverse(meshFrame);
+        t.localScale = Vector3.one * size;
+        t.localPosition = grip.Point - t.localRotation * (gripPoint * size);
+        weapons.Add(go);
+        return r;
     }
 
     // World-space sole and crown heights of a Humanoid in its current (bind) pose.
@@ -274,9 +453,9 @@ public class Character3DModel : DepthSlabbed
         return converted;
     }
 
-    // World radius of the miniature's base; 0 while it is hidden.
+    // World radius of the miniature's (round, single-figure) base; 0 while it is hidden.
     public float BaseWorldRadius =>
-        miniatureBase != null && miniatureBase.gameObject.activeSelf ? miniatureBase.transform.lossyScale.x : 0f;
+        miniatureBase != null && miniatureBase.gameObject.activeSelf ? miniatureBase.transform.lossyScale.y : 0f;
 
     // The miniature's base (Character3DBase), side band in the owner's nation colour; null hides it.
     public void SetBase(Color? nation, float radius)
@@ -303,17 +482,29 @@ public class Character3DModel : DepthSlabbed
             baseColor = key;
             miniatureBase.sharedMaterial = Character3DBase.MaterialFor(nation.Value, Character3DSettings.Instance.shader);
         }
-        miniatureBase.transform.localScale = Vector3.one * (radius * ModelHeight);
+        // A regiment stretches it into an oval stand reaching back under its troopers (Footprint);
+        // the thickness and the round radius the token and dust go by stay those of one figure.
+        float r = radius * ModelHeight;
+        Vector3 footprint = Footprint * ModelHeight;
+        miniatureBase.transform.localScale = new Vector3(Mathf.Max(r, footprint.x), r, Mathf.Max(r, footprint.y));
+        miniatureBase.transform.localPosition = new Vector3(0f, 0f, footprint.z);
     }
 
     private void LateUpdate()
     {
+        if (IsTrooper)
+        {
+            if (!armed) TryArm(); // drawn by the leader
+            return;
+        }
         if (lightingPublishedFrame != Time.frameCount)
         {
             lightingPublishedFrame = Time.frameCount;
             Character3DSettings frameSettings = Character3DSettings.Instance;
             if (frameSettings != null) Character3DLighting.Publish(frameSettings);
         }
+
+        if (!armed) TryArm();
 
         float slabBase = SlabBase;
         float slabWidth = SlabWidth;
@@ -325,21 +516,14 @@ public class Character3DModel : DepthSlabbed
         Color figureTint = Tint;
         figureTint.a *= FigureAlpha;
 
-        foreach (Renderer r in renderers)
+        DrawFigure(renderers, figureTint, feet, worldHeight, rim, slabBase, slabWidth);
+        // The regiment shares the leader's slab, measured from the leader's feet: one ground
+        // plane for the cast shadows, and real depth between the figures.
+        foreach (Character3DModel trooper in Troops)
         {
-            if (r.sortingLayerID != SortingLayerId) r.sortingLayerID = SortingLayerId;
-            if (r.sortingOrder != SortingOrder) r.sortingOrder = SortingOrder;
-            r.GetPropertyBlock(block);
-            block.SetColor(ColorId, figureTint);
-            block.SetVector(OriginId, feet);
-            block.SetVector(UpId, transform.up);
-            block.SetFloat(HeightId, worldHeight);
-            block.SetColor(RimColorId, rim);
-            block.SetFloat(DepthBaseId, slabBase);
-            // A margin under the slab width keeps neighbouring slabs from touching.
-            block.SetFloat(DepthSlabWidthId, slabWidth * 0.9f);
-            block.SetFloat(DepthSlabScaleId, 0.5f / worldHeight);
-            r.SetPropertyBlock(block);
+            Color trooperTint = figureTint;
+            trooperTint.a *= trooper.Fade;
+            DrawFigure(trooper.renderers, trooperTint, feet, worldHeight, rim, slabBase, slabWidth);
         }
 
         if (miniatureBase != null && miniatureBase.gameObject.activeSelf)
@@ -359,6 +543,27 @@ public class Character3DModel : DepthSlabbed
             block.SetFloat(DepthSlabWidthId, 0f);
             block.SetFloat(DepthSlabScaleId, 0f);
             block.SetFloat(FocusId, Focus);
+            r.SetPropertyBlock(block);
+        }
+    }
+
+    private void DrawFigure(Renderer[] figure, Color tint, Vector3 feet, float worldHeight, Color rim, float slabBase, float slabWidth)
+    {
+        if (figure == null) return;
+        foreach (Renderer r in figure)
+        {
+            if (r.sortingLayerID != SortingLayerId) r.sortingLayerID = SortingLayerId;
+            if (r.sortingOrder != SortingOrder) r.sortingOrder = SortingOrder;
+            r.GetPropertyBlock(block);
+            block.SetColor(ColorId, tint);
+            block.SetVector(OriginId, feet);
+            block.SetVector(UpId, transform.up);
+            block.SetFloat(HeightId, worldHeight);
+            block.SetColor(RimColorId, rim);
+            block.SetFloat(DepthBaseId, slabBase);
+            // A margin under the slab width keeps neighbouring slabs from touching.
+            block.SetFloat(DepthSlabWidthId, slabWidth * 0.9f);
+            block.SetFloat(DepthSlabScaleId, 0.5f / worldHeight);
             r.SetPropertyBlock(block);
         }
     }

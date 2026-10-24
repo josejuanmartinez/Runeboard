@@ -6,20 +6,18 @@
   "surfaces": ["Fieldstone", "Slate", "", "Plain", "Plain", "", "Plain", "", ""],
   "buildings": [
     { "note": "main summit", "at": [0.03, 0.22], "parts": [
-      { "shape": "pyramid", "radius": 0.42, "height": 0.85, "cell": "stone", "twist": 0.05 },
-      { "shape": "pyramid", "pos": [-0.04, 0, 0.02], "radius": 0.38, "height": 0.7, "cell": "wall", "twist": 0.2 },
-      { "shape": "rock", "pos": [-0.2, 0, 0.15], "radius": 0.2, "height": 0.45, "cell": "stone", "seed": 1 }
+      { "shape": "peak", "radius": 0.42, "height": 0.85, "sides": 13, "cell": "wall", "top": "stone", "snow": 0.32, "seed": 1 },
+      { "shape": "peak", "pos": [-0.2, 0, 0.12], "radius": 0.17, "height": 0.5, "length": 0.5, "yaw": -35, "cell": "wall", "top": "stone", "snow": 0.35, "seed": 2 }
     ] },
     { "note": "front spur", "at": [-0.06, -0.1], "parts": [
-      { "shape": "pyramid", "radius": 0.28, "height": 0.48, "cell": "stone", "twist": 0.1 },
-      { "shape": "pyramid", "pos": [0.04, 0, -0.02], "radius": 0.22, "height": 0.36, "cell": "wall", "twist": 0.22 }
+      { "shape": "peak", "radius": 0.24, "height": 0.48, "length": 0.62, "yaw": 75, "sides": 12, "cell": "wall", "top": "stone", "snow": 0.3, "seed": 3 }
     ] },
     { "note": "left shoulder", "at": [-0.34, 0.08], "parts": [
-      { "shape": "rock", "radius": 0.18, "height": 0.28, "cell": "stone", "seed": 2 },
-      { "shape": "rock", "pos": [0.0, 0, -0.35], "radius": 0.14, "height": 0.18, "cell": "wall", "seed": 3 }
+      { "shape": "peak", "radius": 0.18, "height": 0.3, "cell": "wall", "top": "stone", "snow": 0.4, "seed": 4 },
+      { "shape": "rock", "pos": [0.0, 0, -0.35], "radius": 0.14, "height": 0.18, "cell": "stone", "seed": 3 }
     ] },
     { "note": "right shoulder", "at": [0.34, -0.06], "parts": [
-      { "shape": "rock", "radius": 0.18, "height": 0.26, "cell": "stone", "seed": 4 },
+      { "shape": "peak", "radius": 0.18, "height": 0.28, "cell": "wall", "top": "stone", "snow": 0.4, "seed": 5 },
       { "shape": "rock", "pos": [0.02, 0, -0.35], "radius": 0.13, "height": 0.15, "cell": "trim", "seed": 5 }
     ] },
     { "note": "front scree", "at": [0.0, -0.36], "parts": [

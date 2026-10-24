@@ -205,7 +205,33 @@ public class Game : MonoBehaviour
         }
     }
 
+    // Starting as a leader runs the whole campaign setup below in one synchronous block, which
+    // froze the leader screen on its last frame. A human pick now puts the loading screen up
+    // and starts a couple of frames later, once it has rendered. A save restore is already
+    // behind SessionLoadingScreen, so it starts immediately exactly as before.
+    private bool startGameQueued;
+
     public void StartGame()
+    {
+        if (startGameQueued) return;
+        if (SessionLoadingScreen.IsActive)
+        {
+            SessionLoadingScreen.SetStatus("Mustering the armies");
+            StartGameNow();
+            return;
+        }
+
+        startGameQueued = true;
+        SessionLoadingScreen.ShowThen(SessionLoadingScreen.Kind.StartCampaign, () =>
+        {
+            startGameQueued = false;
+            if (this == null) { SessionLoadingScreen.Hide("the game was unloaded before it could start"); return; }
+            StartGameNow();
+            SessionLoadingScreen.Complete(SessionLoadingScreen.Kind.StartCampaign);
+        });
+    }
+
+    private void StartGameNow()
     {
         FindAnyObjectByType<LeaderSelector>()?.ApplyCurrentSelection();
         // Must play before any other startup popup, camera pan, or tutorial step — SelectLeader
@@ -257,6 +283,7 @@ public class Game : MonoBehaviour
         HudDirector.Apply();
         BoardLook.Apply();
         CampaignObjectives.Begin(this);
+        TerritoryBorders.Ensure();
         HandTray.Ensure();
         TurnDigest.Attach(this);
         ObjectiveGuide.Attach(this);

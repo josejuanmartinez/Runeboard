@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Shows the player where and how to pursue their objectives:
-///  • a faint gold ring and a gold place name on every objective target
+///  • a gold place name on every objective target
 ///  • on the first turn, an in-place guided tour: the camera flies to each objective and a callout
 ///    is pinned beside the place itself (leader line + ring on the hex) explaining what to do and
 ///    what it is worth; the player steps through with Next / Skip (Enter / Esc). The last step
@@ -115,17 +115,10 @@ public class ObjectiveGuide : MonoBehaviour
         var root = new GameObject($"ObjectiveBeacon_{o.id}").transform;
         root.position = hex.transform.position + new Vector3(0f, 0f, -0.1f);
 
-        // A thin ring on the ground; the place's own label (gold name) carries the text, so there is
-        // no second floating title over the city.
-        var glowGo = new GameObject("Ring", typeof(SpriteRenderer));
-        glowGo.transform.SetParent(root, false);
-        glowGo.transform.localPosition = new Vector3(0f, -0.08f, 0f);
-        var glow = glowGo.GetComponent<SpriteRenderer>();
-        glow.sprite = BoardLook.SoftRingSprite();
-        glow.sortingLayerName = "Hexes";
-        glow.sortingOrder = 5;
+        // No ring on the ground: with 3D miniatures and towns on the hex it read as a second
+        // selection circle. The place's own label (gold name, SetObjectiveMarker) marks it.
         hex.SetObjectiveMarker(true);
-        return (root, glow, hex);
+        return (root, null, hex);
     }
 
     // ------------------------------------------------------------------ tour

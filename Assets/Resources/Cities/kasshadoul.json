@@ -1,0 +1,62 @@
+{
+  "name": "Kas Shadoul",
+  "description": "A massive stepped dwarven stronghold of mossy grey ashlar rising in tiers to a broken, crumbling crown, with a deep doorway framed in carved knotwork on its front face guarded by two seated, bearded stone dwarf statues; a flagstone path leads out over a moorland strewn with carved standing stones, with dark peaks and a few firs behind.",
+  "style": "Dwarven",
+  "colors":   ["#7A786C", "#5E5C54", "#5A4630", "#6E6C62", "#9C9682", "#1C1A16", "#8A8A70", "", "#4E5A2C"],
+  "surfaces": ["Ashlar", "Plain", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "stepped stronghold", "at": [0.04, 0.17], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.38, 0.14, 0.25], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.1, -0.126], "size": [0.38, 0.025, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [0.01, 0.14, 0.01], "size": [0.31, 0.1, 0.2], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0.24, 0.02], "size": [0.24, 0.08, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0.32, 0.02], "size": [0.18, 0.05, 0.12], "cell": "wall", "top": "dark" },
+      { "shape": "box", "pos": [-0.06, 0.37, 0.0], "size": [0.04, 0.08, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0.37, 0.06], "size": [0.05, 0.11, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.09, 0.37, 0.0], "size": [0.04, 0.06, 0.04], "cell": "wall" },
+      { "shape": "rock", "pos": [0.2, 0, -0.05], "radius": 0.09, "height": 0.08, "cell": "stone" },
+      { "shape": "flag", "pos": [0.02, 0.48, 0.06], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "carved gate porch with statues", "at": [-0.12, 0.02], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.17, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.035, 0.11, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.17, 0], "size": [0.12, 0.02, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [-0.11, 0, -0.04], "size": [0.05, 0.03, 0.05], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.11, 0.03, -0.04], "radius": 0.02, "height": 0.05, "sides": 8, "taper": 0.8, "cell": "stone" },
+      { "shape": "dome", "pos": [-0.11, 0.08, -0.04], "radius": 0.014, "height": 0.02, "sides": 8, "cell": "stone" },
+      { "shape": "box", "pos": [0.11, 0, -0.06], "size": [0.05, 0.03, 0.05], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.11, 0.03, -0.06], "radius": 0.02, "height": 0.05, "sides": 8, "taper": 0.8, "cell": "stone" },
+      { "shape": "dome", "pos": [0.11, 0.08, -0.06], "radius": 0.014, "height": 0.02, "sides": 8, "cell": "stone" }
+    ] },
+    { "note": "flagstone path", "at": [-0.22, -0.14], "yaw": -40, "parts": [
+      { "shape": "box", "size": [0.3, 0.004, 0.1], "cell": "trim" }
+    ] },
+    { "note": "distant peaks, back left", "at": [-0.4, 0.33], "parts": [
+      { "shape": "cone", "radius": 0.08, "height": 0.12, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.07, 0, -0.1], "radius": 0.06, "height": 0.09, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "standing stones, left", "at": [-0.43, -0.07], "parts": [
+      { "shape": "rock", "pos": [0, 0, 0.15], "radius": 0.025, "height": 0.07, "cell": "stone" },
+      { "shape": "rock", "pos": [0.04, 0, 0], "radius": 0.022, "height": 0.06, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.01, 0, -0.16], "radius": 0.022, "height": 0.05, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "standing stones, front", "at": [-0.04, -0.3], "parts": [
+      { "shape": "rock", "pos": [0.03, 0, 0.0], "radius": 0.028, "height": 0.08, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.1, 0, -0.1], "radius": 0.02, "height": 0.04, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.16, 0, 0.08], "radius": 0.028, "height": 0.08, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.2, 0, -0.08], "radius": 0.018, "height": 0.035, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "standing stones, right", "at": [0.33, -0.12], "parts": [
+      { "shape": "rock", "pos": [-0.04, 0, 0], "radius": 0.03, "height": 0.09, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.05, 0, -0.03], "radius": 0.028, "height": 0.08, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.09, 0, 0.32], "radius": 0.03, "height": 0.09, "cell": "stone", "seed": 9 },
+      { "shape": "rock", "pos": [-0.1, 0, -0.15], "radius": 0.018, "height": 0.035, "cell": "stone", "seed": 10 }
+    ] },
+    { "note": "firs", "at": [-0.4, 0.15], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.1, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.75, 0, 0.0], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 1 },
+      { "shape": "tree", "pos": [0.8, 0, -0.6], "kind": "pine", "height": 0.07, "radius": 0.02, "seed": 2 },
+      { "shape": "tree", "pos": [0.55, 0, 0.75], "kind": "pine", "height": 0.07, "radius": 0.02, "seed": 3 }
+    ] }
+  ]
+}

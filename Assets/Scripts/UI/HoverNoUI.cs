@@ -111,7 +111,8 @@ public class HoverNoUI : MonoBehaviour
                 return false;
 
             // Get the mouse position in world space (XY for 2D)
-            Vector3 mouseWorld = rayCamera.ScreenToWorldPoint(Input.mousePosition);
+            // On the board plane: right for the straight-down camera and the tilted one alike.
+            Vector3 mouseWorld = BoardNavigator.ScreenToBoard(rayCamera, Input.mousePosition);
             Vector2 point = (Vector2)mouseWorld;
 
             // 2D colliders: get ALL colliders at this point

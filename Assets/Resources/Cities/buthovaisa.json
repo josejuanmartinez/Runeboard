@@ -1,0 +1,71 @@
+{
+  "name": "Buth Ovaisa",
+  "description": "A Northman stockade: a ring of sharpened log stakes with a raised walkway encloses a tall carved timber great hall at the back, two long shingle-roofed houses on the left and right, and two stilted watchtowers guarding the front gate, around a trampled dirt yard.",
+  "style": "Northman",
+  "colors":   ["#6E5034", "#6A665E", "#5C4228", "#7E7058", "#8A6A44", "#2A2018", "#B08A50", "", "#5E7A30"],
+  "surfaces": ["Planks",  "Slate",   "Planks", "Fieldstone", "Planks", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great hall at the back", "at": [0.0, 0.26], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.3, 0.18, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.18, 0], "size": [0.32, 0.15, 0.17], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.076], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.09, 0, -0.08], "size": [0.015, 0.26, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0.09, 0, -0.08], "size": [0.015, 0.26, 0.015], "cell": "wood" },
+      { "shape": "cone", "pos": [-0.09, 0.26, -0.08], "radius": 0.01, "height": 0.03, "sides": 4, "cell": "wood" },
+      { "shape": "cone", "pos": [0.09, 0.26, -0.08], "radius": 0.01, "height": 0.03, "sides": 4, "cell": "wood" },
+      { "shape": "box", "pos": [0.2, 0, 0.0], "size": [0.1, 0.12, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0.2, 0.12, 0], "size": [0.1, 0.08, 0.1], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "left longhouse", "at": [-0.3, 0.13], "yaw": 70, "parts": [
+      { "shape": "box", "size": [0.26, 0.07, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.28, 0.1, 0.14], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "right longhouse", "at": [0.26, -0.11], "yaw": -55, "parts": [
+      { "shape": "box", "size": [0.26, 0.09, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.28, 0.11, 0.15], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.131, 0, 0], "size": [0.004, 0.06, 0.04], "cell": "dark" }
+    ] },
+    { "note": "left watchtower by the gate", "at": [-0.31, -0.28], "parts": [
+      { "shape": "box", "pos": [-0.035, 0, -0.03], "size": [0.014, 0.2, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0, -0.03], "size": [0.014, 0.2, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [-0.035, 0, 0.03], "size": [0.014, 0.2, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0, 0.03], "size": [0.014, 0.2, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.2, 0], "size": [0.09, 0.06, 0.08], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.26, 0], "radius": 0.075, "height": 0.07, "cell": "roof" }
+    ] },
+    { "note": "front watchtower by the gate", "at": [-0.08, -0.39], "parts": [
+      { "shape": "box", "pos": [-0.035, 0, -0.03], "size": [0.014, 0.17, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0, -0.03], "size": [0.014, 0.17, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [-0.035, 0, 0.03], "size": [0.014, 0.17, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0, 0.03], "size": [0.014, 0.17, 0.014], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.17, 0], "size": [0.09, 0.06, 0.08], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.23, 0], "radius": 0.075, "height": 0.07, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.3, 0], "height": 0.06 }
+    ] },
+    { "note": "palisade back left", "at": [-0.32, 0.4], "parts": [
+      { "shape": "wall", "pos": [-0.11, 0, -0.25], "to": [0.11, 0.25], "height": 0.1, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "palisade left side", "at": [-0.44, 0.08], "parts": [
+      { "shape": "wall", "pos": [0, 0, -0.5], "to": [0, 0.5], "height": 0.1, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "palisade left of gate", "at": [-0.4, -0.2], "parts": [
+      { "shape": "wall", "pos": [-0.04, 0, 0.1], "to": [0.06, -0.12], "height": 0.1, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "palisade front", "at": [0.14, -0.35], "parts": [
+      { "shape": "wall", "pos": [-0.17, 0, -0.1], "to": [0.15, 0.08], "height": 0.09, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "palisade front right", "at": [0.35, -0.24], "parts": [
+      { "shape": "wall", "pos": [-0.065, 0, -0.17], "to": [0.065, 0.17], "height": 0.1, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "palisade right side", "at": [0.41, 0.0], "parts": [
+      { "shape": "wall", "pos": [0, 0, -0.4], "to": [0, 0.4], "height": 0.1, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "palisade back right", "at": [0.33, 0.35], "parts": [
+      { "shape": "wall", "pos": [0.05, 0, -0.35], "to": [-0.06, 0.32], "height": 0.1, "thickness": 0.025, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "haystack and grass", "at": [0.08, 0.06], "parts": [
+      { "shape": "cone", "radius": 0.03, "height": 0.04, "sides": 8, "cell": "trim" },
+      { "shape": "box", "pos": [0.1, 0, 0.1], "size": [0.08, 0.003, 0.06], "cell": "dark" }
+    ] }
+  ]
+}

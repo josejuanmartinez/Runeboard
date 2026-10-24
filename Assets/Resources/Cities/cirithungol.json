@@ -1,0 +1,75 @@
+{
+  "name": "Cirith Ungol",
+  "description": "A black square watchtower with a battlemented crown bearing a fiery Eye stands in a sunken rocky pass among jagged grey crags, linked by a stone arch bridge to the left peak; a dark tunnel mouth leaks a black stream on the left, and in front a stair leads down to an orc camp with a brown hide tent, fire braziers, Eye banners, a gibbet cage, spiked stakes and dead trees.",
+  "style": "Orcish",
+  "colors":   ["#3A3836", "#4A2E26", "#4A3A2C", "#7A766C", "#6A5E4E", "#161412", "#D06A2A", "", "#3A342C"],
+  "surfaces": ["Ashlar",  "Cloth",   "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "black tower", "at": [0.03, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.11, "height": 0.5, "sides": 4, "taper": 0.8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.5, 0], "radius": 0.11, "height": 0.06, "sides": 4, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.56, 0], "radius": 0.1, "count": 8, "thickness": 0.022, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.56, 0], "radius": 0.025, "height": 0.006, "sides": 4, "cell": "accent" },
+      { "shape": "box", "pos": [-0.04, 0, -0.06], "size": [0.03, 0.07, 0.006], "cell": "accent", "yaw": 45 },
+      { "shape": "box", "pos": [-0.04, 0.22, -0.055], "size": [0.04, 0.12, 0.006], "cell": "dark", "yaw": 45 },
+      { "shape": "box", "pos": [-0.04, 0.3, -0.058], "size": [0.016, 0.016, 0.006], "cell": "accent", "yaw": 45 },
+      { "shape": "flag", "pos": [0, 0.57, 0], "height": 0.07 }
+    ] },
+    { "note": "back-left crag", "at": [-0.19, 0.35], "parts": [
+      { "shape": "rock", "radius": 0.11, "height": 0.36, "cell": "stone" },
+      { "shape": "rock", "pos": [0.06, 0, 0.05], "radius": 0.08, "height": 0.26, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "left crags and tunnel", "at": [-0.32, 0.12], "parts": [
+      { "shape": "rock", "pos": [0.0, 0, 0.15], "radius": 0.09, "height": 0.22, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.09, 0, -0.25], "radius": 0.1, "height": 0.28, "cell": "stone", "seed": 3 },
+      { "shape": "box", "pos": [0.05, 0, -0.3], "size": [0.12, 0.09, 0.08], "cell": "stone", "yaw": -30 },
+      { "shape": "box", "pos": [0.07, 0, -0.35], "size": [0.07, 0.07, 0.004], "cell": "dark", "yaw": -30 }
+    ] },
+    { "note": "arch bridge to the tower", "at": [-0.12, 0.25], "yaw": -25, "parts": [
+      { "shape": "box", "pos": [0, 0.13, 0], "size": [0.2, 0.04, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.04, 0.13, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0.0, 0.08, -0.026], "size": [0.08, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "right crags", "at": [0.24, 0.23], "parts": [
+      { "shape": "rock", "radius": 0.12, "height": 0.36, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.11, 0, -0.08], "radius": 0.08, "height": 0.2, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.04, 0, -0.45], "radius": 0.1, "height": 0.09, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "black stream", "at": [-0.25, -0.17], "parts": [
+      { "shape": "wall", "pos": [0.0, 0, 0.3], "to": [-0.06, -0.3], "height": 0.004, "thickness": 0.06, "cell": "dark" }
+    ] },
+    { "note": "stair path", "at": [0.0, -0.08], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.1], "size": [0.06, 0.03, 0.08], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, 0.0], "size": [0.06, 0.015, 0.08], "cell": "trim" }
+    ] },
+    { "note": "hide tent", "at": [0.1, -0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.03, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.03, 0], "radius": 0.07, "height": 0.06, "sides": 8, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, -0.06], "size": [0.025, 0.03, 0.004], "cell": "dark" }
+    ] },
+    { "note": "front brazier and banner", "at": [-0.08, -0.31], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.04, "sides": 6, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.022, "height": 0.015, "sides": 6, "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.055, 0], "radius": 0.015, "height": 0.03, "sides": 5, "cell": "accent" },
+      { "shape": "flag", "pos": [-0.11, 0, 0.18], "height": 0.15, "radius": 0.04 }
+    ] },
+    { "note": "right brazier on a rock and banner", "at": [0.31, 0.03], "parts": [
+      { "shape": "rock", "radius": 0.04, "height": 0.07, "cell": "stone", "seed": 7 },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.015, "height": 0.03, "sides": 5, "cell": "accent" },
+      { "shape": "flag", "pos": [0.11, 0, 0.12], "height": 0.13, "radius": 0.035 }
+    ] },
+    { "note": "gibbet and spiked stakes", "at": [0.24, -0.2], "parts": [
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.008, 0.12, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.0, 0.11, 0], "size": [0.08, 0.008, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [-0.03, 0.04, 0], "size": [0.02, 0.04, 0.02], "cell": "dark" },
+      { "shape": "wall", "pos": [-0.38, 0, -0.1], "to": [-0.2, -0.25], "height": 0.04, "thickness": 0.01, "count": 1, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.38, 0, -0.1], "to": [-0.42, 0.15], "height": 0.04, "thickness": 0.01, "count": 1, "cell": "wood" }
+    ] },
+    { "note": "dead trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, -0.25], "kind": "poplar", "height": 0.12, "radius": 0.03, "cell": "dark" },
+      { "shape": "tree", "pos": [-0.09, 0, -0.03], "kind": "poplar", "height": 0.1, "radius": 0.025, "cell": "dark", "seed": 1 },
+      { "shape": "tree", "pos": [-0.37, 0, 0.6], "kind": "poplar", "height": 0.12, "radius": 0.025, "cell": "dark", "seed": 2 },
+      { "shape": "tree", "pos": [0.27, 0, 0.3], "kind": "poplar", "height": 0.1, "radius": 0.025, "cell": "dark", "seed": 3 }
+    ] }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "Norr-dum",
+  "description": "A timber mine at the foot of snow-capped grey peaks: twin tall plank headframes with steep shingled roofs on the left, rail tracks curving down from a lit mine adit, an open-sided shed on the right, a huge wooden waterwheel and a brick chimney in front, a small hut, an ore cart and pines.",
+  "style": "Dwarven",
+  "colors":   ["#7A6448", "#6E5A40", "#5E4830", "#8E8C84", "#E2DED2", "#1E1812", "#E0A040", "", "#3C5030"],
+  "surfaces": ["Planks",  "Planks",  "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "snowy peaks", "at": [0.0, 0.24], "parts": [
+      { "shape": "cone", "pos": [-0.02, 0, 0.0], "radius": 0.17, "height": 0.52, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.02, 0.36, 0.0], "radius": 0.056, "height": 0.17, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [0.2, 0, -0.1], "radius": 0.2, "height": 0.58, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0.2, 0.38, -0.1], "radius": 0.073, "height": 0.21, "sides": 6, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.24, 0, 0.08], "radius": 0.14, "height": 0.4, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.24, 0.28, 0.08], "radius": 0.044, "height": 0.13, "sides": 6, "cell": "trim" },
+      { "shape": "rock", "pos": [0.36, 0, -0.3], "radius": 0.1, "height": 0.2, "cell": "stone" }
+    ] },
+    { "note": "tall headframe", "at": [-0.32, 0.1], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.4, 0.09], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.05, -0.046], "size": [0.05, 0.15, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.4, 0], "size": [0.12, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.07, 0, -0.05], "size": [0.015, 0.22, 0.015], "cell": "wood", "yaw": 20 },
+      { "shape": "box", "pos": [0.07, 0, -0.05], "size": [0.015, 0.22, 0.015], "cell": "wood", "yaw": -20 }
+    ] },
+    { "note": "second headframe", "at": [-0.15, 0.16], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.09, 0.32, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.05, -0.041], "size": [0.05, 0.14, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.32, 0], "size": [0.1, 0.07, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "mine adit", "at": [0.08, 0.16], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.08, 0.08, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.02, -0.033], "size": [0.008, 0.01, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.09, 0.05, 0.07], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "open shed", "at": [0.32, -0.01], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.012, 0.08, 0.08], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0, 0], "size": [0.012, 0.08, 0.08], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, 0.035], "size": [0.14, 0.08, 0.01], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.17, 0.06, 0.1], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.03, 0, -0.01], "size": [0.04, 0.03, 0.03], "cell": "wood" }
+    ] },
+    { "note": "rail tracks", "at": [0.08, -0.04], "parts": [
+      { "shape": "box", "pos": [-0.12, 0.004, 0.25], "size": [0.05, 0.006, 0.3], "cell": "wood", "yaw": 40 },
+      { "shape": "box", "pos": [0.02, 0.004, 0.0], "size": [0.05, 0.006, 0.3], "cell": "wood", "yaw": 20 },
+      { "shape": "box", "pos": [0.05, 0.004, -0.3], "size": [0.05, 0.006, 0.3], "cell": "wood", "yaw": -15 }
+    ] },
+    { "note": "great waterwheel", "at": [0.0, -0.2], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.26, 0.26, 0.04], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.04, -0.021], "size": [0.18, 0.18, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.11, -0.03], "size": [0.04, 0.04, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [-0.1, 0, -0.06], "size": [0.02, 0.14, 0.02], "cell": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [0.1, 0, -0.06], "size": [0.02, 0.14, 0.02], "cell": "wood", "yaw": -30 }
+    ] },
+    { "note": "brick chimney", "at": [-0.21, -0.11], "parts": [
+      { "shape": "box", "size": [0.04, 0.25, 0.04], "cell": "stone" }
+    ] },
+    { "note": "front hut", "at": [-0.34, -0.27], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.11, 0.06, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.041], "size": [0.04, 0.04, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.12, 0.06, 0.09], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "ore cart", "at": [0.07, -0.44], "parts": [
+      { "shape": "box", "size": [0.05, 0.03, 0.035], "cell": "wood", "yaw": 30 }
+    ] },
+    { "note": "pines and boulders", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.45, 0, 0.3], "kind": "pine", "height": 0.15, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.44, 0, 0.05], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [0.45, 0, 0.2], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.41, 0, -0.5], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [-0.28, 0, -0.1], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 4 },
+      { "shape": "rock", "pos": [0.3, 0, -0.75], "radius": 0.03, "height": 0.025, "seed": 5 },
+      { "shape": "rock", "pos": [-0.27, 0, -0.85], "radius": 0.03, "height": 0.025, "seed": 6 }
+    ] }
+  ]
+}

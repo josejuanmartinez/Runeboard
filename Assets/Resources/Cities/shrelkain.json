@@ -1,0 +1,90 @@
+{
+  "name": "Shrel-Kain",
+  "description": "A riverside market town: a tall stone belfry with a timbered top, green-slate needle spire and a green stag banner rises behind a long half-timbered hall under mossy green slate, a big brown-roofed timber house stands on the right, striped market stalls fill the cobbled lanes, and along the front a river runs past a palisade, a carved rune obelisk, a plank bridge and a jetty with a green-sailed longboat.",
+  "style": "Northman",
+  "colors":   ["#C4B494", "#4E5E4A", "#6A4A2C", "#8A8478", "#8A4E30", "#2C3A40", "#5E7A48", "", "#4A5A2C"],
+  "surfaces": ["HalfTimber", "Slate", "Planks", "Fieldstone", "Tiles", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "belfry tower", "at": [0.06, 0.36], "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.24, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.24, 0], "radius": 0.058, "height": 0.08, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.26, -0.042], "size": [0.03, 0.04, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.32, 0], "radius": 0.065, "height": 0.18, "cell": "roof" },
+      { "shape": "box", "pos": [0.0, 0.1, -0.042], "size": [0.035, 0.08, 0.004], "cell": "accent" },
+      { "shape": "flag", "pos": [0, 0.5, 0], "height": 0.06 }
+    ] },
+    { "note": "long hall with green-slate roofs", "at": [-0.08, 0.24], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.3, 0.1, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.3, 0.1, 0.13], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.06, 0, -0.03], "size": [0.08, 0.1, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0.06, 0.1, -0.03], "size": [0.08, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.06, 0, -0.081], "size": [0.03, 0.05, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [-0.1, 0.1, 0.02], "size": [0.025, 0.08, 0.025], "cell": "stone" }
+    ] },
+    { "note": "houses, back left", "at": [-0.33, 0.14], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.09, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.12, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.11, 0, 0.06], "size": [0.1, 0.09, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0.11, 0.09, 0.06], "size": [0.1, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.06, 0.09, 0.08], "size": [0.025, 0.09, 0.025], "cell": "stone" }
+    ] },
+    { "note": "small brown-roofed house, right", "at": [0.17, 0.14], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.09, 0.09, 0.09], "cell": "stone" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.09, 0.07, 0.1], "cell": "trim", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "big timber house, right", "at": [0.28, -0.13], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.16, 0.06, 0.15], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.16, 0.12, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.18, 0], "size": [0.17, 0.13, 0.16], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.04, 0.17, 0.04], "size": [0.03, 0.12, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [-0.03, 0, -0.076], "size": [0.03, 0.05, 0.004], "cell": "wood" }
+    ] },
+    { "note": "market stalls", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.15, 0, 0.3], "size": [0.08, 0.04, 0.05], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.15, 0.06, 0.3], "size": [0.09, 0.03, 0.06], "cell": "trim", "top": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [0.06, 0, 0.12], "size": [0.08, 0.04, 0.05], "cell": "wood" },
+      { "shape": "gable", "pos": [0.06, 0.06, 0.12], "size": [0.09, 0.03, 0.06], "cell": "accent", "top": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [-0.11, 0, -0.4], "size": [0.08, 0.04, 0.05], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.11, 0.06, -0.4], "size": [0.09, 0.03, 0.06], "cell": "trim", "top": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [0.06, 0, -0.6], "size": [0.08, 0.04, 0.05], "cell": "wood" },
+      { "shape": "gable", "pos": [0.06, 0.06, -0.6], "size": [0.09, 0.03, 0.06], "cell": "stone", "top": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [-0.04, 0.003, -0.1], "size": [0.12, 0.003, 0.9], "cell": "stone", "yaw": 30 }
+    ] },
+    { "note": "well and palisade", "at": [-0.3, 0.05], "parts": [
+      { "shape": "cylinder", "pos": [0.06, 0, 0.0], "radius": 0.025, "height": 0.03, "sides": 8, "cell": "stone" },
+      { "shape": "box", "pos": [0.06, 0.03, 0.0], "size": [0.04, 0.03, 0.004], "cell": "wood" },
+      { "shape": "wall", "pos": [-0.19, 0, 0.12], "to": [-0.0, -0.25], "height": 0.07, "thickness": 0.015, "cell": "wood" }
+    ] },
+    { "note": "rune obelisk", "at": [-0.43, -0.25], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.22, "sides": 4, "twist": 0.125, "taper": 0.6, "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.22, 0], "radius": 0.022, "height": 0.04, "cell": "stone" }
+    ] },
+    { "note": "river", "at": [0.0, -0.3], "parts": [
+      { "shape": "box", "pos": [-0.3, 0, 0.2], "size": [0.12, 0.004, 0.5], "cell": "dark", "yaw": -20 },
+      { "shape": "box", "pos": [-0.12, 0, -0.25], "size": [0.45, 0.004, 0.2], "cell": "dark", "yaw": 40 },
+      { "shape": "box", "pos": [0.25, 0, -0.1], "size": [0.5, 0.004, 0.16], "cell": "dark", "yaw": -25 }
+    ] },
+    { "note": "plank bridge and gate", "at": [-0.31, -0.13], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.14, 0.01, 0.045], "cell": "wood" },
+      { "shape": "box", "pos": [0.08, 0, 0], "size": [0.01, 0.08, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.08, 0, 0.05], "size": [0.01, 0.08, 0.01], "cell": "wood" }
+    ] },
+    { "note": "jetty and longboat", "at": [0.04, -0.37], "yaw": -25, "parts": [
+      { "shape": "box", "pos": [0.04, 0.015, 0], "size": [0.22, 0.01, 0.06], "cell": "wood" },
+      { "shape": "box", "pos": [0.14, 0, 0], "size": [0.01, 0.04, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.12, 0, -0.1], "size": [0.15, 0.03, 0.045], "cell": "wood", "yaw": -10 },
+      { "shape": "box", "pos": [-0.12, 0.03, -0.1], "size": [0.004, 0.12, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [-0.12, 0.06, -0.105], "size": [0.07, 0.07, 0.004], "cell": "accent", "yaw": -10 }
+    ] },
+    { "note": "pines, rocks and field", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [0.45, 0, 0.0], "kind": "pine", "height": 0.17, "radius": 0.045 },
+      { "shape": "tree", "pos": [0.3, 0, -0.6], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.47, 0, 0.6], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [0.25, 0, 0.75], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.2, 0, 1.0], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 5 },
+      { "shape": "rock", "pos": [0.44, 0, 0.7], "radius": 0.07, "height": 0.1, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.25, 0, 1.15], "radius": 0.05, "height": 0.07, "cell": "stone", "seed": 7 },
+      { "shape": "box", "pos": [0.33, 0, 0.85], "size": [0.12, 0.006, 0.15], "cell": "wood", "yaw": 30 }
+    ] }
+  ]
+}

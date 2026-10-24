@@ -19,7 +19,9 @@ public static class Character3DLighting
     private static readonly int OutlineWidthId = Shader.PropertyToID("_C3D_OutlineWidth");
 
     // The pitched frame every model stands in: up leans toward the camera by `pitch`.
-    public static Quaternion BoardFrame(Character3DSettings settings) => Quaternion.Euler(-settings.pitch, 0f, 0f);
+    // With the board camera tilted (BoardNavigator.CurrentTilt) the frame leans further by the same
+    // angle, so units and buildings are seen from the same height as with the straight-down camera.
+    public static Quaternion BoardFrame(Character3DSettings settings) => Quaternion.Euler(-(settings.pitch + BoardNavigator.CurrentTilt), 0f, 0f);
 
     // World-space direction toward the key light.
     public static Vector3 LightDirection(Character3DSettings settings)

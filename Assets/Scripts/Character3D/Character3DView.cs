@@ -66,6 +66,7 @@ public class Character3DView : MonoBehaviour
 
     private void OnDisable()
     {
+        RestoreGoldRing();
         SetSpriteHidden(false);
         Register(null);
     }
@@ -113,21 +114,52 @@ public class Character3DView : MonoBehaviour
         }
 
         SetSpriteHidden(model != null && mode == Character3DSettings.Mode.Replace);
-        if (model == null) return;
+        if (model == null)
+        {
+            RestoreGoldRing();
+            token?.Hide();
+            return;
+        }
 
         if (model.gameObject.activeSelf != spriteVisible) model.gameObject.SetActive(spriteVisible);
-        if (!spriteVisible) return;
+        if (!spriteVisible)
+        {
+            token?.Hide();
+            return;
+        }
 
         // Only spritesheet frames share the baked cell; a static illustration has its own size.
         if (controller.IsShowing && sprite.sprite != null) spriteCellHeight = sprite.sprite.bounds.size.y;
         UpdateFacing(settings);
         Place(settings, mode);
+        Leader owner = character != null ? character.GetOwner() : null;
+        model.SetBase(settings.showBase ? owner != null ? owner.nationColor : Color.clear : null, settings.baseRadius);
+        UpdateBaseFocus();
         Animate(settings);
+        KickUpDust();
 
-        model.Tint = sprite.color;
+        model.Tint = FigureTint(sprite.color);
         model.RimColor = controller.PresentationRimColor;
         model.SortingLayerId = sprite.sortingLayerID;
         model.SortingOrder = sprite.sortingOrder;
+        UpdateToken(settings, character, owner);
+    }
+
+    // Strategic zoom: the figure dithers away and its token takes its place on the base.
+    private UnitToken token;
+
+    private void UpdateToken(Character3DSettings settings, Character character, Leader owner)
+    {
+        float amount = model.BaseWorldRadius > 0f ? UnitToken.Amount(settings) : 0f;
+        model.FigureAlpha = 1f - amount;
+        if (amount <= 0f)
+        {
+            token?.Hide();
+            return;
+        }
+        if (token == null) token = UnitToken.Create(transform);
+        token.Show(character, owner != null ? owner.nationColor : Color.clear, model.transform.position, model.BaseWorldRadius,
+            amount * sprite.color.a, sprite.sortingLayerID, sprite.sortingOrder, settings);
     }
 
     // ── Animation ───────────────────────────────────────────────────────────────────────────
@@ -135,6 +167,7 @@ public class Character3DView : MonoBehaviour
     private void Animate(Character3DSettings settings)
     {
         Character3DAnimator anim = model.Animation;
+        anim.IdleVariety = UnitAnimations.IsHumans(Shown); // other nations' units just stand idle
         Character character = Shown;
         string spriteState = controller.CurrentStateName;
 
@@ -158,13 +191,14 @@ public class Character3DView : MonoBehaviour
         if (spriteState != lastSpriteState)
         {
             lastSpriteState = spriteState;
-            if (Time.time > suppressSpriteEchoUntil && SpriteStateMove(spriteState, out UnitAnimations.Move echo))
+            if (Time.time > suppressSpriteEchoUntil && UnitAnimations.IsHumans(character) && SpriteStateMove(spriteState, out UnitAnimations.Move echo))
                 UnitAnimations.Perform(anim, echo, UnitAnimations.Pick(echo), hidden);
         }
 
         // Selecting a unit gets a "ready" acknowledgement — it raises its guard and lowers it again.
         bool selected = character != null && Board.Instance != null && Board.Instance.selectedCharacter == character;
-        if (selected && !wasSelected && !anim.IsBusy && !moving) UnitAnimations.Perform(anim, UnitAnimations.Move.Rally, null, hidden);
+        if (selected && !wasSelected && !anim.IsBusy && !moving && UnitAnimations.IsHumans(character))
+            UnitAnimations.Perform(anim, UnitAnimations.Move.Rally, null, hidden);
         wasSelected = selected;
     }
 
@@ -310,7 +344,69 @@ public class Character3DView : MonoBehaviour
         Transform root = model.transform;
         root.localPosition = new Vector3(x, feetY, 0f);
         root.rotation = Character3DLighting.BoardFrame(settings) * Quaternion.Euler(0f, yaw, 0f);
-        root.localScale = Vector3.one * (targetHeight * settings.figureScale / model.ModelHeight);
+        root.localScale = Vector3.one * (targetHeight * settings.figureScale * ZoomBoost(settings) / model.ModelHeight);
+    }
+
+    // Miniatures grow a little as the camera pulls back, so they still read at strategic zoom.
+    private static float ZoomBoost(Character3DSettings settings)
+    {
+        Camera cam = Camera.main;
+        if (cam == null || settings.zoomedOutBoost <= 0f) return 1f;
+        float t = Mathf.InverseLerp(BoardLook.DefaultZoom, BoardLook.DefaultZoom * 2.5f, cam.orthographicSize);
+        return 1f + settings.zoomedOutBoost * Mathf.SmoothStep(0f, 1f, t);
+    }
+
+    // A puff of dust at the base when the miniature sets off, and a bigger one when it lands.
+    private bool dustMoving;
+
+    private void KickUpDust()
+    {
+        bool movingNow = moveSpeed > 0.05f;
+        if (movingNow == dustMoving) return;
+        dustMoving = movingNow;
+        AmbientLife.Dust(model.transform.position, model.BaseWorldRadius, landing: !movingNow);
+    }
+
+    // A unit standing on a miniature base shows focus on the base itself (its top face lights up,
+    // see Character3D.shader's _MINIATURE_BASE), so the flat selection sigil (GoldRing) is not
+    // drawn under it. Units without a base keep the sigil.
+    private SpriteRenderer goldRingRenderer;
+    private bool goldRingHidden;
+
+    // Telling your units from the rest at a glance, without hiding anyone: the human player's own
+    // miniatures always have a faint warm light on their base and stand at full brightness; other
+    // nations' figures sit a shade dimmer (enemies keep their red outline on top). Hover and
+    // selection light the base further and brighten the figure — never a colour tint, and nobody
+    // else fades out.
+    private const float OwnBaseLight = 0.22f;
+    private const float OthersDim = 0.86f;
+
+    private static bool IsMine(Character character) => UnitAnimations.IsHumans(character);
+
+    private void UpdateBaseFocus()
+    {
+        float focus = controller.FocusAmount;
+        model.Focus = Mathf.Max(focus, IsMine(Shown) ? OwnBaseLight : 0f);
+        SetGoldRingHidden(model.BaseWorldRadius > 0f);
+        AmbientLife.Motes(model.transform.position, model.BaseWorldRadius, focus * model.FigureAlpha);
+    }
+
+    private Color FigureTint(Color spriteColor)
+    {
+        float focus = controller.FocusAmount;
+        float brightness = (IsMine(Shown) ? 1f : OthersDim) + 0.16f * focus;
+        return new Color(spriteColor.r * brightness, spriteColor.g * brightness, spriteColor.b * brightness, spriteColor.a);
+    }
+
+    private void RestoreGoldRing() => SetGoldRingHidden(false);
+
+    private void SetGoldRingHidden(bool hidden)
+    {
+        if (hidden == goldRingHidden || goldRing == null) return;
+        if (goldRingRenderer == null) goldRingRenderer = goldRing.GetComponent<SpriteRenderer>();
+        if (goldRingRenderer == null) return;
+        goldRingRenderer.forceRenderingOff = hidden;
+        goldRingHidden = hidden;
     }
 
     private void SetSpriteHidden(bool hidden)

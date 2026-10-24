@@ -1,0 +1,93 @@
+{
+  "name": "Havens of Umbar",
+  "description": "A great colonnaded rotunda crowned by a ribbed teal dome and a gilded lantern rises on a high round podium over the harbour of Umbar; sweeping stairs curve down to a star-paved plaza and a stone quay where two sail-ships are moored, slim gold-tipped pillars stand on the waterfront, rows of dark cypresses and palms line the terraces, and whitewashed flat-roofed houses with little domes crowd the right edge.",
+  "style": "Southron",
+  "colors":   ["#D6CAA8", "#4E8680", "#6A4A30", "#B8AA88", "#C8A040", "#2A2A22", "#3E6A6E", "", "#2E4A2C"],
+  "surfaces": ["Ashlar", "Plain", "Planks", "Ashlar", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "domed rotunda on round podium", "at": [0.0, 0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.24, "height": 0.1, "sides": 18, "cell": "stone", "top": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.1, 0.02], "radius": 0.14, "height": 0.02, "sides": 16, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.12, 0.02], "radius": 0.12, "height": 0.15, "sides": 16, "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.1, 0.12, -0.06], "radius": 0.012, "height": 0.15, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.04, 0.12, -0.1], "radius": 0.012, "height": 0.15, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.04, 0.12, -0.1], "radius": 0.012, "height": 0.15, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.1, 0.12, -0.06], "radius": 0.012, "height": 0.15, "sides": 8, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.27, 0.02], "radius": 0.135, "height": 0.03, "sides": 16, "cell": "wall", "top": "trim" },
+      { "shape": "dome", "pos": [0, 0.3, 0.02], "radius": 0.13, "height": 0.13, "sides": 16, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0, 0.42, 0.02], "radius": 0.03, "height": 0.03, "sides": 10, "cell": "trim" },
+      { "shape": "flag", "pos": [0, 0.45, 0.02], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "curving grand stairs", "at": [0.12, -0.04], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.14, 0.02, 0.2], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.02, 0.04], "size": [0.14, 0.02, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.04, 0.08], "size": [0.14, 0.02, 0.06], "cell": "wall" }
+    ] },
+    { "note": "star-paved plaza", "at": [0.22, 0.0], "parts": [
+      { "shape": "cylinder", "radius": 0.11, "height": 0.012, "sides": 14, "cell": "stone", "top": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.012, 0], "radius": 0.04, "height": 0.002, "sides": 8, "cell": "accent" }
+    ] },
+    { "note": "curved quay and front stairs", "at": [-0.06, -0.25], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.4, 0.03, 0.18], "cell": "stone", "top": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.14], "size": [0.12, 0.015, 0.1], "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.12, 0.03, -0.07], "radius": 0.012, "height": 0.05, "sides": 6, "cell": "wall", "top": "trim" },
+      { "shape": "cylinder", "pos": [0.0, 0.03, -0.08], "radius": 0.012, "height": 0.05, "sides": 6, "cell": "wall", "top": "trim" }
+    ] },
+    { "note": "harbour water", "at": [-0.3, -0.3], "yaw": 44, "parts": [
+      { "shape": "box", "size": [0.5, 0.004, 0.3], "cell": "accent" }
+    ] },
+    { "note": "sail-ship, left", "at": [-0.39, -0.22], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.1, 0.025, 0.035], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.025, 0], "size": [0.004, 0.08, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.005, 0.05, 0.06], "cell": "wall" }
+    ] },
+    { "note": "sail-ship, front", "at": [-0.25, -0.32], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.11, 0.025, 0.035], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.025, 0], "size": [0.004, 0.09, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.005, 0.055, 0.065], "cell": "wall" }
+    ] },
+    { "note": "gold-tipped pillar, left", "at": [-0.43, -0.01], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.28, "sides": 8, "taper": 0.7, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.28, 0], "radius": 0.02, "height": 0.07, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "gold-tipped pillar, quay", "at": [-0.17, -0.16], "parts": [
+      { "shape": "cylinder", "radius": 0.012, "height": 0.16, "sides": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.16, 0], "radius": 0.012, "height": 0.04, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "gold-tipped pillar, front right", "at": [0.34, -0.33], "parts": [
+      { "shape": "cylinder", "radius": 0.022, "height": 0.25, "sides": 8, "taper": 0.75, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.25, 0], "radius": 0.018, "height": 0.06, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "whitewashed houses, back right", "at": [0.4, 0.3], "parts": [
+      { "shape": "box", "size": [0.08, 0.1, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.1, 0], "size": [0.05, 0.04, 0.05], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.14, 0], "radius": 0.03, "height": 0.03, "cell": "wall" },
+      { "shape": "dome", "pos": [-0.07, 0, -0.06], "radius": 0.035, "height": 0.06, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "whitewashed houses, right", "at": [0.45, 0.13], "parts": [
+      { "shape": "box", "size": [0.08, 0.09, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0.01, 0.09, 0], "size": [0.05, 0.03, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.02, -0.036], "size": [0.02, 0.04, 0.004], "cell": "dark" }
+    ] },
+    { "note": "domed house, front right", "at": [0.47, -0.13], "parts": [
+      { "shape": "box", "size": [0.06, 0.06, 0.06], "cell": "wall" },
+      { "shape": "dome", "pos": [0, 0.06, 0], "radius": 0.03, "height": 0.03, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "cypress rows on the left terrace", "at": [-0.2, 0.05], "parts": [
+      { "shape": "tree", "pos": [-0.12, 0, 0.05], "kind": "poplar", "height": 0.18, "radius": 0.025 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.05], "kind": "poplar", "height": 0.18, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [0.05, 0, -0.1], "kind": "poplar", "height": 0.17, "radius": 0.025, "seed": 2 },
+      { "shape": "tree", "pos": [0.14, 0, -0.14], "kind": "poplar", "height": 0.16, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [-0.1, 0, 0.3], "kind": "poplar", "height": 0.18, "radius": 0.025, "seed": 4 }
+    ] },
+    { "note": "cypresses, right", "at": [0.3, 0.27], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.18, "radius": 0.025, "seed": 5 },
+      { "shape": "tree", "pos": [0.0, 0, -0.75], "kind": "poplar", "height": 0.16, "radius": 0.025, "seed": 6 }
+    ] },
+    { "note": "palms", "at": [0.15, -0.25], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.12, "radius": 0.045, "seed": 7 },
+      { "shape": "tree", "pos": [0.25, 0, 0.35], "kind": "broadleaf", "height": 0.12, "radius": 0.045, "seed": 8 },
+      { "shape": "tree", "pos": [-0.52, 0, 0.5], "kind": "broadleaf", "height": 0.1, "radius": 0.04, "seed": 9 }
+    ] }
+  ]
+}

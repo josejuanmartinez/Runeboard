@@ -1,0 +1,79 @@
+{
+  "name": "Caras Mirilond",
+  "description": "A busy half-timbered market town: two rows of tall gabled townhouses with green, rust-red and slate roofs, dormers and stone chimneys form a V around a cobbled square, meeting at a stone town hall with an arched door and a tower crowned by a tall green spire; striped market awnings line the houses, a stone well stands in the middle and two striped stalls sit at the front.",
+  "style": "Mannish",
+  "colors":   ["#C4B494", "#4E6A3A", "#5A3E26", "#8E8878", "#9A5A34", "#2A2218", "#6A84A0", "", "#4E6A2C"],
+  "surfaces": ["HalfTimber", "Tiles", "Planks", "Fieldstone", "Tiles", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "town hall tower", "at": [0.0, 0.24], "parts": [
+      { "shape": "cylinder", "radius": 0.075, "height": 0.28, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.2, -0.054], "size": [0.02, 0.03, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.28, 0], "radius": 0.09, "height": 0.2, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.48, 0], "height": 0.06 }
+    ] },
+    { "note": "town hall front with arched door", "at": [0.1, 0.13], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.15, 0.1], "cell": "stone" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.12, 0.1, 0.12], "cell": "roof", "top": "stone", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.15, 0.04], "size": [0.025, 0.08, 0.025], "cell": "stone" }
+    ] },
+    { "note": "left green-roofed townhouse", "at": [-0.14, 0.13], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.13, 0.15, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.13, 0.12, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.03, 0.15, 0.04], "size": [0.025, 0.09, 0.025], "cell": "stone" },
+      { "shape": "box", "pos": [0.0, 0.05, -0.08], "size": [0.09, 0.006, 0.06], "cell": "accent" }
+    ] },
+    { "note": "left red-roofed townhouse", "at": [-0.27, 0.01], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.14, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.14, 0], "size": [0.12, 0.11, 0.12], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0.05, -0.08], "size": [0.09, 0.006, 0.06], "cell": "roof" }
+    ] },
+    { "note": "left slate-roofed townhouse", "at": [-0.38, -0.12], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.11, 0.13, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.11, 0.1, 0.12], "cell": "dark", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.03, 0.13, 0.03], "size": [0.025, 0.08, 0.025], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0.05, -0.08], "size": [0.08, 0.006, 0.06], "cell": "trim" }
+    ] },
+    { "note": "right green-roofed townhouse", "at": [0.22, 0.15], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.15, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.12, 0.11, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.03, 0.15, 0.04], "size": [0.025, 0.08, 0.025], "cell": "stone" }
+    ] },
+    { "note": "right red-roofed townhouse", "at": [0.33, 0.01], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.14, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.14, 0], "size": [0.12, 0.11, 0.12], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.02, 0.05, -0.08], "size": [0.09, 0.006, 0.06], "cell": "roof" }
+    ] },
+    { "note": "right front townhouse", "at": [0.41, -0.15], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.11, 0.13, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.11, 0.1, 0.12], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.03, 0.13, 0.03], "size": [0.025, 0.07, 0.025], "cell": "stone" },
+      { "shape": "box", "pos": [-0.04, 0.05, -0.08], "size": [0.08, 0.006, 0.06], "cell": "accent" }
+    ] },
+    { "note": "well", "at": [0.03, -0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.004, "sides": 12, "cell": "stone" },
+      { "shape": "cylinder", "radius": 0.035, "height": 0.04, "sides": 10, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [-0.03, 0.04, 0], "size": [0.006, 0.05, 0.006], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0.04, 0], "size": [0.006, 0.05, 0.006], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.09, 0], "size": [0.07, 0.006, 0.006], "cell": "wood" }
+    ] },
+    { "note": "blue market stall", "at": [-0.12, -0.26], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.1, 0.025, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [-0.045, 0, 0.0], "size": [0.005, 0.06, 0.005], "cell": "wood" },
+      { "shape": "box", "pos": [0.045, 0, 0.0], "size": [0.005, 0.06, 0.005], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.11, 0.03, 0.07], "cell": "accent" }
+    ] },
+    { "note": "red market stall", "at": [0.12, -0.26], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.1, 0.025, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [-0.045, 0, 0.0], "size": [0.005, 0.06, 0.005], "cell": "wood" },
+      { "shape": "box", "pos": [0.045, 0, 0.0], "size": [0.005, 0.06, 0.005], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.11, 0.03, 0.07], "cell": "trim" }
+    ] },
+    { "note": "tree, barrels and cart", "at": [0.0, -0.2], "parts": [
+      { "shape": "tree", "pos": [-0.4, 0, 0.0], "kind": "broadleaf", "height": 0.12, "radius": 0.05 },
+      { "shape": "tree", "pos": [-0.38, 0, 1.1], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 1 },
+      { "shape": "cylinder", "pos": [0.33, 0, 0.0], "radius": 0.012, "height": 0.025, "sides": 8, "cell": "wood" },
+      { "shape": "box", "pos": [0.13, 0, -0.33], "size": [0.05, 0.02, 0.03], "cell": "wood" }
+    ] }
+  ]
+}

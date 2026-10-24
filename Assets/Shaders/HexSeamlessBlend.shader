@@ -81,6 +81,10 @@ Shader "RetroLOTR/HexSeamlessBlend"
         _GridGlowWidth ("Neon Grid Glow Width (px)", Range(0.5,12)) = 1
         _GridHueScale ("Neon Hue Cycle (per tile)", Range(0.02,0.5)) = 0.12
         _CellCenter ("Cell Center (map units, set per cell)", Vector) = (0,0,0,0)
+        // Relief lighting (BoardLookSettings.terrainRelief, set by HexSeamlessTerrain): the art's
+        // brightness read as height, its slope lit by the board's front-left key light.
+        _Relief ("Relief Strength", Range(0,1.5)) = 0
+        _ReliefLight ("Relief Light (screen direction toward the light)", Vector) = (-0.707,-0.707,0,0)
     }
 
     SubShader
@@ -114,6 +118,9 @@ Shader "RetroLOTR/HexSeamlessBlend"
             };
 
             sampler2D _MainTex;
+            float4 _MainTex_TexelSize;
+            float _Relief;
+            float4 _ReliefLight;
             float4 _SpriteUV;
 
             sampler2D _NeighborTex0; sampler2D _NeighborTex1; sampler2D _NeighborTex2;
@@ -370,6 +377,22 @@ Shader "RetroLOTR/HexSeamlessBlend"
                 fixed4 result = own;
                 if (weightSum > 1e-4)
                     result.rgb = lerp(own.rgb, rgbSum / weightSum, _BlendStrength * saturate(weightSum));
+
+                // Relief: brightness as height, so ridges, trees and rooftops catch the front-left
+                // light on one side and shade on the other — the map reads as a modelled surface.
+                if (_Relief > 0.0)
+                {
+                    float2 uvc = _SpriteUV.xy + ArtLocal(s) * _SpriteUV.zw;
+                    float2 tx = _MainTex_TexelSize.xy * 2.0;
+                    const float3 lumaW = float3(0.2126, 0.7152, 0.0722);
+                    float hl = dot(tex2D(_MainTex, uvc - float2(tx.x, 0)).rgb, lumaW);
+                    float hr = dot(tex2D(_MainTex, uvc + float2(tx.x, 0)).rgb, lumaW);
+                    float hd = dot(tex2D(_MainTex, uvc - float2(0, tx.y)).rgb, lumaW);
+                    float hu = dot(tex2D(_MainTex, uvc + float2(0, tx.y)).rgb, lumaW);
+                    // A slope faces down its gradient; lit when that faces the light.
+                    float facing = dot(-float2(hr - hl, hu - hd), _ReliefLight.xy);
+                    result.rgb *= 1.0 + clamp(facing * _Relief * 3.0, -0.3, 0.3);
+                }
 
                 result.a *= alphaMask;
                 result *= i.color;

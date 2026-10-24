@@ -1,0 +1,82 @@
+{
+  "name": "Riavod",
+  "description": "A Northman steading under grey granite crags and dark pines: a carved timber mead-hall with a steep blue-slate roof, crossed gable horns, a round window and a banner pole stands at the back, four thatched timber longhouses with carved bargeboards sit around a cobbled crossroads with a round stone well, and a rushing stream crossed by a stone footbridge cuts the front left corner.",
+  "style": "Northman",
+  "colors":   ["#8A6A44", "#7E6638", "#5A4028", "#9A988A", "#B08A4A", "#2A2018", "#4A6070", "", "#3E5430"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Slate", "", ""],
+  "buildings": [
+    { "note": "granite crags", "at": [0.0, 0.24], "parts": [
+      { "shape": "rock", "pos": [-0.02, 0, 0.05], "radius": 0.11, "height": 0.33, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.15, 0, -0.03], "radius": 0.08, "height": 0.2, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.26, 0, -0.08], "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.36, 0, -0.22], "radius": 0.08, "height": 0.1, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.29, 0, -0.2], "radius": 0.09, "height": 0.21, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.16, 0, 0.05], "radius": 0.06, "height": 0.13, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "carved mead-hall", "at": [0.07, 0.11], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.15, 0.1, 0.2], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.21, 0.14, 0.17], "cell": "accent", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.101], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.13, -0.106], "size": [0.03, 0.03, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [-0.05, 0.12, -0.1], "size": [0.008, 0.16, 0.008], "cell": "trim", "yaw": 0 },
+      { "shape": "box", "pos": [0.05, 0.12, -0.1], "size": [0.008, 0.16, 0.008], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.13], "size": [0.07, 0.015, 0.05], "cell": "stone" }
+    ] },
+    { "note": "banner pole", "at": [0.14, 0.09], "parts": [
+      { "shape": "flag", "height": 0.13, "radius": 0.035 }
+    ] },
+    { "note": "longhouse, left", "at": [-0.27, 0.0], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.16], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.17, 0.08, 0.14], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.081], "size": [0.03, 0.045, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.07, -0.085], "size": [0.008, 0.1, 0.008], "cell": "trim" }
+    ] },
+    { "note": "longhouse, right", "at": [0.3, -0.06], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.16], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.17, 0.08, 0.14], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.081], "size": [0.03, 0.045, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.07, -0.085], "size": [0.008, 0.1, 0.008], "cell": "trim" }
+    ] },
+    { "note": "longhouse, front centre", "at": [-0.13, -0.2], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.06, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.14, 0.07, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.066], "size": [0.025, 0.04, 0.004], "cell": "dark" }
+    ] },
+    { "note": "longhouse, front right", "at": [0.18, -0.29], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.07, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.08, 0.14], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.076], "size": [0.03, 0.045, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.07, -0.08], "size": [0.008, 0.1, 0.008], "cell": "trim" }
+    ] },
+    { "note": "cobbled crossroads and well", "at": [0.03, -0.08], "parts": [
+      { "shape": "box", "size": [0.12, 0.003, 0.9], "cell": "stone", "yaw": 30 },
+      { "shape": "box", "size": [0.7, 0.003, 0.12], "cell": "stone", "yaw": 30 },
+      { "shape": "cylinder", "pos": [0.03, 0, 0.02], "radius": 0.045, "height": 0.025, "sides": 10, "cell": "stone", "top": "dark" }
+    ] },
+    { "note": "stream and footbridge", "at": [-0.2, -0.3], "yaw": 49, "parts": [
+      { "shape": "box", "size": [0.94, 0.004, 0.08], "cell": "accent" },
+      { "shape": "box", "pos": [0.12, 0.02, 0], "size": [0.05, 0.015, 0.16], "cell": "stone" },
+      { "shape": "box", "pos": [0.12, 0, 0], "size": [0.04, 0.02, 0.03], "cell": "stone" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.15, 0, 1.05], "kind": "pine", "height": 0.2, "radius": 0.045 },
+      { "shape": "tree", "pos": [-0.09, 0, 1.12], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.21, 0, 0.8], "kind": "pine", "height": 0.18, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [-0.41, 0, 0.4], "kind": "pine", "height": 0.16, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [-0.44, 0, 0.0], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 5 },
+      { "shape": "tree", "pos": [-0.39, 0, -0.2], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 6 },
+      { "shape": "tree", "pos": [0.4, 0, 0.5], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 7 },
+      { "shape": "tree", "pos": [0.45, 0, 0.2], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 8 },
+      { "shape": "tree", "pos": [0.45, 0, -0.1], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 9 },
+      { "shape": "tree", "pos": [0.13, 0, 0.09], "kind": "pine", "height": 0.09, "radius": 0.03, "seed": 10 },
+      { "shape": "tree", "pos": [0.34, 0, -0.5], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 11 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.85], "kind": "pine", "height": 0.07, "radius": 0.025, "seed": 12 }
+    ] },
+    { "note": "timber post and boulders", "at": [0.37, -0.2], "parts": [
+      { "shape": "box", "size": [0.012, 0.13, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.12, 0], "size": [0.06, 0.01, 0.01], "cell": "wood" },
+      { "shape": "rock", "pos": [-0.07, 0, -0.2], "radius": 0.04, "height": 0.03, "cell": "stone" },
+      { "shape": "rock", "pos": [0.05, 0, 0.3], "radius": 0.03, "height": 0.025, "cell": "stone", "seed": 2 }
+    ] }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "name": "Sarn Lothduin",
+  "description": "A marsh village on stilts: round and gabled plank huts under shaggy conical and ridged thatch stand on timber legs over dark winding channels, linked by rickety plank footbridges between reedy islets, with a clump of small pines and mossy stones at the back left.",
+  "style": "Northman",
+  "colors":   ["#6E5236", "#8E7448", "#5E4630", "#6E6A58", "#A08A50", "#1E1A14", "#3E6460", "", "#5A6430"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Thatch", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "marsh channels", "at": [0.0, -0.05], "parts": [
+      { "shape": "box", "pos": [0.0, 0, 0.0], "size": [0.9, 0.004, 0.7], "cell": "accent" },
+      { "shape": "box", "pos": [-0.25, 0, 0.6], "size": [0.4, 0.004, 0.3], "cell": "accent", "yaw": -20 },
+      { "shape": "box", "pos": [0.0, 0, -0.55], "size": [0.5, 0.004, 0.35], "cell": "accent" },
+      { "shape": "dome", "pos": [-0.25, 0, -0.1], "radius": 0.15, "height": 0.015, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.2, 0, 0.2], "radius": 0.12, "height": 0.015, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.32, 0, -0.55], "radius": 0.1, "height": 0.012, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.05, 0, -0.75], "radius": 0.14, "height": 0.012, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "round hut, back left", "at": [-0.04, 0.12], "parts": [
+      { "shape": "box", "pos": [-0.04, 0, -0.03], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.03], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.0, 0, 0.04], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.06, 0], "radius": 0.06, "height": 0.07, "sides": 10, "cell": "wall" },
+      { "shape": "box", "pos": [0.01, 0.08, -0.058], "size": [0.015, 0.02, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.08, "height": 0.1, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "tall gabled hut, back", "at": [0.17, 0.13], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [-0.04, 0, -0.04], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.04], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.1, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.11, 0.14, 0.11], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "bridge between the back huts", "at": [0.06, 0.13], "yaw": 0, "parts": [
+      { "shape": "box", "pos": [0, 0.055, 0], "size": [0.12, 0.008, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.0, 0], "size": [0.008, 0.055, 0.008], "cell": "wood" }
+    ] },
+    { "note": "hut behind", "at": [0.17, 0.33], "parts": [
+      { "shape": "box", "size": [0.07, 0.05, 0.07], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.05, 0], "radius": 0.06, "height": 0.08, "cell": "roof" }
+    ] },
+    { "note": "round hut with landing, right", "at": [0.3, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.04, 0, -0.03], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.03], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.06, 0], "radius": 0.055, "height": 0.08, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.14, 0], "radius": 0.075, "height": 0.09, "sides": 10, "cell": "roof" },
+      { "shape": "box", "pos": [-0.1, 0.04, -0.06], "size": [0.08, 0.008, 0.06], "cell": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [-0.1, 0, -0.06], "size": [0.008, 0.04, 0.008], "cell": "wood" }
+    ] },
+    { "note": "cluster of gabled huts, left", "at": [-0.22, -0.1], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [-0.05, 0, 0.06], "size": [0.01, 0.06, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.05, 0.05, 0.08], "size": [0.09, 0.07, 0.08], "cell": "wall" },
+      { "shape": "gable", "pos": [-0.05, 0.12, 0.08], "size": [0.1, 0.07, 0.09], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.02, 0, -0.02], "size": [0.01, 0.06, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.01, 0.05, -0.02], "size": [0.09, 0.07, 0.08], "cell": "wall" },
+      { "shape": "gable", "pos": [-0.01, 0.12, -0.02], "size": [0.1, 0.07, 0.09], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.1, 0, -0.04], "size": [0.01, 0.06, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.1, 0, -0.1], "size": [0.01, 0.06, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.1, 0.05, -0.04], "size": [0.12, 0.08, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0.1, 0.13, -0.04], "size": [0.13, 0.08, 0.11], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "gabled hut, front", "at": [0.02, -0.38], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [-0.04, 0, -0.04], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.04], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, 0.04], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.1, 0.07, 0.09], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.11, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "round hut, front right", "at": [0.3, -0.25], "parts": [
+      { "shape": "box", "pos": [-0.04, 0, -0.03], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.03], "size": [0.01, 0.07, 0.01], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.06, 0], "radius": 0.06, "height": 0.08, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.14, 0], "radius": 0.08, "height": 0.1, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "front footbridge", "at": [0.16, -0.25], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.2, 0.008, 0.035], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.08, -0.016], "size": [0.2, 0.006, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.008, 0.06, 0.008], "cell": "wood" }
+    ] },
+    { "note": "pines and stones, back left", "at": [-0.24, 0.3], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.0], "kind": "pine", "height": 0.11, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.05, 0, 0.1], "kind": "pine", "height": 0.12, "radius": 0.025, "seed": 2 },
+      { "shape": "tree", "pos": [-0.07, 0, 0.12], "kind": "pine", "height": 0.09, "radius": 0.022, "seed": 3 },
+      { "shape": "tree", "pos": [0.1, 0, -0.05], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 4 },
+      { "shape": "rock", "pos": [0.25, 0, 0.12], "radius": 0.06, "height": 0.03, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.15, 0, -0.1], "radius": 0.05, "height": 0.025, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.05, 0, -0.65], "radius": 0.06, "height": 0.03, "cell": "stone", "seed": 6 }
+    ] }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "name": "Neburcha",
+  "description": "A desert waystation of ruins in the sand: a crumbling whitewashed shrine with a copper dome, brick-arched doors, front steps and a red cloth awning, a ruined stone archway, a stone-ringed well, a sun-banner pole, a hanging lantern, a carved totem post, a fire brazier and tall saguaro cacti.",
+  "style": "Southron",
+  "colors":   ["#C8B898", "#A0603C", "#6A4A30", "#B09A78", "#8A5A3A", "#2A2018", "#9A4A30", "", "#6A7A4A"],
+  "surfaces": ["Plaster", "Plain", "Planks", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "domed shrine", "at": [0.18, 0.36], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.18, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.081], "size": [0.04, 0.09, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.101, 0.05, 0], "size": [0.004, 0.06, 0.03], "cell": "dark" },
+      { "shape": "box", "pos": [-0.04, 0, -0.11], "size": [0.07, 0.03, 0.06], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.02, 0.18, 0.01], "radius": 0.06, "height": 0.03, "sides": 12, "cell": "trim" },
+      { "shape": "dome", "pos": [-0.02, 0.21, 0.01], "radius": 0.06, "height": 0.07, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0.14, 0, 0.02], "size": [0.04, 0.16, 0.12], "cell": "stone" },
+      { "shape": "box", "pos": [-0.13, 0, 0.06], "size": [0.06, 0.07, 0.03], "cell": "stone" }
+    ] },
+    { "note": "red awning", "at": [0.36, 0.25], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.1, 0], "size": [0.1, 0.006, 0.08], "cell": "accent" },
+      { "shape": "box", "pos": [-0.05, 0, -0.04], "size": [0.006, 0.1, 0.006], "cell": "wood" },
+      { "shape": "box", "pos": [0.05, 0, -0.04], "size": [0.006, 0.1, 0.006], "cell": "wood" }
+    ] },
+    { "note": "carved totem post", "at": [-0.34, 0.3], "parts": [
+      { "shape": "box", "size": [0.015, 0.42, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.36, 0], "size": [0.1, 0.012, 0.012], "cell": "wood" },
+      { "shape": "cone", "pos": [0, 0.42, 0], "radius": 0.012, "height": 0.04, "sides": 4, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.04, 0.27, 0], "radius": 0.01, "height": 0.08, "sides": 6, "cell": "trim" },
+      { "shape": "cylinder", "pos": [0.04, 0.27, 0], "radius": 0.01, "height": 0.08, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "rubble blocks", "at": [-0.19, 0.4], "parts": [
+      { "shape": "box", "size": [0.06, 0.05, 0.05], "cell": "stone", "yaw": 20 },
+      { "shape": "box", "pos": [0.08, 0, -0.08], "size": [0.04, 0.035, 0.04], "cell": "stone", "yaw": -15 },
+      { "shape": "box", "pos": [0.2, 0, 0.15], "size": [0.12, 0.05, 0.03], "cell": "stone", "yaw": 30 }
+    ] },
+    { "note": "stone-ringed well", "at": [0.0, 0.05], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.04, "sides": 8, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [0.03, 0, -0.07], "size": [0.07, 0.05, 0.04], "cell": "stone", "yaw": 20 },
+      { "shape": "rock", "pos": [-0.09, 0, -0.03], "radius": 0.025, "height": 0.07, "cell": "stone", "seed": 1 },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.01, "height": 0.02, "sides": 6, "cell": "accent" }
+    ] },
+    { "note": "ruined arch", "at": [-0.12, -0.35], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.035, 0.2, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.035, 0.14, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [-0.02, 0.18, 0], "size": [0.1, 0.03, 0.04], "cell": "stone", "yaw": 15 },
+      { "shape": "box", "pos": [0.1, 0, -0.02], "size": [0.04, 0.03, 0.04], "cell": "stone" }
+    ] },
+    { "note": "sun banner pole", "at": [0.42, -0.12], "parts": [
+      { "shape": "flag", "height": 0.38, "radius": 0.06 },
+      { "shape": "box", "pos": [0, 0.22, -0.006], "size": [0.05, 0.12, 0.004], "cell": "accent" }
+    ] },
+    { "note": "hanging lantern", "at": [-0.44, -0.2], "parts": [
+      { "shape": "box", "size": [0.012, 0.26, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0.25, 0], "size": [0.07, 0.01, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0.12, 0], "size": [0.025, 0.035, 0.025], "cell": "dark" }
+    ] },
+    { "note": "fire brazier", "at": [0.34, -0.3], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.03, 0.08], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.03, 0], "radius": 0.025, "height": 0.025, "sides": 8, "cell": "trim", "top": "accent" }
+    ] },
+    { "note": "clay pot", "at": [-0.28, -0.35], "parts": [
+      { "shape": "cylinder", "radius": 0.02, "height": 0.035, "sides": 8, "taper": 0.7, "cell": "trim" }
+    ] },
+    { "note": "saguaro cacti", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.42, 0, 0.52], "radius": 0.022, "height": 0.2, "sides": 8, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [-0.46, 0.06, 0.52], "radius": 0.014, "height": 0.08, "sides": 6, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [-0.09, 0, 0.9], "radius": 0.018, "height": 0.12, "sides": 8, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [-0.21, 0, 0.21], "radius": 0.014, "height": 0.08, "sides": 8, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [0.22, 0, -0.48], "radius": 0.022, "height": 0.24, "sides": 8, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [0.26, 0.05, -0.48], "radius": 0.014, "height": 0.11, "sides": 6, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [-0.48, 0, -0.42], "radius": 0.018, "height": 0.12, "sides": 8, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [0.01, 0, -0.38], "radius": 0.012, "height": 0.05, "sides": 8, "cell": "foliage" }
+    ] }
+  ]
+}

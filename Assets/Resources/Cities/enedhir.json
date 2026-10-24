@@ -1,0 +1,74 @@
+{
+  "name": "Enedhir",
+  "description": "A small crossroads village squatting in old ruins: four half-timbered fieldstone cottages with sagging mossy-green thatch roofs sit one in each quarter of an X of dirt roads, among broken stone pillars, crumbling wall stubs and a little tower with a pyramid roof at the back, with crates, dark pines, autumn shrubs and a dead tree.",
+  "style": "Mannish",
+  "colors":   ["#C8BCA0", "#7C7A3C", "#5E4430", "#9A9484", "#8A7044", "#2A2218", "#B8743A", "", "#3E5228"],
+  "surfaces": ["HalfTimber", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "crossing dirt roads", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "size": [1.0, 0.004, 0.1], "cell": "trim", "yaw": -55 },
+      { "shape": "box", "size": [1.0, 0.004, 0.1], "cell": "trim", "yaw": 55 }
+    ] },
+    { "note": "cottage, back", "at": [-0.02, 0.29], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.2, 0.1, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.101, 0, 0], "size": [0.004, 0.06, 0.04], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.066], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.22, 0.1, 0.15], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "cottage, left", "at": [-0.3, 0.0], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.2, 0.1, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [0.101, 0, 0], "size": [0.004, 0.06, 0.04], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.22, 0.1, 0.15], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.1], "size": [0.05, 0.03, 0.04], "cell": "wood" }
+    ] },
+    { "note": "cottage, right", "at": [0.28, -0.04], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.2, 0.1, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.101, 0, 0], "size": [0.004, 0.06, 0.04], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.22, 0.1, 0.15], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.07, 0, -0.1], "size": [0.05, 0.03, 0.04], "cell": "wood" }
+    ] },
+    { "note": "cottage, front", "at": [-0.04, -0.36], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.18, 0.1, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [-0.091, 0, 0], "size": [0.004, 0.06, 0.04], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.2, 0.1, 0.14], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "little tower and ruined wall, back", "at": [0.04, 0.45], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.15, 0], "radius": 0.04, "height": 0.06, "cell": "trim" },
+      { "shape": "wall", "pos": [0.04, 0, 0], "to": [0.15, -0.2], "height": 0.09, "thickness": 0.03, "count": 2, "cell": "stone" }
+    ] },
+    { "note": "broken pillars, back", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.18, 0, 1.0], "radius": 0.035, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.18, 0, 0.95], "radius": 0.035, "height": 0.17, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.29, 0, 0.78], "radius": 0.035, "height": 0.17, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.13, 0, 0.33], "radius": 0.035, "height": 0.11, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.32, 0, 0.72], "radius": 0.035, "height": 0.16, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "wall", "pos": [0.32, 0, 0.72], "to": [0.42, 0.5], "height": 0.08, "thickness": 0.03, "cell": "stone" }
+    ] },
+    { "note": "ruined walls, front left", "at": [-0.4, -0.2], "parts": [
+      { "shape": "cylinder", "pos": [0.0, 0, 0.3], "radius": 0.025, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "wall", "pos": [0.0, 0, 0.3], "to": [0.12, -0.15], "height": 0.08, "thickness": 0.03, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.13, 0, -0.15], "radius": 0.03, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.16, 0, -0.25], "radius": 0.03, "height": 0.12, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "ruined walls and tower stump, front right", "at": [0.2, -0.3], "parts": [
+      { "shape": "cylinder", "pos": [0, 0, 0], "radius": 0.03, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.04, 0, -0.05], "to": [0.0, 0.0], "height": 0.07, "thickness": 0.03, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.12, 0, 0.22], "radius": 0.04, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "wall", "pos": [0.12, 0, 0.22], "to": [0.25, 0.55], "height": 0.1, "thickness": 0.03, "count": 2, "cell": "stone" }
+    ] },
+    { "note": "dark pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.23, 0, 0.74], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [0.19, 0, 0.4], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [-0.3, 0, -0.24], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.44, 0, 0.6], "kind": "pine", "height": 0.14, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.47, 0, -0.1], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 5 }
+    ] },
+    { "note": "dead tree and autumn shrubs", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.5], "kind": "broadleaf", "height": 0.14, "radius": 0.045, "cell": "wood", "seed": 6 },
+      { "shape": "tree", "pos": [-0.44, 0, 0.2], "kind": "broadleaf", "height": 0.05, "radius": 0.035, "cell": "accent", "seed": 7 },
+      { "shape": "tree", "pos": [0.15, 0, -0.45], "kind": "broadleaf", "height": 0.06, "radius": 0.035, "cell": "accent", "seed": 8 },
+      { "shape": "tree", "pos": [0.46, 0, 0.18], "kind": "broadleaf", "height": 0.05, "radius": 0.035, "cell": "accent", "seed": 9 }
+    ] }
+  ]
+}

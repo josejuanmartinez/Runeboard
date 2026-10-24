@@ -1,0 +1,84 @@
+{
+  "name": "Fornost Erain",
+  "description": "The fallen royal city of Arnor: a great pillared hall with a pediment and terracotta roof, half collapsed into a slope of rubble, standing and toppled columns, a ring of broken curtain walls with square towers hung with blue banners, and a gate with a stone bridge over a stream at the front right.",
+  "style": "Mannish",
+  "colors":   ["#C8B690", "#8A5236", "#6A5038", "#A89A78", "#D8CCA8", "#3A342A", "#2E3E66", "", "#5A6A2E"],
+  "surfaces": ["Ashlar", "Tiles", "", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "ruined pillared hall, back left", "at": [-0.08, 0.17], "yaw": -45, "parts": [
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.3, 0.13, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [-0.16, 0, 0], "size": [0.1, 0.02, 0.16], "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.18, 0.02, -0.055], "radius": 0.013, "height": 0.12, "sides": 8, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.18, 0.02, 0], "radius": 0.013, "height": 0.12, "sides": 8, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.18, 0.02, 0.055], "radius": 0.013, "height": 0.12, "sides": 8, "cell": "trim" },
+      { "shape": "box", "pos": [-0.11, 0.14, 0], "size": [0.17, 0.02, 0.16], "cell": "trim" },
+      { "shape": "gable", "pos": [-0.07, 0.16, 0], "size": [0.24, 0.07, 0.16], "cell": "roof", "top": "trim" },
+      { "shape": "gable", "pos": [0.14, 0.13, 0], "size": [0.1, 0.05, 0.12], "cell": "roof", "top": "wall", "yaw": 12 },
+      { "shape": "rock", "pos": [0.1, 0, -0.12], "radius": 0.1, "height": 0.07, "cell": "stone" },
+      { "shape": "flag", "pos": [0.05, 0.13, -0.07], "height": 0.08, "radius": 0.004 }
+    ] },
+    { "note": "rubble slope", "at": [0.12, 0.0], "parts": [
+      { "shape": "rock", "radius": 0.13, "height": 0.05, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.12, 0, -0.1], "radius": 0.08, "height": 0.035, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "standing column, right", "at": [0.24, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.016, "height": 0.16, "sides": 8, "cell": "trim" }
+    ] },
+    { "note": "standing column and fallen drum, centre", "at": [0.04, -0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.016, "height": 0.14, "sides": 8, "cell": "trim" },
+      { "shape": "box", "pos": [0.03, 0, -0.12], "size": [0.03, 0.025, 0.2], "cell": "trim", "yaw": -25 }
+    ] },
+    { "note": "fallen column, left of centre", "at": [-0.04, 0.03], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.15, 0.025, 0.028], "cell": "trim" }
+    ] },
+    { "note": "curtain walls", "at": [0, 0], "parts": [
+      { "shape": "wall", "pos": [-0.3, 0, 1.05], "to": [-0.47, 0.1], "height": 0.07, "thickness": 0.03, "count": 6 },
+      { "shape": "wall", "pos": [-0.47, 0, 0.1], "to": [-0.32, -0.52], "height": 0.06, "thickness": 0.03, "count": 5 },
+      { "shape": "wall", "pos": [-0.32, 0, -0.52], "to": [-0.2, -0.68], "height": 0.05, "thickness": 0.03 },
+      { "shape": "wall", "pos": [-0.12, 0, -0.71], "to": [0.15, -0.5], "height": 0.06, "thickness": 0.03, "count": 5 },
+      { "shape": "wall", "pos": [0.33, 0, -0.29], "to": [0.45, 0.1], "height": 0.07, "thickness": 0.03, "count": 5 },
+      { "shape": "wall", "pos": [0.45, 0, 0.1], "to": [0.4, 0.45], "height": 0.05, "thickness": 0.03 }
+    ] },
+    { "note": "tower, back left", "at": [-0.3, 0.44], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.16, "sides": 4, "twist": 0.125, "cell": "wall" }
+    ] },
+    { "note": "tower, left", "at": [-0.46, 0.04], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.13, 0], "radius": 0.038, "count": 6, "cell": "wall" }
+    ] },
+    { "note": "tower, front left", "at": [-0.32, -0.22], "parts": [
+      { "shape": "cylinder", "radius": 0.032, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "flag", "pos": [0.05, 0, -0.02], "height": 0.12, "radius": 0.004 }
+    ] },
+    { "note": "tower, front", "at": [-0.14, -0.3], "parts": [
+      { "shape": "cylinder", "radius": 0.032, "height": 0.09, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.09, 0], "radius": 0.035, "count": 6, "cell": "wall" }
+    ] },
+    { "note": "gate towers", "at": [0.24, -0.17], "yaw": 30, "parts": [
+      { "shape": "cylinder", "pos": [-0.09, 0, 0], "radius": 0.035, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [-0.09, 0.13, 0], "radius": 0.038, "count": 6, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.09, 0, 0], "radius": 0.035, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0.09, 0.13, 0], "radius": 0.038, "count": 6, "cell": "wall" },
+      { "shape": "flag", "pos": [-0.09, 0.13, 0], "height": 0.08, "radius": 0.004 }
+    ] },
+    { "note": "tower, right", "at": [0.45, 0.04], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0, 0.15, 0], "radius": 0.038, "count": 6, "cell": "wall" }
+    ] },
+    { "note": "broken tower, back right", "at": [0.4, 0.25], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.11, "sides": 4, "twist": 0.125, "cell": "wall" }
+    ] },
+    { "note": "stream, front right", "at": [0.33, -0.3], "yaw": -62, "parts": [
+      { "shape": "box", "size": [0.9, 0.004, 0.07], "cell": "accent" }
+    ] },
+    { "note": "stone bridge from the gate", "at": [0.33, -0.25], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.015, 0], "size": [0.14, 0.015, 0.05], "cell": "stone" },
+      { "shape": "box", "size": [0.03, 0.015, 0.04], "cell": "stone" }
+    ] },
+    { "note": "cypresses", "at": [-0.32, 0.15], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.13, "radius": 0.02 },
+      { "shape": "tree", "pos": [0.3, 0, -0.95], "kind": "poplar", "height": 0.1, "radius": 0.02, "seed": 1 },
+      { "shape": "tree", "pos": [0.5, 0, -1.0], "kind": "pine", "height": 0.09, "radius": 0.02, "seed": 2 }
+    ] }
+  ]
+}

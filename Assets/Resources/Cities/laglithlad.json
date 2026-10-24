@@ -1,0 +1,77 @@
+{
+  "name": "Lag-lithlad",
+  "description": "A black spiked fortress in an ash waste: a tall octagonal tower with a pointed spire, fire-lit slit windows and a ring of stone spikes rises from a round walled court guarded by four flaming torch pillars and a spiked front gate with stairs, while rivers of glowing lava wind away across the cracked ground past standing stones, boulders and dead trees.",
+  "style": "Orcish",
+  "colors":   ["#4A4642", "#3A3634", "#3E3024", "#5A5450", "#6A625A", "#1E1A18", "#D8641E", "", "#4A3E2E"],
+  "surfaces": ["Fieldstone", "Slate", "", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "round walled court", "at": [0.0, 0.2], "parts": [
+      { "shape": "cylinder", "radius": 0.22, "height": 0.08, "sides": 14, "cell": "stone", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.08, 0], "radius": 0.22, "count": 14 },
+      { "shape": "cone", "pos": [-0.2, 0.08, -0.09], "radius": 0.02, "height": 0.1, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [0.2, 0.08, -0.09], "radius": 0.02, "height": 0.1, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.12, 0.08, 0.18], "radius": 0.02, "height": 0.1, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [0.12, 0.08, 0.18], "radius": 0.02, "height": 0.1, "sides": 4, "cell": "stone" }
+    ] },
+    { "note": "central spired tower", "at": [0.0, 0.24], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.3, "sides": 8, "taper": 0.8, "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.18, -0.07], "size": [0.015, 0.06, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.02, 0.18, -0.07], "size": [0.015, 0.06, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.04, -0.075], "size": [0.015, 0.2, 0.004], "cell": "accent" },
+      { "shape": "battlements", "pos": [0, 0.3, 0], "radius": 0.065, "count": 8 },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.05, "height": 0.16, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [-0.06, 0.28, -0.03], "radius": 0.012, "height": 0.08, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [0.06, 0.28, -0.03], "radius": 0.012, "height": 0.08, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.28, 0.06], "radius": 0.012, "height": 0.08, "sides": 4, "cell": "stone" },
+      { "shape": "flag", "pos": [0, 0.46, 0], "height": 0.08, "radius": 0.005 }
+    ] },
+    { "note": "front gate", "at": [0.0, -0.01], "parts": [
+      { "shape": "box", "size": [0.1, 0.13, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.04, 0.08, 0.004], "cell": "accent" },
+      { "shape": "cone", "pos": [-0.05, 0.13, 0], "radius": 0.016, "height": 0.08, "sides": 4, "cell": "stone" },
+      { "shape": "cone", "pos": [0.05, 0.13, 0], "radius": 0.016, "height": 0.08, "sides": 4, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.06], "size": [0.06, 0.015, 0.06], "cell": "stone" }
+    ] },
+    { "note": "torch pillars", "at": [0.0, 0.2], "parts": [
+      { "shape": "cylinder", "pos": [-0.2, 0, 0.3], "radius": 0.02, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.2, 0.2, 0.3], "radius": 0.012, "height": 0.035, "sides": 5, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.21, 0, 0.32], "radius": 0.02, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.21, 0.2, 0.32], "radius": 0.012, "height": 0.035, "sides": 5, "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.17, 0, -0.3], "radius": 0.02, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.17, 0.18, -0.3], "radius": 0.012, "height": 0.035, "sides": 5, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.15, 0, -0.27], "radius": 0.02, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.15, 0.18, -0.27], "radius": 0.012, "height": 0.035, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "lava to the front", "at": [-0.03, -0.26], "yaw": 80, "parts": [
+      { "shape": "box", "size": [0.95, 0.004, 0.05], "cell": "accent" }
+    ] },
+    { "note": "lava to the front left", "at": [-0.2, -0.15], "yaw": -56, "parts": [
+      { "shape": "box", "size": [0.7, 0.004, 0.05], "cell": "accent" }
+    ] },
+    { "note": "lava to the front right", "at": [0.2, -0.14], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.64, 0.004, 0.05], "cell": "accent" }
+    ] },
+    { "note": "lava to the back left", "at": [-0.3, 0.17], "yaw": 67, "parts": [
+      { "shape": "box", "size": [0.5, 0.004, 0.045], "cell": "accent" }
+    ] },
+    { "note": "lava to the back right", "at": [0.3, 0.2], "yaw": -67, "parts": [
+      { "shape": "box", "size": [0.5, 0.004, 0.045], "cell": "accent" }
+    ] },
+    { "note": "standing stones and boulders", "at": [0.0, -0.1], "parts": [
+      { "shape": "cylinder", "pos": [0.12, 0, -0.36], "radius": 0.035, "height": 0.17, "sides": 4, "taper": 0.4, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.38, 0, 0.07], "radius": 0.04, "height": 0.17, "sides": 4, "taper": 0.4, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.28, 0, 0.1], "radius": 0.03, "height": 0.1, "sides": 4, "taper": 0.4, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.34, 0, -0.07], "radius": 0.03, "height": 0.13, "sides": 4, "taper": 0.5, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.13, 0, -0.45], "radius": 0.05, "height": 0.07, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.43, 0, 0.6], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.25, 0, 0.15], "radius": 0.035, "height": 0.05, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.4, 0, -0.35], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [-0.15, 0, -0.75], "radius": 0.05, "height": 0.04, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "dead trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.41, 0, -0.18], "kind": "broadleaf", "height": 0.15, "radius": 0.035, "cell": "wood", "seed": 1 },
+      { "shape": "tree", "pos": [0.21, 0, -0.65], "kind": "broadleaf", "height": 0.13, "radius": 0.03, "cell": "wood", "seed": 2 },
+      { "shape": "tree", "pos": [0.41, 0, 0.3], "kind": "broadleaf", "height": 0.14, "radius": 0.035, "cell": "wood", "seed": 3 }
+    ] }
+  ]
+}

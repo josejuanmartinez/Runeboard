@@ -1,0 +1,77 @@
+{
+  "name": "Ovatharac",
+  "description": "A sun-baked ruin field: a tall carved sandstone obelisk on a stepped plinth stands at the back, a broken ring of arches with leaning standing stones on the left, a shattered hollow tower inside a low ring wall on the right, and roofless square stone huts scattered across the dusty ground with a couple of dead trees.",
+  "style": "Southron",
+  "colors":   ["#B8AC8C", "#8C8068", "#4A3C2C", "#A89C80", "#8C8068", "#3A3428", "#6E6450", "", "#5C6234"],
+  "surfaces": ["Ashlar",  "Ashlar",  "",        "Fieldstone", "Plain", "", "", "", ""],
+  "buildings": [
+    { "note": "great obelisk", "at": [0.0, 0.38], "parts": [
+      { "shape": "box", "size": [0.17, 0.02, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.13, 0.025, 0.08], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.045, 0], "radius": 0.05, "height": 0.4, "sides": 4, "twist": 0.125, "taper": 0.7, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.1, -0.036], "size": [0.025, 0.28, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.445, 0], "radius": 0.036, "height": 0.07, "cell": "wall" }
+    ] },
+    { "note": "ring of ruined arches", "at": [-0.26, 0.12], "parts": [
+      { "shape": "wall", "pos": [0.1, 0, -0.14], "to": [-0.05, -0.16], "height": 0.07, "thickness": 0.03, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.05, 0, -0.16], "to": [-0.17, -0.05], "height": 0.075, "thickness": 0.03, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.17, 0, -0.05], "to": [-0.15, 0.1], "height": 0.065, "thickness": 0.03, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.15, 0, 0.1], "to": [-0.03, 0.17], "height": 0.05, "thickness": 0.03, "cell": "stone" },
+      { "shape": "box", "pos": [0.02, 0, -0.155], "size": [0.03, 0.04, 0.004], "cell": "dark", "yaw": 8 },
+      { "shape": "box", "pos": [-0.11, 0, -0.13], "size": [0.03, 0.04, 0.004], "cell": "dark", "yaw": -40 },
+      { "shape": "box", "pos": [-0.06, 0, 0.1], "size": [0.025, 0.08, 0.02], "cell": "wall", "yaw": 10 },
+      { "shape": "box", "pos": [0.0, 0, 0.12], "size": [0.025, 0.09, 0.02], "cell": "wall", "yaw": -5 },
+      { "shape": "box", "pos": [0.06, 0, 0.1], "size": [0.025, 0.085, 0.02], "cell": "wall", "yaw": 20 },
+      { "shape": "box", "pos": [0.12, 0, 0.05], "size": [0.025, 0.07, 0.02], "cell": "wall", "yaw": 35 },
+      { "shape": "box", "pos": [0.16, 0, -0.02], "size": [0.04, 0.07, 0.03], "cell": "stone", "yaw": 15 }
+    ] },
+    { "note": "broken hollow tower in its ring wall", "at": [0.17, -0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.27, "sides": 7, "taper": 0.45, "cell": "stone" },
+      { "shape": "box", "pos": [0.0, 0.08, -0.06], "size": [0.03, 0.08, 0.004], "cell": "dark" },
+      { "shape": "rock", "pos": [0.04, 0.24, 0.0], "radius": 0.025, "height": 0.05, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.13, 0, 0.04], "to": [-0.1, -0.1], "height": 0.03, "thickness": 0.025, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.1, 0, -0.1], "to": [0.06, -0.14], "height": 0.03, "thickness": 0.025, "cell": "stone" },
+      { "shape": "wall", "pos": [0.06, 0, -0.14], "to": [0.16, -0.08], "height": 0.03, "thickness": 0.025, "cell": "stone" }
+    ] },
+    { "note": "roofless huts, back left", "at": [-0.33, 0.4], "parts": [
+      { "shape": "box", "pos": [0.06, 0, 0.04], "size": [0.1, 0.07, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0.066, 0.04], "size": [0.07, 0.006, 0.05], "cell": "dark" },
+      { "shape": "box", "pos": [-0.08, 0, 0.05], "size": [0.08, 0.05, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [-0.08, 0.046, 0.05], "size": [0.05, 0.006, 0.04], "cell": "dark" },
+      { "shape": "box", "pos": [0.0, 0, -0.1], "size": [0.08, 0.04, 0.06], "cell": "wall" }
+    ] },
+    { "note": "roofless huts, back right", "at": [0.26, 0.45], "parts": [
+      { "shape": "box", "pos": [0.0, 0, 0.12], "size": [0.1, 0.07, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.066, 0.12], "size": [0.07, 0.006, 0.05], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0, -0.15], "size": [0.1, 0.08, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0.076, -0.15], "size": [0.07, 0.006, 0.05], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0, -0.184], "size": [0.03, 0.045, 0.004], "cell": "dark" }
+    ] },
+    { "note": "ruins right", "at": [0.41, 0.05], "parts": [
+      { "shape": "box", "pos": [0.02, 0, 0.18], "size": [0.08, 0.06, 0.07], "cell": "stone", "yaw": 10 },
+      { "shape": "box", "pos": [-0.03, 0, -0.06], "size": [0.1, 0.11, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0.106, -0.06], "size": [0.07, 0.006, 0.05], "cell": "dark" },
+      { "shape": "box", "pos": [-0.03, 0, -0.101], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "huts, front left", "at": [-0.25, -0.24], "parts": [
+      { "shape": "box", "pos": [-0.05, 0, 0.1], "size": [0.08, 0.07, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [-0.05, 0.066, 0.1], "size": [0.05, 0.006, 0.04], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0, 0.12], "size": [0.07, 0.07, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [-0.07, 0, -0.03], "size": [0.08, 0.06, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0.03, 0, -0.03], "size": [0.08, 0.06, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.17], "size": [0.07, 0.04, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0.16, 0, -0.27], "size": [0.07, 0.04, 0.05], "cell": "stone" }
+    ] },
+    { "note": "twin ruins, front right", "at": [0.31, -0.25], "parts": [
+      { "shape": "box", "pos": [-0.04, 0, -0.02], "size": [0.09, 0.06, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0.056, -0.02], "size": [0.06, 0.006, 0.05], "cell": "dark" },
+      { "shape": "box", "pos": [0.05, 0, 0.03], "size": [0.09, 0.08, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0.076, 0.03], "size": [0.06, 0.006, 0.05], "cell": "dark" }
+    ] },
+    { "note": "dead trees", "at": [-0.2, -0.3], "parts": [
+      { "shape": "tree", "pos": [-0.24, 0, 0.3], "kind": "broadleaf", "height": 0.13, "radius": 0.03, "cell": "wood" },
+      { "shape": "tree", "pos": [0.18, 0, -0.18], "kind": "broadleaf", "height": 0.08, "radius": 0.025, "cell": "wood", "seed": 2 },
+      { "shape": "tree", "pos": [0.55, 0, 0.45], "kind": "broadleaf", "height": 0.06, "radius": 0.03, "cell": "foliage", "seed": 3 }
+    ] }
+  ]
+}

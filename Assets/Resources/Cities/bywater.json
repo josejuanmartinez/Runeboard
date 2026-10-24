@@ -1,0 +1,56 @@
+{
+  "name": "Bywater",
+  "description": "The Bywater pool: a broad grey-green pond fills most of the hex, with reeds and lily pads, a wooden jetty and a few weathered stone pillars standing in the water; behind it a single turf-roofed hobbit-hole with a round green door, brick chimney and stake fence, and a clump of dark firs on the back left.",
+  "style": "Hobbit",
+  "colors":   ["#8A6A4A", "#8A8A3A", "#6A4A2E", "#8C7A60", "#9A7A50", "#2E2A20", "#7E9C98", "", "#4C5A2C"],
+  "surfaces": ["Plaster", "Turf",    "Planks", "Fieldstone", "Planks", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "pond", "at": [-0.02, -0.14], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.82, 0.004, 0.62], "cell": "accent" },
+      { "shape": "box", "pos": [0.05, 0, -0.45], "size": [0.62, 0.004, 0.36], "cell": "accent" },
+      { "shape": "box", "pos": [0.12, 0, 0.38], "size": [0.3, 0.004, 0.2], "cell": "accent" }
+    ] },
+    { "note": "hobbit-hole under its mound", "at": [0.22, 0.33], "parts": [
+      { "shape": "dome", "radius": 0.15, "height": 0.13, "sides": 12, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0, 0, 0], "radius": 0.13, "height": 0.05, "sides": 12, "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.128], "size": [0.05, 0.05, 0.006], "cell": "foliage" },
+      { "shape": "box", "pos": [-0.02, 0.05, -0.128], "size": [0.03, 0.012, 0.006], "cell": "foliage" },
+      { "shape": "box", "pos": [-0.1, 0.02, -0.08], "size": [0.02, 0.02, 0.004], "cell": "dark", "yaw": 40 },
+      { "shape": "box", "pos": [0.06, 0.11, 0.03], "size": [0.025, 0.07, 0.025], "cell": "wall" },
+      { "shape": "wall", "pos": [-0.16, 0, -0.12], "to": [-0.05, -0.2], "height": 0.035, "thickness": 0.008, "cell": "wood" },
+      { "shape": "wall", "pos": [0.02, 0, -0.2], "to": [0.17, -0.1], "height": 0.035, "thickness": 0.008, "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0, -0.22], "size": [0.04, 0.012, 0.08], "cell": "stone", "yaw": -30 }
+    ] },
+    { "note": "jetty", "at": [0.08, 0.1], "yaw": -35, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.13, 0.01, 0.06], "cell": "wood" },
+      { "shape": "box", "pos": [-0.06, 0, -0.025], "size": [0.008, 0.035, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0, -0.025], "size": [0.008, 0.035, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, -0.025], "size": [0.008, 0.035, 0.008], "cell": "wood" }
+    ] },
+    { "note": "fir clump, back left", "at": [-0.28, 0.33], "parts": [
+      { "shape": "tree", "pos": [-0.08, 0, 0.05], "kind": "pine", "height": 0.22, "radius": 0.045 },
+      { "shape": "tree", "pos": [0.0, 0, 0.1], "kind": "pine", "height": 0.26, "radius": 0.05, "seed": 1 },
+      { "shape": "tree", "pos": [0.06, 0, 0.04], "kind": "pine", "height": 0.24, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.05], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.05, 0, -0.08], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 4 },
+      { "shape": "rock", "pos": [-0.17, 0, -0.05], "radius": 0.025, "height": 0.025, "cell": "stone" }
+    ] },
+    { "note": "fir right of the smial", "at": [0.42, 0.25], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.18, "radius": 0.045, "seed": 5 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.2], "kind": "broadleaf", "height": 0.05, "radius": 0.035, "cell": "trim", "seed": 6 }
+    ] },
+    { "note": "stone pillars in the water", "at": [0.3, -0.2], "parts": [
+      { "shape": "cylinder", "pos": [0, 0, 0], "radius": 0.03, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "trim" },
+      { "shape": "cylinder", "pos": [0.09, 0, -0.06], "radius": 0.028, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "trim" },
+      { "shape": "cylinder", "pos": [0.16, 0, -0.02], "radius": 0.018, "height": 0.06, "sides": 4, "twist": 0.125, "cell": "trim" },
+      { "shape": "rock", "pos": [-0.18, 0, -0.15], "radius": 0.03, "height": 0.035, "cell": "trim", "seed": 7 },
+      { "shape": "rock", "pos": [-0.08, 0, -0.25], "radius": 0.03, "height": 0.03, "cell": "trim", "seed": 8 }
+    ] },
+    { "note": "reeds and shore rocks", "at": [-0.3, 0.06], "parts": [
+      { "shape": "rock", "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 9 },
+      { "shape": "tree", "pos": [0.1, 0, 0.2], "kind": "poplar", "height": 0.07, "radius": 0.015, "seed": 10 },
+      { "shape": "tree", "pos": [0.05, 0, -0.6], "kind": "poplar", "height": 0.07, "radius": 0.018, "seed": 11 },
+      { "shape": "tree", "pos": [0.95, 0, -0.1], "kind": "poplar", "height": 0.09, "radius": 0.018, "seed": 12 }
+    ] }
+  ]
+}

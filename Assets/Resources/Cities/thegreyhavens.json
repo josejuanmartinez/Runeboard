@@ -1,0 +1,111 @@
+{
+  "name": "The Grey Havens",
+  "description": "The elven harbour of Mithlond: pale stone halls with tall pointed Gothic windows under verdigris-green slate roofs and small domed belfries, a curved arcaded colonnade around a star-paved court, a round lighthouse tower on the right cliff, an arched causeway to a small tower in the bay, cypresses on the terraces and grey-sailed ships on the water.",
+  "style": "Elven",
+  "colors":   ["#CFC6AE", "#6E8C80", "#6A4E34", "#A49C88", "#B8A880", "#2E3634", "#3E5A6A", "", "#3E5A30"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Ashlar", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "bay water, front", "at": [0.05, -0.4], "parts": [
+      { "shape": "box", "size": [0.9, 0.004, 0.22], "cell": "accent" }
+    ] },
+    { "note": "bay water, right", "at": [0.42, -0.15], "parts": [
+      { "shape": "box", "size": [0.18, 0.004, 0.6], "cell": "accent" }
+    ] },
+    { "note": "central great hall with tall pointed roof", "at": [0.1, 0.24], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.22, 0.14, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.05, 0.03, -0.066], "size": [0.05, 0.09, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.14, 0], "size": [0.22, 0.12, 0.13], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "pyramid", "pos": [0.06, 0.14, 0.02], "radius": 0.08, "height": 0.16, "cell": "roof" },
+      { "shape": "cone", "pos": [0.06, 0.3, 0.02], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "domed belfry tower, back centre", "at": [0.03, 0.34], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.3, "sides": 8, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [0, 0.22, -0.046], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "dome", "pos": [0, 0.3, 0], "radius": 0.055, "height": 0.06, "sides": 8, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.36, 0], "height": 0.06, "radius": 0.02 }
+    ] },
+    { "note": "left hall with Gothic gable window", "at": [-0.24, 0.17], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.2, 0.13, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.02, -0.061], "size": [0.05, 0.09, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.2, 0.09, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cylinder", "pos": [-0.02, 0, 0.11], "radius": 0.035, "height": 0.22, "sides": 8, "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.02, 0.22, 0.11], "radius": 0.04, "height": 0.07, "cell": "roof" }
+    ] },
+    { "note": "left curved terrace wall", "at": [-0.25, 0.04], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.22, 0.05, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.01, -0.021], "size": [0.18, 0.03, 0.004], "cell": "dark" }
+    ] },
+    { "note": "right wing with small gables", "at": [0.25, 0.18], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.16, 0.09, 0.08], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.16, 0.06, 0.08], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.06], "size": [0.05, 0.06, 0.04], "cell": "wall" },
+      { "shape": "gable", "pos": [0.05, 0.06, -0.06], "size": [0.05, 0.04, 0.04], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "curved colonnade round the star court", "at": [0.04, 0.06], "parts": [
+      { "shape": "cylinder", "pos": [0, 0, 0], "radius": 0.11, "height": 0.006, "sides": 12, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.007, 0], "size": [0.06, 0.003, 0.03], "cell": "accent", "yaw": 45 },
+      { "shape": "wall", "pos": [0.132, 0, -0.048], "to": [0.132, 0.048], "height": 0.07, "thickness": 0.02, "cell": "wall" },
+      { "shape": "wall", "pos": [0.132, 0, 0.048], "to": [0.07, 0.121], "height": 0.07, "thickness": 0.02, "cell": "wall" },
+      { "shape": "wall", "pos": [0.07, 0, 0.121], "to": [-0.024, 0.138], "height": 0.07, "thickness": 0.02, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.024, 0, 0.138], "to": [-0.107, 0.09], "height": 0.07, "thickness": 0.02, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.107, 0, 0.09], "to": [-0.14, 0.0], "height": 0.07, "thickness": 0.02, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.14, 0, 0.0], "to": [-0.107, -0.09], "height": 0.07, "thickness": 0.02, "cell": "wall" }
+    ] },
+    { "note": "round lighthouse tower on the right cliff", "at": [0.41, 0.0], "parts": [
+      { "shape": "rock", "radius": 0.09, "height": 0.08, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.055, "height": 0.24, "sides": 10, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [0, 0.22, -0.05], "size": [0.02, 0.035, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.28, 0], "radius": 0.06, "height": 0.08, "sides": 10, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.36, 0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "arched causeway into the bay", "at": [0.1, -0.22], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.28, 0.015, 0.045], "cell": "wall" },
+      { "shape": "box", "pos": [-0.1, 0, 0], "size": [0.022, 0.05, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0, 0], "size": [0.022, 0.05, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.022, 0.05, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.065, -0.02], "size": [0.28, 0.01, 0.005], "cell": "wall" }
+    ] },
+    { "note": "small tower at the end of the causeway", "at": [0.23, -0.33], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.13, "sides": 8, "cell": "wall", "top": "stone" },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.04, "height": 0.06, "sides": 8, "cell": "roof" }
+    ] },
+    { "note": "domed pavilion on the lower left terrace", "at": [-0.35, -0.2], "parts": [
+      { "shape": "rock", "radius": 0.1, "height": 0.05, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.05, "height": 0.06, "sides": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.045, -0.046], "size": [0.04, 0.045, 0.004], "cell": "dark" },
+      { "shape": "dome", "pos": [0, 0.1, 0], "radius": 0.055, "height": 0.035, "sides": 8, "cell": "roof" }
+    ] },
+    { "note": "great ship at the quay", "at": [0.33, -0.17], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.14, 0.03, 0.045], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.008, 0.2, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0.02, 0], "size": [0.02, 0.04, 0.02], "cell": "wood" }
+    ] },
+    { "note": "three small sailing boats", "at": [0.0, -0.38], "parts": [
+      { "shape": "box", "pos": [-0.11, 0, 0.0], "size": [0.06, 0.015, 0.025], "cell": "wood" },
+      { "shape": "box", "pos": [-0.11, 0.015, 0.0], "size": [0.035, 0.05, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [0.0, 0, 0.06], "size": [0.06, 0.015, 0.025], "cell": "wood" },
+      { "shape": "box", "pos": [0.0, 0.015, 0.06], "size": [0.035, 0.05, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [0.1, 0, -0.04], "size": [0.06, 0.015, 0.025], "cell": "wood" },
+      { "shape": "box", "pos": [0.1, 0.015, -0.04], "size": [0.035, 0.05, 0.004], "cell": "trim" }
+    ] },
+    { "note": "cliffs under the terraces", "at": [-0.15, -0.22], "parts": [
+      { "shape": "rock", "radius": 0.08, "height": 0.05, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.12, 0, 0.1], "radius": 0.06, "height": 0.04, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "cypresses on the terraces", "at": [-0.12, 0.06], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.12], "kind": "poplar", "height": 0.18, "radius": 0.025 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.05], "kind": "poplar", "height": 0.15, "radius": 0.022, "seed": 1 },
+      { "shape": "tree", "pos": [-0.12, 0, -0.1], "kind": "poplar", "height": 0.14, "radius": 0.022, "seed": 2 },
+      { "shape": "tree", "pos": [0.04, 0, -0.2], "kind": "poplar", "height": 0.13, "radius": 0.02, "seed": 3 }
+    ] },
+    { "note": "cypresses right", "at": [0.24, -0.02], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.15, "radius": 0.022, "seed": 4 },
+      { "shape": "tree", "pos": [0.08, 0, 0.0], "kind": "broadleaf", "height": 0.09, "radius": 0.04, "seed": 5 },
+      { "shape": "tree", "pos": [0.1, 0, 0.3], "kind": "poplar", "height": 0.13, "radius": 0.02, "seed": 6 }
+    ] },
+    { "note": "broadleaf trees, left", "at": [-0.42, 0.12], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 7 },
+      { "shape": "tree", "pos": [0.04, 0, -0.18], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 8 }
+    ] }
+  ]
+}

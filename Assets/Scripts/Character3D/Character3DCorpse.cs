@@ -18,6 +18,7 @@ public class Character3DCorpse : MonoBehaviour
         model = GetComponent<Character3DModel>();
         startAlpha = model.Tint.a;
         model.RimColor = Color.clear; // no alignment outline on the dead
+        model.Focus = 0f;             // nor a selection glow on its base
         model.Animation.PlayOnce(deathClip, 0.1f, 1f, hold: true);
     }
 

@@ -1,0 +1,73 @@
+{
+  "name": "Derndingle",
+  "description": "A colossal ancient tree with a gnarled root-buttressed trunk rises from a dense green forest, its crown hung with elven pavilions under curved blue-grey spire roofs, joined by winding stairs; more pavilions stand on stilts at its feet, a forked dirt path leads out to a footbridge and a stream with a small waterfall runs along the front left.",
+  "style": "Elven",
+  "colors":   ["#B8A47C", "#6A7A86", "#7A6244", "#8C8A78", "#C2AA74", "#2E3226", "#6E9A8C", "", "#6E7A30"],
+  "surfaces": ["Planks", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", "Leaves"],
+  "buildings": [
+    { "note": "great tree trunk and roots", "at": [-0.01, -0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.11, "height": 0.08, "sides": 9, "taper": 0.7, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.08, 0.02], "radius": 0.08, "height": 0.34, "sides": 9, "taper": 0.6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.07, 0.06, 0.05], "radius": 0.04, "height": 0.25, "sides": 7, "taper": 0.5, "cell": "wood" },
+      { "shape": "dome", "pos": [0, 0.33, 0.04], "radius": 0.24, "height": 0.2, "sides": 12, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.02, 0.48, 0.04], "radius": 0.16, "height": 0.16, "sides": 12, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.0, 0.6, 0.06], "radius": 0.09, "height": 0.1, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "crown pavilions", "at": [-0.01, -0.06], "parts": [
+      { "shape": "cylinder", "pos": [0.0, 0.64, 0.06], "radius": 0.03, "height": 0.05, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.69, 0.06], "radius": 0.04, "height": 0.12, "sides": 6, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.1, 0.52, -0.02], "radius": 0.03, "height": 0.05, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0.1, 0.57, -0.02], "radius": 0.042, "height": 0.1, "sides": 6, "cell": "roof" },
+      { "shape": "cylinder", "pos": [-0.15, 0.46, 0.0], "radius": 0.03, "height": 0.05, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.15, 0.51, 0.0], "radius": 0.04, "height": 0.1, "sides": 6, "cell": "roof" },
+      { "shape": "flag", "pos": [0.0, 0.81, 0.06], "height": 0.08, "radius": 0.004 }
+    ] },
+    { "note": "pavilion on stilts, left", "at": [-0.3, -0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.012, "height": 0.08, "sides": 5, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.08, 0], "radius": 0.035, "height": 0.05, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.048, "height": 0.1, "sides": 6, "cell": "roof" }
+    ] },
+    { "note": "pavilions on stilts, right", "at": [0.16, -0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.012, "height": 0.14, "sides": 5, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.14, 0], "radius": 0.035, "height": 0.05, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.19, 0], "radius": 0.048, "height": 0.1, "sides": 6, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.04, 0.2, 0.25], "radius": 0.025, "height": 0.05, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0.04, 0.25, 0.25], "radius": 0.035, "height": 0.08, "sides": 6, "cell": "roof" }
+    ] },
+    { "note": "gate pavilion and footbridge, front", "at": [0.11, -0.25], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.06, "sides": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.06, 0], "radius": 0.055, "height": 0.09, "sides": 6, "cell": "roof" },
+      { "shape": "box", "pos": [0.09, 0.0, -0.08], "size": [0.12, 0.012, 0.04], "cell": "wood", "yaw": 35 }
+    ] },
+    { "note": "forked dirt path", "at": [-0.01, -0.26], "yaw": 80, "parts": [
+      { "shape": "box", "size": [0.3, 0.004, 0.05], "cell": "trim" }
+    ] },
+    { "note": "stream and waterfall, front left", "at": [-0.3, -0.27], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.48, 0.004, 0.07], "cell": "accent" },
+      { "shape": "rock", "pos": [-0.15, 0, 0.08], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.1, 0, 0.08], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "forest behind", "at": [0.0, 0.32], "parts": [
+      { "shape": "tree", "pos": [-0.38, 0, 0.0], "kind": "pine", "height": 0.3, "radius": 0.06, "seed": 1 },
+      { "shape": "tree", "pos": [-0.22, 0, 0.1], "kind": "broadleaf", "height": 0.3, "radius": 0.1, "seed": 2 },
+      { "shape": "tree", "pos": [0.22, 0, 0.1], "kind": "broadleaf", "height": 0.32, "radius": 0.1, "seed": 3 },
+      { "shape": "tree", "pos": [0.38, 0, -0.05], "kind": "pine", "height": 0.32, "radius": 0.06, "seed": 4 }
+    ] },
+    { "note": "forest left", "at": [-0.38, 0.06], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.26, "radius": 0.1, "seed": 5 },
+      { "shape": "tree", "pos": [0.08, 0, -0.35], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 6 },
+      { "shape": "tree", "pos": [-0.06, 0, 0.3], "kind": "pine", "height": 0.25, "radius": 0.05, "seed": 7 }
+    ] },
+    { "note": "forest right", "at": [0.38, 0.0], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.3, "radius": 0.1, "seed": 8 },
+      { "shape": "tree", "pos": [0.05, 0, 0.3], "kind": "pine", "height": 0.3, "radius": 0.055, "seed": 9 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.35], "kind": "broadleaf", "height": 0.22, "radius": 0.09, "seed": 10 },
+      { "shape": "tree", "pos": [0.08, 0, -0.55], "kind": "pine", "height": 0.2, "radius": 0.05, "seed": 11 }
+    ] },
+    { "note": "trees front", "at": [-0.05, -0.4], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.08, "seed": 12 },
+      { "shape": "tree", "pos": [-0.22, 0, 0.35], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 13 },
+      { "shape": "tree", "pos": [0.33, 0, 0.1], "kind": "pine", "height": 0.18, "radius": 0.045, "seed": 14 }
+    ] }
+  ]
+}

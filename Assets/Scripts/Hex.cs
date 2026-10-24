@@ -732,8 +732,9 @@ public class Hex : MonoBehaviour
         bool hasArmiesOrCharacters = armyCounts[0] > 0 || armyCounts[1] > 0 || armyCounts[2] > 0
             || characterCounts[0] > 0 || characterCounts[1] > 0 || characterCounts[2] > 0;
 
-        bool hasContent = shouldShowPc || hasArmiesOrCharacters;
-            
+        List<HexNameplates.Marker> markers = CollectHudMarkers();
+        bool hasContent = shouldShowPc || hasArmiesOrCharacters || markers.Count > 0;
+
         if (!hasContent) { HideHexLabel(); return; }
         if (!EnsurePcText()) return;
 
@@ -755,7 +756,7 @@ public class Hex : MonoBehaviour
             AppendGroup("neutralCharacter", characterCounts[(int)AlignmentEnum.neutral]);
         }
 
-        HexNameplates.PlateData plate = new() { hasSettlement = shouldShowPc && pc != null, unitsRichText = units.ToString() };
+        HexNameplates.PlateData plate = new() { hasSettlement = shouldShowPc && pc != null, unitsRichText = units.ToString(), markers = markers };
         if (plate.hasSettlement)
         {
             plate.name = DisplayNames.Format(pc.pcName);
@@ -776,6 +777,52 @@ public class Hex : MonoBehaviour
         SetActiveFast(pcName.gameObject, false);
         pcTextBandFit?.Fit();
         HexNameplates.Show(this, plate, pcName.spriteAsset, pcName.font);
+    }
+
+    // ── Unified hex HUD ─────────────────────────────────────────────────────────────────────
+    // An artifact, a pending event and an underground way show as medallions on the hex's info
+    // strip (HexNameplates), in the banner's style, with their tooltips. Their old world sprites
+    // and 3D-text tooltips stay in place for the game logic but are no longer drawn.
+
+    private static readonly System.Text.RegularExpressions.Regex MarkTags = new("</?mark[^>]*>");
+
+    private List<HexNameplates.Marker> CollectHudMarkers()
+    {
+        var markers = new List<HexNameplates.Marker>(3);
+        AddHudMarker(markers, artifact, artifactHover, null);
+        AddHudMarker(markers, encounter, encounterHover, null);
+        AddHudMarker(markers, underground, null, "Underground: a hidden way runs beneath this land.");
+        return markers;
+    }
+
+    private static void AddHudMarker(List<HexNameplates.Marker> markers, GameObject marker, HoverNoUI hover, string fallbackTooltip)
+    {
+        if (marker == null || !marker.activeInHierarchy) return;
+        SpriteRenderer icon = marker.GetComponent<SpriteRenderer>();
+        if (icon == null || icon.sprite == null) icon = marker.GetComponentInChildren<SpriteRenderer>(true);
+        string Text()
+        {
+            string text = hover != null && hover.textWidget != null ? MarkTags.Replace(hover.textWidget.text ?? "", "") : null;
+            return string.IsNullOrWhiteSpace(text) ? fallbackTooltip : text;
+        }
+        markers.Add(new HexNameplates.Marker
+        {
+            icon = icon != null ? icon.sprite : null,
+            tooltip = Text(),
+            tooltipSource = Text,
+        });
+    }
+
+    // Keeps a marker's world object (other code checks it) but stops drawing it and its 3D tooltip.
+    private static void HideWorldMarker(GameObject marker, HoverNoUI hover)
+    {
+        if (marker != null)
+            foreach (Renderer r in marker.GetComponentsInChildren<Renderer>(true)) r.forceRenderingOff = true;
+        if (hover != null)
+        {
+            hover.HideTooltip();
+            hover.enabled = false;
+        }
     }
 
     public void RedrawCharacters(bool refreshHoverText = true)
@@ -2060,6 +2107,10 @@ public class Hex : MonoBehaviour
     private void PlayRevealPulse()
     {
         if (terrainTexture == null) return;
+        // Under the shroud look the terrain is already drawn beneath the fog, and the fog overlay
+        // fades away as the reveal: blanking the painting here only exposed the black hex
+        // background for a second, half-transparent "reveal" after the first.
+        if (BoardLook.ShroudActive) return;
 
         if (revealPulseCoroutine != null)
         {
@@ -2317,7 +2368,11 @@ public class Hex : MonoBehaviour
     public void UpdateUndergroundMarker()
     {
         if (underground == null) return;
-        SetActiveFast(underground, IsUnderground() && IsHexRevealed());
+        bool show = IsUnderground() && IsHexRevealed();
+        if (underground.activeSelf == show) return;
+        SetActiveFast(underground, show);
+        HideWorldMarker(underground, null);
+        RefreshHexLabel();
     }
 
     public int GetTerrainCost(Character character)
@@ -2517,6 +2572,14 @@ public class Hex : MonoBehaviour
         movementCostManager.ShowMovementLeft(Math.Max(0, movementLeft), character, BuildTerrainFeatureSpriteTags());
     }
 
+    // A step of a route the unit cannot take this turn (HexPathRenderer): a red X, no cost.
+    public void ShowMovementBlocked()
+    {
+        if (!EnsureMovementCost()) return;
+        SetActiveFast(movement, true);
+        movementCostManager.ShowBlocked();
+    }
+
     // Inline TMP sprite tags for this hex's terrain (plus the chasm marker), drawn alongside the
     // movement cost. Reuses the environment_terrain_features spritesheet wired on the movement text.
     private string BuildTerrainFeatureSpriteTags()
@@ -2588,8 +2651,11 @@ public class Hex : MonoBehaviour
     public void UpdateArtifactVisibility()
     {
         bool shouldShow = artifactRevealed && hiddenObjects != null && hiddenObjects.Count > 0 && IsHexSeen();
+        bool changed = artifact != null && artifact.activeSelf != shouldShow;
         SetActiveFast(artifact, shouldShow);
         if (artifactHover) SetActiveFast(artifactHover.gameObject, shouldShow);
+        HideWorldMarker(artifact, artifactHover);
+        if (changed) RefreshHexLabel();
     }
 
     public bool HasPendingEncounters => _pendingEncounters.Count > 0;
@@ -2625,6 +2691,9 @@ public class Hex : MonoBehaviour
         SetActiveFast(encounter, shouldShow);
         if (encounterHover) SetActiveFast(encounterHover.gameObject, shouldShow);
         if (artifactBg) SetActiveFast(artifactBg, shouldShow);
+        HideWorldMarker(encounter, encounterHover);
+        HideWorldMarker(artifactBg, null);
+        if (shouldShow != wasShowing) RefreshHexLabel();
         if (shouldShow && !wasShowing)
             DeckManager.NotifyEncounterPlaced(this);
     }
@@ -3117,39 +3186,12 @@ public class Hex : MonoBehaviour
         if (board == null) board = Board.Instance;
         controller?.SetOutlineFocus(isCharacterHovered, board != null && board.selectedCharacter != null
             && board.selectedCharacter.hex == this);
-        Color color;
-
-        if (isCharacterHovered)
-        {
-            color = controller != null ? controller.hoveredColor : Color.white;
-            controller?.SetOutlineAlpha(color.a);
-            controller?.SetOutlineSize(outlineSize);
-            ApplyCharacterAndStackColor(color);
-            return;
-        }
-
-        bool someoneElseHovered = hoveredCharacterCount > 0;
-
-        if (board == null) board = Board.Instance;
-        Character selected = board != null ? board.selectedCharacter : null;
-
-        Color idleColor = controller != null
-            ? (someoneElseHovered ? controller.otherHoveredColor : controller.unhoveredColor)
-            : Color.white;
-
-        if (selected != null && selected.hex == this && characterSpriteRenderer.sprite != null)
-        {
-            // Keep the existing sprite pulse; the controller adds a smooth focus halo.
-            float pulseSpeed = controller != null ? controller.selectionPulseSpeed : 1f;
-            float colorT = Mathf.PingPong(Time.time * pulseSpeed, 1f);
-            color = Color.Lerp(idleColor, Color.white, colorT);
-            controller?.SetOutlineSize(outlineSize);
-        }
-        else
-        {
-            color = idleColor;
-            controller?.SetOutlineSize(outlineSize);
-        }
+        // Every unit stays fully visible whatever is hovered or selected: hovering one used to fade
+        // all the others to a ghostly grey, and tinted the hovered one. Focus now shows on the
+        // miniature itself (Character3DView: its base lights up, the figure brightens a touch,
+        // the outline firms up), so the sprite colour stays plain white.
+        Color color = Color.white;
+        controller?.SetOutlineSize(outlineSize);
         controller?.SetOutlineAlpha(color.a);
         ApplyCharacterAndStackColor(color);
     }

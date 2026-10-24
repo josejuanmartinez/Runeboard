@@ -1,0 +1,50 @@
+{
+  "name": "Amon Hen",
+  "description": "The Hill of Sight: a lone square watchtower of mossy grey ashlar on a flared, buttressed base with an arched doorway and a broken crenellated crown, amid autumn oaks, carved standing stones, a hooded statue on a plinth and a small pool.",
+  "style": "Mannish",
+  "colors":   ["#9C9682", "#6E6A5C", "#5A4632", "#8A8676", "#A07C30", "#221E18", "#3E5E6E", "", "#6A6A2E"],
+  "surfaces": ["Ashlar", "", "", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "watchtower of the Seat of Seeing", "at": [-0.02, -0.12], "yaw": 10, "parts": [
+      { "shape": "box", "size": [0.3, 0.06, 0.22], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.24, 0.07, 0.18], "cell": "stone" },
+      { "shape": "box", "pos": [-0.05, 0, -0.112], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.13, 0], "size": [0.17, 0.26, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0.27, -0.066], "size": [0.025, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.04, 0.27, -0.066], "size": [0.025, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.39, 0], "size": [0.2, 0.03, 0.15], "cell": "wall" },
+      { "shape": "box", "pos": [-0.08, 0.42, -0.06], "size": [0.035, 0.04, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.08, 0.42, -0.06], "size": [0.035, 0.035, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.07, 0.42, 0.06], "size": [0.035, 0.08, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0.42, 0.07], "size": [0.05, 0.11, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.08, 0.42, 0.03], "size": [0.03, 0.06, 0.04], "cell": "wall" }
+    ] },
+    { "note": "hooded statue on plinth", "at": [0.21, 0.17], "parts": [
+      { "shape": "box", "size": [0.07, 0.025, 0.06], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.025, 0], "radius": 0.022, "height": 0.09, "sides": 8, "taper": 0.7, "cell": "wall" },
+      { "shape": "dome", "pos": [0, 0.115, 0], "radius": 0.016, "height": 0.02, "sides": 8, "cell": "wall" }
+    ] },
+    { "note": "carved standing stones", "at": [-0.23, -0.27], "parts": [
+      { "shape": "box", "size": [0.06, 0.12, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.14, 0, -0.18], "size": [0.05, 0.08, 0.03], "cell": "stone" }
+    ] },
+    { "note": "pool", "at": [0.3, -0.27], "parts": [
+      { "shape": "cylinder", "radius": 0.13, "height": 0.004, "sides": 10, "cell": "accent" },
+      { "shape": "rock", "pos": [-0.12, 0, -0.05], "radius": 0.04, "height": 0.04, "cell": "stone" },
+      { "shape": "rock", "pos": [0.12, 0, 0.08], "radius": 0.035, "height": 0.035, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "boulders", "at": [-0.3, -0.13], "parts": [
+      { "shape": "rock", "radius": 0.04, "height": 0.04, "cell": "stone" },
+      { "shape": "rock", "pos": [0.05, 0, 0.6], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.68, 0, 0.3], "radius": 0.035, "height": 0.035, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "autumn oaks", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.35, 0, 0.5], "kind": "broadleaf", "height": 0.22, "radius": 0.09, "cell": "trim" },
+      { "shape": "tree", "pos": [-0.43, 0, -0.15], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "cell": "trim", "seed": 2 },
+      { "shape": "tree", "pos": [0.31, 0, 0.62], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "cell": "trim", "seed": 3 },
+      { "shape": "tree", "pos": [0.41, 0, 0.2], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "cell": "trim", "seed": 4 },
+      { "shape": "tree", "pos": [0.38, 0, -0.38], "kind": "broadleaf", "height": 0.16, "radius": 0.07, "seed": 5 },
+      { "shape": "tree", "pos": [0.04, 0, -1.0], "kind": "broadleaf", "height": 0.14, "radius": 0.07, "seed": 6 }
+    ] }
+  ]
+}

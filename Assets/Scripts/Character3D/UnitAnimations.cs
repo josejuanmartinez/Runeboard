@@ -50,9 +50,20 @@ public static class UnitAnimations
 
     // ── Gameplay events ─────────────────────────────────────────────────────────────────────
 
+    // Only the human player's own units act out their actions, level-ups and arrivals: on other
+    // nations' units these poses (casts, guard and rally stances…) fired all through the AI turns
+    // and read as idle figures doing combat moves out of nowhere. Everyone still walks, fights in
+    // battles, takes wounds and dies.
+    public static bool IsHumans(Character character)
+    {
+        Game game = Game.Instance;
+        return character != null && game != null && game.player != null && character.GetOwner() == game.player;
+    }
+
     public static void ActionExecuted(Character actor, CharacterAction action)
     {
         if (actor == null || action == null || action is Pass || action is EventAction) return;
+        if (!IsHumans(actor)) return;
         string type = action.GetType().Name;
         Move move;
         if (action is Spell || action is MageAction) move = BigSpells.Contains(type) ? Move.BigCast : Move.Cast;
@@ -64,9 +75,13 @@ public static class UnitAnimations
         else if (action is CommanderAction) move = Move.Rally;
         else move = Move.Gesture;
         Play(actor, move);
+        if (move is Move.BigCast or Move.Strike) CloseUps.Request(actor.hex);
     }
 
-    public static void ActionFailed(Character actor) => Play(actor, Move.Flinch, delay: 0.9f);
+    public static void ActionFailed(Character actor)
+    {
+        if (IsHumans(actor)) Play(actor, Move.Flinch, delay: 0.9f);
+    }
 
     // Army battle: the attacker turns on the defender and swings; the defender takes it a beat
     // later — a block if they hold, a heavy reaction if not.
@@ -75,6 +90,7 @@ public static class UnitAnimations
         Vector3? attackerPos = Position(attacker), defenderPos = Position(defender);
         if (attacker != null) Play(attacker, Move.Attack, facing: defenderPos);
         if (defender != null) Play(defender, defenderHeld ? Move.Block : Move.HitLarge, facing: attackerPos, delay: 0.45f);
+        CloseUps.Request(defender?.hex ?? attacker?.hex, attacker?.hex);
     }
 
     public static void Wounded(Character character, int damage)
@@ -89,16 +105,21 @@ public static class UnitAnimations
     public static void Killed(Character character)
     {
         if (character == null || character.killed) return;
+        CloseUps.Request(character.hex);
         Character3DView view = Character3DView.For(character);
         if (view != null && view.PlayDeathAndDetach(Pick(Move.Death))) return;
         SpriteFallback(character, Move.Death);
     }
 
-    public static void LeveledUp(Character character) => Play(character, Move.Cheer, delay: 0.6f);
+    public static void LeveledUp(Character character)
+    {
+        if (IsHumans(character)) Play(character, Move.Cheer, delay: 0.6f);
+    }
 
     public static void Recruited(Character character)
     {
         if (Game.Instance == null || !Game.Instance.started) return; // setup / save loading
+        if (!IsHumans(character)) return;
         Play(character, Move.Arrive);
     }
 

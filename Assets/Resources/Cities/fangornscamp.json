@@ -1,0 +1,60 @@
+{
+  "name": "Fangorns Camp",
+  "description": "An Ent-moot clearing: a wide round hollow of swirled bare earth in the middle of a mossy forest floor, ringed by tall snapped-off grey tree trunks with bare twisting branches, some with knot-hole faces, among scattered pale boulders and little orange and violet toadstools.",
+  "style": "Northman",
+  "colors":   ["#8A7A62", "#5A5A3A", "#7A6A56", "#A8A496", "#B09A70", "#2A261E", "#C8743A", "", "#4A5230"],
+  "surfaces": ["Plain", "Turf", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "swirled earth hollow", "at": [0.0, -0.01], "parts": [
+      { "shape": "cylinder", "pos": [0, 0, 0.1], "radius": 0.3, "height": 0.004, "sides": 20, "cell": "trim" },
+      { "shape": "cylinder", "pos": [0, 0, -0.1], "radius": 0.3, "height": 0.004, "sides": 20, "cell": "trim" },
+      { "shape": "cylinder", "pos": [0, 0, 0], "radius": 0.18, "height": 0.006, "sides": 16, "cell": "wall" }
+    ] },
+    { "note": "snapped trunks, back", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.09, 0, 0.71], "radius": 0.032, "height": 0.28, "sides": 7, "cell": "wood" },
+      { "shape": "tree", "pos": [-0.09, 0, 0.72], "kind": "broadleaf", "height": 0.25, "radius": 0.05, "cell": "dark", "seed": 1 },
+      { "shape": "cylinder", "pos": [-0.22, 0, 0.69], "radius": 0.018, "height": 0.19, "sides": 6, "taper": 0.6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.28, 0, 0.5], "radius": 0.025, "height": 0.29, "sides": 7, "taper": 0.7, "cell": "wood" },
+      { "shape": "tree", "pos": [0.28, 0, 0.51], "kind": "broadleaf", "height": 0.27, "radius": 0.05, "cell": "dark", "seed": 2 }
+    ] },
+    { "note": "snapped trunks, left", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.4, 0, 0.1], "radius": 0.028, "height": 0.29, "sides": 7, "cell": "wood" },
+      { "shape": "tree", "pos": [-0.4, 0, 0.11], "kind": "broadleaf", "height": 0.22, "radius": 0.045, "cell": "dark", "seed": 3 },
+      { "shape": "cylinder", "pos": [-0.46, 0, 0.21], "radius": 0.016, "height": 0.2, "sides": 6, "taper": 0.6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [-0.43, 0, -0.62], "radius": 0.03, "height": 0.23, "sides": 7, "cell": "wood" },
+      { "shape": "tree", "pos": [-0.43, 0, -0.61], "kind": "broadleaf", "height": 0.2, "radius": 0.05, "cell": "dark", "seed": 4 }
+    ] },
+    { "note": "snapped trunks, right", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [0.36, 0, 0.38], "radius": 0.015, "height": 0.17, "sides": 6, "taper": 0.6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.42, 0, 0.4], "radius": 0.018, "height": 0.22, "sides": 6, "taper": 0.6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.46, 0, 0.17], "radius": 0.02, "height": 0.25, "sides": 6, "taper": 0.6, "cell": "wood" },
+      { "shape": "tree", "pos": [0.46, 0, 0.18], "kind": "broadleaf", "height": 0.22, "radius": 0.04, "cell": "dark", "seed": 5 },
+      { "shape": "cylinder", "pos": [0.44, 0, -0.64], "radius": 0.03, "height": 0.22, "sides": 7, "cell": "wood" },
+      { "shape": "tree", "pos": [0.44, 0, -0.63], "kind": "broadleaf", "height": 0.2, "radius": 0.045, "cell": "dark", "seed": 6 }
+    ] },
+    { "note": "snapped trunks, front", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [0.0, 0, -1.2], "radius": 0.032, "height": 0.29, "sides": 7, "cell": "wood" },
+      { "shape": "tree", "pos": [0.0, 0, -1.19], "kind": "broadleaf", "height": 0.25, "radius": 0.05, "cell": "dark", "seed": 7 },
+      { "shape": "cylinder", "pos": [0.29, 0, -0.81], "radius": 0.016, "height": 0.19, "sides": 6, "taper": 0.6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.23, 0, -0.93], "radius": 0.014, "height": 0.13, "sides": 6, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.36, 0, -0.75], "radius": 0.014, "height": 0.08, "sides": 5, "taper": 0.4, "cell": "wood" }
+    ] },
+    { "note": "pale boulders", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.34, 0, 0.31], "radius": 0.045, "height": 0.05, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.29, 0, 0.27], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.04, 0, 0.88], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.23, 0, 0.64], "radius": 0.045, "height": 0.1, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.16, 0, 0.55], "radius": 0.02, "height": 0.02, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.36, 0, 0.24], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.34, 0, -0.33], "radius": 0.035, "height": 0.035, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [-0.21, 0, -0.62], "radius": 0.035, "height": 0.035, "cell": "stone", "seed": 8 }
+    ] },
+    { "note": "toadstools", "at": [0.0, 0.0], "parts": [
+      { "shape": "dome", "pos": [-0.27, 0, -0.75], "radius": 0.012, "height": 0.01, "sides": 6, "cell": "accent" },
+      { "shape": "dome", "pos": [-0.15, 0, -0.85], "radius": 0.012, "height": 0.01, "sides": 6, "cell": "accent" },
+      { "shape": "dome", "pos": [-0.33, 0, -0.5], "radius": 0.012, "height": 0.01, "sides": 6, "cell": "accent" },
+      { "shape": "dome", "pos": [0.12, 0, 0.6], "radius": 0.01, "height": 0.01, "sides": 6, "cell": "accent" },
+      { "shape": "dome", "pos": [0.0, 0, 0.75], "radius": 0.01, "height": 0.01, "sides": 6, "cell": "accent" }
+    ] }
+  ]
+}

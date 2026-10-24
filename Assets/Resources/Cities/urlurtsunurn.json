@@ -1,0 +1,76 @@
+{
+  "name": "Urlurtsu Nurn",
+  "description": "A crumbling whitewashed stone tower on a grassy hill in Nurn, its broken top crowned by a skeleton of charred timber beams, with a ramshackle wooden gallery and a battlemented lower tower clinging to its side, a stone stair climbing to it between grey boulders, fallen logs, dirt tracks and a few dark pines.",
+  "style": "Orcish",
+  "colors":   ["#B4AE9C", "#6A4A30", "#6A4A30", "#8E8A7C", "#A8925A", "#1E1C18", "#7A2E22", "", "#4A5A28"],
+  "surfaces": ["Fieldstone", "Planks", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "ruined main tower", "at": [-0.05, 0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.42, "sides": 4, "taper": 0.85, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [-0.03, 0.3, -0.07], "size": [0.025, 0.035, 0.004], "cell": "dark", "yaw": -45 },
+      { "shape": "box", "pos": [-0.03, 0.18, -0.07], "size": [0.025, 0.035, 0.004], "cell": "dark", "yaw": -45 },
+      { "shape": "box", "pos": [-0.04, 0.42, 0.0], "size": [0.008, 0.16, 0.008], "cell": "wood", "yaw": 15 },
+      { "shape": "box", "pos": [0.04, 0.42, 0.02], "size": [0.008, 0.13, 0.008], "cell": "wood", "yaw": -20 },
+      { "shape": "box", "pos": [0.0, 0.48, 0.0], "size": [0.12, 0.01, 0.01], "cell": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [0.0, 0.42, 0.0], "size": [0.13, 0.015, 0.13], "cell": "wood" },
+      { "shape": "flag", "pos": [-0.04, 0.58, 0.0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "timber gallery on the tower side", "at": [0.06, 0.18], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.24, 0], "size": [0.1, 0.07, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.31, 0], "size": [0.1, 0.05, 0.07], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.008, 0.24, 0.008], "cell": "wood" }
+    ] },
+    { "note": "battlemented lower tower, right", "at": [0.15, 0.0], "parts": [
+      { "shape": "cylinder", "radius": 0.07, "height": 0.28, "sides": 4, "twist": 0.125, "taper": 0.9, "cell": "wall", "top": "stone" },
+      { "shape": "battlements", "pos": [0, 0.28, 0], "radius": 0.06, "count": 6, "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.06], "size": [0.04, 0.12, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.06, 0, -0.05], "size": [0.008, 0.16, 0.008], "cell": "wood", "yaw": 20 }
+    ] },
+    { "note": "stone stair", "at": [-0.09, -0.12], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.06], "size": [0.08, 0.09, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.08, 0.06, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.02], "size": [0.08, 0.03, 0.04], "cell": "stone" }
+    ] },
+    { "note": "fallen timbers", "at": [-0.2, 0.15], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.14, 0.015, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0.01, 0.015, 0.02], "size": [0.12, 0.015, 0.015], "cell": "wood", "yaw": 10 }
+    ] },
+    { "note": "rubble at the tower foot", "at": [-0.15, 0.06], "parts": [
+      { "shape": "rock", "radius": 0.05, "height": 0.05, "cell": "stone" }
+    ] },
+    { "note": "path from the steps", "at": [-0.12, -0.327], "yaw": 96, "parts": [ { "shape": "box", "size": [0.4, 0.005, 0.05], "cell": "trim" } ] },
+    { "note": "track, right 1", "at": [0.298, 0.235], "yaw": 95, "parts": [ { "shape": "box", "size": [0.467, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "track, right 2", "at": [0.305, 0.065], "yaw": 82, "parts": [ { "shape": "box", "size": [0.407, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "track, right 3", "at": [0.265, -0.092], "yaw": 109, "parts": [ { "shape": "box", "size": [0.426, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "track, right 4", "at": [0.161, -0.222], "yaw": 107, "parts": [ { "shape": "box", "size": [0.291, 0.005, 0.06], "cell": "trim" } ] },
+    { "note": "boulders by the stair", "at": [-0.27, -0.14], "parts": [
+      { "shape": "rock", "radius": 0.07, "height": 0.08, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.06, 0, -0.18], "radius": 0.07, "height": 0.07, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.3, 0, 0.05], "radius": 0.05, "height": 0.08, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "boulder, right", "at": [0.36, 0.05], "parts": [
+      { "shape": "rock", "radius": 0.05, "height": 0.06, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "boulders, back", "at": [-0.35, 0.38], "parts": [
+      { "shape": "rock", "pos": [-0.08, 0, -0.06], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.1, 0, 0.1], "radius": 0.05, "height": 0.04, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.63, 0, 0.12], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 7 }
+    ] },
+    { "note": "boulder, front", "at": [0.0, -0.4], "parts": [
+      { "shape": "rock", "radius": 0.035, "height": 0.03, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.32, 0, 0.25], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 9 }
+    ] },
+    { "note": "pines, left", "at": [-0.43, 0.1], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.22, "radius": 0.04 },
+      { "shape": "tree", "pos": [0.0, 0, 0.3], "kind": "pine", "height": 0.16, "radius": 0.03, "seed": 1 }
+    ] },
+    { "note": "pines, back", "at": [-0.26, 0.45], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.14, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.04, 0, 0.03], "kind": "pine", "height": 0.12, "radius": 0.025, "seed": 3 }
+    ] },
+    { "note": "shrubs, right", "at": [0.4, -0.12], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.08, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [-0.18, 0, -0.25], "kind": "broadleaf", "height": 0.05, "radius": 0.04, "seed": 5 }
+    ] }
+  ]
+}

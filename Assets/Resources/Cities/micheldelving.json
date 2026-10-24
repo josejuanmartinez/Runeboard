@@ -1,0 +1,78 @@
+{
+  "name": "Michel Delving",
+  "description": "A hobbit township of grassy smials dug into green mounds, each with a round red or green door, round windows and a stone chimney, set along a winding cobbled lane around a little roofed stone well, with a thatched cottage with a round door at the back, rail fences and leafy trees.",
+  "style": "Hobbit",
+  "colors":   ["#B8A47C", "#5E7A34", "#5A4028", "#8E8878", "#A08A50", "#2A2418", "#8E3A2A", "", "#4E6A2E"],
+  "surfaces": ["Fieldstone", "Turf", "Planks", "Fieldstone", "Thatch", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "smial at the back left", "at": [-0.2, 0.22], "yaw": -20, "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.05], "radius": 0.17, "height": 0.1, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, -0.08], "size": [0.2, 0.06, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.096], "size": [0.035, 0.05, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.06, 0.02, -0.096], "size": [0.02, 0.02, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.08, 0.02, -0.096], "size": [0.02, 0.02, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.16, 0.0, -0.02], "radius": 0.02, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "tall chimney on the back mound", "at": [-0.22, 0.38], "parts": [
+      { "shape": "cylinder", "radius": 0.025, "height": 0.18, "sides": 4, "twist": 0.125, "taper": 0.8, "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.18, 0], "radius": 0.02, "height": 0.02, "cell": "stone" }
+    ] },
+    { "note": "smial mid left", "at": [-0.2, -0.04], "yaw": -20, "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.05], "radius": 0.16, "height": 0.09, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, -0.07], "size": [0.2, 0.06, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.06, 0, -0.086], "size": [0.035, 0.05, 0.004], "cell": "foliage" },
+      { "shape": "box", "pos": [0.07, 0, -0.086], "size": [0.035, 0.05, 0.004], "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.1, 0.05, 0.08], "radius": 0.016, "height": 0.07, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "smial front left", "at": [-0.27, -0.27], "yaw": -20, "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.05], "radius": 0.16, "height": 0.09, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0.02, 0, -0.07], "size": [0.18, 0.06, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0, -0.086], "size": [0.035, 0.05, 0.004], "cell": "foliage" },
+      { "shape": "box", "pos": [0.07, 0.02, -0.086], "size": [0.02, 0.02, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.06, 0.04, 0.06], "radius": 0.02, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "smial on the right", "at": [0.28, 0.03], "yaw": 10, "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.05], "radius": 0.15, "height": 0.09, "sides": 12, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, -0.07], "size": [0.18, 0.06, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.01, 0, -0.086], "size": [0.035, 0.05, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.06, 0.02, -0.086], "size": [0.02, 0.02, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0.1, 0.0, 0.1], "radius": 0.018, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "big smial front right", "at": [0.2, -0.27], "yaw": 15, "parts": [
+      { "shape": "dome", "pos": [0.02, 0, 0.06], "radius": 0.2, "height": 0.1, "sides": 14, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, -0.08], "size": [0.26, 0.065, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.096], "size": [0.04, 0.055, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.09, 0.02, -0.096], "size": [0.02, 0.02, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.05, 0.02, -0.096], "size": [0.02, 0.02, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0.02, -0.096], "size": [0.02, 0.02, 0.004], "cell": "dark" }
+    ] },
+    { "note": "thatched cottage at the back", "at": [0.13, 0.28], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.18, 0.07, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.091, 0, 0], "size": [0.004, 0.055, 0.04], "cell": "foliage" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.2, 0.09, 0.14], "cell": "trim", "top": "wall" },
+      { "shape": "cylinder", "pos": [0.14, 0, -0.1], "radius": 0.018, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "roofed stone well", "at": [0.04, -0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.035, "sides": 12, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [-0.03, 0, 0], "size": [0.008, 0.08, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0, 0], "size": [0.008, 0.08, 0.008], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.08, 0.035, 0.06], "cell": "trim", "top": "wood" }
+    ] },
+    { "note": "winding lane", "at": [0.03, -0.05], "yaw": 70, "parts": [
+      { "shape": "box", "size": [1.0, 0.003, 0.07], "cell": "stone" }
+    ] },
+    { "note": "rail fences", "at": [0.0, 0.0], "parts": [
+      { "shape": "wall", "pos": [-0.2, 0, -0.65], "to": [0.0, -0.75], "height": 0.035, "thickness": 0.008, "cell": "wood" },
+      { "shape": "wall", "pos": [0.1, 0, 0.35], "to": [0.36, 0.4], "height": 0.035, "thickness": 0.008, "cell": "wood" },
+      { "shape": "wall", "pos": [0.22, 0, -0.18], "to": [0.42, -0.15], "height": 0.035, "thickness": 0.008, "cell": "wood" },
+      { "shape": "wall", "pos": [-0.18, 0, -0.12], "to": [-0.09, -0.35], "height": 0.035, "thickness": 0.008, "cell": "wood" }
+    ] },
+    { "note": "trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [0.06, 0, 1.1], "kind": "broadleaf", "height": 0.22, "radius": 0.09, "seed": 1 },
+      { "shape": "tree", "pos": [-0.15, 0, 1.05], "kind": "broadleaf", "height": 0.12, "radius": 0.07, "seed": 2 },
+      { "shape": "tree", "pos": [-0.46, 0, 0.0], "kind": "broadleaf", "height": 0.2, "radius": 0.07, "seed": 3 },
+      { "shape": "tree", "pos": [0.44, 0, 0.6], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "seed": 4 },
+      { "shape": "tree", "pos": [0.44, 0, -0.03], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "seed": 5 }
+    ] }
+  ]
+}

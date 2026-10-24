@@ -1,0 +1,66 @@
+{
+  "name": "Eryn Vorn",
+  "description": "A ring of six tall tapering grey monoliths and three trilithons stands in a mossy olive clearing, hemmed in by dark firs at the back, dense green and gold broadleaf woods round the sides and front, and a yellow-leaved birch at the right; a few small stones and rubble lie in the grass.",
+  "style": "Northman",
+  "colors":   ["#9E9A88", "#5A6A34", "#5E4630", "#9A9684", "#A8A494", "#2A2E22", "#B88E3A", "", "#4A5E28"],
+  "surfaces": ["Fieldstone", "Turf", "Planks", "Fieldstone", "Plain", "", "Plain", "", "Leaves"],
+  "buildings": [
+    { "note": "tall tapering monoliths", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.07, 0, 0.57], "radius": 0.045, "height": 0.26, "sides": 4, "twist": 0.125, "taper": 0.65, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.15, 0, 0.57], "radius": 0.04, "height": 0.23, "sides": 4, "twist": 0.125, "taper": 0.65, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.24, 0, 0.17], "radius": 0.04, "height": 0.32, "sides": 4, "twist": 0.125, "taper": 0.6, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.24, 0, 0.02], "radius": 0.04, "height": 0.31, "sides": 4, "twist": 0.125, "taper": 0.6, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.15, 0, -0.57], "radius": 0.045, "height": 0.31, "sides": 4, "twist": 0.125, "taper": 0.6, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.15, 0, -0.6], "radius": 0.05, "height": 0.35, "sides": 4, "twist": 0.125, "taper": 0.6, "cell": "stone" }
+    ] },
+    { "note": "small stones", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.34, 0, -0.43], "radius": 0.035, "height": 0.1, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.28, 0, -0.07], "radius": 0.025, "height": 0.06, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.34, 0, 0.5], "radius": 0.03, "height": 0.06, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.01, 0, 0.22], "radius": 0.03, "height": 0.08, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.04, 0, -0.65], "radius": 0.015, "height": 0.02, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "trilithon, back right", "at": [0.09, 0.12], "yaw": 20, "parts": [
+      { "shape": "box", "pos": [-0.045, 0, 0], "size": [0.035, 0.17, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0.045, 0, 0], "size": [0.035, 0.17, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.17, 0], "size": [0.14, 0.035, 0.06], "cell": "stone" }
+    ] },
+    { "note": "trilithon, left, with tilted lintel", "at": [-0.11, -0.01], "yaw": -60, "parts": [
+      { "shape": "box", "pos": [-0.035, 0, 0], "size": [0.035, 0.16, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0.035, 0, 0], "size": [0.035, 0.17, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.16, 0], "size": [0.13, 0.03, 0.05], "cell": "stone", "yaw": 10 }
+    ] },
+    { "note": "trilithon, centre front", "at": [0.07, -0.13], "yaw": 20, "parts": [
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.035, 0.2, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.035, 0.2, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.2, 0], "size": [0.13, 0.035, 0.06], "cell": "stone" }
+    ] },
+    { "note": "dark firs behind", "at": [0.0, 0.42], "parts": [
+      { "shape": "tree", "pos": [-0.1, 0, 0.15], "kind": "pine", "height": 0.32, "radius": 0.06, "seed": 1 },
+      { "shape": "tree", "pos": [-0.28, 0, -0.05], "kind": "pine", "height": 0.28, "radius": 0.05, "seed": 2 },
+      { "shape": "tree", "pos": [0.2, 0, 0.0], "kind": "pine", "height": 0.27, "radius": 0.05, "seed": 3 },
+      { "shape": "tree", "pos": [0.05, 0, 0.05], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 4 },
+      { "shape": "tree", "pos": [-0.4, 0, -0.3], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 5 },
+      { "shape": "tree", "pos": [-0.15, 0, -0.1], "kind": "broadleaf", "height": 0.2, "radius": 0.07, "cell": "accent", "seed": 6 }
+    ] },
+    { "note": "woods, left", "at": [-0.4, 0.0], "parts": [
+      { "shape": "tree", "pos": [0, 0, 0.25], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 7 },
+      { "shape": "tree", "pos": [0.02, 0, -0.15], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 8 },
+      { "shape": "tree", "pos": [0.12, 0, -0.05], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "cell": "accent", "seed": 9 },
+      { "shape": "tree", "pos": [0.06, 0, -0.55], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "seed": 10 }
+    ] },
+    { "note": "woods, right, with autumn birch", "at": [0.4, 0.0], "parts": [
+      { "shape": "tree", "pos": [0.02, 0, 0.52], "kind": "poplar", "height": 0.22, "radius": 0.045, "cell": "accent", "seed": 11 },
+      { "shape": "tree", "pos": [-0.06, 0, 0.75], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 12 },
+      { "shape": "tree", "pos": [-0.04, 0, 0.12], "kind": "broadleaf", "height": 0.18, "radius": 0.07, "seed": 13 },
+      { "shape": "tree", "pos": [0.02, 0, -0.3], "kind": "broadleaf", "height": 0.17, "radius": 0.07, "seed": 14 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.65], "kind": "broadleaf", "height": 0.15, "radius": 0.07, "seed": 15 }
+    ] },
+    { "note": "woods, front", "at": [0.0, -0.42], "parts": [
+      { "shape": "tree", "pos": [-0.28, 0, 0.15], "kind": "broadleaf", "height": 0.15, "radius": 0.07, "seed": 16 },
+      { "shape": "tree", "pos": [-0.07, 0, -0.1], "kind": "broadleaf", "height": 0.14, "radius": 0.07, "seed": 17 },
+      { "shape": "tree", "pos": [0.14, 0, -0.05], "kind": "broadleaf", "height": 0.14, "radius": 0.07, "seed": 18 },
+      { "shape": "tree", "pos": [0.3, 0, 0.12], "kind": "broadleaf", "height": 0.15, "radius": 0.07, "seed": 19 }
+    ] }
+  ]
+}

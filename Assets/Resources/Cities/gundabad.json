@@ -1,0 +1,105 @@
+{
+  "name": "Gundabad",
+  "description": "An orc stronghold under three snow-mantled black peaks: a dark fortress with a great skull-faced gate between spiked towers topped with fire, crenellated walls to either side, clusters of tusk-horned orc halls with burning braziers, a winding snowy road down to the front, and a sharpened-stake palisade with two watchtowers along the front edge, dotted with snowy firs.",
+  "style": "Orcish",
+  "colors":   ["#3C3C40", "#2E2C2A", "#4A3E34", "#6A6A6C", "#D8D4C6", "#141414", "#D08A2A", "", "#2A3A30"],
+  "surfaces": ["Fieldstone", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great snowy peak, back centre", "at": [0.03, 0.38], "parts": [
+      { "shape": "rock", "radius": 0.24, "height": 0.2, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.1, 0], "radius": 0.18, "height": 0.45, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.28, 0], "radius": 0.11, "height": 0.27, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "snowy peak, left", "at": [-0.27, 0.27], "parts": [
+      { "shape": "rock", "radius": 0.16, "height": 0.12, "cell": "stone", "seed": 1 },
+      { "shape": "cone", "radius": 0.15, "height": 0.36, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.18, 0], "radius": 0.077, "height": 0.18, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "snowy peak, right", "at": [0.25, 0.28], "parts": [
+      { "shape": "rock", "radius": 0.16, "height": 0.12, "cell": "stone", "seed": 2 },
+      { "shape": "cone", "radius": 0.14, "height": 0.33, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.17, 0], "radius": 0.07, "height": 0.16, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "skull gate and flanking towers", "at": [0.0, 0.16], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.1, 0.15, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.05, 0.07, 0.004], "cell": "dark" },
+      { "shape": "dome", "pos": [0, 0.09, -0.03], "radius": 0.025, "height": 0.03, "sides": 8, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.09, 0, 0], "radius": 0.04, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [-0.09, 0.2, 0], "radius": 0.045, "count": 6, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.09, 0.2, 0], "radius": 0.012, "height": 0.04, "sides": 5, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.09, 0, 0], "radius": 0.04, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "battlements", "pos": [0.09, 0.2, 0], "radius": 0.045, "count": 6, "cell": "wall" },
+      { "shape": "flag", "pos": [0.09, 0.2, 0], "height": 0.07, "radius": 0.004 }
+    ] },
+    { "note": "fortress walls", "at": [0, 0], "parts": [
+      { "shape": "wall", "pos": [-0.29, 0, 0.25], "to": [-0.13, 0.07], "height": 0.08, "thickness": 0.035, "count": 6 },
+      { "shape": "wall", "pos": [-0.13, 0, 0.07], "to": [-0.06, 0.3], "height": 0.08, "thickness": 0.035 },
+      { "shape": "wall", "pos": [0.13, 0, 0.11], "to": [0.29, 0.34], "height": 0.08, "thickness": 0.035, "count": 6 },
+      { "shape": "wall", "pos": [0.13, 0, 0.11], "to": [0.06, 0.35], "height": 0.08, "thickness": 0.035 }
+    ] },
+    { "note": "front corner tower, left", "at": [-0.13, 0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.012, "height": 0.035, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "front corner tower, right", "at": [0.13, 0.05], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.13, 0], "radius": 0.012, "height": 0.035, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "snowy road", "at": [0.0, -0.12], "parts": [
+      { "shape": "box", "pos": [0.02, 0, 0.2], "size": [0.05, 0.004, 0.3], "cell": "stone", "yaw": -10 },
+      { "shape": "box", "pos": [-0.02, 0, -0.15], "size": [0.06, 0.004, 0.4], "cell": "stone", "yaw": 15 },
+      { "shape": "box", "pos": [0.02, 0, -0.5], "size": [0.12, 0.004, 0.2], "cell": "stone" }
+    ] },
+    { "note": "orc halls, left", "at": [-0.3, -0.09], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0.04, 0, 0.08], "size": [0.06, 0.12, 0.06], "cell": "wall" },
+      { "shape": "cone", "pos": [0.04, 0.12, 0.08], "radius": 0.01, "height": 0.035, "sides": 5, "cell": "accent" },
+      { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.09, 0.05, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.07, 0.05, 0], "size": [0.1, 0.05, 0.08], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.07, 0, -0.06], "size": [0.09, 0.05, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [0.07, 0.05, -0.06], "size": [0.1, 0.05, 0.08], "cell": "roof", "top": "wood" },
+      { "shape": "cone", "pos": [0.12, 0, -0.11], "radius": 0.008, "height": 0.06, "sides": 4, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.12, 0, -0.05], "radius": 0.008, "height": 0.06, "sides": 4, "cell": "trim" }
+    ] },
+    { "note": "orc halls, right", "at": [0.29, -0.08], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0.02, 0, 0.12], "size": [0.06, 0.13, 0.06], "cell": "wall" },
+      { "shape": "cone", "pos": [0.02, 0.13, 0.12], "radius": 0.01, "height": 0.035, "sides": 5, "cell": "accent" },
+      { "shape": "box", "pos": [-0.09, 0, 0.02], "size": [0.08, 0.05, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.09, 0.05, 0.02], "size": [0.09, 0.05, 0.08], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.02, 0, -0.07], "size": [0.12, 0.05, 0.07], "cell": "wood" },
+      { "shape": "gable", "pos": [0.02, 0.05, -0.07], "size": [0.13, 0.05, 0.08], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.13, 0, 0.03], "size": [0.07, 0.05, 0.06], "cell": "wood" },
+      { "shape": "gable", "pos": [0.13, 0.05, 0.03], "size": [0.08, 0.04, 0.07], "cell": "roof", "top": "wood" },
+      { "shape": "cone", "pos": [-0.07, 0, -0.12], "radius": 0.008, "height": 0.06, "sides": 4, "cell": "trim" },
+      { "shape": "cone", "pos": [0.1, 0, -0.12], "radius": 0.008, "height": 0.06, "sides": 4, "cell": "trim" }
+    ] },
+    { "note": "stake palisade along the front", "at": [0, 0], "parts": [
+      { "shape": "wall", "pos": [-0.48, 0, -0.34], "to": [-0.12, -0.86], "height": 0.07, "thickness": 0.02, "count": 14, "cell": "wood" },
+      { "shape": "wall", "pos": [0.12, 0, -0.74], "to": [0.47, -0.25], "height": 0.07, "thickness": 0.02, "count": 14, "cell": "wood" }
+    ] },
+    { "note": "palisade watchtower, left", "at": [-0.19, -0.33], "parts": [
+      { "shape": "box", "size": [0.05, 0.12, 0.05], "cell": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.12, 0], "radius": 0.035, "height": 0.04, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.16, 0], "radius": 0.01, "height": 0.03, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "palisade watchtower, right", "at": [0.17, -0.29], "parts": [
+      { "shape": "box", "size": [0.05, 0.12, 0.05], "cell": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.12, 0], "radius": 0.035, "height": 0.04, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.16, 0], "radius": 0.01, "height": 0.03, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "snowy firs, left", "at": [-0.43, 0.13], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.11, "radius": 0.025 },
+      { "shape": "tree", "pos": [0.02, 0, -0.2], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [-0.02, 0, 0.25], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 2 }
+    ] },
+    { "note": "snowy firs, right", "at": [0.42, 0.15], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.11, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [0.04, 0, -0.18], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 4 },
+      { "shape": "tree", "pos": [-0.07, 0, 0.12], "kind": "pine", "height": 0.1, "radius": 0.025, "seed": 5 }
+    ] },
+    { "note": "firs by the road", "at": [-0.12, -0.18], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 6 },
+      { "shape": "tree", "pos": [0.2, 0, 0.2], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 7 },
+      { "shape": "tree", "pos": [0.24, 0, -0.38], "kind": "pine", "height": 0.08, "radius": 0.02, "seed": 8 }
+    ] }
+  ]
+}

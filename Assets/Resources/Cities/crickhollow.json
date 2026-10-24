@@ -1,0 +1,58 @@
+{
+  "name": "Crickhollow",
+  "description": "A lone hobbit-hole dug into a grassy turf mound with a round green door, two round windows and a brick chimney, shaded by two broadleaf trees, behind a low drystone garden wall; a winding dirt path runs down a flowery meadow with boulders and a standing stone to a split-rail fence and gate.",
+  "style": "Hobbit",
+  "colors":   ["#9C8466", "#6E8238", "#6B4A2E", "#8C887A", "#9A7A50", "#2E2A22", "#3E6A3A", "", "#4E6A2C"],
+  "surfaces": ["Fieldstone", "Turf", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "turf mound of the hobbit-hole", "at": [0.0, 0.4], "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.02], "radius": 0.26, "height": 0.2, "sides": 16, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0, -0.17], "size": [0.2, 0.09, 0.06], "cell": "roof" },
+      { "shape": "cylinder", "pos": [0, 0, -0.2], "radius": 0.045, "height": 0.085, "sides": 12, "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.235], "size": [0.065, 0.075, 0.01], "cell": "accent" },
+      { "shape": "box", "pos": [-0.075, 0.03, -0.205], "size": [0.035, 0.035, 0.01], "cell": "trim" },
+      { "shape": "box", "pos": [0.075, 0.03, -0.205], "size": [0.035, 0.035, 0.01], "cell": "trim" },
+      { "shape": "box", "pos": [0.06, 0.15, 0.04], "size": [0.04, 0.09, 0.04], "cell": "wall" }
+    ] },
+    { "note": "flagstone step and path", "at": [0.0, 0.12], "yaw": 10, "parts": [
+      { "shape": "box", "size": [0.06, 0.006, 0.35], "cell": "stone" }
+    ] },
+    { "note": "path down the meadow", "at": [0.02, -0.2], "yaw": -15, "parts": [
+      { "shape": "box", "size": [0.045, 0.004, 0.55], "cell": "wood" }
+    ] },
+    { "note": "drystone garden wall, left", "at": [-0.37, 0.35], "parts": [
+      { "shape": "wall", "to": [0.18, -0.15], "height": 0.025, "thickness": 0.025, "cell": "stone" }
+    ] },
+    { "note": "drystone garden wall, right", "at": [0.02, 0.24], "parts": [
+      { "shape": "wall", "to": [0.36, 0.48], "height": 0.025, "thickness": 0.025, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.15, 0, -0.04], "to": [0.0, 0.0], "height": 0.035, "thickness": 0.012, "cell": "wood" }
+    ] },
+    { "note": "tree left of the hole", "at": [-0.3, 0.4], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.25, "radius": 0.11, "seed": 1 }
+    ] },
+    { "note": "tree right of the hole", "at": [0.25, 0.39], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.2, "radius": 0.09, "seed": 2 }
+    ] },
+    { "note": "bushes and small tree", "at": [-0.44, -0.07], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 3 },
+      { "shape": "tree", "pos": [0.25, 0, -0.1], "kind": "broadleaf", "height": 0.06, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [0.83, 0, 0.6], "kind": "broadleaf", "height": 0.12, "radius": 0.07, "seed": 5 },
+      { "shape": "tree", "pos": [0.55, 0, -0.1], "kind": "broadleaf", "height": 0.06, "radius": 0.04, "seed": 6 }
+    ] },
+    { "note": "boulders in the meadow", "at": [0.24, 0.09], "parts": [
+      { "shape": "rock", "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.06, 0, -0.03], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.58, 0, 0.3], "radius": 0.035, "height": 0.035, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.41, 0, -0.2], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.12, 0, -0.62], "radius": 0.04, "height": 0.06, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "standing stone and drystone pile, front left", "at": [-0.41, -0.27], "parts": [
+      { "shape": "rock", "radius": 0.04, "height": 0.17, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.12, 0, -0.15], "radius": 0.04, "height": 0.03, "cell": "stone", "seed": 8 }
+    ] },
+    { "note": "split-rail fence and gate, front", "at": [-0.36, -0.2], "parts": [
+      { "shape": "wall", "to": [0.35, -0.48], "height": 0.05, "thickness": 0.01, "cell": "wood" },
+      { "shape": "wall", "pos": [0.35, 0, -0.48], "to": [0.84, 0.69], "height": 0.05, "thickness": 0.01, "cell": "wood" }
+    ] }
+  ]
+}

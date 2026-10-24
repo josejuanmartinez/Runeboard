@@ -1,0 +1,79 @@
+{
+  "name": "Lugarlur",
+  "description": "A ruined walled town of pale moss-streaked stone: a broken arcade wall at the back left beside a round tower with a slate cone roof, a few patched cottages with brown shingle roofs, a slate-roofed chapel on the right and a ruined front chapel with a square slate-pyramid tower, a dark sinkhole cracking the central square and a stream running past a little stepped shrine, with pines and a dead tree.",
+  "style": "Mannish",
+  "colors":   ["#B4AA8E", "#6A5236", "#5A4630", "#A49A80", "#6E726E", "#1E1A16", "#5E7270", "", "#3E4A2A"],
+  "surfaces": ["Ashlar", "Tiles", "Planks", "Fieldstone", "Slate", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "broken arcade wall at the back left", "at": [-0.22, 0.25], "yaw": -40, "parts": [
+      { "shape": "box", "pos": [-0.2, 0, 0], "size": [0.12, 0.16, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [-0.1, 0, 0], "size": [0.05, 0.28, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0.22, 0], "size": [0.2, 0.06, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.1, 0, 0], "size": [0.05, 0.28, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.22, 0, 0], "size": [0.1, 0.22, 0.04], "cell": "wall" }
+    ] },
+    { "note": "round tower with slate cone", "at": [0.08, 0.27], "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.28, "sides": 12, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.17, -0.054], "size": [0.015, 0.035, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.28, 0], "radius": 0.062, "height": 0.15, "sides": 12, "cell": "trim" },
+      { "shape": "flag", "pos": [0, 0.43, 0], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "cottage at the back", "at": [-0.02, 0.19], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.1, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.051], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.1, 0.07, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "slate chapel on the right with ruined wall", "at": [0.31, 0.14], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.13, 0.11, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.061], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.13, 0.09, 0.12], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [0, 0.2, 0.05], "radius": 0.008, "height": 0.04, "sides": 6, "cell": "trim" },
+      { "shape": "box", "pos": [0.12, 0, 0.0], "size": [0.04, 0.14, 0.12], "cell": "stone" }
+    ] },
+    { "note": "cottage right", "at": [0.29, -0.09], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.11, 0.09, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.11, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "ruined wall with arch, right edge", "at": [0.42, -0.12], "yaw": 60, "parts": [
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.1, 0.1, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, 0], "size": [0.03, 0.18, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0.1, 0, 0], "size": [0.03, 0.2, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0.16, 0], "size": [0.1, 0.04, 0.035], "cell": "wall" }
+    ] },
+    { "note": "cottage left", "at": [-0.3, -0.04], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.11, 0.09, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.051], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.11, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.11, 0, 0.1], "size": [0.04, 0.24, 0.04], "cell": "wall" }
+    ] },
+    { "note": "ruined front chapel with slate tower", "at": [0.0, -0.34], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.26, 0.14, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.03, 0.14, 0], "size": [0.11, 0.06, 0.11], "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.03, 0.2, 0], "radius": 0.08, "height": 0.12, "cell": "trim" },
+      { "shape": "box", "pos": [-0.05, 0.08, -0.066], "size": [0.02, 0.035, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.11, 0.14, 0.0], "size": [0.04, 0.1, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [0.1, 0, -0.066], "size": [0.035, 0.07, 0.004], "cell": "dark" }
+    ] },
+    { "note": "sinkhole in the square", "at": [-0.01, 0.0], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.003, "sides": 8, "cell": "dark" },
+      { "shape": "box", "pos": [0.05, 0, 0.08], "size": [0.1, 0.003, 0.01], "cell": "dark", "yaw": -40 }
+    ] },
+    { "note": "stream", "at": [-0.085, -0.065], "yaw": -59, "parts": [
+      { "shape": "box", "size": [1.1, 0.004, 0.045], "cell": "accent" }
+    ] },
+    { "note": "stepped shrine", "at": [-0.41, -0.18], "parts": [
+      { "shape": "box", "size": [0.08, 0.03, 0.07], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.06, 0.03, 0.05], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.06, 0], "radius": 0.03, "height": 0.08, "cell": "stone" }
+    ] },
+    { "note": "pines and dead tree", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.33, 0, 0.85], "kind": "pine", "height": 0.25, "radius": 0.04, "seed": 1 },
+      { "shape": "tree", "pos": [-0.4, 0, 0.7], "kind": "pine", "height": 0.2, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [-0.19, 0, -0.85], "kind": "pine", "height": 0.18, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [0.41, 0, -0.55], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.12, 0, -1.0], "kind": "pine", "height": 0.08, "radius": 0.025, "seed": 5 },
+      { "shape": "tree", "pos": [0.23, 0, 0.52], "kind": "broadleaf", "height": 0.28, "radius": 0.06, "cell": "wood", "seed": 6 }
+    ] }
+  ]
+}

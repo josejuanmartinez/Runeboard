@@ -5,7 +5,8 @@ using UnityEngine.Rendering.Universal;
 /// <summary>
 /// The board's overall rendering look, applied once a campaign starts:
 ///  • post: a soft vignette to frame the play area, gentle bloom so gold rings, sparkles and lit
-///    windows glow, slightly richer colour, and no motion blur (camera pans used to smear the map)
+///    windows glow, slightly richer colour, and no motion blur (camera pans used to smear the map);
+///    then the tabletop look (BoardLookSettings): warm grade, fine grain and tilt-shift
 ///  • grounding: a soft contact shadow under every unit so figures stand on the tile instead of
 ///    floating over it
 ///  • framing: the camera opens a little further out so a starting realm reads as a place
@@ -30,6 +31,9 @@ public static class BoardLook
     public static void Apply()
     {
         ApplyPost();
+        TabletopLens.Install();
+        AmbientLife.Ensure();
+        City3D.Ensure();
         if (Shroud)
         {
             // Hexes evaluated their fog state before the game started; re-apply with the shroud on.
@@ -71,6 +75,24 @@ public static class BoardLook
         {
             color.saturation.Override(10f);
         }
+
+        // Tabletop: a lamp-lit table (warm white balance, a touch more vignette) and a fine grain
+        // the painted map and the 3D miniatures share.
+        BoardLookSettings look = BoardLookSettings.Instance;
+        vignette.intensity.Override(look.vignette);
+
+        WhiteBalance white = profile.TryGet(out WhiteBalance existingWhite) ? existingWhite : profile.Add<WhiteBalance>(true);
+        white.active = look.warmth != 0f;
+        white.temperature.Override(look.warmth);
+
+        FilmGrain grain = profile.TryGet(out FilmGrain existingGrain) ? existingGrain : profile.Add<FilmGrain>(true);
+        grain.active = look.grain > 0f;
+        grain.type.Override(FilmGrainLookup.Thin2);
+        grain.intensity.Override(look.grain);
+        grain.response.Override(0.8f);
+
+        // Seasons and dusk ride on top of the grade above.
+        WorldLight.Ensure(profile);
     }
 
     /// <summary>Adds a soft contact shadow under a unit sprite (child of its renderer, under the ring).</summary>

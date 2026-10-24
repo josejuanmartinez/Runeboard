@@ -1,0 +1,66 @@
+{
+  "name": "Sturlurtsa Khand",
+  "description": "A desert necropolis: a colossal sandstone-block pyramid with a gilded capstone and a dark doorway on its left face dominates the hex, flanked by a tall black gold-tipped obelisk and a paved court of slender gold-capped pillars on the left, two smaller pyramids at the right and front, a crumbling stepped shrine with a gilded spire, broken blocks and a pair of date palms in the sand.",
+  "style": "Southron",
+  "colors":   ["#C8B88E", "#BCA87E", "#5A4430", "#B0A07A", "#C8A040", "#2A2622", "#C8A040", "", "#4E6A30"],
+  "surfaces": ["Ashlar", "Ashlar", "", "Ashlar", "Plain", "Plain", "Plain", "", ""],
+  "buildings": [
+    { "note": "great pyramid", "at": [0.03, 0.27], "parts": [
+      { "shape": "cone", "radius": 0.37, "height": 0.6, "sides": 4, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.55, 0], "radius": 0.035, "height": 0.06, "sides": 4, "cell": "accent" },
+      { "shape": "rock", "pos": [0.05, 0, -0.33], "radius": 0.08, "height": 0.04, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "pyramid doorway", "at": [-0.17, 0.14], "yaw": 45, "parts": [
+      { "shape": "box", "size": [0.08, 0.14, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.021], "size": [0.035, 0.1, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.14, 0], "size": [0.09, 0.015, 0.045], "cell": "stone" }
+    ] },
+    { "note": "black obelisk", "at": [-0.39, 0.17], "parts": [
+      { "shape": "box", "size": [0.09, 0.04, 0.07], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.04, "height": 0.32, "sides": 4, "twist": 0.125, "taper": 0.65, "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.1, -0.03], "size": [0.02, 0.2, 0.004], "cell": "accent" },
+      { "shape": "pyramid", "pos": [0, 0.36, 0], "radius": 0.028, "height": 0.06, "cell": "accent" }
+    ] },
+    { "note": "pillared court", "at": [-0.3, 0.02], "parts": [
+      { "shape": "box", "pos": [0.02, 0, 0.0], "size": [0.26, 0.006, 0.3], "cell": "stone", "yaw": 30 },
+      { "shape": "box", "pos": [0.01, 0, 0.36], "size": [0.025, 0.15, 0.025], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.01, 0.15, 0.36], "radius": 0.015, "height": 0.03, "cell": "accent" },
+      { "shape": "box", "pos": [-0.08, 0, 0.0], "size": [0.025, 0.13, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [-0.15, 0, 0.15], "size": [0.025, 0.13, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [0.09, 0, -0.2], "size": [0.025, 0.14, 0.025], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.09, 0.14, -0.2], "radius": 0.015, "height": 0.03, "cell": "accent" },
+      { "shape": "box", "pos": [0.13, 0, -0.18], "size": [0.025, 0.12, 0.025], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.25], "size": [0.025, 0.1, 0.025], "cell": "wall" }
+    ] },
+    { "note": "broken blocks, left", "at": [-0.37, -0.24], "parts": [
+      { "shape": "box", "pos": [-0.03, 0, 0.0], "size": [0.03, 0.08, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.03], "size": [0.03, 0.09, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.07, 0, 0.0], "size": [0.03, 0.06, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.14, 0, 0.18], "size": [0.04, 0.05, 0.04], "cell": "stone" }
+    ] },
+    { "note": "small pyramid, right", "at": [0.4, 0.04], "parts": [
+      { "shape": "pyramid", "radius": 0.13, "height": 0.27, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.25, 0], "radius": 0.02, "height": 0.035, "cell": "accent" }
+    ] },
+    { "note": "small pyramid, front", "at": [-0.02, -0.3], "parts": [
+      { "shape": "pyramid", "radius": 0.13, "height": 0.24, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.22, 0], "radius": 0.02, "height": 0.035, "cell": "accent" },
+      { "shape": "box", "pos": [0.11, 0, -0.1], "size": [0.04, 0.05, 0.04], "cell": "stone" }
+    ] },
+    { "note": "stepped shrine", "at": [0.27, -0.27], "parts": [
+      { "shape": "box", "size": [0.17, 0.05, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.05, 0.01], "size": [0.12, 0.05, 0.1], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.1, 0.01], "radius": 0.06, "height": 0.1, "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.19, 0.01], "radius": 0.015, "height": 0.04, "cell": "accent" },
+      { "shape": "box", "pos": [0.03, 0, -0.071], "size": [0.025, 0.045, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.12, 0, -0.04], "size": [0.04, 0.035, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0.11, 0, -0.08], "size": [0.025, 0.06, 0.025], "cell": "wall" }
+    ] },
+    { "note": "date palms", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [0.21, 0, 0.17], "size": [0.012, 0.13, 0.012], "cell": "wood" },
+      { "shape": "tree", "pos": [0.21, 0.09, 0.17], "kind": "broadleaf", "height": 0.06, "radius": 0.05 },
+      { "shape": "box", "pos": [-0.22, 0, -0.72], "size": [0.012, 0.12, 0.012], "cell": "wood" },
+      { "shape": "tree", "pos": [-0.22, 0.08, -0.72], "kind": "broadleaf", "height": 0.06, "radius": 0.05, "seed": 2 }
+    ] }
+  ]
+}

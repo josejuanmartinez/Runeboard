@@ -35,6 +35,10 @@ public class Character3DAnimator : MonoBehaviour
     private float idleTimer;
     private float nextIdleVariant;
 
+    /// <summary>Off for units that aren't the player's: the idle variants are combat-ready stances
+    /// with weapon swings, which read as other nations' units attacking out of nowhere.</summary>
+    public bool IdleVariety = true;
+
     public string Current => current?.Name;
     public bool IsBusy => current != null && current.OneShot && !current.Hold;
     public bool IsHolding => current != null && current.Hold;
@@ -181,7 +185,7 @@ public class Character3DAnimator : MonoBehaviour
                     done?.Invoke();
                 }
             }
-            else if (current.Name == Idle)
+            else if (current.Name == Idle && IdleVariety)
             {
                 // Idle life: a variant once in a while, then back to the plain idle.
                 idleTimer += dt;

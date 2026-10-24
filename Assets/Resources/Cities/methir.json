@@ -1,0 +1,77 @@
+{
+  "name": "Methir",
+  "description": "A busy market village: half-timbered houses under red tile and golden thatch roofs crowd a dusty lane, with a market stall under a thatched canopy and a red-and-white striped awning, crates of cabbages and barrels, a grey slate-roofed smithy with twin smoking chimneys, a big stone house with a steep red roof at the front right, and a hand cart, barrels and log piles, between dark cypresses.",
+  "style": "Mannish",
+  "colors":   ["#C8BCA0", "#9A4A34", "#6A4A2C", "#7E7C78", "#A08048", "#2A2018", "#A83A30", "", "#4A6430"],
+  "surfaces": ["HalfTimber", "Tiles", "Planks", "Fieldstone", "Thatch", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "red-roofed house at the back left", "at": [-0.12, 0.3], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.22, 0.17, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.06, -0.066], "size": [0.03, 0.03, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.04, 0.12, -0.066], "size": [0.03, 0.03, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.17, 0], "size": [0.22, 0.12, 0.13], "cell": "roof", "top": "wall" },
+      { "shape": "cylinder", "pos": [-0.14, 0, 0.02], "radius": 0.03, "height": 0.33, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.07, 0.17, 0.06], "radius": 0.025, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "thatched house at the back", "at": [0.1, 0.42], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.12, 0.14, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, -0.071], "size": [0.03, 0.03, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.14, 0], "size": [0.12, 0.1, 0.14], "cell": "trim", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "small red gatehouse with lit door", "at": [0.04, 0.22], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.08, 0.13, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.041], "size": [0.03, 0.05, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.08, 0.06, 0.08], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "slate-roofed smithy with twin chimneys", "at": [0.22, 0.16], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.18, 0.1, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.066], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.18, 0.1, 0.13], "cell": "stone", "top": "stone" },
+      { "shape": "cylinder", "pos": [0.04, 0, 0.1], "radius": 0.03, "height": 0.32, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.13, 0, 0.06], "radius": 0.03, "height": 0.3, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "market house with thatched canopy", "at": [-0.32, -0.08], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.2, 0.16, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.1, -0.061], "size": [0.03, 0.03, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.16, 0], "size": [0.2, 0.1, 0.12], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.04, 0.1, -0.11], "size": [0.12, 0.012, 0.1], "cell": "trim" },
+      { "shape": "box", "pos": [-0.09, 0, -0.15], "size": [0.01, 0.1, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.01, 0, -0.15], "size": [0.01, 0.1, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.04, 0, -0.13], "size": [0.1, 0.04, 0.04], "cell": "wood" }
+    ] },
+    { "note": "striped awning stall", "at": [-0.15, 0.03], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [0, 0.12, 0], "size": [0.12, 0.008, 0.11], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.128, 0], "size": [0.03, 0.004, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0.06, 0, -0.05], "size": [0.01, 0.12, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0, 0.05], "size": [0.01, 0.12, 0.01], "cell": "wood" }
+    ] },
+    { "note": "cabbage crates and barrel", "at": [-0.13, -0.13], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.05, 0.04, 0.05], "cell": "wood", "top": "foliage" },
+      { "shape": "box", "pos": [0.05, 0, 0.12], "size": [0.05, 0.04, 0.05], "cell": "wood", "top": "foliage" },
+      { "shape": "cylinder", "pos": [-0.11, 0, 0.0], "radius": 0.018, "height": 0.04, "sides": 8, "cell": "wood" }
+    ] },
+    { "note": "stone house with steep red roof", "at": [0.25, -0.3], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.26, 0.13, 0.15], "cell": "stone" },
+      { "shape": "box", "pos": [-0.05, 0, -0.076], "size": [0.035, 0.06, 0.004], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0.06, -0.076], "size": [0.02, 0.03, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.26, 0.18, 0.15], "cell": "roof", "top": "stone" }
+    ] },
+    { "note": "rock pile in the lane", "at": [0.01, 0.05], "parts": [
+      { "shape": "rock", "radius": 0.035, "height": 0.04, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.03, 0, 0.08], "radius": 0.025, "height": 0.03, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "hand cart, barrels and logs", "at": [-0.05, -0.36], "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.07, 0.015, 0.05], "cell": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [0, 0, -0.02], "size": [0.03, 0.03, 0.006], "cell": "dark", "yaw": 30 },
+      { "shape": "cylinder", "pos": [0.11, 0, 0.0], "radius": 0.016, "height": 0.03, "sides": 8, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.15, 0, 0.0], "radius": 0.016, "height": 0.03, "sides": 8, "cell": "wood" },
+      { "shape": "box", "pos": [0.22, 0, -0.04], "size": [0.08, 0.02, 0.03], "cell": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [0.47, 0, 0.12], "size": [0.08, 0.025, 0.04], "cell": "wood", "yaw": 30 }
+    ] },
+    { "note": "cypresses", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.38, 0, 1.05], "kind": "poplar", "height": 0.22, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [-0.46, 0, 0.75], "kind": "pine", "height": 0.16, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.42, 0, 0.6], "kind": "poplar", "height": 0.22, "radius": 0.035, "seed": 3 }
+    ] }
+  ]
+}

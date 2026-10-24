@@ -1,0 +1,98 @@
+{
+  "name": "Westfold",
+  "description": "A Rohirric village inside a pointed-stake palisade: a tall golden-thatched timber hall with carved horse-head gable finials, a round shield over the door and a fieldstone chimney stands at the back, ringed by smaller steep-thatched plank houses round a dirt green with a roofed well, green white-horse banners on tall poles and a river at the back left.",
+  "style": "Northman",
+  "colors":   ["#7A5E3E", "#B89A5A", "#6E5034", "#8A8478", "#A88E5C", "#2A2016", "#6E8C90", "", "#4E6A2C"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "river 1", "at": [-0.31, 0.314], "yaw": 125, "parts": [ { "shape": "box", "size": [0.253, 0.005, 0.05], "cell": "accent" } ] },
+    { "note": "river 2", "at": [-0.401, 0.222], "yaw": 102, "parts": [ { "shape": "box", "size": [0.279, 0.005, 0.05], "cell": "accent" } ] },
+    { "note": "river 3", "at": [-0.454, 0.131], "yaw": 106, "parts": [ { "shape": "box", "size": [0.219, 0.005, 0.05], "cell": "accent" } ] },
+    { "note": "lane 1", "at": [-0.003, 0.026], "yaw": 97, "parts": [ { "shape": "box", "size": [0.354, 0.005, 0.08], "cell": "trim" } ] },
+    { "note": "lane 2", "at": [-0.055, -0.157], "yaw": 97, "parts": [ { "shape": "box", "size": [0.5, 0.005, 0.08], "cell": "trim" } ] },
+    { "note": "lane 3", "at": [-0.094, -0.333], "yaw": 93, "parts": [ { "shape": "box", "size": [0.32, 0.005, 0.08], "cell": "trim" } ] },
+    { "note": "golden hall", "at": [0.06, 0.15], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.3, 0.11, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.32, 0.2, 0.17], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.151, 0.0, 0], "size": [0.004, 0.08, 0.05], "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.155, 0.11, 0], "radius": 0.025, "height": 0.006, "sides": 10, "cell": "foliage" },
+      { "shape": "box", "pos": [-0.19, 0, 0], "size": [0.05, 0.03, 0.08], "cell": "stone" },
+      { "shape": "box", "pos": [-0.16, 0.3, 0], "size": [0.012, 0.06, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.16, 0.3, 0], "size": [0.012, 0.06, 0.012], "cell": "wood" },
+      { "shape": "flag", "pos": [0.16, 0.36, 0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "fieldstone chimney of the hall", "at": [0.16, 0.26], "parts": [
+      { "shape": "box", "size": [0.04, 0.27, 0.04], "cell": "stone" }
+    ] },
+    { "note": "back-left house", "at": [-0.17, 0.14], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.16, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.081, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.17, 0.1, 0.11], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "right house with lean-to", "at": [0.21, 0.04], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.14, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.071, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.15, 0.09, 0.11], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.0, 0, 0.08], "size": [0.08, 0.05, 0.06], "cell": "wall" },
+      { "shape": "gable", "pos": [0.0, 0.05, 0.08], "size": [0.08, 0.05, 0.06], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "back-right house with chimney", "at": [0.29, 0.18], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.08, 0.09], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.13, 0.08, 0.1], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.03, 0.08, 0.02], "size": [0.025, 0.1, 0.025], "cell": "stone" }
+    ] },
+    { "note": "roofed well", "at": [-0.04, -0.09], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.04, "sides": 8, "cell": "stone" },
+      { "shape": "box", "pos": [-0.03, 0.0, 0], "size": [0.008, 0.09, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0.0, 0], "size": [0.008, 0.09, 0.008], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.08, 0.04, 0.06], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "left house", "at": [-0.35, -0.11], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.15, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.1, 0.11], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "front-left long house", "at": [-0.25, -0.26], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.03, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.21, 0.1, 0.11], "cell": "roof", "top": "wood" },
+      { "shape": "gable", "pos": [0.05, 0.08, -0.04], "size": [0.06, 0.07, 0.06], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "front house", "at": [0.1, -0.33], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.16, 0.07, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [-0.081, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.17, 0.11, 0.12], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "front-right house", "at": [0.3, -0.24], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.14, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.071, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.15, 0.1, 0.11], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "banner pole, back left", "at": [-0.24, 0.3], "parts": [
+      { "shape": "flag", "height": 0.22, "radius": 0.04 }
+    ] },
+    { "note": "banner pole, right", "at": [0.42, 0.0], "parts": [
+      { "shape": "flag", "height": 0.22, "radius": 0.04 }
+    ] },
+    { "note": "palisade west 1", "at": [-0.441, -0.111], "yaw": 82, "parts": [ { "shape": "box", "size": [0.604, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade west 2", "at": [-0.284, -0.314], "yaw": 58, "parts": [ { "shape": "box", "size": [0.449, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade east 1", "at": [0.076, -0.412], "yaw": -9, "parts": [ { "shape": "box", "size": [0.206, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade east 2", "at": [0.324, -0.314], "yaw": -55, "parts": [ { "shape": "box", "size": [0.537, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "palisade east 3", "at": [0.481, -0.078], "yaw": -89, "parts": [ { "shape": "box", "size": [0.692, 0.05, 0.015], "cell": "wood" } ] },
+    { "note": "gate posts", "at": [-0.1, -0.39], "parts": [
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.02, 0.1, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.02, 0.1, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.08, 0], "size": [0.16, 0.015, 0.015], "cell": "wood" }
+    ] },
+    { "note": "trees and shrubs", "at": [0.0, 0.42], "parts": [
+      { "shape": "tree", "pos": [-0.1, 0, 0.0], "kind": "broadleaf", "height": 0.12, "radius": 0.05 },
+      { "shape": "tree", "pos": [0.22, 0, -0.05], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "seed": 1 }
+    ] },
+    { "note": "pine by the river", "at": [-0.45, 0.15], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.08, "radius": 0.03, "seed": 2 }
+    ] },
+    { "note": "shrubs left", "at": [-0.42, -0.24], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.08, "radius": 0.04, "seed": 3 }
+    ] }
+  ]
+}

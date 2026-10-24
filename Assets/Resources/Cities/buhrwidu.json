@@ -1,0 +1,100 @@
+{
+  "name": "Buhr Widu",
+  "description": "A ruined grey-stone hill fort: five square battlemented towers at its corners, a crumbling curtain wall with a twin-turreted gatehouse at the front left, roofless broken halls along two crossing dirt tracks, and a pair of dark pines and a few olive trees among the rubble.",
+  "style": "Northman",
+  "colors":   ["#7C786C", "#4A3E30", "#5E4A34", "#6E6A5E", "#8A8270", "#2A2622", "#5C4E3A", "", "#4E5A2C"],
+  "surfaces": ["Ashlar",  "Planks",  "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "back keep tower", "at": [0.03, 0.41], "parts": [
+      { "shape": "cylinder", "radius": 0.065, "height": 0.29, "sides": 4, "twist": 0.125, "cell": "wall", "top": "trim" },
+      { "shape": "battlements", "pos": [0, 0.29, 0], "radius": 0.06, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.2, -0.047], "size": [0.016, 0.035, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0, 0.3, 0], "height": 0.08 },
+      { "shape": "wall", "pos": [-0.06, 0, 0], "to": [-0.24, -0.02], "height": 0.09, "thickness": 0.03, "cell": "wall" },
+      { "shape": "wall", "pos": [0.05, 0, -0.02], "to": [0.16, -0.12], "height": 0.07, "thickness": 0.03, "count": 3, "cell": "wall" }
+    ] },
+    { "note": "back ruined hall with arch", "at": [-0.08, 0.27], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.03, 0.12, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.05], "size": [0.14, 0.06, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.07, 0, 0.05], "size": [0.1, 0.09, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0, -0.066], "size": [0.02, 0.035, 0.004], "cell": "dark" }
+    ] },
+    { "note": "left back tower and block", "at": [-0.39, 0.21], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.27, "sides": 4, "twist": 0.125, "cell": "wall", "top": "trim" },
+      { "shape": "battlements", "pos": [0, 0.27, 0], "radius": 0.056, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0.01, 0.17, -0.044], "size": [0.014, 0.03, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0, -0.03], "size": [0.08, 0.13, 0.07], "cell": "stone" }
+    ] },
+    { "note": "left front tower", "at": [-0.38, -0.13], "parts": [
+      { "shape": "cylinder", "radius": 0.065, "height": 0.36, "sides": 4, "twist": 0.125, "cell": "wall", "top": "trim" },
+      { "shape": "battlements", "pos": [0, 0.36, 0], "radius": 0.06, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.24, -0.047], "size": [0.016, 0.035, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.11, 0, 0.0], "size": [0.08, 0.09, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0.17, 0, 0.02], "size": [0.06, 0.05, 0.04], "cell": "wall" }
+    ] },
+    { "note": "front left wall to gate", "at": [-0.32, -0.3], "parts": [
+      { "shape": "wall", "pos": [-0.04, 0, 0.1], "to": [0.06, -0.1], "height": 0.08, "thickness": 0.035, "count": 4, "cell": "wall" }
+    ] },
+    { "note": "gatehouse", "at": [-0.24, -0.38], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.14, 0.17, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.036], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.055, 0.17, 0], "size": [0.04, 0.04, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0.055, 0.17, 0], "size": [0.04, 0.04, 0.07], "cell": "wall" },
+      { "shape": "wallBattlements", "pos": [0, 0.17, -0.025], "length": 0.07 }
+    ] },
+    { "note": "front curtain wall, broken", "at": [0.03, -0.37], "yaw": -25, "parts": [
+      { "shape": "box", "pos": [-0.1, 0, 0], "size": [0.2, 0.08, 0.04], "cell": "wall" },
+      { "shape": "wallBattlements", "pos": [-0.1, 0.08, 0], "length": 0.2 },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.08, 0.11, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0.15, 0, 0], "size": [0.14, 0.06, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.02, -0.026], "size": [0.02, 0.04, 0.004], "cell": "dark" }
+    ] },
+    { "note": "central roofless hall", "at": [0.03, -0.15], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.03, 0.17, 0.16], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0, 0.08], "size": [0.16, 0.14, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.07, 0, 0.03], "size": [0.03, 0.09, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.08], "size": [0.08, 0.05, 0.03], "cell": "wall" },
+      { "shape": "rock", "pos": [0.0, 0, 0.0], "radius": 0.02, "height": 0.02, "cell": "stone" }
+    ] },
+    { "note": "right roofless hall", "at": [0.2, 0.06], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.06], "size": [0.2, 0.13, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.1, 0, 0], "size": [0.03, 0.1, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.06], "size": [0.2, 0.08, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.076], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.04, 0, -0.076], "size": [0.025, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "left arch ruin", "at": [-0.19, 0.12], "parts": [
+      { "shape": "box", "size": [0.07, 0.11, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.021], "size": [0.025, 0.06, 0.004], "cell": "dark" },
+      { "shape": "rock", "pos": [0.05, 0, -0.08], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "right tower", "at": [0.37, 0.25], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.25, "sides": 4, "twist": 0.125, "cell": "wall", "top": "trim" },
+      { "shape": "battlements", "pos": [0, 0.25, 0], "radius": 0.056, "count": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.16, -0.044], "size": [0.014, 0.03, 0.004], "cell": "dark" },
+      { "shape": "wall", "pos": [0, 0, -0.04], "to": [-0.02, -0.3], "height": 0.12, "thickness": 0.03, "cell": "wall" }
+    ] },
+    { "note": "right front broken tower and wall", "at": [0.35, -0.14], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.19, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0.19, 0], "size": [0.03, 0.03, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, -0.037], "size": [0.016, 0.04, 0.004], "cell": "dark" },
+      { "shape": "wall", "pos": [0.04, 0, 0.0], "to": [0.12, 0.08], "height": 0.12, "thickness": 0.03, "cell": "wall" },
+      { "shape": "wall", "pos": [0.0, 0, -0.04], "to": [-0.06, -0.28], "height": 0.07, "thickness": 0.03, "count": 3, "cell": "wall" }
+    ] },
+    { "note": "pines at the back", "at": [-0.1, 0.47], "parts": [
+      { "shape": "tree", "pos": [-0.03, 0, 0], "kind": "pine", "height": 0.15, "radius": 0.035 },
+      { "shape": "tree", "pos": [0.03, 0, 0.03], "kind": "pine", "height": 0.18, "radius": 0.04, "seed": 1 }
+    ] },
+    { "note": "olive trees", "at": [0.45, 0.05], "parts": [
+      { "shape": "tree", "pos": [0, 0, 0.05], "kind": "broadleaf", "height": 0.14, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [-0.11, 0, 0], "kind": "broadleaf", "height": 0.12, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [-0.05, 0, -0.55], "kind": "broadleaf", "height": 0.13, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [-0.9, 0, -0.1], "kind": "poplar", "height": 0.14, "radius": 0.03, "seed": 5 }
+    ] },
+    { "note": "rubble", "at": [-0.12, 0.0], "parts": [
+      { "shape": "rock", "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.32, 0, 0.3], "radius": 0.02, "height": 0.018, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.1, 0, 0.45], "radius": 0.02, "height": 0.015, "cell": "stone", "seed": 8 }
+    ] }
+  ]
+}

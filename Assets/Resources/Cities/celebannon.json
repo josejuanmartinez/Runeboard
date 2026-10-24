@@ -1,0 +1,68 @@
+{
+  "name": "Celebannon",
+  "description": "A quiet Silvan glade ringed by tall dark firs and pale birches: a steep-roofed weathered timber hall with a moss-green shingle roof, carved gable posts and a pointed door, an open-sided pavilion beside it, a stone fire ring with log benches on the trodden path, a carved standing stone and a little stream running past the left edge.",
+  "style": "Elven",
+  "colors":   ["#A49C80", "#6A7A4A", "#6A5A3E", "#8E8A78", "#A8B060", "#2A281E", "#5E8A9A", "", "#3E5A2C"],
+  "surfaces": ["Planks",  "Tiles",   "Planks", "Fieldstone", "Leaves", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "timber hall", "at": [-0.07, 0.0], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.24, 0.1, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.26, 0.14, 0.17], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [-0.121, 0, 0], "size": [0.004, 0.07, 0.035], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.03, -0.066], "size": [0.04, 0.035, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0.03, 0.1, -0.07], "size": [0.05, 0.06, 0.05], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [-0.13, 0.24, 0], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" },
+      { "shape": "cone", "pos": [0.13, 0.24, 0], "radius": 0.008, "height": 0.04, "sides": 4, "cell": "wood" },
+      { "shape": "box", "pos": [-0.15, 0, 0], "size": [0.04, 0.015, 0.06], "cell": "stone" }
+    ] },
+    { "note": "open pavilion", "at": [0.24, -0.07], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [-0.07, 0, -0.04], "size": [0.012, 0.07, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0, -0.04], "size": [0.012, 0.07, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [-0.07, 0, 0.04], "size": [0.012, 0.07, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0, 0.04], "size": [0.012, 0.07, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.14, 0.006, 0.08], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.18, 0.09, 0.13], "cell": "roof", "top": "wood" }
+    ] },
+    { "note": "fire ring and benches", "at": [0.08, -0.2], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.01, "sides": 10, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [-0.09, 0, 0.05], "size": [0.07, 0.02, 0.02], "cell": "wood", "yaw": -25 },
+      { "shape": "box", "pos": [0.1, 0, 0.0], "size": [0.07, 0.02, 0.02], "cell": "wood", "yaw": 25 },
+      { "shape": "box", "pos": [-0.02, 0, -0.08], "size": [0.07, 0.02, 0.02], "cell": "wood", "yaw": -10 },
+      { "shape": "box", "pos": [0.0, 0, 0.35], "size": [0.07, 0.02, 0.02], "cell": "wood", "yaw": 25 }
+    ] },
+    { "note": "carved standing stone", "at": [0.16, -0.33], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.015, "sides": 6, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.015, 0], "radius": 0.03, "height": 0.1, "sides": 6, "taper": 0.7, "cell": "stone" },
+      { "shape": "dome", "pos": [0, 0.115, 0], "radius": 0.021, "height": 0.025, "sides": 6, "cell": "stone" }
+    ] },
+    { "note": "path", "at": [-0.05, -0.2], "parts": [
+      { "shape": "wall", "pos": [-0.12, 0, 0.35], "to": [0.0, 0.0], "height": 0.003, "thickness": 0.05, "cell": "trim" },
+      { "shape": "wall", "pos": [0.0, 0, 0.0], "to": [-0.02, -0.65], "height": 0.003, "thickness": 0.05, "cell": "trim" }
+    ] },
+    { "note": "stream", "at": [-0.32, -0.28], "parts": [
+      { "shape": "wall", "pos": [-0.1, 0, 0.3], "to": [0.12, -0.3], "height": 0.004, "thickness": 0.05, "cell": "accent" },
+      { "shape": "rock", "pos": [0.07, 0, 0.3], "radius": 0.025, "height": 0.025, "cell": "stone" },
+      { "shape": "rock", "pos": [0.15, 0, -0.1], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "firs and birches behind", "at": [0.0, 0.38], "parts": [
+      { "shape": "tree", "pos": [-0.24, 0, -0.1], "kind": "pine", "height": 0.22, "radius": 0.05 },
+      { "shape": "tree", "pos": [-0.15, 0, 0.0], "kind": "broadleaf", "height": 0.2, "radius": 0.055, "cell": "trim", "seed": 1 },
+      { "shape": "tree", "pos": [-0.04, 0, 0.1], "kind": "pine", "height": 0.24, "radius": 0.05, "seed": 2 },
+      { "shape": "tree", "pos": [0.11, 0, 0.12], "kind": "pine", "height": 0.27, "radius": 0.055, "seed": 3 },
+      { "shape": "tree", "pos": [0.2, 0, 0.0], "kind": "broadleaf", "height": 0.2, "radius": 0.055, "cell": "trim", "seed": 4 },
+      { "shape": "tree", "pos": [0.32, 0, -0.08], "kind": "pine", "height": 0.22, "radius": 0.05, "seed": 5 },
+      { "shape": "tree", "pos": [0.42, 0, -0.25], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 6 }
+    ] },
+    { "note": "trees left", "at": [-0.36, 0.0], "parts": [
+      { "shape": "tree", "pos": [0.05, 0, 0.3], "kind": "broadleaf", "height": 0.2, "radius": 0.055, "cell": "trim", "seed": 7 },
+      { "shape": "tree", "pos": [-0.05, 0, 0.1], "kind": "broadleaf", "height": 0.18, "radius": 0.055, "cell": "trim", "seed": 8 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.35], "kind": "pine", "height": 0.22, "radius": 0.05, "seed": 9 },
+      { "shape": "tree", "pos": [0.14, 0, -0.6], "kind": "pine", "height": 0.17, "radius": 0.045, "seed": 10 }
+    ] },
+    { "note": "trees right", "at": [0.38, -0.05], "parts": [
+      { "shape": "tree", "pos": [0.02, 0, 0.25], "kind": "broadleaf", "height": 0.17, "radius": 0.05, "cell": "trim", "seed": 11 },
+      { "shape": "tree", "pos": [0.04, 0, -0.2], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 12 },
+      { "shape": "tree", "pos": [-0.07, 0, -0.45], "kind": "pine", "height": 0.18, "radius": 0.045, "seed": 13 }
+    ] }
+  ]
+}

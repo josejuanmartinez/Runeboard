@@ -1,0 +1,75 @@
+{
+  "name": "Laorki",
+  "description": "A desert ruin among red rock crags: a sandstone shrine with a red-tiled dome and a stepped watchtower stand on the high ground at the back beside a broken arcade, a striped red nomad tent and a camel caravan rest at the left, and a ruined stone platform with a lone arch and pillars, a red sun banner and dead stumps lie in the foreground.",
+  "style": "Southron",
+  "colors":   ["#B08A5E", "#8E3E2A", "#5A3A24", "#9A6A4A", "#A88A5E", "#2A1C14", "#8A3828", "", "#6A6038"],
+  "surfaces": ["Ashlar", "Tiles", "", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "crags at the back", "at": [-0.1, 0.4], "parts": [
+      { "shape": "rock", "pos": [-0.2, 0, 0], "radius": 0.15, "height": 0.2, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.02, 0, 0.12], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.42, 0, -0.08], "radius": 0.11, "height": 0.14, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "stepped watchtower on the crag", "at": [-0.12, 0.5], "parts": [
+      { "shape": "box", "pos": [0, 0.1, 0], "size": [0.1, 0.1, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.2, 0], "size": [0.07, 0.08, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.28, 0], "size": [0.04, 0.07, 0.04], "cell": "wall" }
+    ] },
+    { "note": "red-domed shrine", "at": [0.03, 0.44], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.17, 0.13, 0.13], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.066], "size": [0.04, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.05, 0.03, -0.066], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.13, 0], "radius": 0.06, "height": 0.04, "sides": 12, "cell": "wall" },
+      { "shape": "dome", "pos": [0, 0.17, 0], "radius": 0.065, "height": 0.07, "sides": 12, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.24, 0], "radius": 0.01, "height": 0.03, "sides": 6, "cell": "trim" },
+      { "shape": "box", "pos": [0, 0, -0.14], "size": [0.12, 0.015, 0.12], "cell": "trim" },
+      { "shape": "flag", "pos": [0.07, 0.13, 0.05], "height": 0.1, "radius": 0.005 }
+    ] },
+    { "note": "broken arcade", "at": [0.26, 0.38], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [-0.08, 0, 0], "size": [0.03, 0.12, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0, 0], "size": [0.03, 0.12, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0.08, 0, 0], "size": [0.03, 0.16, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0.12, 0], "size": [0.13, 0.03, 0.04], "cell": "wall" }
+    ] },
+    { "note": "nomad tent", "at": [-0.39, 0.29], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.14, 0.06, 0.12], "cell": "accent" },
+      { "shape": "pyramid", "pos": [0, 0.06, 0], "radius": 0.1, "height": 0.08, "cell": "accent" },
+      { "shape": "box", "pos": [0.03, 0, -0.061], "size": [0.04, 0.05, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [-0.04, 0.12, 0], "radius": 0.006, "height": 0.05, "sides": 5, "cell": "trim" },
+      { "shape": "cone", "pos": [0.06, 0.1, 0], "radius": 0.006, "height": 0.05, "sides": 5, "cell": "trim" }
+    ] },
+    { "note": "camel caravan", "at": [-0.27, 0.08], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.08, 0.035, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [0.05, 0.06, 0], "size": [0.015, 0.06, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.085, 0], "size": [0.04, 0.03, 0.035], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.06, 0.05, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0.14, 0.05, 0.25], "size": [0.08, 0.035, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [0.19, 0.06, 0.25], "size": [0.015, 0.06, 0.015], "cell": "wood" },
+      { "shape": "box", "pos": [0.14, 0.085, 0.25], "size": [0.04, 0.03, 0.035], "cell": "accent" },
+      { "shape": "box", "pos": [0.14, 0, 0.25], "size": [0.06, 0.05, 0.02], "cell": "wood" }
+    ] },
+    { "note": "red crags in the middle", "at": [-0.1, -0.1], "parts": [
+      { "shape": "rock", "radius": 0.09, "height": 0.2, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [-0.14, 0, 0.12], "radius": 0.07, "height": 0.13, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.28, 0, -0.1], "radius": 0.07, "height": 0.11, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [-0.23, 0, -0.35], "radius": 0.06, "height": 0.08, "cell": "stone", "seed": 7 }
+    ] },
+    { "note": "ruined platform with lone arch", "at": [0.21, -0.14], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.24, 0.06, 0.2], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0.06, 0.07], "size": [0.03, 0.24, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.14, 0.06, 0.07], "size": [0.03, 0.24, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [0.09, 0.28, 0.07], "size": [0.13, 0.04, 0.03], "cell": "wall" },
+      { "shape": "box", "pos": [-0.09, 0.06, -0.06], "size": [0.035, 0.16, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [-0.07, 0.06, 0.08], "size": [0.04, 0.05, 0.04], "cell": "wall" }
+    ] },
+    { "note": "sun banner on rubble", "at": [0.41, 0.13], "parts": [
+      { "shape": "rock", "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 8 },
+      { "shape": "flag", "pos": [0, 0.02, 0], "height": 0.3, "radius": 0.007 }
+    ] },
+    { "note": "dead stumps", "at": [-0.05, -0.29], "parts": [
+      { "shape": "cylinder", "pos": [-0.08, 0, 0], "radius": 0.008, "height": 0.09, "sides": 5, "taper": 0.3, "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.06, 0, -0.03], "radius": 0.006, "height": 0.06, "sides": 5, "taper": 0.3, "cell": "dark" },
+      { "shape": "cylinder", "pos": [0.15, 0, -0.05], "radius": 0.007, "height": 0.07, "sides": 5, "taper": 0.3, "cell": "dark" }
+    ] }
+  ]
+}

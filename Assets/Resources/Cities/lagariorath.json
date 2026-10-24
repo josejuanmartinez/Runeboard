@@ -1,0 +1,62 @@
+{
+  "name": "Lagari Orath",
+  "description": "A sun-baked desert outpost: a tall sandstone bell tower crowned with a small dome and spire rises beside a crenellated domed hall with an arched gate and a red cloth awning, among gnarled olive-green trees, broken wall fragments, a small arched shelter with its own red awning, a dry stony stream bed and poles hung with red sun banners.",
+  "style": "Southron",
+  "colors":   ["#B49A6E", "#8A5A3A", "#5A4028", "#A08A64", "#A8925C", "#2E2418", "#8A4030", "", "#5A6040"],
+  "surfaces": ["Ashlar", "", "", "Ashlar", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "bell tower", "at": [0.11, 0.4], "yaw": -20, "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.36, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.24, -0.04], "size": [0.025, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.04, 0.12, -0.04], "size": [0.03, 0.12, 0.004], "cell": "accent" },
+      { "shape": "battlements", "pos": [0, 0.36, 0], "radius": 0.055, "count": 8 },
+      { "shape": "cylinder", "pos": [0, 0.36, 0], "radius": 0.035, "height": 0.06, "sides": 8, "cell": "wall" },
+      { "shape": "dome", "pos": [0, 0.42, 0], "radius": 0.038, "height": 0.04, "sides": 10, "cell": "trim" },
+      { "shape": "cone", "pos": [0, 0.46, 0], "radius": 0.01, "height": 0.05, "sides": 6, "cell": "trim" },
+      { "shape": "flag", "pos": [0, 0.5, 0], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "domed hall with arched gate", "at": [0.27, 0.27], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.2, 0.12, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.071], "size": [0.045, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.04, 0.03, -0.071], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "wallBattlements", "pos": [0, 0.12, -0.065], "length": 0.2, "thickness": 0.015 },
+      { "shape": "dome", "pos": [-0.04, 0.12, 0.01], "radius": 0.05, "height": 0.05, "sides": 12, "cell": "trim" }
+    ] },
+    { "note": "red awning before the tower", "at": [0.06, 0.32], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0.07, 0], "size": [0.15, 0.006, 0.08], "cell": "accent" },
+      { "shape": "box", "pos": [-0.07, 0, -0.04], "size": [0.008, 0.07, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0, -0.04], "size": [0.008, 0.07, 0.008], "cell": "wood" }
+    ] },
+    { "note": "gnarled trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.17, 0, 0.8], "kind": "broadleaf", "height": 0.24, "radius": 0.08, "seed": 1 },
+      { "shape": "tree", "pos": [-0.3, 0, 0.29], "kind": "broadleaf", "height": 0.25, "radius": 0.09, "seed": 2 },
+      { "shape": "tree", "pos": [-0.07, 0, 0.12], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 3 },
+      { "shape": "tree", "pos": [0.08, 0, -0.33], "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 4 }
+    ] },
+    { "note": "broken wall fragments", "at": [0.3, 0.06], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.06, 0.18, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.06, 0.06, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.08, -0.021], "size": [0.015, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.16, 0, 0.12], "size": [0.06, 0.12, 0.04], "cell": "stone" }
+    ] },
+    { "note": "arched shelter with awning", "at": [-0.33, -0.22], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.18, 0.12, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, -0.051], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.04, 0.08, -0.08], "size": [0.12, 0.006, 0.07], "cell": "accent" },
+      { "shape": "box", "pos": [-0.1, 0, -0.11], "size": [0.01, 0.08, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.02, 0, -0.11], "size": [0.01, 0.08, 0.01], "cell": "wood" }
+    ] },
+    { "note": "dry stream bed", "at": [0.0, -0.32], "yaw": 72, "parts": [
+      { "shape": "box", "size": [0.6, 0.004, 0.06], "cell": "stone" }
+    ] },
+    { "note": "banner pole front right", "at": [0.25, -0.36], "parts": [
+      { "shape": "cylinder", "radius": 0.016, "height": 0.22, "sides": 6, "cell": "wood" },
+      { "shape": "flag", "pos": [0, 0.0, 0], "height": 0.36, "radius": 0.008 }
+    ] },
+    { "note": "banner far left", "at": [-0.47, 0.32], "parts": [
+      { "shape": "flag", "height": 0.26, "radius": 0.006 },
+      { "shape": "cone", "pos": [0.32, 0, -0.75], "radius": 0.03, "height": 0.04, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [0.68, 0, 0.0], "radius": 0.03, "height": 0.05, "sides": 6, "cell": "foliage" }
+    ] }
+  ]
+}

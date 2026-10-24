@@ -1,0 +1,76 @@
+{
+  "name": "Henneth Annun",
+  "description": "A wide, lobed blue mountain lake fills most of the hex, ringed by grassy slopes, grey standing stones and fir and oak woods; on a rocky knoll at the back stands a lone slender grey watchtower with a slate cone roof beside a broken wall, a winding footpath runs down the right side and a small plank bridge crosses the lake's outflow at the front right.",
+  "style": "Mannish",
+  "colors":   ["#A8A290", "#4E6072", "#5A4430", "#8E8A7C", "#C0B89C", "#2A2824", "#4A78A4", "", "#3E5A2C"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "lake", "at": [0.0, 0.0], "parts": [
+      { "shape": "cylinder", "pos": [-0.2, 0, 0.12], "radius": 0.15, "height": 0.006, "sides": 14, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.0, 0, 0.32], "radius": 0.15, "height": 0.006, "sides": 14, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.19, 0, 0.1], "radius": 0.15, "height": 0.006, "sides": 14, "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.05, 0, -0.08], "radius": 0.17, "height": 0.006, "sides": 14, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.06, 0, -0.32], "radius": 0.15, "height": 0.006, "sides": 14, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.2, 0, -0.42], "radius": 0.1, "height": 0.006, "sides": 12, "cell": "accent" }
+    ] },
+    { "note": "outflow stream and plank bridge, front right", "at": [0.3, -0.3], "yaw": 10, "parts": [
+      { "shape": "box", "size": [0.22, 0.005, 0.05], "cell": "accent" },
+      { "shape": "box", "pos": [-0.02, 0.01, 0], "size": [0.04, 0.01, 0.08], "cell": "wood" }
+    ] },
+    { "note": "rocky knoll with watchtower", "at": [0.0, 0.42], "parts": [
+      { "shape": "rock", "radius": 0.22, "height": 0.08, "cell": "foliage" },
+      { "shape": "cylinder", "pos": [0, 0.06, 0], "radius": 0.042, "height": 0.26, "sides": 10, "taper": 0.92, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.07, -0.042], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.2, -0.04], "size": [0.012, 0.03, 0.004], "cell": "dark" },
+      { "shape": "battlements", "pos": [0, 0.32, 0], "radius": 0.042, "count": 8, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.32, 0], "radius": 0.04, "height": 0.1, "sides": 10, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.42, 0], "height": 0.05, "radius": 0.004 }
+    ] },
+    { "note": "broken wall and crags beside the tower", "at": [0.12, 0.38], "parts": [
+      { "shape": "box", "pos": [0.0, 0.03, 0.05], "size": [0.03, 0.14, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0.03, 0.02], "size": [0.04, 0.09, 0.03], "cell": "stone" },
+      { "shape": "rock", "pos": [0.02, 0, -0.18], "radius": 0.06, "height": 0.06, "cell": "stone" }
+    ] },
+    { "note": "footpath down the right", "at": [0.3, 0.1], "parts": [
+      { "shape": "box", "pos": [-0.1, 0, 0.42], "size": [0.2, 0.004, 0.03], "cell": "trim", "yaw": -10 },
+      { "shape": "box", "pos": [0.05, 0, -0.1], "size": [0.03, 0.004, 0.6], "cell": "trim", "yaw": 15 }
+    ] },
+    { "note": "standing stones", "at": [-0.2, 0.3], "parts": [
+      { "shape": "rock", "radius": 0.022, "height": 0.06, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.02, 0, -0.3], "radius": 0.022, "height": 0.06, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.16, 0, -0.5], "radius": 0.022, "height": 0.05, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.21, 0, -0.75], "radius": 0.025, "height": 0.06, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.6, 0, -0.25], "radius": 0.022, "height": 0.06, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "boulders, front left", "at": [-0.32, -0.2], "parts": [
+      { "shape": "rock", "radius": 0.05, "height": 0.07, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.2, 0, -0.38], "radius": 0.035, "height": 0.03, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "firs behind the tower", "at": [-0.15, 0.38], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.17, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.1], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [0.25, 0, 0.12], "kind": "pine", "height": 0.17, "radius": 0.03, "seed": 2 }
+    ] },
+    { "note": "oaks and firs, left", "at": [-0.38, 0.2], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.07, "cell": "trim" },
+      { "shape": "tree", "pos": [0.0, 0, -0.25], "kind": "pine", "height": 0.11, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [0.17, 0, 0.05], "kind": "pine", "height": 0.11, "radius": 0.025, "seed": 4 }
+    ] },
+    { "note": "trees, front left", "at": [-0.38, -0.18], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.13, "radius": 0.05, "seed": 5 },
+      { "shape": "tree", "pos": [0.07, 0, -0.1], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [0.0, 0, -0.18], "kind": "pine", "height": 0.11, "radius": 0.025, "seed": 7 }
+    ] },
+    { "note": "firs, front", "at": [-0.05, -0.35], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.14, "radius": 0.03, "seed": 8 },
+      { "shape": "tree", "pos": [0.1, 0, -0.1], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 9 },
+      { "shape": "tree", "pos": [0.16, 0, -0.02], "kind": "pine", "height": 0.11, "radius": 0.025, "seed": 10 }
+    ] },
+    { "note": "trees, right", "at": [0.4, 0.22], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.055, "cell": "trim", "seed": 11 },
+      { "shape": "tree", "pos": [0.07, 0, -0.08], "kind": "pine", "height": 0.14, "radius": 0.03, "seed": 12 },
+      { "shape": "tree", "pos": [0.07, 0, -0.55], "kind": "pine", "height": 0.12, "radius": 0.025, "seed": 13 },
+      { "shape": "tree", "pos": [0.05, 0, -0.85], "kind": "broadleaf", "height": 0.13, "radius": 0.05, "seed": 14 }
+    ] }
+  ]
+}

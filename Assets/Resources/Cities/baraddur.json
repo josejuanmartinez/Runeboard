@@ -1,0 +1,58 @@
+{
+  "name": "Barad-dur",
+  "description": "The Dark Tower: an immense ribbed black spire rising from a scarred plateau to a pair of horns cradling the fiery Eye, ringed by two tiers of jagged-turreted black curtain walls, with a lit gatehouse and a long causeway running down to the front across rivers of lava.",
+  "style": "Orcish",
+  "colors":   ["#34302E", "#262220", "#3A2E24", "#4E4842", "#3E3A36", "#141210", "#E06A28", "", "#3A362E"],
+  "surfaces": ["Ashlar", "Slate", "", "Fieldstone", "Ashlar", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the Dark Tower", "at": [0.02, 0.3], "parts": [
+      { "shape": "rock", "radius": 0.2, "height": 0.12, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.05, 0], "radius": 0.16, "height": 0.6, "sides": 10, "taper": 0.35, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.3, -0.03], "radius": 0.07, "height": 0.4, "sides": 6, "taper": 0.5, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, -0.15], "size": [0.06, 0.08, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.08, -0.172], "size": [0.025, 0.04, 0.004], "cell": "accent" },
+      { "shape": "cone", "pos": [-0.04, 0.63, 0], "radius": 0.025, "height": 0.12, "sides": 5, "cell": "dark" },
+      { "shape": "cone", "pos": [0.04, 0.63, 0], "radius": 0.025, "height": 0.12, "sides": 5, "cell": "dark" },
+      { "shape": "dome", "pos": [0, 0.67, -0.01], "radius": 0.03, "height": 0.04, "sides": 8, "cell": "accent" }
+    ] },
+    { "note": "outer curtain wall", "at": [0.02, 0.06], "parts": [
+      { "shape": "wall", "pos": [-0.37, 0, 0.75], "to": [-0.37, -0.2], "height": 0.1, "thickness": 0.03, "count": 7, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.37, 0, -0.2], "to": [0.05, -0.55], "height": 0.1, "thickness": 0.03, "count": 8, "cell": "wall" },
+      { "shape": "wall", "pos": [0.05, 0, -0.55], "to": [0.37, -0.3], "height": 0.1, "thickness": 0.03, "count": 6, "cell": "wall" },
+      { "shape": "wall", "pos": [0.37, 0, -0.3], "to": [0.37, 0.75], "height": 0.1, "thickness": 0.03, "count": 7, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.37, 0, -0.2], "radius": 0.035, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.37, 0.15, -0.2], "radius": 0.03, "height": 0.06, "sides": 4, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.37, 0, -0.3], "radius": 0.035, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.37, 0.15, -0.3], "radius": 0.03, "height": 0.06, "sides": 4, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.37, 0, 0.75], "radius": 0.035, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.37, 0, 0.75], "radius": 0.035, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "wall" }
+    ] },
+    { "note": "gatehouse", "at": [0.09, -0.06], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.12, 0.16, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.036], "size": [0.04, 0.08, 0.004], "cell": "accent" },
+      { "shape": "cone", "pos": [-0.05, 0.16, 0], "radius": 0.02, "height": 0.06, "sides": 4, "cell": "wall" },
+      { "shape": "cone", "pos": [0.05, 0.16, 0], "radius": 0.02, "height": 0.06, "sides": 4, "cell": "wall" }
+    ] },
+    { "note": "inner wall tier", "at": [0.02, 0.22], "parts": [
+      { "shape": "wall", "pos": [-0.24, 0, 0.1], "to": [-0.05, -0.25], "height": 0.08, "thickness": 0.03, "count": 5, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.05, 0, -0.25], "to": [0.25, -0.05], "height": 0.08, "thickness": 0.03, "count": 5, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.05, 0, -0.25], "radius": 0.03, "height": 0.12, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.05, 0.12, -0.25], "radius": 0.025, "height": 0.05, "sides": 4, "cell": "wall" }
+    ] },
+    { "note": "causeway", "at": [0.18, -0.26], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.07, 0.03, 0.5], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.1], "size": [0.03, 0.02, 0.04], "cell": "dark" }
+    ] },
+    { "note": "lava rivers", "at": [0, 0], "parts": [
+      { "shape": "box", "pos": [-0.42, 0, -0.1], "size": [0.04, 0.003, 0.9], "cell": "accent", "yaw": -8 },
+      { "shape": "box", "pos": [-0.15, 0, -0.65], "size": [0.4, 0.003, 0.03], "cell": "accent", "yaw": 15 },
+      { "shape": "box", "pos": [0.42, 0, -0.2], "size": [0.04, 0.003, 0.9], "cell": "accent", "yaw": 10 },
+      { "shape": "box", "pos": [0.1, 0, -0.85], "size": [0.03, 0.003, 0.3], "cell": "accent", "yaw": -20 }
+    ] },
+    { "note": "jagged rocks", "at": [-0.25, -0.3], "parts": [
+      { "shape": "cone", "radius": 0.05, "height": 0.12, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.12, 0, -0.2], "radius": 0.04, "height": 0.09, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.65, 0, 0.6], "radius": 0.04, "height": 0.1, "sides": 5, "cell": "stone" }
+    ] }
+  ]
+}

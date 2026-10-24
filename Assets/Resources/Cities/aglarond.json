@@ -1,0 +1,59 @@
+{
+  "name": "Aglarond",
+  "description": "The Glittering Caves: grey boulder crags pierced by three stone-arched cave mouths glowing with gold, on two grassy terraces joined by a wooden stair, with violet and ice-blue crystal clusters, tall standing rocks and frosty pines.",
+  "style": "Dwarven",
+  "colors":   ["#7C7A72", "#6A6862", "#6A4E32", "#86847A", "#D0A040", "#1E1A16", "#9CC4CC", "", "#6E8A80"],
+  "surfaces": ["Fieldstone", "", "Planks", "", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great crag, back left", "at": [-0.22, 0.3], "parts": [
+      { "shape": "rock", "radius": 0.16, "height": 0.3, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.12, 0, -0.06], "radius": 0.1, "height": 0.16, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.17, 0, 0.04], "radius": 0.11, "height": 0.18, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "left cave gate", "at": [-0.15, 0.16], "parts": [
+      { "shape": "box", "size": [0.15, 0.12, 0.06], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.09, 0], "radius": 0.075, "height": 0.03, "sides": 10, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.09, 0.09, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0, -0.033], "size": [0.07, 0.035, 0.004], "cell": "trim" }
+    ] },
+    { "note": "right cave gate", "at": [0.15, 0.17], "parts": [
+      { "shape": "rock", "pos": [0, 0, 0.13], "radius": 0.1, "height": 0.14, "cell": "stone", "seed": 4 },
+      { "shape": "box", "size": [0.14, 0.11, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.08, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0, -0.033], "size": [0.06, 0.03, 0.004], "cell": "trim" }
+    ] },
+    { "note": "lower cave gate under the terrace", "at": [0.18, -0.15], "parts": [
+      { "shape": "box", "pos": [0, 0, 0.05], "size": [0.24, 0.07, 0.06], "cell": "stone" },
+      { "shape": "box", "size": [0.15, 0.11, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.09, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0, -0.028], "size": [0.07, 0.03, 0.004], "cell": "trim" }
+    ] },
+    { "note": "wooden stair between terraces", "at": [-0.2, -0.13], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.02, 0.1], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.02, 0.025], "size": [0.12, 0.02, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.04, 0.04], "size": [0.12, 0.02, 0.02], "cell": "wood" }
+    ] },
+    { "note": "standing rock right", "at": [0.37, 0.17], "parts": [
+      { "shape": "rock", "radius": 0.06, "height": 0.26, "cell": "stone", "seed": 5 },
+      { "shape": "flag", "pos": [-0.07, 0, -0.02], "height": 0.14, "radius": 0.03 }
+    ] },
+    { "note": "block rock front right", "at": [0.42, -0.14], "parts": [
+      { "shape": "rock", "radius": 0.07, "height": 0.2, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "crystal clusters", "at": [0, 0], "parts": [
+      { "shape": "cone", "pos": [-0.38, 0, 0.12], "radius": 0.035, "height": 0.1, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.32, 0, 0.1], "radius": 0.025, "height": 0.07, "sides": 5, "cell": "trim" },
+      { "shape": "cone", "pos": [-0.43, 0, -0.18], "radius": 0.03, "height": 0.09, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [0.07, 0, -0.3], "radius": 0.03, "height": 0.08, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [0.25, 0, -0.27], "radius": 0.03, "height": 0.08, "sides": 5, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.02, 0, 0.18], "radius": 0.025, "height": 0.07, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "frosty pines", "at": [0, 0.35], "parts": [
+      { "shape": "tree", "pos": [-0.37, 0, -0.05], "kind": "pine", "height": 0.14, "radius": 0.03 },
+      { "shape": "tree", "pos": [0.17, 0, 0.08], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.3, 0, 0.0], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [0.45, 0, -0.1], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [-0.47, 0, -0.35], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 5 }
+    ] }
+  ]
+}

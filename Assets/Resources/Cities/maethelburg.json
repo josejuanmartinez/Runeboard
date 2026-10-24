@@ -1,0 +1,89 @@
+{
+  "name": "Maethelburg",
+  "description": "A palisaded village of whitewashed half-timbered cottages under golden thatch: a round white stone tower with a conical thatch cap stands beside a large gabled mead-hall at the back, cottages with tall fieldstone chimneys ring a great tree in a round stone-walled green, with a walled wheat field, low dry-stone walls and a timber gate at the front, and pines behind.",
+  "style": "Northman",
+  "colors":   ["#C8BC9C", "#9A7A42", "#5A4028", "#9A9484", "#6A4E30", "#2A2018", "#C8A048", "", "#4E6A30"],
+  "surfaces": ["HalfTimber", "Thatch", "Planks", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "round white tower", "at": [0.09, 0.33], "parts": [
+      { "shape": "cylinder", "radius": 0.045, "height": 0.3, "sides": 12, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.18, -0.045], "size": [0.012, 0.03, 0.004], "cell": "dark" },
+      { "shape": "cone", "pos": [0, 0.3, 0], "radius": 0.055, "height": 0.1, "sides": 12, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.39, 0], "height": 0.07, "radius": 0.004 }
+    ] },
+    { "note": "great mead-hall", "at": [0.27, 0.25], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.26, 0.12, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.071], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.26, 0.12, 0.14], "cell": "roof", "top": "wall" },
+      { "shape": "gable", "pos": [-0.06, 0.1, -0.06], "size": [0.08, 0.1, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cone", "pos": [-0.13, 0.24, 0], "radius": 0.006, "height": 0.04, "sides": 5, "cell": "trim" },
+      { "shape": "flag", "pos": [0.13, 0.24, 0], "height": 0.06, "radius": 0.004 },
+      { "shape": "box", "pos": [-0.19, 0, 0.04], "size": [0.1, 0.09, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [-0.19, 0.09, 0.04], "size": [0.1, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "cottage back left", "at": [-0.11, 0.22], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.13, 0.08, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.13, 0.07, 0.1], "cell": "roof", "top": "wall" },
+      { "shape": "cylinder", "pos": [-0.03, 0.1, 0.03], "radius": 0.012, "height": 0.06, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "box", "pos": [-0.04, 0, -0.08], "size": [0.05, 0.04, 0.05], "cell": "wood" }
+    ] },
+    { "note": "cottage left", "at": [-0.28, 0.01], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.16, 0.09, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0.03, 0, -0.056], "size": [0.03, 0.055, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.16, 0.08, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "cylinder", "pos": [-0.05, 0.1, 0.02], "radius": 0.013, "height": 0.07, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "cottage centre left", "at": [-0.1, -0.13], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.12, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.12, 0.07, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "smithy with tall chimney", "at": [-0.3, -0.17], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.14, 0.07, 0.09], "cell": "wood" },
+      { "shape": "gable", "pos": [0.04, 0.07, 0], "size": [0.14, 0.05, 0.09], "cell": "roof", "top": "wood" },
+      { "shape": "cylinder", "pos": [-0.04, 0, -0.03], "radius": 0.03, "height": 0.22, "sides": 4, "twist": 0.125, "taper": 0.75, "cell": "stone" }
+    ] },
+    { "note": "cottage right", "at": [0.4, 0.0], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.12, 0.08, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.12, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "cottage centre right with chimney", "at": [0.23, -0.13], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.13, 0.09, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.13, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cylinder", "pos": [0.07, 0, -0.03], "radius": 0.022, "height": 0.25, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "front cottage", "at": [0.07, -0.42], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.15, 0.09, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.056], "size": [0.03, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.15, 0.09, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "cylinder", "pos": [0.05, 0.12, 0.03], "radius": 0.014, "height": 0.06, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "great tree in its round walled green", "at": [0.04, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.09, "height": 0.025, "sides": 14, "cell": "stone", "top": "foliage" },
+      { "shape": "tree", "pos": [0, 0.02, 0], "kind": "broadleaf", "height": 0.17, "radius": 0.07, "seed": 1 }
+    ] },
+    { "note": "walled wheat field", "at": [0.33, -0.24], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.02, 0.16], "cell": "accent" },
+      { "shape": "wall", "pos": [-0.11, 0, -0.09], "to": [0.11, -0.09], "height": 0.03, "thickness": 0.015, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.11, 0, -0.09], "to": [-0.11, 0.09], "height": 0.03, "thickness": 0.015, "cell": "stone" }
+    ] },
+    { "note": "dry-stone wall and gate at the front left", "at": [-0.24, -0.28], "yaw": 30, "parts": [
+      { "shape": "wall", "pos": [-0.12, 0, 0.0], "to": [0.12, 0.0], "height": 0.04, "thickness": 0.02, "cell": "stone" },
+      { "shape": "box", "pos": [0.2, 0, -0.02], "size": [0.012, 0.09, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.3, 0, -0.08], "size": [0.012, 0.09, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.25, 0.085, -0.05], "size": [0.13, 0.012, 0.012], "cell": "wood", "yaw": 30 }
+    ] },
+    { "note": "palisade round the back and left", "at": [-0.42, 0.0], "parts": [
+      { "shape": "wall", "pos": [0.0, 0, -0.2], "to": [0.0, 0.5], "height": 0.08, "thickness": 0.02, "cell": "wood" },
+      { "shape": "wall", "pos": [0.0, 0, 0.5], "to": [0.3, 1.0], "height": 0.08, "thickness": 0.02, "cell": "wood" }
+    ] },
+    { "note": "pines and trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.26, 0, 0.85], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [-0.04, 0, 1.1], "kind": "pine", "height": 0.22, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [0.0, 0, 1.15], "kind": "pine", "height": 0.18, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [-0.38, 0, 0.7], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 5 },
+      { "shape": "tree", "pos": [0.44, 0, 0.45], "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 6 },
+      { "shape": "tree", "pos": [-0.45, 0, -0.1], "kind": "broadleaf", "height": 0.13, "radius": 0.05, "seed": 7 }
+    ] }
+  ]
+}

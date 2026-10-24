@@ -1,0 +1,40 @@
+{
+  "name": "Amon Sul",
+  "description": "Weathertop: a squat, tapering ruined keep of rough grey fieldstone rising out of a grassy hill, its grassy top holding a stepped stone gable with a broken plank roof, an arched gate reached by a wooden ramp and stone steps on the left, a gnarled dead tree and boulder beside it and a dark stream down the right flank.",
+  "style": "Mannish",
+  "colors":   ["#8E8A70", "#5E4A36", "#5A4632", "#7A765E", "#7A7A3A", "#221E18", "#3A4A4E", "", "#6A6E34"],
+  "surfaces": ["Fieldstone", "Planks", "Planks", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "hill mound", "at": [0.06, 0.02], "parts": [
+      { "shape": "rock", "radius": 0.3, "height": 0.16, "cell": "stone" },
+      { "shape": "rock", "pos": [0.18, 0, -0.04], "radius": 0.18, "height": 0.2, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "ruined keep", "at": [0.02, 0.0], "parts": [
+      { "shape": "cylinder", "radius": 0.24, "height": 0.3, "sides": 8, "taper": 0.72, "cell": "wall", "top": "foliage" },
+      { "shape": "battlements", "pos": [0, 0.3, 0], "radius": 0.17, "count": 9 },
+      { "shape": "box", "pos": [0.05, 0, -0.17], "size": [0.1, 0.27, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [-0.1, 0, -0.215], "size": [0.06, 0.1, 0.03], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0.15, -0.232], "size": [0.015, 0.035, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.04, 0.3, 0.03], "size": [0.12, 0.06, 0.08], "cell": "wall", "yaw": -30 },
+      { "shape": "gable", "pos": [-0.04, 0.36, 0.03], "size": [0.12, 0.09, 0.08], "cell": "roof", "top": "wall", "yaw": -30 }
+    ] },
+    { "note": "ramp and stone steps", "at": [-0.25, -0.17], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.08, 0.02, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.02, 0.02], "size": [0.08, 0.02, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.04, 0.035], "size": [0.08, 0.02, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.08, 0.04, 0.0], "size": [0.12, 0.012, 0.03], "cell": "wood", "yaw": 30 }
+    ] },
+    { "note": "dead tree and boulder", "at": [-0.38, -0.04], "parts": [
+      { "shape": "tree", "pos": [0.01, 0, 0.3], "kind": "broadleaf", "height": 0.17, "radius": 0.04, "cell": "trim" },
+      { "shape": "rock", "radius": 0.06, "height": 0.07, "cell": "stone", "seed": 3 }
+    ] },
+    { "note": "stream down the right", "at": [0.33, -0.18], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.035, 0.004, 0.7], "cell": "accent" },
+      { "shape": "rock", "pos": [0.06, 0, -0.1], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [-0.05, 0, 0.12], "radius": 0.02, "height": 0.02, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "path to the gate", "at": [-0.08, -0.33], "yaw": -15, "parts": [
+      { "shape": "box", "size": [0.08, 0.003, 0.4], "cell": "wood" }
+    ] }
+  ]
+}

@@ -230,7 +230,7 @@ public class KeyManager : MonoBehaviour
         if (move.sqrMagnitude > 0f)
         {
             move.Normalize();
-            boardNavigator.transform.position += move * keyboardMoveSpeed * Time.deltaTime;
+            boardNavigator.Pan(move * keyboardMoveSpeed * Time.deltaTime);
         }
     }
 

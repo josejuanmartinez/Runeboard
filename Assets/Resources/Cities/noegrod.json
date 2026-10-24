@@ -1,0 +1,78 @@
+{
+  "name": "Noegrod",
+  "description": "A dwarven mining town cut into a grey crag: a tall gabled shaft-house on the summit with chain lifts running down, a great timber waterwheel under a waterfall on the left, several slate-roofed stone mine entrances glowing with forge light, curving rail tracks with ore carts, a long stair, blue star banners and pines.",
+  "style": "Dwarven",
+  "colors":   ["#9A968A", "#56606A", "#6A4A2A", "#8A8880", "#B08A40", "#1E1A16", "#E0A048", "", "#3C5232"],
+  "surfaces": ["Ashlar",  "Slate",   "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the crag", "at": [0.03, 0.26], "parts": [
+      { "shape": "rock", "radius": 0.34, "height": 0.42, "cell": "stone" },
+      { "shape": "rock", "pos": [0.1, 0, 0.1], "radius": 0.18, "height": 0.55, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "left cliffs", "at": [-0.38, 0.06], "parts": [
+      { "shape": "rock", "radius": 0.15, "height": 0.26, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.04, 0, -0.35], "radius": 0.1, "height": 0.14, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "summit shaft-house", "at": [0.12, 0.36], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.42, 0], "size": [0.1, 0.16, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.48, -0.041], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.58, 0], "size": [0.11, 0.07, 0.09], "cell": "roof", "top": "trim", "yaw": 90 }
+    ] },
+    { "note": "chain lift shaft", "at": [0.08, 0.22], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.06, 0.44, 0.03], "cell": "dark" },
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.015, 0.44, 0.035], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.015, 0.44, 0.035], "cell": "wall" }
+    ] },
+    { "note": "upper mine entrance", "at": [0.18, 0.18], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.1, 0.08], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.041], "size": [0.045, 0.07, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.11, 0.06, 0.09], "cell": "roof", "top": "trim", "yaw": 90 }
+    ] },
+    { "note": "waterwheel and flume", "at": [-0.2, 0.14], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.2, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.04, -0.011], "size": [0.12, 0.12, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.2, 0.0], "size": [0.24, 0.025, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [-0.11, 0.0, -0.03], "size": [0.03, 0.21, 0.004], "cell": "accent" }
+    ] },
+    { "note": "middle mine house", "at": [-0.02, 0.0], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0, -0.051], "size": [0.04, 0.06, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.13, 0.07, 0.11], "cell": "roof", "top": "trim", "yaw": 90 }
+    ] },
+    { "note": "lower-left mine entrance", "at": [-0.27, -0.22], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.051], "size": [0.05, 0.07, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.13, 0.07, 0.11], "cell": "roof", "top": "trim", "yaw": 90 }
+    ] },
+    { "note": "lower-right mine entrance", "at": [0.24, -0.25], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.01, 0, -0.051], "size": [0.05, 0.07, 0.004], "cell": "accent" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.13, 0.07, 0.11], "cell": "roof", "top": "trim", "yaw": 90 }
+    ] },
+    { "note": "rail tracks", "at": [0.03, -0.12], "parts": [
+      { "shape": "box", "pos": [0, 0, -0.3], "size": [0.05, 0.006, 0.4], "cell": "wood", "yaw": -15 },
+      { "shape": "box", "pos": [0.06, 0, 0.2], "size": [0.05, 0.006, 0.5], "cell": "wood", "yaw": 10 },
+      { "shape": "box", "pos": [-0.1, 0, -0.35], "size": [0.04, 0.006, 0.3], "cell": "wood", "yaw": 50 }
+    ] },
+    { "note": "ore carts", "at": [-0.01, -0.13], "parts": [
+      { "shape": "box", "size": [0.04, 0.03, 0.03], "cell": "dark", "top": "trim" },
+      { "shape": "box", "pos": [-0.05, 0, -0.4], "size": [0.04, 0.03, 0.03], "cell": "dark", "top": "trim" }
+    ] },
+    { "note": "stair up the right", "at": [0.34, 0.1], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, -0.08], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.04, 0.07, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, 0.08], "size": [0.04, 0.12, 0.05], "cell": "stone" }
+    ] },
+    { "note": "banners", "at": [0.0, 0.0], "parts": [
+      { "shape": "flag", "pos": [-0.37, 0, 0.4], "height": 0.22, "radius": 0.045 },
+      { "shape": "flag", "pos": [0.38, 0, -0.28], "height": 0.22, "radius": 0.045 }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.09, 0, 1.05], "kind": "pine", "height": 0.18, "radius": 0.045 },
+      { "shape": "tree", "pos": [-0.19, 0, 0.95], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 1 },
+      { "shape": "tree", "pos": [0.41, 0, 0.5], "kind": "pine", "height": 0.17, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [-0.46, 0, 0.0], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [0.42, 0, -0.55], "kind": "broadleaf", "height": 0.08, "radius": 0.035, "cell": "trim", "seed": 4 }
+    ] }
+  ]
+}

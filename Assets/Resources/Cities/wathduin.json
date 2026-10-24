@@ -1,0 +1,75 @@
+{
+  "name": "Wathduin",
+  "description": "A bleak brown heath: a slender ruined square watchtower with a jagged broken crown stands on a rocky knoll at the back, ringed by bare dead trees, with two weathered standing stones, dry scrub, forking dirt paths and a humped stone bridge over a dark stream on the left.",
+  "style": "Mannish",
+  "colors":   ["#7E766A", "#5A5246", "#4E3C2C", "#6E685C", "#A88E62", "#1E1C18", "#4A5258", "", "#5A4628"],
+  "surfaces": ["Fieldstone", "Slate", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "rocky knoll", "at": [0.0, 0.32], "parts": [
+      { "shape": "rock", "radius": 0.15, "height": 0.08, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.08, 0, -0.1], "radius": 0.06, "height": 0.07, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.04, 0, -0.14], "radius": 0.05, "height": 0.09, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "ruined watchtower", "at": [0.02, 0.37], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.04, 0], "radius": 0.055, "height": 0.36, "sides": 4, "twist": 0.125, "taper": 0.9, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [-0.035, 0.4, -0.035], "size": [0.02, 0.06, 0.02], "cell": "wall" },
+      { "shape": "box", "pos": [0.035, 0.4, -0.035], "size": [0.02, 0.04, 0.02], "cell": "wall" },
+      { "shape": "box", "pos": [0.035, 0.4, 0.035], "size": [0.02, 0.07, 0.02], "cell": "wall" },
+      { "shape": "box", "pos": [-0.035, 0.4, 0.035], "size": [0.02, 0.03, 0.02], "cell": "wall" },
+      { "shape": "box", "pos": [-0.01, 0.06, -0.05], "size": [0.025, 0.06, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.01, 0.24, -0.048], "size": [0.012, 0.035, 0.004], "cell": "dark" },
+      { "shape": "flag", "pos": [0.035, 0.47, 0.035], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "standing stone, left", "at": [-0.16, 0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.03, "height": 0.12, "sides": 5, "taper": 0.6, "cell": "stone" }
+    ] },
+    { "note": "standing stone, right", "at": [0.23, -0.04], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.17, "sides": 5, "taper": 0.6, "cell": "stone" }
+    ] },
+    { "note": "dark stream 1", "at": [-0.29, 0.039], "yaw": 104, "parts": [ { "shape": "box", "size": [0.405, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "dark stream 2", "at": [-0.316, -0.124], "yaw": 84, "parts": [ { "shape": "box", "size": [0.427, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "dark stream 3", "at": [-0.244, -0.301], "yaw": 77, "parts": [ { "shape": "box", "size": [0.468, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "humped stone bridge", "at": [-0.27, -0.22], "yaw": -20, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.15, 0.018, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [-0.055, 0, 0], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0.055, 0, 0], "size": [0.04, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.038, -0.022], "size": [0.15, 0.012, 0.006], "cell": "stone" }
+    ] },
+    { "note": "path 1", "at": [0.024, 0.17], "yaw": 76, "parts": [ { "shape": "box", "size": [0.407, 0.005, 0.045], "cell": "trim" } ] },
+    { "note": "path 2", "at": [0.01, 0.0], "yaw": 105, "parts": [ { "shape": "box", "size": [0.474, 0.005, 0.045], "cell": "trim" } ] },
+    { "note": "path 3", "at": [-0.127, -0.17], "yaw": 113, "parts": [ { "shape": "box", "size": [0.428, 0.005, 0.045], "cell": "trim" } ] },
+    { "note": "path east 1", "at": [0.148, 0.124], "yaw": 24, "parts": [ { "shape": "box", "size": [0.249, 0.005, 0.04], "cell": "trim" } ] },
+    { "note": "path east 2", "at": [0.305, 0.137], "yaw": -56, "parts": [ { "shape": "box", "size": [0.207, 0.005, 0.04], "cell": "trim" } ] },
+    { "note": "path south 1", "at": [0.037, -0.157], "yaw": 65, "parts": [ { "shape": "box", "size": [0.295, 0.005, 0.04], "cell": "trim" } ] },
+    { "note": "path south 2", "at": [0.148, -0.281], "yaw": 73, "parts": [ { "shape": "box", "size": [0.378, 0.005, 0.04], "cell": "trim" } ] },
+    { "note": "dead trees, back left", "at": [-0.3, 0.3], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.05], "kind": "broadleaf", "height": 0.24, "radius": 0.06, "cell": "wood" },
+      { "shape": "tree", "pos": [0.14, 0, 0.18], "kind": "broadleaf", "height": 0.2, "radius": 0.05, "cell": "wood", "seed": 1 },
+      { "shape": "tree", "pos": [-0.12, 0, -0.25], "kind": "broadleaf", "height": 0.26, "radius": 0.06, "cell": "wood", "seed": 2 }
+    ] },
+    { "note": "dead trees, back right", "at": [0.25, 0.32], "parts": [
+      { "shape": "tree", "pos": [-0.08, 0, 0.12], "kind": "broadleaf", "height": 0.18, "radius": 0.05, "cell": "wood", "seed": 3 },
+      { "shape": "tree", "pos": [0.04, 0, 0.0], "kind": "broadleaf", "height": 0.28, "radius": 0.06, "cell": "wood", "seed": 4 },
+      { "shape": "tree", "pos": [0.14, 0, -0.08], "kind": "broadleaf", "height": 0.26, "radius": 0.06, "cell": "wood", "seed": 5 }
+    ] },
+    { "note": "dead trees, right", "at": [0.42, 0.0], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.2], "kind": "broadleaf", "height": 0.24, "radius": 0.05, "cell": "wood", "seed": 6 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.15], "kind": "broadleaf", "height": 0.2, "radius": 0.05, "cell": "wood", "seed": 7 }
+    ] },
+    { "note": "dead tree, front right", "at": [0.33, -0.23], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.22, "radius": 0.055, "cell": "wood", "seed": 8 }
+    ] },
+    { "note": "dead tree, left", "at": [-0.45, -0.05], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.05, "cell": "wood", "seed": 9 }
+    ] },
+    { "note": "dry scrub", "at": [-0.05, -0.15], "parts": [
+      { "shape": "cone", "pos": [-0.07, 0, 0.35], "radius": 0.04, "height": 0.04, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [-0.18, 0, 0.1], "radius": 0.045, "height": 0.045, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [0.1, 0, 0.05], "radius": 0.04, "height": 0.04, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [0.27, 0, -0.1], "radius": 0.04, "height": 0.04, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [-0.1, 0, -0.4], "radius": 0.045, "height": 0.045, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [0.1, 0, -0.45], "radius": 0.045, "height": 0.04, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [0.3, 0, 0.6], "radius": 0.04, "height": 0.04, "sides": 6, "cell": "foliage" }
+    ] }
+  ]
+}

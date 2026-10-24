@@ -1,0 +1,71 @@
+{
+  "name": "Lar Huz",
+  "description": "A desolate muddy outpost split by a winding stony stream: a broken round stone watchtower with ruined crenellations stands at the back left, a palisade of sharpened stakes and a spear with a tattered rust banner at the back, a broken barrel and logs to the right, a wrecked spiked cart at the front left and a roofed stone well beside a small arch at the front right.",
+  "style": "Mannish",
+  "colors":   ["#6E6A5E", "#4E3E2C", "#5A4630", "#74705E", "#6A5A42", "#1E1A14", "#5E6A68", "", "#5A5A30"],
+  "surfaces": ["Fieldstone", "Planks", "Planks", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "broken round watchtower", "at": [-0.34, 0.29], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.32, "sides": 12, "taper": 0.92, "cell": "wall" },
+      { "shape": "box", "pos": [-0.02, 0.12, -0.075], "size": [0.02, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.05, 0.32, -0.02], "size": [0.03, 0.08, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.03, 0.32, -0.04], "size": [0.03, 0.06, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0.32, 0.04], "size": [0.03, 0.03, 0.03], "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.08, 0, -0.04], "radius": 0.006, "height": 0.22, "sides": 4, "taper": 0.6, "cell": "wood" },
+      { "shape": "rock", "pos": [0.12, 0, -0.12], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 1 },
+      { "shape": "flag", "pos": [0, 0.32, 0.02], "height": 0.07, "radius": 0.004 }
+    ] },
+    { "note": "stream, back stretch", "at": [-0.055, 0.4], "yaw": 75, "parts": [
+      { "shape": "box", "size": [0.7, 0.004, 0.045], "cell": "accent" }
+    ] },
+    { "note": "stream, middle stretch", "at": [-0.015, 0.085], "yaw": -82, "parts": [
+      { "shape": "box", "size": [0.78, 0.004, 0.045], "cell": "accent" }
+    ] },
+    { "note": "stream, front stretch", "at": [0.015, -0.27], "yaw": 79, "parts": [
+      { "shape": "box", "size": [0.88, 0.004, 0.045], "cell": "accent" }
+    ] },
+    { "note": "palisade of sharpened stakes", "at": [0.13, 0.43], "yaw": -20, "parts": [
+      { "shape": "cylinder", "pos": [-0.06, 0, 0], "radius": 0.01, "height": 0.13, "sides": 5, "cell": "wood" },
+      { "shape": "cylinder", "pos": [-0.03, 0, 0.01], "radius": 0.01, "height": 0.17, "sides": 5, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.0, 0, 0], "radius": 0.01, "height": 0.2, "sides": 5, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.03, 0, 0.01], "radius": 0.01, "height": 0.22, "sides": 5, "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.06, 0, 0], "radius": 0.01, "height": 0.18, "sides": 5, "cell": "wood" },
+      { "shape": "cone", "pos": [0.0, 0.2, 0], "radius": 0.01, "height": 0.03, "sides": 5, "cell": "wood" },
+      { "shape": "cone", "pos": [0.03, 0.22, 0.01], "radius": 0.01, "height": 0.03, "sides": 5, "cell": "wood" },
+      { "shape": "box", "pos": [0.02, 0, -0.06], "size": [0.1, 0.03, 0.04], "cell": "stone" }
+    ] },
+    { "note": "spear banner and broken barrel", "at": [0.37, 0.3], "parts": [
+      { "shape": "flag", "pos": [0.0, 0, 0.15], "height": 0.32, "radius": 0.006 },
+      { "shape": "cylinder", "pos": [-0.02, 0, -0.05], "radius": 0.045, "height": 0.06, "sides": 10, "cell": "wood", "top": "dark" },
+      { "shape": "box", "pos": [0.04, 0, -0.14], "size": [0.12, 0.02, 0.02], "cell": "wood", "yaw": 30 },
+      { "shape": "box", "pos": [-0.08, 0, 0.12], "size": [0.08, 0.02, 0.02], "cell": "wood", "yaw": -20 }
+    ] },
+    { "note": "wrecked spiked cart", "at": [-0.35, -0.12], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.04, 0], "size": [0.14, 0.03, 0.08], "cell": "wood" },
+      { "shape": "box", "pos": [0.0, 0.07, 0.04], "size": [0.14, 0.04, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [-0.02, 0, -0.045], "size": [0.07, 0.07, 0.008], "cell": "dark" },
+      { "shape": "box", "pos": [0.1, 0, -0.02], "size": [0.12, 0.01, 0.01], "cell": "wood", "yaw": 25 },
+      { "shape": "cylinder", "pos": [-0.06, 0.04, 0.03], "radius": 0.008, "height": 0.14, "sides": 5, "taper": 0.2, "cell": "wood" },
+      { "shape": "cylinder", "pos": [-0.02, 0.04, 0.04], "radius": 0.008, "height": 0.12, "sides": 5, "taper": 0.2, "cell": "wood" },
+      { "shape": "flag", "pos": [-0.08, 0.04, 0.0], "height": 0.14, "radius": 0.005 }
+    ] },
+    { "note": "roofed stone well and arch", "at": [0.24, -0.23], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.05, "sides": 12, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [-0.05, 0, 0.04], "size": [0.01, 0.12, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.05, 0, 0.04], "size": [0.01, 0.12, 0.01], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.12, 0.04], "size": [0.14, 0.05, 0.08], "cell": "roof", "top": "wood", "yaw": -20 },
+      { "shape": "box", "pos": [0.12, 0, 0.15], "size": [0.025, 0.1, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.2, 0, 0.15], "size": [0.025, 0.1, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [0.16, 0.1, 0.15], "size": [0.105, 0.03, 0.03], "cell": "stone" }
+    ] },
+    { "note": "spear banner front right", "at": [0.45, 0.04], "parts": [
+      { "shape": "flag", "height": 0.32, "radius": 0.006 }
+    ] },
+    { "note": "scattered stones and grass", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.18, 0, -0.25], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.18, 0, 0.3], "radius": 0.02, "height": 0.02, "cell": "stone", "seed": 3 },
+      { "shape": "cone", "pos": [0.15, 0, 0.12], "radius": 0.03, "height": 0.04, "sides": 6, "cell": "foliage" },
+      { "shape": "cone", "pos": [-0.25, 0, 0.55], "radius": 0.03, "height": 0.04, "sides": 6, "cell": "foliage" }
+    ] }
+  ]
+}

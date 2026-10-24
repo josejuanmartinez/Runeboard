@@ -1,0 +1,79 @@
+{
+  "name": "Lond Daer Enedh",
+  "description": "The ruined great haven: a hillside of collapsed timber shipyard frames and broken thatch roofs between lone stone chimneys and a tall pale stone tower at the top, a stone ring well and a framed well by the dusty road, a jagged crag on the sea at the left, and a few blue-roofed cottages among pines above a small pier with rowboats.",
+  "style": "Mannish",
+  "colors":   ["#A8A090", "#8A7A50", "#6A5434", "#9C9484", "#C49040", "#2A2418", "#3E6A78", "", "#3E5430"],
+  "surfaces": ["Ashlar", "Thatch", "Planks", "Fieldstone", "", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the sea on the left", "at": [-0.36, -0.18], "yaw": 58, "parts": [
+      { "shape": "box", "size": [0.75, 0.004, 0.42], "cell": "accent" }
+    ] },
+    { "note": "crag by the sea", "at": [-0.32, -0.12], "parts": [
+      { "shape": "rock", "radius": 0.13, "height": 0.34, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.08, 0, -0.15], "radius": 0.09, "height": 0.18, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "tall stone tower at the top", "at": [0.04, 0.45], "parts": [
+      { "shape": "cylinder", "radius": 0.06, "height": 0.08, "sides": 10, "taper": 0.6, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.08, 0], "radius": 0.038, "height": 0.26, "sides": 10, "taper": 0.85, "cell": "wall", "top": "dark" },
+      { "shape": "flag", "pos": [0, 0.34, 0], "height": 0.07, "radius": 0.004 }
+    ] },
+    { "note": "collapsed frames along the top", "at": [-0.12, 0.42], "yaw": -20, "parts": [
+      { "shape": "cylinder", "pos": [-0.22, 0, 0.02], "radius": 0.025, "height": 0.18, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [-0.12, 0, 0], "size": [0.12, 0.07, 0.08], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.12, 0.07, 0], "size": [0.12, 0.07, 0.08], "cell": "roof", "top": "wood", "yaw": 15 },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.01, 0.12, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.1, 0.04, 0], "size": [0.16, 0.012, 0.012], "cell": "wood", "yaw": 30 },
+      { "shape": "gable", "pos": [0.27, 0.0, -0.02], "size": [0.12, 0.1, 0.08], "cell": "roof", "top": "wood", "yaw": -20 },
+      { "shape": "box", "pos": [0.32, 0, -0.02], "size": [0.01, 0.14, 0.01], "cell": "wood" },
+      { "shape": "tree", "pos": [-0.02, 0, 0.12], "kind": "broadleaf", "height": 0.12, "radius": 0.05, "cell": "trim", "seed": 1 }
+    ] },
+    { "note": "stone ring well", "at": [0.33, 0.36], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.04, "sides": 12, "cell": "stone", "top": "dark" }
+    ] },
+    { "note": "collapsed frames mid left", "at": [-0.15, 0.1], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [-0.05, 0, 0], "size": [0.012, 0.16, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.012, 0.14, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.13, 0], "size": [0.16, 0.012, 0.012], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.02, 0.0, 0.06], "size": [0.16, 0.14, 0.1], "cell": "roof", "top": "wood", "yaw": -15 },
+      { "shape": "box", "pos": [0.14, 0, -0.08], "size": [0.012, 0.11, 0.012], "cell": "wood" }
+    ] },
+    { "note": "collapsed frames right", "at": [0.22, 0.14], "yaw": -40, "parts": [
+      { "shape": "gable", "pos": [0, 0, 0], "size": [0.18, 0.13, 0.1], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.06, 0, -0.05], "size": [0.012, 0.15, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0.06, -0.06], "size": [0.2, 0.012, 0.012], "cell": "wood", "yaw": 25 }
+    ] },
+    { "note": "right chimney and fallen thatch", "at": [0.36, -0.12], "yaw": 40, "parts": [
+      { "shape": "cylinder", "pos": [0.08, 0, 0.15], "radius": 0.03, "height": 0.34, "sides": 4, "twist": 0.125, "cell": "wall", "top": "dark" },
+      { "shape": "gable", "pos": [0, 0, 0], "size": [0.22, 0.2, 0.12], "cell": "roof", "top": "wood", "yaw": 10 },
+      { "shape": "box", "pos": [-0.05, 0, -0.07], "size": [0.012, 0.18, 0.012], "cell": "wood" },
+      { "shape": "box", "pos": [0.06, 0, -0.07], "size": [0.012, 0.16, 0.012], "cell": "wood" }
+    ] },
+    { "note": "collapsed shed front", "at": [0.15, -0.4], "yaw": -20, "parts": [
+      { "shape": "gable", "size": [0.16, 0.06, 0.08], "cell": "roof", "top": "wood", "yaw": 12 },
+      { "shape": "box", "pos": [0.05, 0.03, -0.04], "size": [0.18, 0.012, 0.012], "cell": "wood", "yaw": -25 }
+    ] },
+    { "note": "framed well by the road", "at": [0.04, -0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.035, "height": 0.05, "sides": 10, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [-0.035, 0, 0], "size": [0.01, 0.15, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0, 0], "size": [0.01, 0.15, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.145, 0], "size": [0.09, 0.012, 0.012], "cell": "wood" }
+    ] },
+    { "note": "blue-roofed cottages", "at": [-0.12, -0.27], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.1, 0.07, 0.09], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.1, 0.06, 0.09], "cell": "accent", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0.09, 0, -0.18], "size": [0.07, 0.05, 0.06], "cell": "wood" },
+      { "shape": "gable", "pos": [0.09, 0.05, -0.18], "size": [0.07, 0.045, 0.06], "cell": "accent", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "pines by the cottages", "at": [-0.07, -0.12], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.18, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.05, 0, 0.05], "kind": "pine", "height": 0.2, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [-0.07, 0, 0.08], "kind": "pine", "height": 0.16, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [0.04, 0, -0.45], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 5 }
+    ] },
+    { "note": "pier and rowboats", "at": [-0.24, -0.4], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0.012, 0], "size": [0.16, 0.01, 0.04], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0, -0.06], "size": [0.07, 0.015, 0.025], "cell": "wood" },
+      { "shape": "box", "pos": [0.12, 0, -0.08], "size": [0.07, 0.015, 0.025], "cell": "wood" }
+    ] }
+  ]
+}

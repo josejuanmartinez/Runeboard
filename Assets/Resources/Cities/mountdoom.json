@@ -1,0 +1,55 @@
+{
+  "name": "Mount Doom",
+  "description": "A huge black volcano filling the hex, its ridged slopes scored with glowing orange lava rivers running down from a fiery smoking crater, two slender eye-crowned dark towers on the left shoulder, jagged spurs on the right, and a black-walled gatehouse with spired towers and a lit gate at its foot.",
+  "style": "Orcish",
+  "colors":   ["#3A322E", "#2A2420", "", "#4A3E36", "#5A4A3E", "#140E0C", "#E0702A", "", "#3A2E24"],
+  "surfaces": ["Fieldstone", "", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "the volcano", "at": [0.03, 0.08], "parts": [
+      { "shape": "rock", "radius": 0.46, "height": 0.2, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0, 0.05], "radius": 0.4, "height": 0.82, "sides": 9, "taper": 0.14, "cell": "stone", "top": "accent" },
+      { "shape": "cylinder", "pos": [0, 0.82, 0.05], "radius": 0.06, "height": 0.03, "sides": 9, "taper": 1.1, "cell": "stone", "top": "accent" },
+      { "shape": "cone", "pos": [0, 0.85, 0.05], "radius": 0.03, "height": 0.06, "sides": 6, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0, 0, 0.05], "radius": 0.39, "height": 0.8, "sides": 9, "taper": 0.15, "twist": 0.0556, "cell": "accent" }
+    ] },
+    { "note": "spurs on the right", "at": [0.4, 0.05], "parts": [
+      { "shape": "cone", "radius": 0.07, "height": 0.36, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.06, 0, 0.35], "radius": 0.05, "height": 0.25, "sides": 5, "cell": "wall" },
+      { "shape": "cone", "pos": [0.04, 0, -0.35], "radius": 0.06, "height": 0.3, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "lava pools at the foot", "at": [0.0, -0.3], "parts": [
+      { "shape": "box", "pos": [-0.25, 0, 0.1], "size": [0.2, 0.004, 0.1], "cell": "accent", "yaw": -15 },
+      { "shape": "box", "pos": [0.3, 0, 0.15], "size": [0.18, 0.004, 0.08], "cell": "accent", "yaw": 20 }
+    ] },
+    { "note": "front eye tower", "at": [-0.38, -0.06], "parts": [
+      { "shape": "cylinder", "radius": 0.055, "height": 0.48, "sides": 6, "taper": 0.5, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.47, 0], "size": [0.03, 0.03, 0.02], "cell": "accent" },
+      { "shape": "cone", "pos": [-0.02, 0.46, 0], "radius": 0.01, "height": 0.08, "sides": 4, "cell": "wall" },
+      { "shape": "cone", "pos": [0.02, 0.46, 0], "radius": 0.01, "height": 0.08, "sides": 4, "cell": "wall" }
+    ] },
+    { "note": "rear eye tower", "at": [-0.3, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.36, "sides": 6, "taper": 0.55, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.35, 0], "size": [0.022, 0.022, 0.015], "cell": "accent" },
+      { "shape": "cone", "pos": [-0.015, 0.34, 0], "radius": 0.008, "height": 0.06, "sides": 4, "cell": "wall" },
+      { "shape": "cone", "pos": [0.015, 0.34, 0], "radius": 0.008, "height": 0.06, "sides": 4, "cell": "wall" }
+    ] },
+    { "note": "front wall", "at": [0.0, -0.36], "parts": [
+      { "shape": "wall", "pos": [-0.32, 0, 0.0], "to": [0.33, 0.1], "height": 0.04, "thickness": 0.02, "count": 1, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.31, 0, 0], "radius": 0.025, "height": 0.08, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.31, 0.08, 0], "radius": 0.025, "height": 0.04, "sides": 4, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.19, 0, 0], "radius": 0.02, "height": 0.07, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.22, 0, 0.08], "radius": 0.025, "height": 0.09, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.22, 0.09, 0.08], "radius": 0.025, "height": 0.04, "sides": 4, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.32, 0, 0.1], "radius": 0.02, "height": 0.08, "sides": 4, "twist": 0.125, "cell": "wall" }
+    ] },
+    { "note": "black gatehouse", "at": [0.0, -0.4], "parts": [
+      { "shape": "box", "size": [0.1, 0.11, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.035, 0.05, 0.004], "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.05, 0, 0], "radius": 0.02, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.05, 0.13, 0], "radius": 0.02, "height": 0.05, "sides": 4, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.05, 0, 0], "radius": 0.02, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.05, 0.13, 0], "radius": 0.02, "height": 0.05, "sides": 4, "cell": "wall" },
+      { "shape": "flag", "pos": [0, 0.11, 0], "height": 0.06 }
+    ] }
+  ]
+}

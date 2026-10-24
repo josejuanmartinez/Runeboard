@@ -1,0 +1,58 @@
+{
+  "name": "Barad-wath",
+  "description": "A single tall black round tower capped by a ribbed spiked dome, rising from a ring-walled courtyard with an arched gate between pointed pillars hung with dark red eye banners, two small spired guard posts on the road in front, all on a basalt plateau of jagged black spikes cut by winding lava channels.",
+  "style": "Orcish",
+  "colors":   ["#3A3836", "#2C2A2A", "#3A2E24", "#4A4642", "#6A2420", "#141210", "#C0502A", "", "#3A362E"],
+  "surfaces": ["Ashlar", "Slate", "", "Fieldstone", "Cloth", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "black tower", "at": [0.0, 0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.22, "height": 0.13, "sides": 16, "cell": "wall", "top": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.13, 0.03], "radius": 0.15, "height": 0.05, "sides": 16, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.18, 0.03], "radius": 0.13, "height": 0.3, "sides": 16, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.48, 0.03], "radius": 0.145, "height": 0.04, "sides": 16, "cell": "stone" },
+      { "shape": "dome", "pos": [0, 0.52, 0.03], "radius": 0.12, "height": 0.1, "sides": 12, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.61, 0.03], "radius": 0.015, "height": 0.05, "sides": 6, "cell": "roof" },
+      { "shape": "box", "pos": [0, 0.15, -0.12], "size": [0.02, 0.025, 0.004], "cell": "accent" }
+    ] },
+    { "note": "gate with pillars and banners", "at": [-0.02, -0.11], "parts": [
+      { "shape": "box", "size": [0.12, 0.12, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [-0.08, 0, -0.02], "radius": 0.02, "height": 0.12, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.08, 0.12, -0.02], "radius": 0.02, "height": 0.05, "sides": 4, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.08, 0, -0.02], "radius": 0.02, "height": 0.12, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cone", "pos": [0.08, 0.12, -0.02], "radius": 0.02, "height": 0.05, "sides": 4, "cell": "wall" },
+      { "shape": "box", "pos": [-0.23, 0.07, 0.15], "size": [0.03, 0.12, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [0.16, 0.04, 0.1], "size": [0.03, 0.12, 0.004], "cell": "trim" },
+      { "shape": "flag", "pos": [0.16, 0.0, 0.11], "height": 0.2, "radius": 0.03 }
+    ] },
+    { "note": "guard posts on the road", "at": [-0.13, -0.27], "parts": [
+      { "shape": "box", "pos": [-0.09, 0, 0.1], "size": [0.04, 0.07, 0.04], "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.09, 0.07, 0.1], "radius": 0.03, "height": 0.05, "cell": "roof" },
+      { "shape": "box", "pos": [0.1, 0, -0.05], "size": [0.04, 0.07, 0.04], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.1, 0.07, -0.05], "radius": 0.03, "height": 0.05, "cell": "roof" },
+      { "shape": "wall", "pos": [-0.2, 0, 0.05], "to": [-0.08, 0.15], "height": 0.03, "thickness": 0.02, "cell": "wall" }
+    ] },
+    { "note": "road", "at": [-0.05, -0.33], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.1, 0.004, 0.45], "cell": "stone" }
+    ] },
+    { "note": "lava channels", "at": [0, 0], "parts": [
+      { "shape": "box", "pos": [-0.4, 0, -0.1], "size": [0.03, 0.003, 0.8], "cell": "accent", "yaw": -15 },
+      { "shape": "box", "pos": [-0.28, 0, 0.3], "size": [0.25, 0.003, 0.03], "cell": "accent", "yaw": 15 },
+      { "shape": "box", "pos": [0.33, 0, 0.35], "size": [0.03, 0.003, 0.5], "cell": "accent", "yaw": -45 },
+      { "shape": "box", "pos": [0.35, 0, -0.35], "size": [0.03, 0.003, 0.6], "cell": "accent", "yaw": 30 },
+      { "shape": "box", "pos": [0.2, 0, -0.75], "size": [0.2, 0.003, 0.03], "cell": "accent", "yaw": 20 }
+    ] },
+    { "note": "black spikes left", "at": [-0.33, 0.13], "parts": [
+      { "shape": "cone", "pos": [0.05, 0, 0.35], "radius": 0.05, "height": 0.14, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.04, 0, 0.05], "radius": 0.05, "height": 0.12, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.07, 0, -0.25], "radius": 0.04, "height": 0.1, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "black spikes right", "at": [0.36, 0.08], "parts": [
+      { "shape": "cone", "pos": [0.0, 0, 0.3], "radius": 0.05, "height": 0.15, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.08, 0, 0.1], "radius": 0.05, "height": 0.14, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.04, 0, -0.15], "radius": 0.045, "height": 0.12, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.04, 0, -0.5], "radius": 0.05, "height": 0.12, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.22, 0, 0.6], "radius": 0.035, "height": 0.09, "sides": 5, "cell": "stone" }
+    ] }
+  ]
+}

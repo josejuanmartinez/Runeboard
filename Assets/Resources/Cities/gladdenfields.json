@@ -1,0 +1,60 @@
+{
+  "name": "Gladden Fields",
+  "description": "An empty fen of humped, mossy olive tussocks threaded by still, jade-green pools and a winding rivulet, with clumps of pale sedge and tall reeds tipped with rust-red flower spikes; no buildings at all.",
+  "style": "Hobbit",
+  "colors":   ["", "#A8563E", "#5A4630", "#6E6844", "#C8BE98", "#2E2A1E", "#5E9682", "", "#6A6A34"],
+  "surfaces": ["", "Plain", "", "Turf", "Plain", "", "Plain", "", "Leaves"],
+  "buildings": [
+    { "note": "large pool, left", "at": [-0.26, 0.09], "yaw": -15, "parts": [
+      { "shape": "cylinder", "radius": 0.14, "height": 0.006, "sides": 12, "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.08, 0, 0.1], "radius": 0.07, "height": 0.006, "sides": 10, "cell": "accent" }
+    ] },
+    { "note": "rivulet, centre", "at": [0.03, -0.1], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.26, 0.005, 0.04], "cell": "accent" },
+      { "shape": "box", "pos": [0.14, 0, 0.12], "size": [0.03, 0.005, 0.16], "cell": "accent" }
+    ] },
+    { "note": "pool and channel, right", "at": [0.3, -0.17], "parts": [
+      { "shape": "cylinder", "pos": [0.05, 0, 0.03], "radius": 0.06, "height": 0.006, "sides": 10, "cell": "accent" },
+      { "shape": "box", "pos": [-0.07, 0, -0.04], "size": [0.16, 0.005, 0.04], "cell": "accent", "yaw": 10 }
+    ] },
+    { "note": "pools, front", "at": [-0.05, -0.37], "parts": [
+      { "shape": "cylinder", "pos": [-0.31, 0, 0.18], "radius": 0.06, "height": 0.006, "sides": 10, "cell": "accent" },
+      { "shape": "cylinder", "radius": 0.035, "height": 0.006, "sides": 10, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.22, 0, -0.05], "radius": 0.05, "height": 0.006, "sides": 10, "cell": "accent" }
+    ] },
+    { "note": "tussocks, back", "at": [-0.05, 0.3], "parts": [
+      { "shape": "dome", "pos": [-0.2, 0, 0.0], "radius": 0.11, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.05, 0, 0.1], "radius": 0.12, "height": 0.06, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.3, 0, -0.05], "radius": 0.1, "height": 0.045, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "tussocks, middle", "at": [0.05, 0.05], "parts": [
+      { "shape": "dome", "pos": [-0.05, 0, 0], "radius": 0.13, "height": 0.05, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.3, 0, 0.05], "radius": 0.12, "height": 0.055, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [-0.42, 0, -0.25], "radius": 0.08, "height": 0.04, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "tussocks, front", "at": [0.0, -0.24], "parts": [
+      { "shape": "dome", "pos": [-0.12, 0, 0], "radius": 0.13, "height": 0.045, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.18, 0, -0.08], "radius": 0.1, "height": 0.04, "sides": 10, "cell": "foliage" },
+      { "shape": "dome", "pos": [0.4, 0, 0.25], "radius": 0.08, "height": 0.04, "sides": 10, "cell": "foliage" }
+    ] },
+    { "note": "flowering reeds, back", "at": [-0.06, 0.36], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.09, "radius": 0.012 },
+      { "shape": "cone", "pos": [0, 0.07, 0], "radius": 0.008, "height": 0.04, "sides": 5, "cell": "roof" },
+      { "shape": "tree", "pos": [0.04, 0, 0.04], "kind": "poplar", "height": 0.1, "radius": 0.012, "seed": 1 },
+      { "shape": "cone", "pos": [0.04, 0.08, 0.04], "radius": 0.008, "height": 0.04, "sides": 5, "cell": "roof" },
+      { "shape": "tree", "pos": [0.17, 0, 0.05], "kind": "poplar", "height": 0.07, "radius": 0.01, "seed": 2 },
+      { "shape": "cone", "pos": [0.17, 0.06, 0.05], "radius": 0.007, "height": 0.03, "sides": 5, "cell": "roof" }
+    ] },
+    { "note": "flowering reeds, right", "at": [0.19, 0.14], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.08, "radius": 0.012, "seed": 3 },
+      { "shape": "cone", "pos": [0, 0.065, 0], "radius": 0.008, "height": 0.035, "sides": 5, "cell": "roof" },
+      { "shape": "tree", "pos": [0.2, 0, 0.12], "kind": "poplar", "height": 0.08, "radius": 0.012, "seed": 4 },
+      { "shape": "cone", "pos": [0.2, 0.065, 0.12], "radius": 0.008, "height": 0.035, "sides": 5, "cell": "roof" }
+    ] },
+    { "note": "pale sedge clumps", "at": [-0.12, -0.22], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.04, "radius": 0.012, "cell": "trim", "seed": 5 },
+      { "shape": "tree", "pos": [0.25, 0, -0.15], "kind": "poplar", "height": 0.04, "radius": 0.012, "cell": "trim", "seed": 6 },
+      { "shape": "tree", "pos": [0.18, 0, 0.75], "kind": "poplar", "height": 0.04, "radius": 0.012, "cell": "trim", "seed": 7 }
+    ] }
+  ]
+}

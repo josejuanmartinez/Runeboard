@@ -1,0 +1,79 @@
+{
+  "name": "Kas Shafra",
+  "description": "A rustic hamlet of weathered plank cottages with steep grey shingle-thatch roofs and fieldstone chimneys, gathered round a stone well where dirt paths cross; a tall stone chimney-stack rises at the back right beside a lone pine, with fenced garden plots and a leafy tree in front.",
+  "style": "Northman",
+  "colors":   ["#7A5E3E", "#7E7462", "#5A4229", "#8A8478", "#6B5236", "#2E2418", "", "", "#4E5E2E"],
+  "surfaces": ["Planks",  "Thatch",  "", "Fieldstone", "", "", "", "", ""],
+  "buildings": [
+    { "note": "back-left cottage with smoking chimney", "at": [-0.24, 0.37], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.17], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.086], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.12, 0.1, 0.17], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "cylinder", "pos": [-0.07, 0, 0.03], "radius": 0.018, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "back-centre long house with cross gable", "at": [0.02, 0.42], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.2, 0.09, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.2, 0.08, 0.12], "cell": "roof", "top": "wood" },
+      { "shape": "gable", "pos": [0.05, 0.09, -0.04], "size": [0.07, 0.07, 0.06], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "cylinder", "pos": [-0.02, 0.12, 0.02], "radius": 0.015, "height": 0.08, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "back-right cottage and tall stone chimney-stack", "at": [0.26, 0.31], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.15], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.076], "size": [0.035, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.12, 0.09, 0.15], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "cylinder", "pos": [0.1, 0, 0.05], "radius": 0.035, "height": 0.36, "sides": 4, "twist": 0.125, "taper": 0.85, "cell": "stone" }
+    ] },
+    { "note": "pine behind", "at": [0.17, 0.5], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.24, "radius": 0.045 },
+      { "shape": "tree", "pos": [-0.16, 0, -0.1], "kind": "broadleaf", "height": 0.09, "radius": 0.05, "seed": 2 }
+    ] },
+    { "note": "left cottage with porch", "at": [-0.38, 0.03], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.12, 0.1, 0.15], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.12, 0.09, 0.15], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0.02, 0, -0.1], "size": [0.07, 0.06, 0.05], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0, 0.13, 0.04], "radius": 0.016, "height": 0.08, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "centre-left chapel house with round window", "at": [-0.15, -0.07], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.13, 0.12, 0.17], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.086], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.09, -0.086], "radius": 0.012, "height": 0.004, "sides": 8, "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.13, 0.11, 0.17], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "cylinder", "pos": [0.07, 0, 0.03], "radius": 0.017, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "village well", "at": [0.08, -0.05], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.04, "sides": 10, "cell": "stone", "top": "dark" },
+      { "shape": "box", "pos": [-0.035, 0, 0], "size": [0.01, 0.12, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.035, 0, 0], "size": [0.01, 0.12, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.115, 0], "size": [0.09, 0.01, 0.012], "cell": "wood" }
+    ] },
+    { "note": "right barn, long ridge running toward the viewer", "at": [0.36, -0.02], "yaw": 55, "parts": [
+      { "shape": "box", "size": [0.24, 0.1, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.24, 0.1, 0.12], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.121, 0, 0], "size": [0.004, 0.07, 0.05], "cell": "dark" }
+    ] },
+    { "note": "front-right house with lean-to porch", "at": [0.26, -0.3], "yaw": 45, "parts": [
+      { "shape": "box", "size": [0.18, 0.09, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.18, 0.09, 0.12], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.1, 0, -0.02], "size": [0.04, 0.07, 0.08], "cell": "wood" }
+    ] },
+    { "note": "front-left cottage", "at": [-0.32, -0.33], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.14, 0.08, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.14, 0.08, 0.11], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.056], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "front small cottage", "at": [-0.12, -0.43], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.1, 0.08, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.1, 0.09, 0.12], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "front tree and fences", "at": [0.01, -0.27], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 3 },
+      { "shape": "wall", "pos": [0.0, 0, -0.1], "to": [0.15, -0.0], "height": 0.03, "thickness": 0.008, "cell": "wood" }
+    ] },
+    { "note": "fenced garden behind the well", "at": [0.03, 0.2], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.08, "radius": 0.05, "seed": 5 },
+      { "shape": "wall", "pos": [-0.08, 0, -0.06], "to": [0.08, 0.0], "height": 0.03, "thickness": 0.008, "cell": "wood" }
+    ] }
+  ]
+}

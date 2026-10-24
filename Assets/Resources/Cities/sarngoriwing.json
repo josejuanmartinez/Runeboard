@@ -1,0 +1,75 @@
+{
+  "name": "Sarn Goriwing",
+  "description": "A mining hold on a snow-streaked grey mountain: a tall timber mill-house with a huge waterwheel stands on trestles at the right foot, plank-built lodges with green rune banners perch on the slopes, a timber-framed adit opens into a crag on the left, and wooden mine-cart tracks snake down past an ore cart, pines and green banner poles.",
+  "style": "Northman",
+  "colors":   ["#7A5E40", "#5E4E3A", "#6A4E30", "#8A8A80", "#D8D8D0", "#221C16", "#3E6A50", "", "#3E5430"],
+  "surfaces": ["Planks", "Planks", "Planks", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "snowy mountain", "at": [0.0, 0.2], "parts": [
+      { "shape": "rock", "pos": [0.0, 0, 0.1], "radius": 0.26, "height": 0.6, "cell": "stone" },
+      { "shape": "rock", "pos": [0.0, 0.42, 0.1], "radius": 0.08, "height": 0.16, "cell": "trim", "seed": 2 },
+      { "shape": "rock", "pos": [-0.2, 0, 0.05], "radius": 0.14, "height": 0.33, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.2, 0.22, 0.05], "radius": 0.06, "height": 0.1, "cell": "trim", "seed": 4 },
+      { "shape": "rock", "pos": [0.28, 0, -0.08], "radius": 0.14, "height": 0.28, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [0.28, 0.18, -0.08], "radius": 0.06, "height": 0.09, "cell": "trim", "seed": 6 },
+      { "shape": "rock", "pos": [-0.12, 0, -0.18], "radius": 0.12, "height": 0.2, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.12, 0, -0.2], "radius": 0.12, "height": 0.18, "cell": "stone", "seed": 8 }
+    ] },
+    { "note": "crag with mine adit, front left", "at": [-0.22, -0.12], "parts": [
+      { "shape": "rock", "pos": [0.0, 0, 0.08], "radius": 0.11, "height": 0.22, "cell": "stone", "seed": 9 },
+      { "shape": "box", "pos": [0.0, 0, -0.06], "size": [0.08, 0.07, 0.07], "cell": "wood", "yaw": 30 },
+      { "shape": "gable", "pos": [0.0, 0.07, -0.06], "size": [0.09, 0.04, 0.08], "cell": "roof", "top": "wood", "yaw": 120 },
+      { "shape": "box", "pos": [-0.02, 0, -0.1], "size": [0.04, 0.05, 0.004], "cell": "dark", "yaw": 30 }
+    ] },
+    { "note": "upper lodge with banner", "at": [0.1, 0.13], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0.0, 0], "size": [0.1, 0.17, 0.1], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.17, 0], "size": [0.1, 0.08, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.25, 0], "size": [0.11, 0.07, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.03, 0.17, -0.052], "size": [0.03, 0.06, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.02, 0.17, -0.051], "size": [0.025, 0.045, 0.004], "cell": "dark" }
+    ] },
+    { "note": "left lodge on the slope", "at": [-0.26, 0.07], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.11, 0.06, 0.09], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.11, 0.06, 0.09], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.12, 0], "size": [0.12, 0.06, 0.1], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0.07, -0.046], "size": [0.025, 0.025, 0.004], "cell": "accent" }
+    ] },
+    { "note": "waterwheel mill-house", "at": [0.2, -0.17], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.04, 0.12, 0.04], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0, 0.04], "size": [0.03, 0.12, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0.0, 0.02], "size": [0.12, 0.06, 0.12], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0.06, 0.02], "size": [0.12, 0.26, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0.04, 0.32, 0.02], "size": [0.13, 0.08, 0.13], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.04, 0.12, -0.041], "size": [0.03, 0.03, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.04, 0.1, 0.0], "size": [0.012, 0.22, 0.22], "cell": "dark" },
+      { "shape": "box", "pos": [-0.05, 0.2, 0.0], "size": [0.012, 0.02, 0.24], "cell": "wood" },
+      { "shape": "box", "pos": [-0.05, 0.09, 0.0], "size": [0.012, 0.24, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [-0.05, 0.2, 0.0], "size": [0.016, 0.04, 0.04], "cell": "stone" }
+    ] },
+    { "note": "mine-cart tracks", "at": [0.0, -0.25], "parts": [
+      { "shape": "box", "pos": [-0.13, 0.004, 0.0], "size": [0.24, 0.008, 0.05], "cell": "wood", "yaw": 35 },
+      { "shape": "box", "pos": [0.04, 0.004, -0.2], "size": [0.3, 0.008, 0.05], "cell": "wood", "yaw": 35 },
+      { "shape": "box", "pos": [0.08, 0.004, 0.25], "size": [0.04, 0.008, 0.4], "cell": "wood", "yaw": 20 },
+      { "shape": "box", "pos": [0.16, 0.004, -0.06], "size": [0.05, 0.008, 0.25], "cell": "wood", "yaw": -20 }
+    ] },
+    { "note": "ore cart", "at": [-0.01, -0.41], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.06, 0.03, 0.035], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.05, 0.008, 0.03], "cell": "stone" }
+    ] },
+    { "note": "green banners", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.41, 0, -0.3], "size": [0.008, 0.16, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [-0.39, 0.06, -0.3], "size": [0.04, 0.09, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.36, 0, -0.43], "size": [0.008, 0.16, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.38, 0.06, -0.43], "size": [0.04, 0.09, 0.004], "cell": "accent" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.39, 0, 0.52], "kind": "pine", "height": 0.14, "radius": 0.04 },
+      { "shape": "tree", "pos": [-0.45, 0, 0.25], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [-0.34, 0, 0.02], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 3 },
+      { "shape": "tree", "pos": [0.44, 0, 0.38], "kind": "pine", "height": 0.14, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [0.44, 0, -0.33], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 5 },
+      { "shape": "tree", "pos": [-0.18, 0, -0.74], "kind": "pine", "height": 0.1, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [-0.12, 0, -0.7], "kind": "pine", "height": 0.09, "radius": 0.03, "seed": 7 }
+    ] }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Carn Dum",
+  "description": "The Witch-king's citadel: a black gothic fortress facade with clustered needle spires, a rose window and a pointed gate is carved into the foot of a jagged snow-streaked dark mountain; before it a raised octagonal stone platform with two pale-fire braziers and rows of iron spikes, reached by twin stairs, with black banners, standing stones and a dead tree in the snow below.",
+  "style": "Orcish",
+  "colors":   ["#3A3836", "#2A2826", "#3A3028", "#5A5650", "#D8D4CA", "#161414", "#C8D8B0", "", "#3A3630"],
+  "surfaces": ["Ashlar",  "Slate",   "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "mountain", "at": [0.0, 0.36], "parts": [
+      { "shape": "rock", "pos": [0, 0, 0.05], "radius": 0.36, "height": 0.62, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.25, 0, -0.05], "radius": 0.22, "height": 0.3, "cell": "trim", "seed": 1 },
+      { "shape": "rock", "pos": [0.27, 0, -0.08], "radius": 0.2, "height": 0.32, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [0.05, 0.45, 0.06], "radius": 0.12, "height": 0.2, "cell": "trim", "seed": 3 }
+    ] },
+    { "note": "fortress facade", "at": [0.06, 0.2], "parts": [
+      { "shape": "box", "size": [0.34, 0.25, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.02, 0, -0.051], "size": [0.06, 0.12, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.02, 0.25, 0.0], "size": [0.14, 0.1, 0.08], "cell": "wall" },
+      { "shape": "gable", "pos": [0.02, 0.35, 0.0], "size": [0.14, 0.08, 0.08], "cell": "wall", "top": "wall", "yaw": 90 },
+      { "shape": "cylinder", "pos": [0.02, 0.27, -0.041], "radius": 0.035, "height": 0.004, "sides": 8, "cell": "accent" },
+      { "shape": "cylinder", "pos": [-0.15, 0, -0.03], "radius": 0.035, "height": 0.3, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.15, 0.3, -0.03], "radius": 0.035, "height": 0.13, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.17, 0, -0.03], "radius": 0.035, "height": 0.28, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.17, 0.28, -0.03], "radius": 0.035, "height": 0.12, "cell": "roof" },
+      { "shape": "cone", "pos": [-0.04, 0.25, 0.0], "radius": 0.02, "height": 0.2, "sides": 6, "cell": "roof" },
+      { "shape": "cone", "pos": [0.08, 0.25, 0.0], "radius": 0.02, "height": 0.22, "sides": 6, "cell": "roof" },
+      { "shape": "cone", "pos": [0.02, 0.43, 0.0], "radius": 0.012, "height": 0.08, "sides": 6, "cell": "roof" }
+    ] },
+    { "note": "octagonal platform with braziers", "at": [0.05, -0.02], "parts": [
+      { "shape": "cylinder", "radius": 0.22, "height": 0.12, "sides": 8, "cell": "stone", "top": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.12, 0], "radius": 0.07, "height": 0.003, "sides": 8, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.16, 0.12, 0.12], "radius": 0.02, "height": 0.05, "sides": 6, "taper": 1.4, "cell": "dark" },
+      { "shape": "cone", "pos": [-0.16, 0.17, 0.12], "radius": 0.018, "height": 0.04, "sides": 5, "cell": "accent" },
+      { "shape": "cylinder", "pos": [0.1, 0.12, 0.04], "radius": 0.02, "height": 0.05, "sides": 6, "taper": 1.4, "cell": "dark" },
+      { "shape": "cone", "pos": [0.1, 0.17, 0.04], "radius": 0.018, "height": 0.04, "sides": 5, "cell": "accent" }
+    ] },
+    { "note": "left spikes and banner", "at": [-0.2, 0.13], "parts": [
+      { "shape": "wall", "pos": [-0.06, 0, -0.05], "to": [0.1, 0.05], "height": 0.05, "thickness": 0.02, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.05, 0.05, -0.04], "radius": 0.01, "height": 0.06, "sides": 4, "cell": "dark" },
+      { "shape": "cone", "pos": [0.0, 0.05, -0.01], "radius": 0.01, "height": 0.07, "sides": 4, "cell": "dark" },
+      { "shape": "cone", "pos": [0.05, 0.05, 0.02], "radius": 0.01, "height": 0.06, "sides": 4, "cell": "dark" },
+      { "shape": "flag", "pos": [-0.02, 0.05, 0.08], "height": 0.2, "radius": 0.05 }
+    ] },
+    { "note": "right spikes and banner", "at": [0.3, 0.02], "parts": [
+      { "shape": "wall", "pos": [-0.08, 0, -0.05], "to": [0.1, 0.12], "height": 0.05, "thickness": 0.02, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.06, 0.05, -0.03], "radius": 0.01, "height": 0.06, "sides": 4, "cell": "dark" },
+      { "shape": "cone", "pos": [0.0, 0.05, 0.02], "radius": 0.01, "height": 0.07, "sides": 4, "cell": "dark" },
+      { "shape": "cone", "pos": [0.06, 0.05, 0.08], "radius": 0.01, "height": 0.06, "sides": 4, "cell": "dark" },
+      { "shape": "flag", "pos": [0.04, 0.05, 0.12], "height": 0.2, "radius": 0.05 }
+    ] },
+    { "note": "left stair", "at": [-0.19, -0.2], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.0], "size": [0.08, 0.03, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0.06], "size": [0.08, 0.06, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0.12], "size": [0.08, 0.09, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0.18], "size": [0.08, 0.12, 0.06], "cell": "wall" }
+    ] },
+    { "note": "right stair", "at": [0.22, -0.22], "yaw": -35, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.0], "size": [0.08, 0.03, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0.06], "size": [0.08, 0.06, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0.12], "size": [0.08, 0.09, 0.06], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, 0.18], "size": [0.08, 0.12, 0.06], "cell": "wall" }
+    ] },
+    { "note": "standing stones", "at": [-0.02, -0.3], "parts": [
+      { "shape": "cone", "pos": [0.0, 0, 0.05], "radius": 0.035, "height": 0.12, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.08, 0, 0.0], "radius": 0.025, "height": 0.08, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.07, 0, 0.0], "radius": 0.025, "height": 0.08, "sides": 5, "cell": "stone" },
+      { "shape": "rock", "pos": [0.02, 0, -0.08], "radius": 0.025, "height": 0.04, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [-0.36, 0, 0.3], "radius": 0.025, "height": 0.04, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.4, 0, 0.0], "radius": 0.025, "height": 0.04, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "left crag", "at": [-0.41, 0.15], "parts": [
+      { "shape": "rock", "radius": 0.1, "height": 0.13, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [0.0, 0, -0.25], "radius": 0.06, "height": 0.06, "cell": "trim", "seed": 8 }
+    ] },
+    { "note": "dead tree", "at": [0.42, -0.18], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.14, "radius": 0.025, "cell": "dark" }
+    ] }
+  ]
+}

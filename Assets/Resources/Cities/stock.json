@@ -1,0 +1,97 @@
+{
+  "name": "Stock",
+  "description": "A thatched Northman market village: a great steep-thatched timber hall with crossed gable horns stands on a stone plinth with steps and braziers at the back, a tall timber lattice watchtower beside it, thatched longhouses ring a dirt square with a standing stone in a stone ring and red, blue and white striped stalls, with rune-stones, a banner totem, a stream, pines and a walled wheat field at the front.",
+  "style": "Northman",
+  "colors":   ["#6E5236", "#A08A4E", "#5A4028", "#8A887C", "#8E3A2E", "#241C14", "#3E5A80", "", "#46582C"],
+  "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Cloth", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "great hall on its plinth", "at": [-0.07, 0.25], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.36, 0.04, 0.22], "cell": "stone" },
+      { "shape": "box", "pos": [0.02, 0.0, -0.13], "size": [0.1, 0.02, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.04, 0.02], "size": [0.3, 0.1, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.14, 0.02], "size": [0.32, 0.18, 0.16], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.02, 0.04, -0.051], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0.02, 0.14, -0.04], "size": [0.07, 0.08, 0.08], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.16, 0.3, 0.02], "size": [0.01, 0.06, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.16, 0.3, 0.02], "size": [0.01, 0.06, 0.01], "cell": "wood" },
+      { "shape": "cylinder", "pos": [0.09, 0.04, -0.1], "radius": 0.01, "height": 0.04, "sides": 6, "cell": "trim" },
+      { "shape": "cylinder", "pos": [-0.05, 0.04, -0.1], "radius": 0.01, "height": 0.04, "sides": 6, "cell": "trim" }
+    ] },
+    { "note": "lattice watchtower", "at": [0.17, 0.37], "parts": [
+      { "shape": "box", "pos": [-0.03, 0, -0.03], "size": [0.01, 0.24, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0, -0.03], "size": [0.01, 0.24, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.03, 0, 0.03], "size": [0.01, 0.24, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0.03, 0, 0.03], "size": [0.01, 0.24, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.21, 0], "size": [0.08, 0.03, 0.08], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.24, 0], "radius": 0.06, "height": 0.05, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.29, 0], "height": 0.05 }
+    ] },
+    { "note": "longhouse, back left", "at": [-0.35, 0.17], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.07, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.14, 0.1, 0.12], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0.07, 0.05], "size": [0.025, 0.12, 0.025], "cell": "stone" }
+    ] },
+    { "note": "longhouse, left", "at": [-0.4, -0.13], "yaw": 30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.12, 0.03, 0.15], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.1, 0.07, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.15, 0.1, 0.12], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "longhouse, back right", "at": [0.27, 0.21], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.12, 0.03, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.1, 0.06, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.13, 0.09, 0.12], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "longhouse, right", "at": [0.38, 0.0], "yaw": -30, "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.12, 0.03, 0.15], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.03, 0], "size": [0.1, 0.08, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.15, 0.1, 0.12], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "small house, front", "at": [-0.11, -0.27], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.09, 0.06, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.06, 0], "size": [0.12, 0.08, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "standing stone in its ring", "at": [0.08, 0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.045, "height": 0.02, "sides": 10, "cell": "stone", "top": "foliage" },
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.025, 0.1, 0.02], "cell": "stone" }
+    ] },
+    { "note": "market stalls", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [-0.09, 0, -0.02], "size": [0.1, 0.04, 0.06], "cell": "wood" },
+      { "shape": "gable", "pos": [-0.09, 0.06, -0.02], "size": [0.11, 0.03, 0.07], "cell": "trim", "top": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [0.15, 0, -0.21], "size": [0.1, 0.04, 0.06], "cell": "wood" },
+      { "shape": "gable", "pos": [0.15, 0.06, -0.21], "size": [0.11, 0.03, 0.07], "cell": "accent", "top": "wood", "yaw": -30 },
+      { "shape": "box", "pos": [0.04, 0, -0.48], "size": [0.09, 0.04, 0.06], "cell": "wood" },
+      { "shape": "gable", "pos": [0.04, 0.06, -0.48], "size": [0.1, 0.02, 0.07], "cell": "stone", "top": "wood", "yaw": -30 }
+    ] },
+    { "note": "banner totem", "at": [0.21, -0.29], "parts": [
+      { "shape": "box", "size": [0.02, 0.15, 0.02], "cell": "wood" },
+      { "shape": "box", "pos": [0, 0.11, 0], "size": [0.07, 0.01, 0.01], "cell": "wood" },
+      { "shape": "box", "pos": [-0.025, 0.05, -0.006], "size": [0.015, 0.06, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0.025, 0.05, -0.006], "size": [0.015, 0.06, 0.004], "cell": "accent" }
+    ] },
+    { "note": "rune-stones", "at": [0.0, 0.0], "parts": [
+      { "shape": "box", "pos": [0.46, 0, -0.21], "size": [0.03, 0.08, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.41, 0, -0.28], "size": [0.03, 0.07, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [-0.17, 0, 0.4], "size": [0.03, 0.07, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.13, 0, 0.74], "size": [0.03, 0.06, 0.02], "cell": "stone" }
+    ] },
+    { "note": "walled wheat field", "at": [0.0, -0.4], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.26, 0.025, 0.16], "cell": "roof" },
+      { "shape": "wall", "pos": [-0.14, 0, -0.09], "to": [0.14, -0.09], "height": 0.025, "thickness": 0.02, "cell": "stone" },
+      { "shape": "wall", "pos": [-0.14, 0, 0.09], "to": [0.14, 0.09], "height": 0.03, "thickness": 0.01, "cell": "wood" }
+    ] },
+    { "note": "stream, right", "at": [0.42, -0.24], "yaw": -40, "parts": [
+      { "shape": "box", "size": [0.2, 0.004, 0.05], "cell": "accent" }
+    ] },
+    { "note": "pines", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.27, 0, 1.05], "kind": "pine", "height": 0.15, "radius": 0.04 },
+      { "shape": "tree", "pos": [-0.33, 0, 1.0], "kind": "pine", "height": 0.12, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [-0.43, 0, 0.83], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.1, 0, 1.15], "kind": "pine", "height": 0.17, "radius": 0.04, "seed": 4 },
+      { "shape": "tree", "pos": [0.37, 0, 0.9], "kind": "pine", "height": 0.14, "radius": 0.035, "seed": 5 },
+      { "shape": "tree", "pos": [0.43, 0, 0.82], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 6 },
+      { "shape": "tree", "pos": [-0.32, 0, -0.8], "kind": "pine", "height": 0.08, "radius": 0.025, "seed": 7 },
+      { "shape": "tree", "pos": [0.34, 0, -0.6], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 8 },
+      { "shape": "tree", "pos": [-0.43, 0, -0.65], "kind": "broadleaf", "height": 0.06, "radius": 0.04, "cell": "roof", "seed": 9 }
+    ] }
+  ]
+}

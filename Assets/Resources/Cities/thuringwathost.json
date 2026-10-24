@@ -1,0 +1,63 @@
+{
+  "name": "Thuringwathost",
+  "description": "A single massive, tapering square tower of mossy grey stone, roofless and ruined, with a crow-stepped gable and a green planked roof perched on its top, an arched door reached by a plank bridge over a turquoise stream that winds round its foot past stepping blocks, a bare dead tree on the left and pines and autumn trees on the right.",
+  "style": "Mannish",
+  "colors":   ["#A39C84", "#3E6A64", "#6A5034", "#8C8670", "#A8A060", "#24221E", "#6AA6A0", "", "#5A6A2C"],
+  "surfaces": ["Fieldstone", "Planks", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "great tapering ruined tower", "at": [0.0, -0.1], "parts": [
+      { "shape": "cylinder", "radius": 0.25, "height": 0.48, "sides": 4, "taper": 0.75, "cell": "wall", "top": "foliage" },
+      { "shape": "battlements", "pos": [0, 0.48, 0], "radius": 0.18, "count": 12, "cell": "wall" },
+      { "shape": "box", "pos": [0.09, 0.3, -0.1], "size": [0.03, 0.05, 0.004], "cell": "dark", "yaw": 45 },
+      { "shape": "box", "pos": [-0.07, 0.28, -0.11], "size": [0.035, 0.06, 0.004], "cell": "dark", "yaw": -45 }
+    ] },
+    { "note": "crow-stepped gable house on the tower top", "at": [-0.02, 0.06], "yaw": -40, "parts": [
+      { "shape": "box", "pos": [0, 0.48, 0], "size": [0.2, 0.06, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.54, 0], "size": [0.2, 0.22, 0.1], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.1, 0.54, 0], "size": [0.02, 0.18, 0.04], "cell": "wall" },
+      { "shape": "dome", "pos": [0.1, 0.76, 0], "radius": 0.02, "height": 0.02, "sides": 6, "cell": "wall" },
+      { "shape": "flag", "pos": [0.1, 0.78, 0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "arched door on the left face", "at": [-0.14, -0.06], "yaw": -45, "parts": [
+      { "shape": "box", "pos": [0, 0, -0.02], "size": [0.08, 0.12, 0.02], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.032], "size": [0.05, 0.09, 0.004], "cell": "dark" }
+    ] },
+    { "note": "plank bridge from the door", "at": [-0.2, -0.12], "yaw": 35, "parts": [
+      { "shape": "box", "pos": [0, 0.02, 0], "size": [0.15, 0.012, 0.035], "cell": "wood" }
+    ] },
+    { "note": "stepping stone blocks", "at": [-0.3, -0.22], "parts": [
+      { "shape": "box", "pos": [0, 0, 0], "size": [0.1, 0.035, 0.07], "cell": "stone" },
+      { "shape": "box", "pos": [0.03, 0.035, 0.02], "size": [0.06, 0.03, 0.05], "cell": "stone" },
+      { "shape": "box", "pos": [-0.06, 0, -0.04], "size": [0.05, 0.02, 0.05], "cell": "stone" }
+    ] },
+    { "note": "stream 1", "at": [-0.342, 0.105], "yaw": 106, "parts": [ { "shape": "box", "size": [0.344, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 2", "at": [-0.395, -0.039], "yaw": 92, "parts": [ { "shape": "box", "size": [0.394, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 3", "at": [-0.323, -0.15], "yaw": 45, "parts": [ { "shape": "box", "size": [0.241, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 4", "at": [-0.146, -0.209], "yaw": 32, "parts": [ { "shape": "box", "size": [0.252, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 5", "at": [0.05, -0.255], "yaw": 25, "parts": [ { "shape": "box", "size": [0.237, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 6", "at": [0.213, -0.209], "yaw": -67, "parts": [ { "shape": "box", "size": [0.358, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream 7", "at": [0.324, -0.118], "yaw": -54, "parts": [ { "shape": "box", "size": [0.175, 0.005, 0.04], "cell": "accent" } ] },
+    { "note": "stream branch", "at": [0.213, -0.327], "yaw": 84, "parts": [ { "shape": "box", "size": [0.268, 0.005, 0.035], "cell": "accent" } ] },
+    { "note": "bare dead tree, left", "at": [-0.3, 0.24], "parts": [
+      { "shape": "tree", "kind": "poplar", "height": 0.3, "radius": 0.04, "cell": "wood" }
+    ] },
+    { "note": "boulders, left bank", "at": [-0.44, 0.1], "parts": [
+      { "shape": "rock", "radius": 0.045, "height": 0.045, "cell": "stone" },
+      { "shape": "tree", "pos": [0.02, 0, -0.18], "kind": "pine", "height": 0.06, "radius": 0.03, "seed": 1 }
+    ] },
+    { "note": "pines, right", "at": [0.33, 0.2], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.25, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.1, 0, -0.15], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 3 }
+    ] },
+    { "note": "autumn broadleaf, right", "at": [0.36, -0.05], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.08, "cell": "trim", "seed": 4 },
+      { "shape": "rock", "pos": [-0.13, 0, 0.05], "radius": 0.04, "height": 0.05, "cell": "stone", "seed": 5 },
+      { "shape": "tree", "pos": [0.05, 0, -0.3], "kind": "broadleaf", "height": 0.1, "radius": 0.06, "cell": "trim", "seed": 6 }
+    ] },
+    { "note": "front pine and bush", "at": [0.15, -0.36], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.18, "radius": 0.04, "seed": 7 },
+      { "shape": "tree", "pos": [-0.32, 0, 0.0], "kind": "broadleaf", "height": 0.07, "radius": 0.05, "cell": "wood", "seed": 8 },
+      { "shape": "rock", "pos": [-0.12, 0, -0.1], "radius": 0.025, "height": 0.02, "cell": "stone", "seed": 9 }
+    ] }
+  ]
+}

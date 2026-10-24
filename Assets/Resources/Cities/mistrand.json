@@ -1,0 +1,58 @@
+{
+  "name": "Mistrand",
+  "description": "A small farming hamlet of five steep-thatched, half-timbered cottages ringed round a dusty crossroads, one with a green awning and one with a red one, crates and barrels at their doors, and a stone smelting furnace puffing smoke at the back, with a few pines and an autumn tree.",
+  "style": "Mannish",
+  "colors":   ["#C8BCA0", "#8A7444", "#5A4430", "#8C887C", "#A0663A", "#2A2018", "#4E6E4C", "", "#3C5230"],
+  "surfaces": ["HalfTimber", "Thatch", "Planks", "Fieldstone", "Plain", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "smelting furnace", "at": [0.04, 0.31], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.16, "sides": 4, "twist": 0.125, "taper": 0.6, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.02, -0.036], "size": [0.03, 0.05, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [-0.07, 0, 0], "size": [0.008, 0.1, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.07, 0, -0.04], "size": [0.03, 0.025, 0.025], "cell": "wood" }
+    ] },
+    { "note": "back-left cottage", "at": [-0.14, 0.22], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.14, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.15, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.1, 0, -0.04], "size": [0.03, 0.03, 0.03], "cell": "wood" }
+    ] },
+    { "note": "back-right cottage", "at": [0.21, 0.17], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.15, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [-0.04, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.08, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.05, 0.08, 0.03], "size": [0.02, 0.07, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.11, 0, -0.03], "size": [0.04, 0.03, 0.03], "cell": "wood" }
+    ] },
+    { "note": "left cottage with green awning", "at": [-0.31, -0.04], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.15, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.09, 0.045, -0.02], "size": [0.03, 0.006, 0.07], "cell": "accent" },
+      { "shape": "box", "pos": [-0.09, 0, 0], "size": [0.03, 0.03, 0.06], "cell": "wood" }
+    ] },
+    { "note": "right cottage with red awning", "at": [0.3, -0.04], "yaw": 35, "parts": [
+      { "shape": "box", "size": [0.15, 0.07, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0, 0.045, -0.065], "size": [0.08, 0.006, 0.03], "cell": "trim" },
+      { "shape": "box", "pos": [0.06, 0.08, 0.03], "size": [0.02, 0.08, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0, -0.08], "size": [0.05, 0.025, 0.03], "cell": "wood" }
+    ] },
+    { "note": "front cottage", "at": [0.02, -0.25], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.15, 0.07, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.076, 0, 0], "size": [0.004, 0.05, 0.03], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.16, 0.08, 0.11], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.04, 0.08, 0.02], "size": [0.02, 0.06, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.06, 0, -0.08], "size": [0.04, 0.03, 0.03], "cell": "wood" }
+    ] },
+    { "note": "stump in the square", "at": [0.03, 0.05], "parts": [
+      { "shape": "cylinder", "radius": 0.012, "height": 0.015, "sides": 6, "cell": "wood" }
+    ] },
+    { "note": "trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.36, 0, 0.6], "kind": "pine", "height": 0.22, "radius": 0.05 },
+      { "shape": "tree", "pos": [0.38, 0, 0.57], "kind": "broadleaf", "height": 0.12, "radius": 0.045, "cell": "trim", "seed": 1 },
+      { "shape": "tree", "pos": [-0.4, 0, -0.48], "kind": "pine", "height": 0.11, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.07, 0, -0.95], "kind": "pine", "height": 0.08, "radius": 0.025, "seed": 3 },
+      { "shape": "rock", "pos": [0.42, 0, -0.45], "radius": 0.03, "height": 0.025, "seed": 4 }
+    ] }
+  ]
+}

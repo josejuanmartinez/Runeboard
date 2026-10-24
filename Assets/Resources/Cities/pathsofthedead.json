@@ -1,0 +1,66 @@
+{
+  "name": "Paths of the Dead",
+  "description": "A jagged grey mountain fills the back of the hex with a great bearded king's face carved into its crags and a pillared dark gateway with steps at its right foot; a pale gravel path winds down through mossy ground lined with carved rune-stones and boulders, walked by ghostly green shades.",
+  "style": "Mannish",
+  "colors":   ["#8A877A", "#6E6C62", "#4A3C2C", "#76746A", "#9A968A", "#1C1A18", "#A8C4A8", "", "#5E6438"],
+  "surfaces": ["Ashlar",  "Fieldstone", "",    "Fieldstone", "Plain", "",   "Plain",   "", ""],
+  "buildings": [
+    { "note": "Dwimorberg crags", "at": [0.0, 0.4], "parts": [
+      { "shape": "rock", "pos": [0.0, 0, 0.06], "radius": 0.22, "height": 0.62, "cell": "stone" },
+      { "shape": "rock", "pos": [0.15, 0, 0.05], "radius": 0.13, "height": 0.42, "cell": "stone", "seed": 2 },
+      { "shape": "rock", "pos": [-0.19, 0, -0.02], "radius": 0.13, "height": 0.33, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.32, 0, -0.06], "radius": 0.13, "height": 0.3, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.42, 0, -0.18], "radius": 0.1, "height": 0.2, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.32, 0, -0.1], "radius": 0.09, "height": 0.16, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "carved king's face", "at": [-0.08, 0.37], "parts": [
+      { "shape": "box", "pos": [0, 0.12, -0.12], "size": [0.12, 0.22, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.27, -0.13], "size": [0.13, 0.05, 0.05], "cell": "trim" },
+      { "shape": "pyramid", "pos": [0, 0.32, -0.12], "radius": 0.06, "height": 0.06, "cell": "trim" },
+      { "shape": "box", "pos": [-0.03, 0.22, -0.147], "size": [0.025, 0.012, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.03, 0.22, -0.147], "size": [0.025, 0.012, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.04, -0.13], "radius": 0.05, "height": 0.09, "cell": "wall" }
+    ] },
+    { "note": "Dark Door gateway", "at": [0.17, 0.27], "yaw": 10, "parts": [
+      { "shape": "box", "size": [0.13, 0.11, 0.05], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.026], "size": [0.04, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.065, 0, -0.01], "size": [0.025, 0.13, 0.04], "cell": "trim" },
+      { "shape": "box", "pos": [0.065, 0, -0.01], "size": [0.025, 0.13, 0.04], "cell": "trim" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.1, 0.03, 0.05], "cell": "wall", "top": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.06], "size": [0.06, 0.012, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.09], "size": [0.06, 0.006, 0.03], "cell": "stone" }
+    ] },
+    { "note": "gravel path", "at": [0.0, -0.08], "parts": [
+      { "shape": "box", "pos": [0.04, 0, 0.32], "size": [0.12, 0.003, 0.3], "cell": "stone", "yaw": 30 },
+      { "shape": "box", "pos": [-0.1, 0, 0.05], "size": [0.12, 0.003, 0.3], "cell": "stone", "yaw": -30 },
+      { "shape": "box", "pos": [0.02, 0, -0.35], "size": [0.12, 0.003, 0.35], "cell": "stone", "yaw": 15 }
+    ] },
+    { "note": "rune-stones", "at": [0.0, -0.05], "parts": [
+      { "shape": "box", "pos": [-0.2, 0, 0.24], "size": [0.04, 0.1, 0.025], "cell": "wall" },
+      { "shape": "dome", "pos": [-0.2, 0.1, 0.24], "radius": 0.02, "height": 0.015, "sides": 8, "cell": "wall" },
+      { "shape": "box", "pos": [-0.26, 0, -0.38], "size": [0.04, 0.1, 0.025], "cell": "wall" },
+      { "shape": "dome", "pos": [-0.26, 0.1, -0.38], "radius": 0.02, "height": 0.015, "sides": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0.11, 0, 0.1], "size": [0.04, 0.1, 0.025], "cell": "wall" },
+      { "shape": "dome", "pos": [0.11, 0.1, 0.1], "radius": 0.02, "height": 0.015, "sides": 8, "cell": "wall" },
+      { "shape": "box", "pos": [0.25, 0, -0.17], "size": [0.05, 0.13, 0.03], "cell": "wall" },
+      { "shape": "dome", "pos": [0.25, 0.13, -0.17], "radius": 0.025, "height": 0.02, "sides": 8, "cell": "wall" }
+    ] },
+    { "note": "boulders", "at": [0.0, 0.0], "parts": [
+      { "shape": "rock", "pos": [-0.4, 0, -0.1], "radius": 0.05, "height": 0.1, "cell": "stone", "seed": 7 },
+      { "shape": "rock", "pos": [-0.38, 0, 0.4], "radius": 0.05, "height": 0.1, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [-0.18, 0, -0.62], "radius": 0.05, "height": 0.09, "cell": "stone", "seed": 9 },
+      { "shape": "rock", "pos": [0.4, 0, -0.2], "radius": 0.06, "height": 0.12, "cell": "stone", "seed": 10 },
+      { "shape": "rock", "pos": [0.33, 0, 0.4], "radius": 0.06, "height": 0.13, "cell": "stone", "seed": 11 },
+      { "shape": "rock", "pos": [0.19, 0, 0.3], "radius": 0.04, "height": 0.08, "cell": "stone", "seed": 12 },
+      { "shape": "rock", "pos": [-0.26, 0, 0.52], "radius": 0.05, "height": 0.09, "cell": "stone", "seed": 13 }
+    ] },
+    { "note": "ghostly shades", "at": [0.0, 0.0], "parts": [
+      { "shape": "cone", "pos": [-0.32, 0, 0.12], "radius": 0.022, "height": 0.09, "sides": 8, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.07, 0, 0.1], "radius": 0.022, "height": 0.09, "sides": 8, "cell": "accent" },
+      { "shape": "cone", "pos": [0.0, 0, 0.48], "radius": 0.022, "height": 0.09, "sides": 8, "cell": "accent" },
+      { "shape": "cone", "pos": [-0.01, 0, -0.33], "radius": 0.022, "height": 0.09, "sides": 8, "cell": "accent" },
+      { "shape": "cone", "pos": [0.0, 0, -0.78], "radius": 0.022, "height": 0.08, "sides": 8, "cell": "accent" },
+      { "shape": "cone", "pos": [0.12, 0, -0.64], "radius": 0.022, "height": 0.08, "sides": 8, "cell": "accent" }
+    ] }
+  ]
+}

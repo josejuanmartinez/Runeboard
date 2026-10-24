@@ -1,0 +1,85 @@
+{
+  "name": "Thandruil's Hall",
+  "description": "An elven forest palace: a sweeping S-curved arcade of pale traceried arches under a verdigris-green roof links a cluster of slender round towers with tall green conical spires, more spired towers stand among the trees on the left and right, and a winding stone path climbs past a rocky cascade crossed by an arched footbridge, all deep in olive, golden and dark-pine woodland.",
+  "style": "Elven",
+  "colors":   ["#CFC6A8", "#6E9282", "#6A5A3C", "#8A8676", "#B09030", "#2A2A22", "#5E8A90", "", "#4E5E2C"],
+  "surfaces": ["Ashlar", "Slate", "", "Fieldstone", "Plain", "", "Plain", "", "Leaves"],
+  "buildings": [
+    { "note": "rear tower cluster", "at": [0.0, 0.42], "parts": [
+      { "shape": "cylinder", "pos": [0.0, 0, 0.05], "radius": 0.05, "height": 0.24, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.24, 0.05], "radius": 0.065, "height": 0.17, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.08, 0, -0.08], "radius": 0.045, "height": 0.16, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.08, 0.16, -0.08], "radius": 0.058, "height": 0.13, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [-0.13, 0, -0.15], "radius": 0.045, "height": 0.15, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.13, 0.15, -0.15], "radius": 0.058, "height": 0.13, "sides": 10, "cell": "roof" },
+      { "shape": "flag", "pos": [0.0, 0.41, 0.05], "height": 0.06 }
+    ] },
+    { "note": "curved arcade, back wing", "at": [-0.06, 0.24], "yaw": -35, "parts": [
+      { "shape": "box", "size": [0.42, 0.15, 0.11], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.056], "size": [0.38, 0.11, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.1, 0.0, -0.06], "size": [0.02, 0.15, 0.01], "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.0, -0.06], "size": [0.02, 0.15, 0.01], "cell": "wall" },
+      { "shape": "box", "pos": [0.1, 0.0, -0.06], "size": [0.02, 0.15, 0.01], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.44, 0.07, 0.13], "cell": "roof", "top": "wall" },
+      { "shape": "cone", "pos": [-0.21, 0.15, -0.05], "radius": 0.01, "height": 0.06, "sides": 6, "cell": "wall" }
+    ] },
+    { "note": "curved arcade, front wing", "at": [0.11, 0.12], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.3, 0.15, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.0, -0.051], "size": [0.26, 0.11, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.05, 0.0, -0.055], "size": [0.02, 0.15, 0.01], "cell": "wall" },
+      { "shape": "box", "pos": [0.05, 0.0, -0.055], "size": [0.02, 0.15, 0.01], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.32, 0.07, 0.12], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "twin spired towers, left", "at": [-0.33, 0.04], "parts": [
+      { "shape": "cylinder", "pos": [0.0, 0, 0.12], "radius": 0.05, "height": 0.2, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.0, 0.2, 0.12], "radius": 0.062, "height": 0.14, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.03, 0, -0.08], "radius": 0.045, "height": 0.17, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.03, 0.17, -0.08], "radius": 0.058, "height": 0.14, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "spired tower, right", "at": [0.23, 0.17], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.15, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.15, 0], "radius": 0.062, "height": 0.13, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "tower and chapel, front right", "at": [0.25, -0.18], "parts": [
+      { "shape": "cylinder", "pos": [0.03, 0, 0.0], "radius": 0.05, "height": 0.22, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [0.03, 0.22, 0.0], "radius": 0.062, "height": 0.15, "sides": 10, "cell": "roof" },
+      { "shape": "box", "pos": [-0.07, 0, 0.0], "size": [0.06, 0.12, 0.06], "cell": "wall" },
+      { "shape": "pyramid", "pos": [-0.07, 0.12, 0.0], "radius": 0.045, "height": 0.12, "cell": "roof" }
+    ] },
+    { "note": "winding stone path", "at": [-0.05, -0.1], "parts": [
+      { "shape": "box", "pos": [0.07, 0, 0.35], "size": [0.07, 0.003, 0.35], "cell": "stone", "yaw": -40 },
+      { "shape": "box", "pos": [0.06, 0, 0.0], "size": [0.07, 0.003, 0.35], "cell": "stone", "yaw": 35 },
+      { "shape": "box", "pos": [-0.04, 0, -0.38], "size": [0.07, 0.003, 0.35], "cell": "stone", "yaw": -25 },
+      { "shape": "box", "pos": [-0.15, 0, -0.65], "size": [0.07, 0.003, 0.25], "cell": "stone", "yaw": 20 }
+    ] },
+    { "note": "rocky cascade and footbridge", "at": [-0.13, -0.15], "parts": [
+      { "shape": "rock", "pos": [0.0, 0, 0.3], "radius": 0.07, "height": 0.1, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.14, 0, 0.15], "radius": 0.05, "height": 0.07, "cell": "stone", "seed": 2 },
+      { "shape": "box", "pos": [-0.06, 0, 0.25], "size": [0.05, 0.06, 0.3], "cell": "accent", "yaw": -20 },
+      { "shape": "box", "pos": [0.07, 0, -0.45], "size": [0.06, 0.004, 0.55], "cell": "accent", "yaw": -25 },
+      { "shape": "box", "pos": [0.04, 0.03, -0.2], "size": [0.13, 0.012, 0.04], "cell": "wall", "yaw": -20 },
+      { "shape": "box", "pos": [0.04, 0.045, -0.218], "size": [0.13, 0.015, 0.004], "cell": "wall", "yaw": -20 },
+      { "shape": "rock", "pos": [0.16, 0, -0.65], "radius": 0.05, "height": 0.05, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.27, 0, -0.35], "radius": 0.05, "height": 0.06, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "forest behind", "at": [0.0, 0.3], "parts": [
+      { "shape": "tree", "pos": [-0.25, 0, 0.45], "kind": "broadleaf", "height": 0.24, "radius": 0.08 },
+      { "shape": "tree", "pos": [0.25, 0, 0.45], "kind": "broadleaf", "height": 0.24, "radius": 0.08, "seed": 2 },
+      { "shape": "tree", "pos": [-0.38, 0, 0.05], "kind": "broadleaf", "height": 0.2, "radius": 0.07, "seed": 3 },
+      { "shape": "tree", "pos": [0.38, 0, 0.0], "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 4 },
+      { "shape": "tree", "pos": [0.05, 0, 0.6], "kind": "broadleaf", "height": 0.2, "radius": 0.07, "seed": 5 }
+    ] },
+    { "note": "forest left and right", "at": [0.0, -0.1], "parts": [
+      { "shape": "tree", "pos": [-0.43, 0, 0.0], "kind": "broadleaf", "height": 0.17, "radius": 0.06, "cell": "trim", "seed": 6 },
+      { "shape": "tree", "pos": [-0.25, 0, -0.1], "kind": "poplar", "height": 0.18, "radius": 0.03, "cell": "trim", "seed": 7 },
+      { "shape": "tree", "pos": [-0.28, 0, -0.35], "kind": "pine", "height": 0.16, "radius": 0.035, "seed": 8 },
+      { "shape": "tree", "pos": [-0.4, 0, -0.5], "kind": "broadleaf", "height": 0.13, "radius": 0.05, "seed": 9 },
+      { "shape": "tree", "pos": [0.43, 0, 0.1], "kind": "broadleaf", "height": 0.18, "radius": 0.06, "seed": 10 },
+      { "shape": "tree", "pos": [0.4, 0, -0.35], "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 11 },
+      { "shape": "tree", "pos": [0.16, 0, -0.5], "kind": "poplar", "height": 0.14, "radius": 0.025, "cell": "trim", "seed": 12 },
+      { "shape": "tree", "pos": [0.07, 0, -0.75], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 13 },
+      { "shape": "tree", "pos": [0.3, 0, -0.7], "kind": "poplar", "height": 0.13, "radius": 0.025, "cell": "trim", "seed": 14 },
+      { "shape": "tree", "pos": [-0.15, 0, 0.0], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 15 }
+    ] }
+  ]
+}

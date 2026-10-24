@@ -1,0 +1,69 @@
+{
+  "name": "Tol Buruth",
+  "description": "A lonely rocky islet in a dark storm-green sea, crowned by a tall stone lighthouse with a glowing lantern and a spired cap inside a ring of battlemented walls, with a stair down to the water, jagged sea-stacks all around and a wrecked ship with tattered sails in the foreground.",
+  "style": "Mannish",
+  "colors":   ["#7A7058", "#5A5446", "#4E3C28", "#5E5640", "#9A8C6A", "#1E1E1A", "#E0A850", "", "#3E4A30"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "rocky islet", "at": [-0.18, 0.06], "parts": [
+      { "shape": "rock", "radius": 0.22, "height": 0.12, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.12, 0, -0.12], "radius": 0.1, "height": 0.14, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.1, 0, -0.1], "radius": 0.08, "height": 0.08, "cell": "stone", "seed": 2 },
+      { "shape": "box", "pos": [0.0, 0.09, 0.02], "size": [0.26, 0.02, 0.2], "cell": "stone" }
+    ] },
+    { "note": "lighthouse", "at": [-0.15, 0.17], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.1, 0], "radius": 0.05, "height": 0.3, "sides": 10, "taper": 0.85, "cell": "wall", "top": "stone" },
+      { "shape": "box", "pos": [0, 0.22, -0.044], "size": [0.012, 0.025, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.3, -0.042], "size": [0.012, 0.025, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.4, 0], "radius": 0.05, "height": 0.012, "sides": 10, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.412, 0], "radius": 0.034, "height": 0.05, "sides": 8, "cell": "accent" },
+      { "shape": "cone", "pos": [0, 0.462, 0], "radius": 0.045, "height": 0.05, "sides": 8, "cell": "roof" },
+      { "shape": "cone", "pos": [0, 0.51, 0], "radius": 0.008, "height": 0.05, "sides": 6, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.56, 0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "battlemented ring walls", "at": [-0.17, 0.1], "parts": [
+      { "shape": "wall", "pos": [-0.13, 0.1, -0.05], "to": [0.0, -0.12], "height": 0.06, "thickness": 0.025, "count": 1, "cell": "wall" },
+      { "shape": "wall", "pos": [0.0, 0.1, -0.12], "to": [0.13, -0.04], "height": 0.06, "thickness": 0.025, "count": 1, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.13, 0.1, -0.05], "to": [-0.06, 0.12], "height": 0.06, "thickness": 0.025, "count": 1, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.13, 0.1, -0.05], "radius": 0.025, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.13, 0.1, -0.04], "radius": 0.025, "height": 0.09, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0.0, 0.1, -0.13], "size": [0.03, 0.045, 0.004], "cell": "dark" }
+    ] },
+    { "note": "small turret by the lighthouse", "at": [-0.08, 0.26], "parts": [
+      { "shape": "box", "pos": [0, 0.1, 0], "size": [0.04, 0.1, 0.04], "cell": "wall" },
+      { "shape": "pyramid", "pos": [0, 0.2, 0], "radius": 0.03, "height": 0.05, "cell": "roof" }
+    ] },
+    { "note": "stair down to the sea", "at": [-0.04, -0.03], "yaw": 40, "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.05, 0.08, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.05, 0.04, 0.04], "cell": "stone" }
+    ] },
+    { "note": "sea-stacks, back right", "at": [0.2, 0.22], "parts": [
+      { "shape": "cone", "radius": 0.06, "height": 0.13, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.06, 0, -0.06], "radius": 0.04, "height": 0.08, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.01, 0, -0.12], "radius": 0.03, "height": 0.05, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "sea-stack, right", "at": [0.32, 0.01], "parts": [
+      { "shape": "cone", "radius": 0.065, "height": 0.14, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.09, 0, 0.06], "radius": 0.025, "height": 0.04, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "sea-stack, left", "at": [-0.4, 0.14], "parts": [
+      { "shape": "cone", "radius": 0.03, "height": 0.05, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "sea-stack, front left", "at": [-0.13, -0.33], "parts": [
+      { "shape": "cone", "radius": 0.05, "height": 0.09, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [0.05, 0, -0.02], "radius": 0.025, "height": 0.04, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "small rocks, front", "at": [0.2, -0.3], "parts": [
+      { "shape": "cone", "pos": [0.03, 0, 0.1], "radius": 0.03, "height": 0.05, "sides": 5, "cell": "stone" },
+      { "shape": "cone", "pos": [-0.2, 0, -0.22], "radius": 0.02, "height": 0.03, "sides": 5, "cell": "stone" }
+    ] },
+    { "note": "wrecked ship", "at": [0.03, -0.23], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.22, 0.04, 0.07], "cell": "wood" },
+      { "shape": "box", "pos": [0.1, 0.02, 0], "size": [0.04, 0.05, 0.05], "cell": "wood" },
+      { "shape": "box", "pos": [0.02, 0.04, 0], "size": [0.008, 0.17, 0.008], "cell": "wood" },
+      { "shape": "box", "pos": [0.02, 0.15, 0], "size": [0.13, 0.006, 0.006], "cell": "wood" },
+      { "shape": "box", "pos": [0.05, 0.08, 0], "size": [0.07, 0.07, 0.004], "cell": "trim", "yaw": 10 },
+      { "shape": "box", "pos": [-0.07, 0.04, 0], "size": [0.006, 0.09, 0.006], "cell": "wood", "yaw": 20 }
+    ] }
+  ]
+}

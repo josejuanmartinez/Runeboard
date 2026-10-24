@@ -1,0 +1,66 @@
+{
+  "name": "Belegost",
+  "description": "A great dwarf-hold built up a grey, snow-dusted mountain: octagonal grey-stone bastions banded with copper-orange courses, a deep open octagonal court mid-slope, ramparts and a long stair winding up the left flank, a carved dwarf face in the right-hand cliff, and a massive three-towered front wall with an arched tunnel gate, framed by pines and russet autumn larches.",
+  "style": "Dwarven",
+  "colors":   ["#686660", "#54524C", "", "#8A8270", "#D0D0CA", "#1E1E1C", "#B0602A", "", "#3E4E30"],
+  "surfaces": ["Ashlar", "", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "grey mountain", "at": [0.02, 0.2], "parts": [
+      { "shape": "rock", "radius": 0.42, "height": 0.45, "cell": "stone" },
+      { "shape": "rock", "pos": [0.0, 0.2, 0.08], "radius": 0.2, "height": 0.38, "cell": "trim", "seed": 2 },
+      { "shape": "rock", "pos": [0.24, 0, -0.02], "radius": 0.2, "height": 0.28, "cell": "trim", "seed": 3 },
+      { "shape": "rock", "pos": [-0.28, 0, -0.05], "radius": 0.18, "height": 0.2, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.36, 0, -0.2], "radius": 0.14, "height": 0.24, "cell": "stone", "seed": 5 }
+    ] },
+    { "note": "open octagonal court", "at": [0.0, 0.06], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.1, 0], "radius": 0.13, "height": 0.13, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.19, 0], "radius": 0.132, "height": 0.012, "sides": 8, "cell": "accent" },
+      { "shape": "box", "pos": [0, 0.0, -0.09], "size": [0.14, 0.12, 0.04], "cell": "wall" }
+    ] },
+    { "note": "upper left bastion", "at": [-0.24, 0.32], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.1, 0], "radius": 0.07, "height": 0.15, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.2, 0], "radius": 0.072, "height": 0.01, "sides": 8, "cell": "accent" }
+    ] },
+    { "note": "upper right bastion", "at": [0.08, 0.4], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.16, 0], "radius": 0.075, "height": 0.15, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.26, 0], "radius": 0.077, "height": 0.01, "sides": 8, "cell": "accent" },
+      { "shape": "flag", "pos": [0, 0.31, 0], "height": 0.1, "radius": 0.03 }
+    ] },
+    { "note": "left ramparts and long stair", "at": [-0.33, 0.0], "parts": [
+      { "shape": "wall", "pos": [-0.04, 0, -0.3], "to": [-0.06, 0.15], "height": 0.14, "thickness": 0.04, "count": 6, "cell": "wall" },
+      { "shape": "wall", "pos": [-0.06, 0, 0.15], "to": [0.12, 0.35], "height": 0.11, "thickness": 0.035, "count": 5, "cell": "wall" },
+      { "shape": "box", "pos": [-0.07, 0, -0.5], "size": [0.05, 0.05, 0.25], "cell": "stone", "yaw": 30 }
+    ] },
+    { "note": "carved dwarf face in the cliff", "at": [0.41, 0.06], "parts": [
+      { "shape": "rock", "pos": [0.02, 0, 0.05], "radius": 0.08, "height": 0.24, "cell": "stone", "seed": 6 },
+      { "shape": "box", "pos": [-0.02, 0.06, -0.05], "size": [0.05, 0.12, 0.03], "cell": "wall", "yaw": -30 }
+    ] },
+    { "note": "front curtain wall and tunnel gate", "at": [0.03, -0.33], "parts": [
+      { "shape": "box", "size": [0.44, 0.15, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.11, -0.051], "size": [0.44, 0.01, 0.004], "cell": "accent" },
+      { "shape": "box", "pos": [0, 0, -0.07], "size": [0.1, 0.12, 0.04], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.092], "size": [0.05, 0.08, 0.004], "cell": "dark" },
+      { "shape": "wallBattlements", "pos": [0, 0.15, -0.04], "length": 0.44, "thickness": 0.02 }
+    ] },
+    { "note": "front left tower", "at": [-0.15, -0.26], "parts": [
+      { "shape": "cylinder", "radius": 0.085, "height": 0.26, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.2, 0], "radius": 0.087, "height": 0.012, "sides": 8, "cell": "accent" }
+    ] },
+    { "note": "front centre tower", "at": [0.11, -0.24], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.26, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.2, 0], "radius": 0.082, "height": 0.012, "sides": 8, "cell": "accent" }
+    ] },
+    { "note": "front right tower", "at": [0.31, -0.16], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.3, "sides": 8, "cell": "wall", "top": "dark" },
+      { "shape": "cylinder", "pos": [0, 0.24, 0], "radius": 0.082, "height": 0.012, "sides": 8, "cell": "accent" },
+      { "shape": "box", "pos": [0.04, 0, -0.08], "size": [0.04, 0.06, 0.004], "cell": "dark" }
+    ] },
+    { "note": "pines and autumn larches", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.45, 0, 0.0], "kind": "pine", "height": 0.15, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.42, 0, -0.45], "kind": "pine", "height": 0.13, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.43, 0, -0.4], "kind": "pine", "height": 0.13, "radius": 0.035, "cell": "accent", "seed": 3 },
+      { "shape": "tree", "pos": [0.24, 0, -0.75], "kind": "pine", "height": 0.11, "radius": 0.035, "cell": "accent", "seed": 4 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.85], "kind": "pine", "height": 0.1, "radius": 0.03, "cell": "accent", "seed": 5 }
+    ] }
+  ]
+}

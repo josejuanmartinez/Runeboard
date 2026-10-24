@@ -1,0 +1,90 @@
+{
+  "name": "Dol Amroth",
+  "description": "A pale stone seaside castle of Gondor: a tall square keep with a steep blue-slate spire and swan pennant towers over a long buttressed great hall and a smaller gabled chapel, all ringed by a crenellated curtain wall with a gatehouse onto the shore, a pier and a swan-sailed boat; a white tree blooms in the courtyard, dark cypresses line the walls, swan banners fly, and a white spire stands on the green cliff hill behind.",
+  "style": "Mannish",
+  "colors":   ["#D2C8B0", "#3E5878", "#6A4A2E", "#BDB29A", "#C8BEA8", "#2C2E34", "#4E6E8A", "", "#3E5230"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Ashlar", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "hill and cliffs behind", "at": [-0.15, 0.3], "parts": [
+      { "shape": "dome", "pos": [0.05, 0, 0.12], "radius": 0.3, "height": 0.16, "sides": 12, "cell": "foliage" },
+      { "shape": "rock", "pos": [-0.25, 0, -0.1], "radius": 0.12, "height": 0.16, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.3, 0, 0.2], "radius": 0.1, "height": 0.2, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "white spire on the hill", "at": [-0.04, 0.38], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.13, 0.12], "radius": 0.05, "height": 0.02, "sides": 10, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.15, 0.12], "radius": 0.035, "height": 0.16, "sides": 8, "taper": 0.45, "cell": "wall" },
+      { "shape": "cone", "pos": [0, 0.31, 0.12], "radius": 0.016, "height": 0.05, "sides": 6, "cell": "wall" }
+    ] },
+    { "note": "great hall", "at": [0.03, 0.04], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.36, 0.11, 0.14], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.04, -0.071], "size": [0.3, 0.04, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.11, 0], "size": [0.36, 0.11, 0.15], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "rear hall", "at": [0.12, 0.22], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.18, 0.1, 0.1], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.1, 0], "size": [0.18, 0.07, 0.1], "cell": "roof", "top": "wall" }
+    ] },
+    { "note": "front block of the keep", "at": [0.2, -0.08], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.14, 0.24, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.1, -0.061], "size": [0.07, 0.07, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.24, 0], "size": [0.12, 0.08, 0.14], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "great square keep tower", "at": [0.32, -0.02], "parts": [
+      { "shape": "cylinder", "radius": 0.1, "height": 0.48, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.3, -0.072], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "pyramid", "pos": [0, 0.48, 0], "radius": 0.075, "height": 0.2, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.68, 0], "height": 0.1, "radius": 0.005 }
+    ] },
+    { "note": "keep side wing with porch", "at": [0.42, -0.1], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.1, 0.14, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.051], "size": [0.04, 0.07, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.14, 0], "size": [0.1, 0.05, 0.1], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "chapel, left", "at": [-0.3, -0.12], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.08, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0.04, 0, -0.051], "size": [0.03, 0.05, 0.004], "cell": "dark" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.2, 0.07, 0.11], "cell": "roof", "top": "wall" },
+      { "shape": "box", "pos": [0.12, 0, 0.08], "size": [0.1, 0.08, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0.12, 0.08, 0.08], "size": [0.12, 0.07, 0.11], "cell": "roof", "top": "wall", "yaw": 90 }
+    ] },
+    { "note": "curtain wall", "at": [-0.47, -0.12], "parts": [
+      { "shape": "wall", "to": [0.24, -0.36], "height": 0.07, "thickness": 0.03, "count": 0, "cell": "stone" },
+      { "shape": "wall", "pos": [0.24, 0, -0.36], "to": [0.42, -0.05], "height": 0.07, "thickness": 0.03, "cell": "stone" },
+      { "shape": "wall", "pos": [0.42, 0, -0.05], "to": [0.62, -0.31], "height": 0.07, "thickness": 0.03, "count": 4, "cell": "stone" },
+      { "shape": "wall", "pos": [0.62, 0, -0.31], "to": [0.87, 0.0], "height": 0.07, "thickness": 0.03, "count": 4, "cell": "stone" }
+    ] },
+    { "note": "gatehouse", "at": [0.15, -0.27], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.09, 0.12, 0.07], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.036], "size": [0.04, 0.06, 0.004], "cell": "dark" },
+      { "shape": "wallBattlements", "pos": [0, 0.12, 0], "length": 0.09, "thickness": 0.07, "cell": "wall" }
+    ] },
+    { "note": "white tree in the courtyard", "at": [0.1, -0.08], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.012, "sides": 10, "cell": "stone" },
+      { "shape": "tree", "kind": "broadleaf", "height": 0.13, "radius": 0.06, "cell": "trim", "seed": 1 }
+    ] },
+    { "note": "swan banners", "at": [-0.39, 0.05], "parts": [
+      { "shape": "flag", "height": 0.32, "radius": 0.006 },
+      { "shape": "flag", "pos": [0.18, 0, 0.0], "height": 0.2, "radius": 0.005 }
+    ] },
+    { "note": "cypresses", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.14, 0, 0.6], "kind": "poplar", "height": 0.18, "radius": 0.025, "seed": 1 },
+      { "shape": "tree", "pos": [-0.08, 0, 0.7], "kind": "poplar", "height": 0.16, "radius": 0.025, "seed": 2 },
+      { "shape": "tree", "pos": [-0.15, 0, 0.25], "kind": "poplar", "height": 0.14, "radius": 0.025, "seed": 3 },
+      { "shape": "tree", "pos": [-0.43, 0, -0.1], "kind": "poplar", "height": 0.12, "radius": 0.022, "seed": 4 },
+      { "shape": "tree", "pos": [-0.15, 0, -0.38], "kind": "poplar", "height": 0.12, "radius": 0.022, "seed": 5 },
+      { "shape": "tree", "pos": [-0.07, 0, -0.18], "kind": "poplar", "height": 0.11, "radius": 0.022, "seed": 6 },
+      { "shape": "tree", "pos": [0.3, 0, -0.2], "kind": "poplar", "height": 0.12, "radius": 0.022, "seed": 7 },
+      { "shape": "tree", "pos": [0.46, 0, -0.12], "kind": "poplar", "height": 0.11, "radius": 0.022, "seed": 8 },
+      { "shape": "tree", "pos": [0.47, 0, 0.3], "kind": "poplar", "height": 0.13, "radius": 0.022, "seed": 9 }
+    ] },
+    { "note": "sea along the front", "at": [-0.18, -0.4], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.62, 0.004, 0.22], "cell": "accent" }
+    ] },
+    { "note": "pier and swan-sailed boat", "at": [0.06, -0.4], "parts": [
+      { "shape": "box", "pos": [0.09, 0, 0.02], "size": [0.05, 0.02, 0.16], "cell": "stone", "yaw": -30 },
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.13, 0.025, 0.04], "cell": "wood", "yaw": -25 },
+      { "shape": "cylinder", "pos": [-0.04, 0.025, 0], "radius": 0.004, "height": 0.1, "sides": 4, "cell": "wood" },
+      { "shape": "box", "pos": [-0.04, 0.04, -0.006], "size": [0.06, 0.07, 0.004], "cell": "trim", "yaw": -25 }
+    ] }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "name": "Adburg",
+  "description": "A grim rustic hamlet of five thatched half-timber longhouses round a dusty crossroads, the largest with a tall stone chimney and skull trophies over the gables, plus a striped awning tent, a fenced paddock, a banner pole and standing stones.",
+  "style": "Mannish",
+  "colors":   ["#8C7C5E", "#8A6C3E", "#4A3524", "#6C6860", "#5A4630", "#2A2018", "#A0503A", "", "#5A6830"],
+  "surfaces": ["HalfTimber", "Thatch", "Planks", "Fieldstone", "", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "great hall with chimney", "at": [-0.17, 0.15], "yaw": -28, "parts": [
+      { "shape": "box", "size": [0.28, 0.09, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.09, 0], "size": [0.3, 0.11, 0.15], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.08], "size": [0.1, 0.09, 0.05], "cell": "wall" },
+      { "shape": "gable", "pos": [0.04, 0.09, -0.08], "size": [0.1, 0.08, 0.06], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [0.04, 0, -0.106], "size": [0.035, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.13, 0, -0.06], "size": [0.04, 0.24, 0.04], "cell": "stone" }
+    ] },
+    { "note": "back right longhouse", "at": [0.3, 0.14], "yaw": 28, "parts": [
+      { "shape": "box", "size": [0.22, 0.08, 0.12], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.08, 0], "size": [0.24, 0.1, 0.14], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.07, 0, -0.061], "size": [0.03, 0.05, 0.004], "cell": "dark" }
+    ] },
+    { "note": "left house", "at": [-0.32, -0.1], "yaw": 25, "parts": [
+      { "shape": "box", "size": [0.18, 0.07, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.2, 0.08, 0.13], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [0.05, 0, -0.056], "size": [0.03, 0.045, 0.004], "cell": "dark" }
+    ] },
+    { "note": "right house", "at": [0.29, -0.14], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.19, 0.07, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.21, 0.08, 0.13], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.05, 0, -0.056], "size": [0.03, 0.045, 0.004], "cell": "dark" }
+    ] },
+    { "note": "front house", "at": [-0.02, -0.28], "yaw": -25, "parts": [
+      { "shape": "box", "size": [0.17, 0.07, 0.11], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.07, 0], "size": [0.19, 0.08, 0.13], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.04, 0, -0.056], "size": [0.03, 0.045, 0.004], "cell": "dark" }
+    ] },
+    { "note": "striped awning tent", "at": [0.19, -0.01], "parts": [
+      { "shape": "pyramid", "pos": [0, 0.04, 0], "radius": 0.05, "height": 0.04, "cell": "accent" },
+      { "shape": "box", "pos": [-0.04, 0, -0.03], "size": [0.006, 0.05, 0.006], "cell": "wood" },
+      { "shape": "box", "pos": [0.04, 0, -0.03], "size": [0.006, 0.05, 0.006], "cell": "wood" }
+    ] },
+    { "note": "banner pole by the left house", "at": [-0.17, -0.02], "parts": [
+      { "shape": "flag", "height": 0.12, "radius": 0.03 }
+    ] },
+    { "note": "paddock fence", "at": [0.12, 0.31], "parts": [
+      { "shape": "wall", "pos": [-0.1, 0, 0], "to": [0.1, 0.05], "height": 0.035, "thickness": 0.008, "cell": "wood" },
+      { "shape": "tree", "pos": [0.04, 0, 0.12], "kind": "broadleaf", "height": 0.07, "radius": 0.05 }
+    ] },
+    { "note": "standing stone left", "at": [-0.44, 0.18], "parts": [
+      { "shape": "box", "size": [0.035, 0.08, 0.025], "cell": "stone" }
+    ] },
+    { "note": "carved post right", "at": [0.45, 0.0], "parts": [
+      { "shape": "cylinder", "radius": 0.016, "height": 0.08, "sides": 6, "cell": "wood" },
+      { "shape": "rock", "pos": [-0.1, 0, 0.18], "radius": 0.03, "height": 0.03, "cell": "stone" }
+    ] },
+    { "note": "boulders", "at": [-0.4, -0.2], "parts": [
+      { "shape": "rock", "radius": 0.03, "height": 0.03, "cell": "stone" },
+      { "shape": "rock", "pos": [0.42, 0, -0.35], "radius": 0.03, "height": 0.025, "cell": "stone", "seed": 2 }
+    ] }
+  ]
+}

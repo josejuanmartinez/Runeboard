@@ -74,6 +74,12 @@ public class HexPathRenderer : MonoBehaviour
         lineRenderer.positionCount = 0;
         lineRenderer.SetPositions(new Vector3[] { });
 
+        // Out of reach (too far for the movement left, or none left): still show the route, in red
+        // with an X on every step, so it is clear that this order cannot be given.
+        bool outOfReach = path == null || path.Count == 0;
+        if (outOfReach) path = FindPath(fromRounded, toRounded, character, ignoreMovement: true);
+        SetPathBlocked(outOfReach);
+
         // Check if path exists
         if (path == null || path.Count == 0) return;
 
@@ -102,7 +108,11 @@ public class HexPathRenderer : MonoBehaviour
                     }
                 }
 
-                hexObj.ShowMovementLeft(movementLeft, character);
+                if (outOfReach)
+                {
+                    if (i != 0) hexObj.ShowMovementBlocked();
+                }
+                else hexObj.ShowMovementLeft(movementLeft, character);
             }
             else
             {
@@ -112,6 +122,28 @@ public class HexPathRenderer : MonoBehaviour
         }
 
         DrawFluidPath(hexCenters);
+    }
+
+    // The path's normal colours, kept to restore after a red out-of-reach preview.
+    private Gradient normalGradient;
+    private bool pathBlocked;
+
+    private void SetPathBlocked(bool blocked)
+    {
+        normalGradient ??= lineRenderer.colorGradient;
+        if (blocked == pathBlocked) return;
+        pathBlocked = blocked;
+        if (!blocked)
+        {
+            lineRenderer.colorGradient = normalGradient;
+            return;
+        }
+        // The same gradient's alpha, in a deep warning red.
+        var red = new Gradient();
+        red.SetKeys(
+            new[] { new GradientColorKey(new Color(0.85f, 0.18f, 0.12f), 0f), new GradientColorKey(new Color(0.85f, 0.18f, 0.12f), 1f) },
+            normalGradient.alphaKeys);
+        lineRenderer.colorGradient = red;
     }
 
     // Resamples the straight hex-center-to-hex-center path into a smooth Catmull-Rom spline so
@@ -172,9 +204,11 @@ public class HexPathRenderer : MonoBehaviour
         );
     }
 
-    public List<Vector2Int> FindPath(Vector2Int startPos, Vector2Int goalPos, Character character)
+    // ignoreMovement: the route the unit would take with unlimited movement — only for showing an
+    // order it cannot give (DrawPathBetweenHexes), never for moving.
+    public List<Vector2Int> FindPath(Vector2Int startPos, Vector2Int goalPos, Character character, bool ignoreMovement = false)
     {
-        int movementLeft = character.GetMovementLeft();
+        int movementLeft = ignoreMovement ? 9999 : character.GetMovementLeft();
         if (movementLeft < 1) return new List<Vector2Int> { };
         // If start and goal are the same, return just that position
         if (startPos == goalPos) return new List<Vector2Int> { startPos };

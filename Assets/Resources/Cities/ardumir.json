@@ -1,0 +1,64 @@
+{
+  "name": "Ardumir",
+  "description": "A hillside town of tall half-timber houses on fieldstone ground floors with steep blue-slate and russet-tiled roofs, dormers and chimneys, along winding cobbled lanes round a small roofed well, crowned at the back by a hall with a tall shingled spire, with striped awnings, pines and a big oak.",
+  "style": "Mannish",
+  "colors":   ["#C4B898", "#3E4E6E", "#4A3424", "#7C786A", "#8A4E30", "#241C14", "#B89A5A", "", "#4E6430"],
+  "surfaces": ["HalfTimber", "Slate", "Planks", "Fieldstone", "Tiles", "", "Cloth", "", ""],
+  "buildings": [
+    { "note": "spired hall, back", "at": [0.03, 0.3], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.18, 0.06, 0.13], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.18, 0.09, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.2, 0.11, 0.15], "cell": "trim", "top": "wall" },
+      { "shape": "box", "pos": [0.05, 0, -0.066], "size": [0.035, 0.05, 0.004], "cell": "dark" },
+      { "shape": "cylinder", "pos": [0.05, 0.2, 0.0], "radius": 0.03, "height": 0.06, "sides": 4, "twist": 0.125, "cell": "wall" },
+      { "shape": "pyramid", "pos": [0.05, 0.26, 0.0], "radius": 0.03, "height": 0.14, "cell": "trim" },
+      { "shape": "box", "pos": [-0.07, 0.14, 0.02], "size": [0.03, 0.12, 0.03], "cell": "stone" },
+      { "shape": "box", "pos": [-0.04, 0.02, -0.09], "size": [0.08, 0.03, 0.05], "cell": "accent" }
+    ] },
+    { "note": "back left house", "at": [-0.25, 0.2], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.18, 0.13, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.2, 0.1, 0.15], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.05, 0.13, 0.04], "size": [0.035, 0.12, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [0.12, 0, -0.03], "size": [0.08, 0.03, 0.06], "cell": "accent" }
+    ] },
+    { "note": "front left tall house", "at": [-0.33, -0.2], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.2, 0.06, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.2, 0.11, 0.14], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.17, 0], "size": [0.22, 0.13, 0.16], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.05, 0, -0.071], "size": [0.035, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [-0.07, 0.2, 0.03], "size": [0.04, 0.12, 0.04], "cell": "stone" }
+    ] },
+    { "note": "right house", "at": [0.3, -0.01], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.18, 0.06, 0.13], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.18, 0.09, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.15, 0], "size": [0.2, 0.11, 0.15], "cell": "trim", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [0.0, 0, -0.066], "size": [0.035, 0.05, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0.04, 0.17, 0.04], "size": [0.035, 0.12, 0.035], "cell": "stone" },
+      { "shape": "box", "pos": [-0.04, 0.17, 0.04], "size": [0.035, 0.11, 0.035], "cell": "stone" }
+    ] },
+    { "note": "front house with awning", "at": [0.11, -0.38], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.18, 0.05, 0.13], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.05, 0], "size": [0.18, 0.08, 0.13], "cell": "wall" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.2, 0.12, 0.15], "cell": "roof", "top": "wall", "yaw": 90 },
+      { "shape": "box", "pos": [-0.12, 0, -0.04], "size": [0.08, 0.04, 0.06], "cell": "accent" },
+      { "shape": "box", "pos": [-0.07, 0.13, 0.04], "size": [0.035, 0.08, 0.035], "cell": "stone" }
+    ] },
+    { "note": "roofed well", "at": [-0.02, -0.01], "parts": [
+      { "shape": "box", "size": [0.1, 0.02, 0.1], "cell": "stone", "yaw": 45 },
+      { "shape": "cylinder", "pos": [0, 0.02, 0], "radius": 0.025, "height": 0.04, "sides": 8, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0], "size": [0.008, 0.04, 0.008], "cell": "wood" },
+      { "shape": "pyramid", "pos": [0, 0.09, 0], "radius": 0.035, "height": 0.04, "cell": "roof" }
+    ] },
+    { "note": "cobbled lanes", "at": [-0.02, -0.15], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.12, 0.003, 0.9], "cell": "stone" }
+    ] },
+    { "note": "trees", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.15, 0, 0.95], "kind": "pine", "height": 0.18, "radius": 0.045 },
+      { "shape": "tree", "pos": [0.4, 0, 0.8], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 2 },
+      { "shape": "tree", "pos": [0.37, 0, -0.12], "kind": "broadleaf", "height": 0.18, "radius": 0.08, "seed": 3 },
+      { "shape": "tree", "pos": [-0.07, 0, -0.65], "kind": "pine", "height": 0.13, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [0.26, 0, -0.75], "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 5 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.45], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 6 }
+    ] }
+  ]
+}

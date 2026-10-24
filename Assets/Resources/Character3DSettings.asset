@@ -18,7 +18,7 @@ MonoBehaviour:
   startMode: 1
   pitch: 25
   heightFraction: 0.53
-  figureScale: 1
+  figureScale: 1.3
   feetOffset: 0
   sideBySideOffset: 0.45
   runSpeed: 2.2
@@ -34,3 +34,5 @@ MonoBehaviour:
   shadowColor: {r: 0.02, g: 0.025, b: 0.04, a: 0.8}
   shadowFarOpacity: 0.45
   rimStrength: 1
+  tokenShader: {fileID: 4800000, guid: 708665795a31bbbe66428b6bbb4007bf, type: 3}
+  tokenZoom: {x: 10, y: 13}

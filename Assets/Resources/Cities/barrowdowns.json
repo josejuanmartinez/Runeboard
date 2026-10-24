@@ -1,0 +1,62 @@
+{
+  "name": "Barrow-downs",
+  "description": "Rolling green downs dotted with three grey stone dolmens, each a dark barrow entrance of upright slabs under heavy capstones set into a grassy mound, linked by worn dirt paths among pointed standing stones, mossy boulders and dark shrubs.",
+  "style": "Mannish",
+  "colors":   ["#8E8C80", "#6E6C62", "#8A7452", "#8E8C80", "#7A7A6A", "#1A1A16", "", "", "#3E5228"],
+  "surfaces": ["Fieldstone", "", "Plain", "Fieldstone", "", "", "", "Turf", "Leaves"],
+  "buildings": [
+    { "note": "great dolmen, top of the down", "at": [-0.04, 0.3], "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.14], "radius": 0.18, "height": 0.1, "sides": 12, "cell": "foliage" },
+      { "shape": "box", "pos": [-0.06, 0, 0], "size": [0.04, 0.12, 0.08], "cell": "stone" },
+      { "shape": "box", "pos": [0.06, 0, 0], "size": [0.04, 0.12, 0.08], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.08, 0.1, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.12, 0.01], "size": [0.2, 0.05, 0.12], "cell": "stone" },
+      { "shape": "rock", "pos": [0.14, 0, 0.0], "radius": 0.06, "height": 0.08, "cell": "stone" }
+    ] },
+    { "note": "middle dolmen", "at": [0.16, 0.13], "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.12], "radius": 0.15, "height": 0.08, "sides": 12, "cell": "foliage" },
+      { "shape": "box", "pos": [-0.05, 0, 0], "size": [0.035, 0.1, 0.07], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.035, 0.1, 0.07], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.07, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.1, 0.01], "size": [0.17, 0.045, 0.1], "cell": "stone" }
+    ] },
+    { "note": "front dolmen", "at": [0.08, -0.14], "parts": [
+      { "shape": "dome", "pos": [0, 0, 0.12], "radius": 0.15, "height": 0.08, "sides": 12, "cell": "foliage" },
+      { "shape": "box", "pos": [-0.05, 0, 0], "size": [0.035, 0.1, 0.07], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.035, 0.1, 0.07], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.03], "size": [0.07, 0.08, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.1, 0.01], "size": [0.17, 0.045, 0.1], "cell": "stone" },
+      { "shape": "rock", "pos": [-0.15, 0, 0.12], "radius": 0.08, "height": 0.07, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "standing stones", "at": [0, 0], "parts": [
+      { "shape": "cylinder", "pos": [-0.23, 0, 1.0], "radius": 0.03, "height": 0.12, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.3, 0, 0.8], "radius": 0.03, "height": 0.12, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.31, 0, 0.43], "radius": 0.03, "height": 0.1, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.02, 0, 0.45], "radius": 0.03, "height": 0.1, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.29, 0, -0.3], "radius": 0.03, "height": 0.11, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.07, 0, -0.8], "radius": 0.03, "height": 0.11, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.36, 0, 0.0], "radius": 0.03, "height": 0.1, "sides": 5, "taper": 0.5, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.41, 0, 0.2], "radius": 0.03, "height": 0.09, "sides": 5, "taper": 0.5, "cell": "stone" }
+    ] },
+    { "note": "boulders", "at": [0, 0], "parts": [
+      { "shape": "rock", "pos": [-0.42, 0, 0.0], "radius": 0.05, "height": 0.05, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.33, 0, -0.55], "radius": 0.06, "height": 0.05, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [-0.04, 0, 0.0], "radius": 0.06, "height": 0.05, "cell": "stone", "seed": 4 },
+      { "shape": "rock", "pos": [0.25, 0, -0.65], "radius": 0.05, "height": 0.04, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.32, 0, 0.75], "radius": 0.05, "height": 0.04, "cell": "stone", "seed": 6 }
+    ] },
+    { "note": "dark shrubs", "at": [0, 0], "parts": [
+      { "shape": "tree", "pos": [-0.38, 0, 0.45], "kind": "broadleaf", "height": 0.08, "radius": 0.06 },
+      { "shape": "tree", "pos": [-0.29, 0, 0.2], "kind": "broadleaf", "height": 0.08, "radius": 0.06, "seed": 2 },
+      { "shape": "tree", "pos": [-0.42, 0, -0.2], "kind": "broadleaf", "height": 0.07, "radius": 0.05, "seed": 3 },
+      { "shape": "tree", "pos": [0.33, 0, 0.35], "kind": "broadleaf", "height": 0.07, "radius": 0.05, "seed": 4 },
+      { "shape": "tree", "pos": [0.42, 0, -0.15], "kind": "broadleaf", "height": 0.08, "radius": 0.06, "seed": 5 },
+      { "shape": "tree", "pos": [0.17, 0, -0.45], "kind": "broadleaf", "height": 0.07, "radius": 0.05, "seed": 6 }
+    ] },
+    { "note": "worn paths", "at": [0, 0], "parts": [
+      { "shape": "box", "pos": [-0.1, 0, 0.1], "size": [0.05, 0.003, 0.5], "cell": "wood", "yaw": -20 },
+      { "shape": "box", "pos": [-0.05, 0, -0.65], "size": [0.05, 0.003, 0.4], "cell": "wood", "yaw": -25 },
+      { "shape": "box", "pos": [0.28, 0, -0.1], "size": [0.05, 0.003, 0.5], "cell": "wood", "yaw": 20 }
+    ] }
+  ]
+}

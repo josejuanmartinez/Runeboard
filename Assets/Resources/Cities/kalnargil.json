@@ -1,0 +1,69 @@
+{
+  "name": "Kal Nargil",
+  "description": "A jagged crag of grey basalt columns rising to a tall square spire, with skull faces carved into three of the pillars staring out with red eyes; a timber-lintelled tunnel mouth opens at its foot and a muddy track leads away to the front left across rough grass, past fallen column blocks, gorse and two bare, twisted trees.",
+  "style": "Orcish",
+  "colors":   ["#5E605C", "#3E3C38", "#5A4630", "#6A6C66", "#A8A08A", "#141210", "#A83020", "", "#4E5426"],
+  "surfaces": ["Fieldstone", "", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "basalt column crag", "at": [0, 0], "parts": [
+      { "shape": "rock", "pos": [0.02, 0, 0.38], "radius": 0.3, "height": 0.12, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.04, 0, 0.42], "radius": 0.07, "height": 0.55, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.12, 0, 0.52], "radius": 0.06, "height": 0.44, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.06, 0, 0.52], "radius": 0.06, "height": 0.4, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.19, 0, 0.42], "radius": 0.05, "height": 0.3, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.22, 0, 0.42], "radius": 0.05, "height": 0.3, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.3, 0, 0.3], "radius": 0.04, "height": 0.2, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.26, 0, 0.36], "radius": 0.04, "height": 0.15, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "tunnel mouth with timber lintel", "at": [0.0, 0.14], "parts": [
+      { "shape": "box", "pos": [0, 0, 0.02], "size": [0.13, 0.13, 0.04], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0.12, -0.01], "size": [0.2, 0.03, 0.03], "cell": "wood" },
+      { "shape": "box", "pos": [-0.075, 0, -0.01], "size": [0.015, 0.12, 0.02], "cell": "wood" }
+    ] },
+    { "note": "skull pillar, left of the gate", "at": [-0.15, 0.12], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.28, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.18, -0.036], "size": [0.05, 0.06, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [-0.012, 0.21, -0.039], "size": [0.012, 0.01, 0.003], "cell": "accent" },
+      { "shape": "box", "pos": [0.012, 0.21, -0.039], "size": [0.012, 0.01, 0.003], "cell": "accent" }
+    ] },
+    { "note": "skull pillar, right of the gate", "at": [0.15, 0.07], "parts": [
+      { "shape": "cylinder", "radius": 0.05, "height": 0.32, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.22, -0.036], "size": [0.05, 0.06, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [-0.012, 0.25, -0.039], "size": [0.012, 0.01, 0.003], "cell": "accent" },
+      { "shape": "box", "pos": [0.012, 0.25, -0.039], "size": [0.012, 0.01, 0.003], "cell": "accent" },
+      { "shape": "flag", "pos": [0, 0.32, 0], "height": 0.06, "radius": 0.004 }
+    ] },
+    { "note": "small skull pillar, front right", "at": [0.16, -0.09], "parts": [
+      { "shape": "cylinder", "radius": 0.04, "height": 0.17, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.09, -0.029], "size": [0.04, 0.05, 0.004], "cell": "trim" },
+      { "shape": "box", "pos": [-0.01, 0.12, -0.032], "size": [0.01, 0.008, 0.003], "cell": "accent" },
+      { "shape": "box", "pos": [0.01, 0.12, -0.032], "size": [0.01, 0.008, 0.003], "cell": "accent" }
+    ] },
+    { "note": "short columns, right foot", "at": [0.3, -0.05], "parts": [
+      { "shape": "cylinder", "pos": [0.03, 0, 0.12], "radius": 0.035, "height": 0.13, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.04, 0, -0.15], "radius": 0.03, "height": 0.1, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [-0.16, 0, -0.3], "radius": 0.03, "height": 0.06, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "fallen blocks, left", "at": [-0.2, 0.0], "parts": [
+      { "shape": "rock", "radius": 0.03, "height": 0.03, "cell": "stone" },
+      { "shape": "rock", "pos": [0.1, 0, -0.08], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 1 },
+      { "shape": "cylinder", "pos": [-0.15, 0, -0.6], "radius": 0.04, "height": 0.06, "sides": 4, "twist": 0.125, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.65, 0, -0.65], "radius": 0.03, "height": 0.05, "sides": 4, "twist": 0.125, "cell": "stone" }
+    ] },
+    { "note": "muddy track", "at": [-0.1, -0.2], "yaw": -60, "parts": [
+      { "shape": "box", "size": [0.55, 0.004, 0.09], "cell": "wood" }
+    ] },
+    { "note": "bare tree, left", "at": [-0.42, -0.02], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.05, "cell": "wood" }
+    ] },
+    { "note": "bare tree, right", "at": [0.4, -0.15], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.16, "radius": 0.05, "cell": "wood", "seed": 1 }
+    ] },
+    { "note": "gorse clumps", "at": [0.1, -0.35], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.04, "radius": 0.03, "seed": 2 },
+      { "shape": "tree", "pos": [0.12, 0, 0.15], "kind": "broadleaf", "height": 0.04, "radius": 0.03, "seed": 3 },
+      { "shape": "tree", "pos": [-0.38, 0, 0.6], "kind": "broadleaf", "height": 0.05, "radius": 0.035, "seed": 4 },
+      { "shape": "tree", "pos": [0.32, 0, 1.0], "kind": "broadleaf", "height": 0.05, "radius": 0.035, "seed": 5 }
+    ] }
+  ]
+}

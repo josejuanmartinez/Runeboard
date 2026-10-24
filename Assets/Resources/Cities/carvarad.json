@@ -1,0 +1,39 @@
+{
+  "name": "Carvarad",
+  "description": "A lone, very tall, square grey-stone watchtower with a heavy crown of battlements, its buttressed base cracked and strangled by thick brown vines, a small arched door at its foot; it stands on dry ochre grassland among leafless dead trees and rust-red shrubs.",
+  "style": "Mannish",
+  "colors":   ["#B4AC94", "#5A4A3A", "#5A3A26", "#8A8474", "#6A4A2E", "#2A2420", "#8A3A28", "", "#6A5A2A"],
+  "surfaces": ["Ashlar",  "Planks",  "Planks", "Fieldstone", "Plain", "", "Leaves", "", ""],
+  "buildings": [
+    { "note": "great tower", "at": [0.02, -0.03], "parts": [
+      { "shape": "cylinder", "radius": 0.26, "height": 0.2, "sides": 4, "taper": 0.75, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.2, 0], "radius": 0.19, "height": 0.46, "sides": 4, "taper": 0.95, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0, 0.66, 0], "radius": 0.22, "height": 0.04, "sides": 4, "cell": "wall", "top": "dark" },
+      { "shape": "battlements", "pos": [0, 0.7, 0], "radius": 0.2, "count": 8, "thickness": 0.03, "cell": "wall" },
+      { "shape": "box", "pos": [-0.13, 0, -0.13], "size": [0.06, 0.1, 0.01], "cell": "dark", "yaw": 45 },
+      { "shape": "box", "pos": [-0.065, 0.48, -0.065], "size": [0.03, 0.06, 0.01], "cell": "dark", "yaw": 45 },
+      { "shape": "box", "pos": [0.065, 0.48, -0.065], "size": [0.03, 0.06, 0.01], "cell": "dark", "yaw": -45 },
+      { "shape": "box", "pos": [-0.05, 0.1, -0.09], "size": [0.012, 0.5, 0.012], "cell": "trim", "yaw": 15 },
+      { "shape": "box", "pos": [0.06, 0.15, -0.08], "size": [0.012, 0.5, 0.012], "cell": "trim", "yaw": -10 },
+      { "shape": "flag", "pos": [0, 0.7, 0], "height": 0.08 },
+      { "shape": "rock", "pos": [0.18, 0, -0.06], "radius": 0.05, "height": 0.06, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "dead trees", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.3, 0, 0.75], "kind": "poplar", "height": 0.24, "radius": 0.05, "cell": "wood" },
+      { "shape": "tree", "pos": [0.32, 0, 0.7], "kind": "poplar", "height": 0.22, "radius": 0.045, "cell": "wood", "seed": 1 },
+      { "shape": "tree", "pos": [0.4, 0, 0.35], "kind": "poplar", "height": 0.19, "radius": 0.04, "cell": "wood", "seed": 2 },
+      { "shape": "tree", "pos": [-0.38, 0, 0.0], "kind": "poplar", "height": 0.2, "radius": 0.045, "cell": "wood", "seed": 3 },
+      { "shape": "tree", "pos": [0.31, 0, -0.45], "kind": "poplar", "height": 0.17, "radius": 0.04, "cell": "wood", "seed": 4 },
+      { "shape": "tree", "pos": [0.1, 0, -0.95], "kind": "poplar", "height": 0.15, "radius": 0.04, "cell": "wood", "seed": 5 }
+    ] },
+    { "note": "rust-red shrubs and stones", "at": [0.0, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.27, 0, -0.55], "kind": "broadleaf", "height": 0.08, "radius": 0.045, "cell": "accent", "seed": 6 },
+      { "shape": "tree", "pos": [-0.42, 0, -0.25], "kind": "broadleaf", "height": 0.06, "radius": 0.035, "cell": "accent", "seed": 7 },
+      { "shape": "tree", "pos": [-0.43, 0, 0.2], "kind": "broadleaf", "height": 0.05, "radius": 0.03, "cell": "accent", "seed": 8 },
+      { "shape": "tree", "pos": [0.42, 0, -0.2], "kind": "broadleaf", "height": 0.07, "radius": 0.04, "cell": "accent", "seed": 9 },
+      { "shape": "rock", "pos": [0.4, 0, 0.15], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 10 },
+      { "shape": "rock", "pos": [-0.12, 0, -0.75], "radius": 0.02, "height": 0.02, "cell": "stone", "seed": 11 },
+      { "shape": "rock", "pos": [-0.22, 0, 0.6], "radius": 0.02, "height": 0.02, "cell": "stone", "seed": 12 }
+    ] }
+  ]
+}

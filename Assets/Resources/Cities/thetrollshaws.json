@@ -1,0 +1,50 @@
+{
+  "name": "The Trollshaws",
+  "description": "A troll-hole in the Trollshaws: a moss-capped knoll of great grey standing slabs crowned by a tall pointed crag, with a dark arched stone-lined cave mouth in its face, a trampled dirt path leading out, tumbled boulders all round and a few dark pines.",
+  "style": "Orcish",
+  "colors":   ["#8A8270", "#6E6A2A", "#5A4630", "#8A8270", "#9C8458", "#1C1A16", "#7A7A34", "", "#3E4A26"],
+  "surfaces": ["Fieldstone", "Turf", "", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "moss-capped knoll", "at": [0.0, 0.05], "parts": [
+      { "shape": "cylinder", "pos": [0, 0, 0.06], "radius": 0.36, "height": 0.2, "sides": 9, "taper": 0.85, "cell": "stone", "top": "roof" },
+      { "shape": "dome", "pos": [0, 0.2, 0.06], "radius": 0.3, "height": 0.06, "sides": 9, "cell": "roof" },
+      { "shape": "cylinder", "pos": [-0.25, 0, -0.08], "radius": 0.07, "height": 0.24, "sides": 5, "taper": 0.7, "cell": "stone" },
+      { "shape": "cylinder", "pos": [0.22, 0, -0.1], "radius": 0.08, "height": 0.26, "sides": 5, "taper": 0.7, "cell": "stone", "twist": 0.2 },
+      { "shape": "cylinder", "pos": [0.33, 0, 0.05], "radius": 0.06, "height": 0.22, "sides": 5, "taper": 0.7, "cell": "stone" }
+    ] },
+    { "note": "tall pointed crag on top", "at": [0.06, 0.33], "parts": [
+      { "shape": "cylinder", "pos": [0, 0.2, 0], "radius": 0.1, "height": 0.34, "sides": 5, "taper": 0.3, "cell": "stone" },
+      { "shape": "rock", "pos": [-0.12, 0.2, -0.04], "radius": 0.035, "height": 0.05, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.1, 0.2, -0.06], "radius": 0.04, "height": 0.07, "cell": "stone", "seed": 2 },
+      { "shape": "flag", "pos": [0, 0.54, 0], "height": 0.05, "radius": 0.018 }
+    ] },
+    { "note": "arched cave mouth", "at": [-0.06, -0.12], "parts": [
+      { "shape": "box", "size": [0.2, 0.17, 0.06], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.031], "size": [0.13, 0.15, 0.004], "cell": "stone", "top": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.035], "size": [0.09, 0.13, 0.004], "cell": "dark" }
+    ] },
+    { "note": "dirt path 1", "at": [-0.081, -0.222], "yaw": 105, "parts": [ { "shape": "box", "size": [0.297, 0.005, 0.08], "cell": "trim" } ] },
+    { "note": "dirt path 2", "at": [-0.186, -0.333], "yaw": 117, "parts": [ { "shape": "box", "size": [0.355, 0.005, 0.08], "cell": "trim" } ] },
+    { "note": "boulders, left", "at": [-0.4, 0.05], "parts": [
+      { "shape": "rock", "radius": 0.07, "height": 0.1, "cell": "stone", "seed": 3 },
+      { "shape": "rock", "pos": [0.05, 0, -0.3], "radius": 0.08, "height": 0.12, "cell": "stone", "seed": 4 }
+    ] },
+    { "note": "boulders, front right", "at": [0.12, -0.25], "parts": [
+      { "shape": "rock", "radius": 0.06, "height": 0.1, "cell": "stone", "seed": 5 },
+      { "shape": "rock", "pos": [-0.08, 0, -0.05], "radius": 0.05, "height": 0.08, "cell": "stone", "seed": 6 },
+      { "shape": "rock", "pos": [0.07, 0, -0.08], "radius": 0.025, "height": 0.025, "cell": "stone", "seed": 7 }
+    ] },
+    { "note": "boulders, right", "at": [0.4, -0.08], "parts": [
+      { "shape": "rock", "radius": 0.06, "height": 0.12, "cell": "stone", "seed": 8 },
+      { "shape": "rock", "pos": [0.02, 0, 0.45], "radius": 0.05, "height": 0.08, "cell": "stone", "seed": 9 }
+    ] },
+    { "note": "pines, back left", "at": [-0.36, 0.3], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.16, "radius": 0.035 },
+      { "shape": "tree", "pos": [-0.08, 0, -0.1], "kind": "pine", "height": 0.11, "radius": 0.03, "seed": 1 }
+    ] },
+    { "note": "shrubs, right", "at": [0.44, 0.08], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.07, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [-0.1, 0, -0.35], "kind": "broadleaf", "height": 0.07, "radius": 0.045, "seed": 3 }
+    ] }
+  ]
+}

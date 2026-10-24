@@ -1,0 +1,80 @@
+{
+  "name": "Cerin Amroth",
+  "description": "A grassy hilltop ring of ancient, weathered grey megaliths carved with faint swirling runes: six tall standing stones around three heavy trilithons, one of them leaning, enclosed by a dense round wood of olive-green oaks and dark firs.",
+  "style": "Elven",
+  "colors":   ["#8E8A7A", "#5A5A4A", "#5E4A30", "#8E8A7A", "#8A963E", "#2E2C24", "#A8A490", "", "#55682A"],
+  "surfaces": ["Fieldstone", "Slate", "Planks", "Fieldstone", "Leaves", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "back-left megalith", "at": [-0.07, 0.25], "yaw": -20, "parts": [
+      { "shape": "box", "size": [0.1, 0.27, 0.06], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.27, 0], "radius": 0.06, "height": 0.04, "cell": "stone", "twist": 0.0 }
+    ] },
+    { "note": "back-right megalith", "at": [0.15, 0.26], "yaw": 20, "parts": [
+      { "shape": "box", "size": [0.08, 0.27, 0.06], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.27, 0], "radius": 0.05, "height": 0.04, "cell": "stone" }
+    ] },
+    { "note": "left megalith", "at": [-0.26, 0.08], "yaw": -40, "parts": [
+      { "shape": "box", "size": [0.08, 0.29, 0.06], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.29, 0], "radius": 0.05, "height": 0.04, "cell": "stone" }
+    ] },
+    { "note": "right megalith", "at": [0.24, 0.03], "yaw": 40, "parts": [
+      { "shape": "box", "size": [0.08, 0.28, 0.06], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.28, 0], "radius": 0.05, "height": 0.05, "cell": "stone" }
+    ] },
+    { "note": "front-left megalith", "at": [-0.15, -0.27], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.09, 0.3, 0.06], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.3, 0], "radius": 0.055, "height": 0.04, "cell": "stone" },
+      { "shape": "rock", "pos": [0.07, 0, -0.03], "radius": 0.02, "height": 0.02, "cell": "stone" }
+    ] },
+    { "note": "front-right megalith", "at": [0.15, -0.25], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.08, 0.3, 0.06], "cell": "stone" },
+      { "shape": "pyramid", "pos": [0, 0.3, 0], "radius": 0.05, "height": 0.04, "cell": "stone" },
+      { "shape": "box", "pos": [-0.04, 0, -0.03], "size": [0.04, 0.14, 0.04], "cell": "stone" }
+    ] },
+    { "note": "back trilithon", "at": [0.08, 0.1], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [-0.05, 0, 0], "size": [0.04, 0.2, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0, 0], "size": [0.04, 0.2, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.2, 0], "size": [0.16, 0.04, 0.06], "cell": "stone" }
+    ] },
+    { "note": "left trilithon", "at": [-0.13, -0.04], "yaw": -55, "parts": [
+      { "shape": "box", "pos": [-0.04, 0, 0], "size": [0.04, 0.2, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0.04, 0, 0], "size": [0.04, 0.2, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.2, 0], "size": [0.14, 0.04, 0.06], "cell": "stone", "yaw": -8 }
+    ] },
+    { "note": "front trilithon", "at": [0.04, -0.12], "yaw": 25, "parts": [
+      { "shape": "box", "pos": [-0.045, 0, 0], "size": [0.035, 0.17, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0.045, 0, 0], "size": [0.035, 0.17, 0.04], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.17, 0], "size": [0.14, 0.035, 0.06], "cell": "stone" }
+    ] },
+    { "note": "small stone", "at": [0.0, 0.09], "parts": [
+      { "shape": "rock", "radius": 0.025, "height": 0.08, "cell": "stone", "seed": 1 }
+    ] },
+    { "note": "wood back", "at": [0.0, 0.42], "parts": [
+      { "shape": "tree", "pos": [-0.27, 0, -0.1], "kind": "pine", "height": 0.2, "radius": 0.045 },
+      { "shape": "tree", "pos": [-0.13, 0, 0.0], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "cell": "trim", "seed": 1 },
+      { "shape": "tree", "pos": [0.02, 0, 0.1], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 2 },
+      { "shape": "tree", "pos": [0.12, 0, 0.02], "kind": "broadleaf", "height": 0.15, "radius": 0.055, "seed": 3 },
+      { "shape": "tree", "pos": [0.28, 0, -0.08], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "seed": 4 }
+    ] },
+    { "note": "wood left", "at": [-0.38, 0.0], "parts": [
+      { "shape": "tree", "pos": [0.0, 0, 0.35], "kind": "broadleaf", "height": 0.16, "radius": 0.06, "cell": "trim", "seed": 5 },
+      { "shape": "tree", "pos": [-0.04, 0, 0.1], "kind": "pine", "height": 0.18, "radius": 0.045, "seed": 6 },
+      { "shape": "tree", "pos": [0.07, 0, -0.15], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 7 },
+      { "shape": "tree", "pos": [-0.03, 0, -0.35], "kind": "broadleaf", "height": 0.14, "radius": 0.06, "seed": 8 },
+      { "shape": "tree", "pos": [0.1, 0, -0.65], "kind": "broadleaf", "height": 0.13, "radius": 0.06, "cell": "trim", "seed": 9 }
+    ] },
+    { "note": "wood right", "at": [0.38, 0.0], "parts": [
+      { "shape": "tree", "pos": [-0.02, 0, 0.35], "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 10 },
+      { "shape": "tree", "pos": [0.04, 0, 0.1], "kind": "pine", "height": 0.18, "radius": 0.04, "seed": 11 },
+      { "shape": "tree", "pos": [0.0, 0, -0.15], "kind": "broadleaf", "height": 0.15, "radius": 0.06, "seed": 12 },
+      { "shape": "tree", "pos": [-0.04, 0, -0.4], "kind": "pine", "height": 0.17, "radius": 0.04, "seed": 13 },
+      { "shape": "tree", "pos": [-0.1, 0, -0.65], "kind": "broadleaf", "height": 0.13, "radius": 0.06, "cell": "trim", "seed": 14 }
+    ] },
+    { "note": "wood front", "at": [0.0, -0.4], "parts": [
+      { "shape": "tree", "pos": [-0.15, 0, 0.1], "kind": "broadleaf", "height": 0.13, "radius": 0.06, "seed": 15 },
+      { "shape": "tree", "pos": [0.02, 0, 0.0], "kind": "pine", "height": 0.15, "radius": 0.04, "seed": 16 },
+      { "shape": "tree", "pos": [0.15, 0, 0.1], "kind": "broadleaf", "height": 0.13, "radius": 0.06, "cell": "trim", "seed": 17 },
+      { "shape": "tree", "pos": [-0.06, 0, -0.12], "kind": "broadleaf", "height": 0.11, "radius": 0.05, "seed": 18 }
+    ] }
+  ]
+}

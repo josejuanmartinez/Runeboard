@@ -1,0 +1,56 @@
+{
+  "name": "Galabrynd",
+  "description": "A mossy stepped stone pyramid with steep staircases up two faces and a small square shrine on its flat summit, hidden in a dense forest clearing of tall firs and broad oaks, with a dirt path leading in from the front left past boulders and gold-leaved shrubs.",
+  "style": "Mannish",
+  "colors":   ["#8A8670", "#6E6A58", "#5A4430", "#76725E", "#A8A288", "#26241E", "#B08A2E", "", "#4E5E2E"],
+  "surfaces": ["Fieldstone", "Plain", "", "Fieldstone", "Plain", "", "Leaves", "", ""],
+  "buildings": [
+    { "note": "stepped pyramid with summit shrine", "at": [0.04, 0.08], "yaw": 45, "parts": [
+      { "shape": "box", "size": [0.3, 0.06, 0.24], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.06, 0.01], "size": [0.24, 0.05, 0.19], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.11, 0.02], "size": [0.18, 0.05, 0.14], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.16, 0.03], "size": [0.12, 0.04, 0.1], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0.2, 0.03], "size": [0.08, 0.06, 0.07], "cell": "wall", "top": "trim" },
+      { "shape": "box", "pos": [0, 0.2, -0.007], "size": [0.025, 0.04, 0.004], "cell": "dark" },
+      { "shape": "box", "pos": [0, 0, -0.14], "size": [0.05, 0.05, 0.04], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0.05, -0.1], "size": [0.05, 0.05, 0.04], "cell": "trim" },
+      { "shape": "box", "pos": [0, 0.1, -0.06], "size": [0.05, 0.05, 0.04], "cell": "trim" },
+      { "shape": "box", "pos": [0.17, 0, 0], "size": [0.04, 0.05, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0.13, 0.05, 0.005], "size": [0.04, 0.05, 0.05], "cell": "trim" },
+      { "shape": "box", "pos": [0.09, 0.1, 0.01], "size": [0.04, 0.05, 0.05], "cell": "trim" }
+    ] },
+    { "note": "dirt path to the front left", "at": [-0.12, -0.22], "yaw": -55, "parts": [
+      { "shape": "box", "size": [0.4, 0.004, 0.1], "cell": "trim" }
+    ] },
+    { "note": "great oak behind the pyramid", "at": [0.01, 0.42], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.3, "radius": 0.1 }
+    ] },
+    { "note": "firs, back", "at": [-0.25, 0.38], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 1 },
+      { "shape": "tree", "pos": [0.11, 0, 0.0], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 2 },
+      { "shape": "tree", "pos": [0.48, 0, 0.05], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 3 },
+      { "shape": "tree", "pos": [0.62, 0, -0.06], "kind": "pine", "height": 0.2, "radius": 0.04, "seed": 4 }
+    ] },
+    { "note": "oak and firs, left", "at": [-0.36, 0.1], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.22, "radius": 0.08, "seed": 5 },
+      { "shape": "tree", "pos": [-0.03, 0, -0.4], "kind": "pine", "height": 0.2, "radius": 0.045, "seed": 6 },
+      { "shape": "tree", "pos": [0.12, 0, -0.35], "kind": "pine", "height": 0.15, "radius": 0.035, "seed": 7 },
+      { "shape": "tree", "pos": [-0.06, 0, -0.62], "kind": "broadleaf", "height": 0.07, "radius": 0.035, "cell": "accent", "seed": 8 }
+    ] },
+    { "note": "oak and firs, right", "at": [0.38, 0.22], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.18, "radius": 0.07, "seed": 9 },
+      { "shape": "tree", "pos": [0.03, 0, -0.3], "kind": "pine", "height": 0.22, "radius": 0.045, "seed": 10 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.6], "kind": "broadleaf", "height": 0.08, "radius": 0.035, "cell": "accent", "seed": 11 }
+    ] },
+    { "note": "broad oaks in front", "at": [0.0, -0.3], "parts": [
+      { "shape": "tree", "kind": "broadleaf", "height": 0.2, "radius": 0.08, "seed": 12 },
+      { "shape": "tree", "pos": [0.2, 0, 0.12], "kind": "broadleaf", "height": 0.21, "radius": 0.08, "seed": 13 },
+      { "shape": "tree", "pos": [0.25, 0, -0.08], "kind": "broadleaf", "height": 0.06, "radius": 0.035, "cell": "accent", "seed": 14 }
+    ] },
+    { "note": "boulders", "at": [-0.3, -0.18], "parts": [
+      { "shape": "rock", "radius": 0.035, "height": 0.035, "cell": "stone" },
+      { "shape": "rock", "pos": [0.3, 0, -0.45], "radius": 0.04, "height": 0.03, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [0.65, 0, -0.1], "radius": 0.03, "height": 0.03, "cell": "stone", "seed": 2 }
+    ] }
+  ]
+}

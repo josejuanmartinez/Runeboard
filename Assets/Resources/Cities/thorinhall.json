@@ -1,0 +1,81 @@
+{
+  "name": "Thorin Hall",
+  "description": "Thorin's Halls in the Blue Mountains: a grey-stone dwarven castle built against a snow-capped peak, with round towers under steep blue-slate conical roofs and timber galleries, a half-timbered great hall with a chimney on the left, a gabled gate-chapel flanked by carved statues at the front, waterfalls down the left cliff and dark pines all round.",
+  "style": "Dwarven",
+  "colors":   ["#8A8478", "#4A5A68", "#5A3E28", "#6E6A62", "#E0DCD2", "#1E1E1E", "#9AB0BC", "", "#2E3E2A"],
+  "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "buildings": [
+    { "note": "snow-capped peak behind", "at": [0.0, 0.42], "parts": [
+      { "shape": "cone", "radius": 0.42, "height": 0.62, "sides": 6, "cell": "stone" },
+      { "shape": "cone", "pos": [0, 0.42, 0], "radius": 0.14, "height": 0.2, "sides": 6, "cell": "trim" },
+      { "shape": "rock", "pos": [0.3, 0, -0.1], "radius": 0.18, "height": 0.35, "cell": "stone", "seed": 1 },
+      { "shape": "rock", "pos": [-0.3, 0, -0.08], "radius": 0.16, "height": 0.3, "cell": "stone", "seed": 2 }
+    ] },
+    { "note": "half-timbered great hall, left", "at": [-0.17, 0.17], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.22, 0.16, 0.12], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0.1, -0.061], "size": [0.2, 0.05, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.16, 0], "size": [0.22, 0.12, 0.12], "cell": "roof", "top": "wood" },
+      { "shape": "box", "pos": [-0.06, 0.18, 0.02], "size": [0.03, 0.12, 0.03], "cell": "stone" }
+    ] },
+    { "note": "front timber gable of the hall", "at": [-0.04, 0.24], "yaw": -30, "parts": [
+      { "shape": "box", "size": [0.08, 0.2, 0.08], "cell": "stone" },
+      { "shape": "box", "pos": [0, 0, -0.041], "size": [0.03, 0.06, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.2, 0], "size": [0.08, 0.1, 0.08], "cell": "roof", "top": "wood", "yaw": 90 }
+    ] },
+    { "note": "great round tower, back right", "at": [0.2, 0.18], "parts": [
+      { "shape": "cylinder", "radius": 0.08, "height": 0.28, "sides": 12, "cell": "wall", "top": "stone" },
+      { "shape": "cylinder", "pos": [0, 0.28, 0], "radius": 0.085, "height": 0.05, "sides": 12, "cell": "wood" },
+      { "shape": "cone", "pos": [0, 0.33, 0], "radius": 0.1, "height": 0.2, "sides": 12, "cell": "roof" },
+      { "shape": "flag", "pos": [0, 0.53, 0], "height": 0.06, "radius": 0.02 }
+    ] },
+    { "note": "curtain wall", "at": [0.06, 0.04], "parts": [
+      { "shape": "wall", "pos": [-0.12, 0, 0], "to": [0.14, 0], "height": 0.16, "thickness": 0.04, "count": 1, "cell": "wall" }
+    ] },
+    { "note": "left round towers", "at": [-0.11, -0.1], "parts": [
+      { "shape": "cylinder", "pos": [-0.02, 0, 0.12], "radius": 0.05, "height": 0.3, "sides": 10, "cell": "wall" },
+      { "shape": "cone", "pos": [-0.02, 0.3, 0.12], "radius": 0.06, "height": 0.13, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [0.03, 0, -0.05], "radius": 0.05, "height": 0.22, "sides": 10, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.03, 0.22, -0.05], "radius": 0.055, "height": 0.03, "sides": 10, "cell": "wood" },
+      { "shape": "cone", "pos": [0.03, 0.25, -0.05], "radius": 0.065, "height": 0.13, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "right round towers", "at": [0.24, -0.15], "parts": [
+      { "shape": "cylinder", "pos": [0.02, 0, 0.18], "radius": 0.05, "height": 0.28, "sides": 10, "cell": "wall" },
+      { "shape": "cylinder", "pos": [0.02, 0.28, 0.18], "radius": 0.055, "height": 0.03, "sides": 10, "cell": "wood" },
+      { "shape": "cone", "pos": [0.02, 0.31, 0.18], "radius": 0.065, "height": 0.12, "sides": 10, "cell": "roof" },
+      { "shape": "cylinder", "pos": [-0.04, 0, -0.06], "radius": 0.055, "height": 0.2, "sides": 10, "cell": "wall" },
+      { "shape": "cylinder", "pos": [-0.04, 0.2, -0.06], "radius": 0.06, "height": 0.03, "sides": 10, "cell": "wood" },
+      { "shape": "cone", "pos": [-0.04, 0.23, -0.06], "radius": 0.07, "height": 0.12, "sides": 10, "cell": "roof" }
+    ] },
+    { "note": "gate chapel with statues", "at": [0.03, -0.28], "yaw": 30, "parts": [
+      { "shape": "box", "size": [0.12, 0.13, 0.12], "cell": "wall" },
+      { "shape": "box", "pos": [0, 0, -0.061], "size": [0.04, 0.07, 0.004], "cell": "wood" },
+      { "shape": "gable", "pos": [0, 0.13, 0], "size": [0.12, 0.09, 0.12], "cell": "roof", "top": "wood", "yaw": 90 },
+      { "shape": "box", "pos": [-0.05, 0, -0.07], "size": [0.025, 0.1, 0.02], "cell": "stone" },
+      { "shape": "box", "pos": [0.05, 0, -0.07], "size": [0.025, 0.1, 0.02], "cell": "stone" }
+    ] },
+    { "note": "waterfall down the left cliff", "at": [-0.24, -0.05], "parts": [
+      { "shape": "rock", "radius": 0.12, "height": 0.2, "cell": "stone", "seed": 3 },
+      { "shape": "box", "pos": [0.0, 0, -0.1], "size": [0.03, 0.2, 0.01], "cell": "accent" }
+    ] },
+    { "note": "stream 1", "at": [-0.434, 0.013], "yaw": 83, "parts": [ { "shape": "box", "size": [0.52, 0.005, 0.035], "cell": "accent" } ] },
+    { "note": "stream 2", "at": [-0.388, -0.163], "yaw": 86, "parts": [ { "shape": "box", "size": [0.361, 0.005, 0.035], "cell": "accent" } ] },
+    { "note": "stream 3", "at": [-0.29, -0.307], "yaw": 64, "parts": [ { "shape": "box", "size": [0.4, 0.005, 0.035], "cell": "accent" } ] },
+    { "note": "stone causeway 1", "at": [0.004, -0.34], "yaw": 106, "parts": [ { "shape": "box", "size": [0.219, 0.012, 0.05], "cell": "stone" } ] },
+    { "note": "stone causeway 2", "at": [-0.061, -0.412], "yaw": 117, "parts": [ { "shape": "box", "size": [0.199, 0.012, 0.05], "cell": "stone" } ] },
+    { "note": "pines left", "at": [-0.42, 0.18], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.18, "radius": 0.035 },
+      { "shape": "tree", "pos": [0.08, 0, -0.08], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 1 },
+      { "shape": "tree", "pos": [0.05, 0, 0.25], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 2 }
+    ] },
+    { "note": "pines right", "at": [0.42, 0.0], "parts": [
+      { "shape": "tree", "pos": [0, 0, 0.3], "kind": "pine", "height": 0.18, "radius": 0.035, "seed": 3 },
+      { "shape": "tree", "pos": [0.02, 0, -0.1], "kind": "pine", "height": 0.16, "radius": 0.03, "seed": 4 },
+      { "shape": "tree", "pos": [-0.02, 0, -0.35], "kind": "pine", "height": 0.15, "radius": 0.03, "seed": 5 }
+    ] },
+    { "note": "pines front", "at": [0.14, -0.38], "parts": [
+      { "shape": "tree", "kind": "pine", "height": 0.12, "radius": 0.03, "seed": 6 },
+      { "shape": "tree", "pos": [-0.2, 0, -0.05], "kind": "pine", "height": 0.11, "radius": 0.028, "seed": 7 },
+      { "shape": "rock", "pos": [0.14, 0, 0.1], "radius": 0.04, "height": 0.04, "cell": "stone", "seed": 8 }
+    ] }
+  ]
+}

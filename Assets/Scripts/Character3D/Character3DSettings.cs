@@ -24,6 +24,18 @@ public class Character3DSettings : ScriptableObject
     public float figureScale = 1f;
     [Tooltip("Extra feet offset, in sprite cell heights, on top of the GoldRing anchor.")]
     public float feetOffset;
+    [Tooltip("Extra size when zoomed out: at 2.5× the default zoom, units are this much larger again (0.4 = +40%), so they still read at strategic zoom.")]
+    [Range(0f, 1.5f)] public float zoomedOutBoost = 0.4f;
+    [Header("Strategic zoom tokens (see UnitToken)")]
+    [Tooltip("RetroLOTR/UnitToken. Empty = no tokens, figures at every zoom.")]
+    public Shader tokenShader;
+    [Tooltip("Orthographic sizes where figures start turning into tokens, and where they are tokens only.")]
+    public Vector2 tokenZoom = new(10f, 13f);
+    [Header("Miniature base (see Character3DBase)")]
+    [Tooltip("Stand every unit on a bevelled base with a nation-coloured rim, like a painted miniature.")]
+    public bool showBase = true;
+    [Tooltip("Base radius as a fraction of the model's height.")]
+    [Range(0.1f, 0.6f)] public float baseRadius = 0.3f;
     [Tooltip("Side By Side mode: how far right of the sprite the model stands, in sprite cell heights.")]
     public float sideBySideOffset = 0.45f;
     [Tooltip("Moving faster than this (sprite cells per second) switches the walk to a run.")]

@@ -306,12 +306,11 @@ public class CharacterAction
             ActionCostSnapshot caravanSnapshot = (isBuyCaravans || isSellCaravans)
                 ? CalculateCostSnapshot(GetResourceCostProfile(character.GetOwner()))
                 : default;
-            // Only human-controlled characters use the one-action-per-turn flag. AI order
+            // Only human-controlled characters spend from their per-turn action budget. AI order
             // count is enforced by AITurnController according to the selected difficulty.
             if (!isAI && ConsumesAction)
             {
-                character.hasActionedThisTurn = true;
-                (character.GetOwner() as PlayableLeader)?.SpendCommandPoint();
+                character.SpendAction();
             }
 
             bool failed = false;
@@ -360,7 +359,7 @@ public class CharacterAction
 
             if (!isAI && ConsumesAction && character.HasStatusEffect(StatusEffectEnum.Hope) && UnityEngine.Random.Range(0, 100) < 25)
             {
-                character.hasActionedThisTurn = false;
+                character.RefundAction();
                 MessageDisplayNoUI.ShowMessage(character.hex, character, "Hope preserves the action.", Color.green);
             }
 
@@ -1377,7 +1376,7 @@ public class CharacterAction
             && !character.CanPlayerActNow()
             && (string.IsNullOrWhiteSpace(defaultActionName) || actionName != defaultActionName))
         {
-            parts.Add(character.actionBlockedThisTurn ? "Cannot act this turn." : "No command points left this turn.");
+            parts.Add(character.actionBlockedThisTurn ? "Cannot act this turn." : "Has already acted this turn.");
         }
 
         if (owner != null)

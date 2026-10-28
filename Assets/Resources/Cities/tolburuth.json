@@ -4,6 +4,7 @@
   "style": "Mannish",
   "colors":   ["#7A7058", "#5A5446", "#4E3C28", "#5E5640", "#9A8C6A", "#1E1E1A", "#E0A850", "", "#3E4A30"],
   "surfaces": ["Ashlar", "Slate", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "ground": "water",
   "buildings": [
     { "note": "rocky islet", "at": [-0.18, 0.06], "parts": [
       { "shape": "rock", "radius": 0.22, "height": 0.12, "cell": "stone" },

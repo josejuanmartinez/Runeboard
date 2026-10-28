@@ -8,6 +8,8 @@ public class StateAllegiance : EmmissaryAction
 {
     public const string ActionRef = "StateAllegiance";
     private const int QuestionsPerAttempt = 3;
+    private const float AiBaseChance = 0.35f;
+    private const float AiChancePerEmissaryLevel = 0.15f;
 
     private static Dictionary<string, List<NonPlayableLeaderTriviaQuestion>> cachedTrivia;
     private static bool triviaLoaded;
@@ -52,6 +54,14 @@ public class StateAllegiance : EmmissaryAction
             .ToList();
 
         bool isAI = !character.isPlayerControlled;
+        // The AI cannot read the questions (it would guess at random and almost never win a
+        // realm), so it rolls on its emissary skill instead.
+        if (isAI)
+        {
+            bool convinced = UnityEngine.Random.value < Mathf.Clamp01(AiBaseChance + AiChancePerEmissaryLevel * character.GetEmmissary());
+            if (!convinced) MessageDisplayNoUI.ShowMessage(character.hex, character, $"{nonPlayableLeader.characterName} is not convinced.", Color.red);
+            return convinced;
+        }
         Sprite portrait = SelectionDialog.Instance != null ? SelectionDialog.Instance.GetCharacterIllustration(character) : null;
         int discardCount = character.GetEmmissary() / 2;
 
@@ -135,13 +145,15 @@ public class StateAllegiance : EmmissaryAction
             {
                 if (pc.isCapital && pc.owner is NonPlayableLeader nonPlayableLeader)
                 {
-                    if (nonPlayableLeader.joined || nonPlayableLeader.killed) return false;
+                    if (nonPlayableLeader.joined || nonPlayableLeader.killed) { Debug.Log($"[Allegiance] {nonPlayableLeader.characterName}: already joined or killed"); return false; }
                     if (actorOwner is not PlayableLeader playableLeader) return false;
-                    if (!nonPlayableLeader.CanJoinWithStateAllegiance(playableLeader)) return false;
+                    if (!nonPlayableLeader.CanJoinWithStateAllegiance(playableLeader)) { Debug.Log($"[Allegiance] {nonPlayableLeader.characterName} refuses {playableLeader.characterName}: alignment {nonPlayableLeader.alignment} vs {playableLeader.alignment}"); return false; }
 
-                    if (!await RunRecruitmentGauntlet(nonPlayableLeader, character)) return false;
+                    if (!await RunRecruitmentGauntlet(nonPlayableLeader, character)) { Debug.Log($"[Allegiance] {nonPlayableLeader.characterName}: not convinced by {character.characterName}"); return false; }
 
-                    return nonPlayableLeader.Joined(playableLeader);
+                    bool joinedNow = nonPlayableLeader.Joined(playableLeader);
+                    Debug.Log($"[Allegiance] {nonPlayableLeader.characterName} joins {playableLeader.characterName}: {joinedNow}");
+                    return joinedNow;
                 }
 
                 int loyalty = UnityEngine.Random.Range(1, 5);

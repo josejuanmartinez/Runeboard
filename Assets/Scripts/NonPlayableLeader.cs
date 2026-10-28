@@ -36,12 +36,12 @@ public class NonPlayableLeader : Leader
         string capitalName = GetCapitalName();
         bool sameAlignment = leader != null && leader.alignment == alignment;
 
-        sb.Append($"<b>{characterName}</b> only accepts AFriendOrThree from a leader of the same alignment.<br>");
+        sb.Append($"<b>{characterName}</b> only accepts A Friend or Three from a leader of the same alignment.<br>");
         sb.Append(FormatRequirement("Alignment matches", sameAlignment));
 
         if (!string.IsNullOrWhiteSpace(capitalName))
         {
-            sb.Append($"Send an emissary to {capitalName} and issue AFriendOrThree.");
+            sb.Append($"Send an emissary to {capitalName} and play A Friend or Three.");
         }
         else
         {
@@ -145,11 +145,12 @@ public class NonPlayableLeader : Leader
 
         NonPlayableLeaderIcons npls = FindObjectsByType<NonPlayableLeaderIcons>()
             .FirstOrDefault(x => x.playableLeader == playableLeaderJoinedTo);
-        if (!npls) return false;
         NonPlayableLeaderIcon npli = FindObjectsByType<NonPlayableLeaderIcon>()
             .FirstOrDefault(x => x.nonPlayableLeader == this);
-        if (!npli) return false;
-        npli.transform.parent = npls.transform;
+        // The icons are only UI: an AI leader may have no strip of realm icons, and a realm
+        // still joins them (this used to make every AI attempt fail silently).
+        if (npls && npli) npli.transform.parent = npls.transform;
+        else npli = null;
 
         Color? npliBorderColor = npli != null ? npli.border.color : null;
 

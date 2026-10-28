@@ -695,10 +695,11 @@ public class Hex : MonoBehaviour
 
     private void RefreshHexLabel()
     {
+        // Out of sight, a known settlement keeps its plate (as its town and border stay); what
+        // stands on the hex is only told while you can see it.
         bool seen = IsHexSeen();
-        if (!seen) { HideHexLabel(); return; }
-
         bool shouldShowPc = ShouldShowPcVisual();
+        if (!seen && !shouldShowPc) { HideHexLabel(); return; }
 
         // Armies and scouted characters are each bucketed by alignment (a leaderless army/character
         // counts as neutral) — one sprite per alignment present, followed by its count, rather than
@@ -708,7 +709,7 @@ public class Hex : MonoBehaviour
         PlayableLeader viewer = GetPlayer();
         bool isScouted = IsScouted(viewer);
 
-        for (int i = 0, n = armies.Count; i < n; i++)
+        for (int i = 0, n = seen ? armies.Count : 0; i < n; i++)
         {
             Character commander = armies[i]?.GetCommander();
             if (commander == null) continue;
@@ -716,7 +717,7 @@ public class Hex : MonoBehaviour
             armyCounts[(int)align]++;
         }
 
-        for (int i = 0, n = characters.Count; i < n; i++)
+        for (int i = 0, n = seen ? characters.Count : 0; i < n; i++)
         {
             Character ch = characters[i];
             if (ch == null || ch.killed || ch.hex != this || ch.IsArmyCommander()) continue;
@@ -732,7 +733,7 @@ public class Hex : MonoBehaviour
         bool hasArmiesOrCharacters = armyCounts[0] > 0 || armyCounts[1] > 0 || armyCounts[2] > 0
             || characterCounts[0] > 0 || characterCounts[1] > 0 || characterCounts[2] > 0;
 
-        List<HexNameplates.Marker> markers = CollectHudMarkers();
+        List<HexNameplates.Marker> markers = seen ? CollectHudMarkers() : new List<HexNameplates.Marker>();
         bool hasContent = shouldShowPc || hasArmiesOrCharacters || markers.Count > 0;
 
         if (!hasContent) { HideHexLabel(); return; }
@@ -769,7 +770,12 @@ public class Hex : MonoBehaviour
             plate.loyalty = Math.Max(0, pc.loyalty);
             plate.port = pc.hasPort;
             plate.hidden = pc.isHidden;
-            plate.painting = pcTexture != null ? pcTexture.sprite : null; // the medallion shows the settlement's art
+            // The medallion shows the city's card illustration; until the card art has loaded
+            // (Addressables), the settlement's tile painting stands in.
+            CardData pcCard = DeckManager.Instance != null ? DeckManager.Instance.FindPcCardByPcName(pc.pcName) : null;
+            Sprite cardArt = pcCard != null ? HandTray.ResolveArt(pcCard) : null;
+            plate.painting = cardArt != null ? cardArt : pcTexture != null ? pcTexture.sprite : null;
+            plate.paintingIsCard = cardArt != null;
         }
 
         // Drawn by the screen-space city banner widget; the world-space label stays hidden and only
@@ -1530,6 +1536,8 @@ public class Hex : MonoBehaviour
     {
         UpdateVisibilityForFog();
         HexSeamlessTerrain.MarkDirty(this);
+        // The minimap camera only renders on request: redraw it with the land now hidden.
+        MinimapManager.RefreshMinimap();
     }
 
     private void UpdateVisibilityForFog()
@@ -1586,8 +1594,7 @@ public class Hex : MonoBehaviour
     private bool ShouldShowPcPort()
     {
         if (pc == null || !pc.hasPort) return false;
-        bool seen = IsHexSeen();
-        if (!seen) return false;
+        if (!IsHexRevealed()) return false;
         if (game == null) game = Game.Instance;
 
         PlayableLeader viewingLeader = game != null ? game.currentlyPlaying : null;
@@ -2486,8 +2493,10 @@ public class Hex : MonoBehaviour
     public bool ShouldShowPcVisual()
     {
         if (pc == null || pc.citySize == PCSizeEnum.NONE) return false;
-        bool seen = IsHexSeen();
-        if (!seen) return false;
+        // A settlement on land you know stays on the map when it drops out of sight, as its
+        // territory border and the terrain do (it used to vanish, leaving an empty border).
+        // Hidden strongholds still need revealing (IsPCRevealed).
+        if (!IsHexRevealed()) return false;
         if (game == null) game = Game.Instance;
 
         PlayableLeader viewingLeader = game != null ? game.currentlyPlaying : null;
@@ -2524,11 +2533,11 @@ public class Hex : MonoBehaviour
     {
         if (hexRegion == null) return;
         bool hasRegion = !string.IsNullOrWhiteSpace(assignedLandRegion);
-        // Under the night shroud the whole continent is drawn on the minimap (this layer is what
-        // the minimap camera renders); unexplored regions are dimmer than known ones.
-        bool show = hasRegion && revealPulseCoroutine == null && (IsHexRevealed() || BoardLook.ShroudActive);
+        // This layer is what the minimap camera renders: like the board, it shows only the land
+        // already explored; the rest stays dark until discovered.
+        bool show = hasRegion && revealPulseCoroutine == null && IsHexRevealed();
         hexRegion.enabled = show;
-        if (show) hexRegion.color = RegionColors.GetColor(assignedLandRegion, alpha: IsHexRevealed() ? 1f : 0.22f);
+        if (show) hexRegion.color = RegionColors.GetColor(assignedLandRegion, alpha: 1f);
     }
 
     public string GetLandRegion()
@@ -2566,11 +2575,11 @@ public class Hex : MonoBehaviour
         UpdateUndergroundMarker();
     }
 
-    public void ShowMovementLeft(int movementLeft, Character character)
+    public void ShowMovementLeft(int movementLeft, Character character, bool destination = false)
     {
         if (!EnsureMovementCost()) return;
         SetActiveFast(movement, true);
-        movementCostManager.ShowMovementLeft(Math.Max(0, movementLeft), character, BuildTerrainFeatureSpriteTags());
+        movementCostManager.ShowMovementLeft(Math.Max(0, movementLeft), character, BuildTerrainFeatureSpriteTags(), destination);
     }
 
     // A step of a route the unit cannot take this turn (HexPathRenderer): a red X, no cost.

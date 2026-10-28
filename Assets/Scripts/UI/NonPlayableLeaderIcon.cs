@@ -21,6 +21,7 @@ public class NonPlayableLeaderIcon : MonoBehaviour, IPointerEnterHandler, IPoint
     private AlignmentEnum alignment;
     private string text = string.Empty;
     private bool isUnrevealed = true;
+    public bool IsRevealed => !isUnrevealed;
 
     private Game game;
 
@@ -49,15 +50,16 @@ public class NonPlayableLeaderIcon : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         if (isUnrevealed || PopupManager.IsShowing || BoardNavigator.IsNavigationInputLocked()) return;
         Sounds.Instance?.PlayUiHover();
-        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>().First(x => x.alignment == alignment);
-        if (leader) leader.HighlighNonPlayableLeader(nonPlayableLeader.characterName, text);
+        // The alliance view, this realm standing out (the leader's own portrait stays as it is).
+        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>().FirstOrDefault(x => x.alignment == alignment);
+        PlayableLeaderIcon owner = GetComponentInParent<PlayableLeaderIcon>();
+        AllianceConstellation.Show(owner != null ? owner : leader, nonPlayableLeader);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         Sounds.Instance?.PlayUiExit();
-        PlayableLeaderIcon leader = FindObjectsByType<PlayableLeaderIcon>().First(x => x.alignment == alignment);
-        if (leader) leader.Restore(nonPlayableLeader.characterName);
+        AllianceConstellation.Hide();
     }
 
     public void SetDead()
@@ -69,9 +71,11 @@ public class NonPlayableLeaderIcon : MonoBehaviour, IPointerEnterHandler, IPoint
     {
         return alignment;
     }
+    // Joined: the realm's colour, brightened.
     public void SetHired()
     {
-        border.color = Color.white;
+        Color nation = nonPlayableLeader != null ? UiTheme.NationRing(nonPlayableLeader.nationColor) : Color.white;
+        border.color = Color.Lerp(nation, Color.white, 0.35f);
     }
     public void RevealToPlayer(bool ignoreIfAlreadyRevealed = false)
     {

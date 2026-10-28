@@ -2,13 +2,16 @@ using System;
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using RetroLOTR.Scenarios;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Hands-free visual/regression tour, enabled from the command line:
-///   Runeboard.exe -autotour &lt;outDir&gt; [-autotour-leader Gandalf] [-autotour-turns 2]
+///   Runeboard.exe -autotour &lt;outDir&gt; [-autotour-leader Gandalf] [-autotour-variant tharkun] [-autotour-turns 2]
+/// With -autotour-campaign the AI plays the human's side too for the given turns, and every
+/// leader's campaign progress is logged each round ("[AutoTour] campaign ...").
 /// Starts the 2950 campaign as the given leader with no menus, intro or tutorial, stages a fixed
 /// set of scenes (HUD, card preview, zoomed-out map, AI turns, save/load, end screen), writes a
 /// screenshot of each to outDir plus "[AutoTour]" timing lines to the player log, then quits.
@@ -20,6 +23,10 @@ public static class AutoTour
     public static string OutDir { get; private set; }
     public static string Leader { get; private set; } = "Gandalf";
     public static int Turns { get; private set; } = 2;
+    /// <summary>-autotour-variant: the flavour's subdeck id (e.g. gandalf_the_white); empty picks the first.</summary>
+    public static string Variant { get; private set; } = string.Empty;
+    /// <summary>-autotour-campaign: the AI plays every side and campaign progress is logged.</summary>
+    public static bool Campaign { get; private set; }
     /// <summary>-autotour-title: photograph the title/menu screens instead of playing.</summary>
     public static bool TitleOnly { get; private set; }
     /// <summary>-autotour-film: slow camera moves and no screenshots, for recording a trailer.</summary>
@@ -33,6 +40,8 @@ public static class AutoTour
         {
             if (args[i] == "-autotour") { Active = true; OutDir = args[i + 1]; }
             else if (args[i] == "-autotour-leader") Leader = args[i + 1];
+            else if (args[i] == "-autotour-variant") Variant = args[i + 1];
+            else if (args[i] == "-autotour-rivals") Rivals = args[i + 1];
             else if (args[i] == "-autotour-turns" && int.TryParse(args[i + 1], out int t)) Turns = t;
         }
         if (!Active) return;
@@ -40,6 +49,7 @@ public static class AutoTour
         Directory.CreateDirectory(OutDir);
         TitleOnly = System.Array.IndexOf(args, "-autotour-title") >= 0;
         Film = System.Array.IndexOf(args, "-autotour-film") >= 0;
+        Campaign = System.Array.IndexOf(args, "-autotour-campaign") >= 0;
         if (TitleOnly)
         {
             AudioListener.volume = 0f;
@@ -54,7 +64,22 @@ public static class AutoTour
         AudioListener.volume = 0f;
         var runner = new GameObject("AutoTourRunner").AddComponent<AutoTourRunner>();
         UnityEngine.Object.DontDestroyOnLoad(runner.gameObject);
-        Log($"started out={OutDir} leader={Leader} turns={Turns}");
+        Log($"started out={OutDir} leader={Leader} variant={Variant} turns={Turns} campaign={Campaign}");
+    }
+
+    // -autotour-rivals "Saruman=sharkey,Sauron=the_deceiver": the AI leaders' flavours.
+    private static string Rivals = string.Empty;
+
+    /// <summary>The flavour (subdeck id) this tour gives an AI leader, or null.</summary>
+    public static string RivalVariant(string leader)
+    {
+        if (!Active || string.IsNullOrWhiteSpace(Rivals) || string.IsNullOrWhiteSpace(leader)) return null;
+        foreach (string pair in Rivals.Split(','))
+        {
+            string[] kv = pair.Split('=');
+            if (kv.Length == 2 && string.Equals(kv[0].Trim(), leader, StringComparison.OrdinalIgnoreCase)) return kv[1].Trim();
+        }
+        return null;
     }
 
     public static void Log(string message) => Debug.Log($"[AutoTour] {message}");
@@ -70,7 +95,10 @@ public class AutoTourRunner : MonoBehaviour
         if (AutoTour.TitleOnly)
         {
             yield return WaitFor(() => FindAnyObjectByType<StartScreenController>() is StartScreenController s && s.isActiveAndEnabled && s.IsShowing, 600f, "title screen");
-            yield return new WaitForSecondsRealtime(3f);
+            // The tabletop behind the menu (TitleDiorama) is up once the boot screen is gone; its
+            // miniatures stream in after it, so give them time to stand.
+            yield return WaitFor(() => FindAnyObjectByType<StartupLoadingScreen>() == null && TitleDiorama.Instance != null && TitleDiorama.Instance.Ready, 600f, "title tabletop");
+            yield return new WaitForSecondsRealtime(8f);
             yield return Shot("title");
             DumpHud();
             FindAnyObjectByType<StartScreenController>().StartCampaign();
@@ -82,13 +110,44 @@ public class AutoTourRunner : MonoBehaviour
         }
         yield return WaitFor(() => FindAnyObjectByType<LeaderSelector>() is LeaderSelector ls && ls.SelectionScreenShown, 600f, "leader selection");
         if (AutoTour.Film) { yield return Film(clock); yield break; }
-        yield return new WaitForSecondsRealtime(2f);
+        // The boot screen lifts first; then give the backdrop's camera time to reach the start.
+        yield return WaitFor(() => FindAnyObjectByType<StartupLoadingScreen>() == null, 600f, "loading screen gone");
+        yield return new WaitForSecondsRealtime(4.5f);
+        // A leader's video popup waits for a click that nobody gives here.
+        if (VideoPopupManager.IsShowing) { AutoTour.Log("closed a video popup over the selection"); VideoPopupManager.Instance?.Hide(); yield return new WaitForSecondsRealtime(1f); }
         yield return Shot("leader_selection");
+        foreach (Canvas canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None).Where(c => c.isActiveAndEnabled && c.isRootCanvas).OrderByDescending(c => c.sortingOrder))
+        {
+            AutoTour.Log($"canvas {canvas.name} mode={canvas.renderMode} order={canvas.sortingOrder} children={canvas.transform.childCount}");
+            // Anything big and opaque on it: what could be covering the screen.
+            foreach (UnityEngine.UI.Graphic g in canvas.GetComponentsInChildren<UnityEngine.UI.Graphic>())
+            {
+                if (!g.isActiveAndEnabled || g.color.a < 0.3f) continue;
+                Rect r = g.rectTransform.rect;
+                float w = r.width * g.rectTransform.lossyScale.x, h = r.height * g.rectTransform.lossyScale.y;
+                if (w >= Screen.width * 0.8f && h >= Screen.height * 0.8f)
+                    AutoTour.Log($"  covers: {g.transform.parent?.name}/{g.name} {g.GetType().Name} a={g.color.a:0.00} sprite={(g is UnityEngine.UI.Image im && im.sprite != null ? im.sprite.name : "-")}");
+            }
+        }
+        LeaderSelector selector = FindAnyObjectByType<LeaderSelector>();
+        if (selector != null)
+        {
+            Transform t = selector.leaderSelectionFullScreen != null ? selector.leaderSelectionFullScreen.transform : selector.transform;
+            AutoTour.Log($"selection full screen active={t.gameObject.activeInHierarchy}");
+            for (Transform p = t; p != null; p = p.parent)
+                foreach (CanvasGroup g in p.GetComponents<CanvasGroup>())
+                    AutoTour.Log($"  group {p.name} alpha={g.alpha}");
+            foreach (CanvasGroup g in t.GetComponentsInChildren<CanvasGroup>(true))
+                AutoTour.Log($"  child group {g.name} alpha={g.alpha} active={g.gameObject.activeInHierarchy}");
+        }
+        yield return new WaitForSecondsRealtime(3f);
+        yield return Shot("leader_selection_later");
         yield return WaitFor(() => Game.Instance != null && Game.Instance.started && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "first human turn");
         AutoTour.Log($"campaign ready after {clock.Elapsed.TotalSeconds:0.0}s");
         yield return new WaitForSecondsRealtime(3f);
         yield return Shot("turn_start");
         DumpHud();
+        if (AutoTour.Campaign) { yield return RouteShot(); yield return CampaignRun(clock); yield break; }
 
         if (HandTray.Instance != null && HandTray.Instance.DebugPreview(0))
         {
@@ -154,6 +213,14 @@ public class AutoTourRunner : MonoBehaviour
         }
 
         CampaignObjectives objectivesForShot = CampaignObjectives.Instance;
+        // The current campaign step's card (picture, story, objective).
+        if (CampaignHud.Focused != null && ObjectiveGuide.Instance != null)
+        {
+            ObjectiveGuide.Instance.FocusObjective(CampaignHud.Focused);
+            yield return new WaitForSecondsRealtime(1.6f);
+            yield return Shot("step_focus");
+            yield return new WaitForSecondsRealtime(1f);
+        }
         if (objectivesForShot != null && ObjectiveGuide.Instance != null)
         {
             foreach (CampaignObjective o in objectivesForShot.GetObjectives(Game.Instance.player))
@@ -176,6 +243,173 @@ public class AutoTourRunner : MonoBehaviour
 
         AutoTour.Log($"done after {clock.Elapsed.TotalSeconds:0.0}s");
         Application.Quit();
+    }
+
+    // Campaign mode: the AI plays the human's side as well, and every leader's campaign is
+    // logged each round, so a run shows whether each flavour's steps get done.
+    private IEnumerator CampaignRun(Stopwatch clock)
+    {
+        StartCoroutine(DismissPopups());
+        StartCoroutine(PhotographNewCards());
+        StartCoroutine(PhotographWhile("battle", () => BattleScreen.IsShowing, 1.2f, 3));
+        StartCoroutine(PhotographWhile("battle_dice", () => BattleScreen.IsShowing, 4.6f, 3));
+        StartCoroutine(PhotographWhile("environment", () => GameObject.Find("EnvironmentBurst") != null, 0.7f, 3));
+        LogCampaigns("start");
+        for (int t = 0; t < AutoTour.Turns; t++)
+        {
+            int turnBefore = Game.Instance.turn;
+            Game.Instance.AutoplayOneTurn();
+            yield return WaitFor(() => Game.Instance.GameOver || Game.Instance.turn > turnBefore && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "next human turn");
+            if (Game.Instance.GameOver) { LogCampaigns("war over"); break; }
+            yield return new WaitForSecondsRealtime(1f);
+            LogCampaigns($"turn {Game.Instance.turn}");
+            if (Game.Instance.turn % 5 == 0)
+            {
+                yield return Shot($"turn_{Game.Instance.turn}");
+                // The alliance view of the player's side, as hovering their portrait shows it.
+                if (Game.Instance.turn == 5) yield return PanelShots();
+                PlayableLeaderIcon mine = FindObjectsByType<PlayableLeaderIcon>(FindObjectsSortMode.None).FirstOrDefault(i => i.playableLeader == Game.Instance.player);
+                if (mine != null && Game.Instance.turn == 10)
+                {
+                    AllianceConstellation.Show(mine);
+                    yield return new WaitForSecondsRealtime(1.5f);
+                    yield return Shot("alliances");
+                    AllianceConstellation.Hide();
+                }
+            }
+        }
+        yield return Shot("campaign_end");
+        DumpHud("hud_dump_end.txt");
+        if (SaveSystem.Save(out string error))
+        {
+            AutoTour.Log("save ok");
+            // Load it straight back and log every campaign again, to compare with the lines above.
+            if (SaveSystem.BeginLoad(out string loadError))
+            {
+                yield return WaitFor(() => SaveSystem.PendingLoad != null, 120f, "load start");
+                yield return WaitFor(() => Game.Instance != null && Game.Instance.started && Game.Instance.IsPlayerCurrentlyPlaying() && Game.Instance.IsAcceptingPlayerInput, 900f, "loaded campaign");
+                yield return new WaitForSecondsRealtime(2f);
+                LogCampaigns("after load");
+                yield return Shot("after_load");
+            }
+            else AutoTour.Log($"load FAILED: {loadError}");
+        }
+        else AutoTour.Log($"save FAILED: {error}");
+        AutoTour.Log($"done after {clock.Elapsed.TotalSeconds:0.0}s");
+        Application.Quit();
+    }
+
+    // Nobody is there to press Continue on battle reports and the like during a campaign run.
+    // Set while a popup is being photographed on purpose.
+    private static bool holdPopups;
+
+    private static IEnumerator DismissPopups()
+    {
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            if (PopupManager.IsShowing && !holdPopups) { AutoTour.Log("dismissed a popup"); PopupManager.CloseAll(); }
+        }
+    }
+
+    // Photographs something passing (a battle, a weather burst) a moment after it appears, a few times.
+    private IEnumerator PhotographWhile(string name, Func<bool> showing, float after, int max)
+    {
+        int shots = 0;
+        while (shots < max)
+        {
+            yield return new WaitForSecondsRealtime(0.2f);
+            if (!showing()) continue;
+            yield return new WaitForSecondsRealtime(after);
+            if (showing()) { yield return Shot(name); shots++; }
+            while (showing()) yield return new WaitForSecondsRealtime(0.2f);
+        }
+    }
+
+    // The deck viewer opens by itself when a step grants cards: photograph the first few, then
+    // close it so the run goes on.
+    private IEnumerator PhotographNewCards()
+    {
+        int shots = 0;
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(0.5f);
+            if (!DeckViewer.IsOpen) continue;
+            AutoTour.Log("new cards shown");
+            if (shots++ < 4)
+            {
+                yield return new WaitForSecondsRealtime(0.6f);
+                yield return Shot("new_cards");
+            }
+            DeckViewer.CloseIfOpen();
+        }
+    }
+
+    // The month calendar and a two-leader popup, as the player sees them.
+    private IEnumerator PanelShots()
+    {
+        HudCalendar block = FindAnyObjectByType<HudCalendar>();
+        if (block != null)
+        {
+            MonthCalendar.Show((RectTransform)block.transform);
+            yield return new WaitForSecondsRealtime(1f);
+            yield return Shot("calendar");
+            MonthCalendar.Hide();
+        }
+        Illustrations art = FindAnyObjectByType<Illustrations>();
+        PlayableLeader player = Game.Instance.player;
+        NonPlayableLeader other = FindObjectsByType<NonPlayableLeader>(FindObjectsSortMode.None).FirstOrDefault(n => n != null && !n.killed);
+        if (art != null && player != null && other != null)
+        {
+            holdPopups = true;
+            PopupManager.ShowImmediate($"{other.characterName} reveals themselves!", art.GetIllustrationByName(player), art.GetIllustrationByName(other),
+                $"You discovered {other.characterName}, a realm of Middle-earth.<br><br>{other.GetJoiningConditionsText(player)}", false);
+            // Popups wait for messages and camera moves to finish first.
+            float until = Time.realtimeSinceStartup + 8f;
+            while (!PopupManager.IsShowing && Time.realtimeSinceStartup < until) yield return null;
+            yield return new WaitForSecondsRealtime(1.2f);
+            yield return Shot("popup");
+            PopupManager.CloseAll();
+            holdPopups = false;
+        }
+    }
+
+    // A planned route from the player's first character to land a few hexes away, close up, so
+    // the movement-cost medallions can be checked.
+    private IEnumerator RouteShot()
+    {
+        PlayableLeader player = Game.Instance.player;
+        Character who = player?.controlledCharacters.Find(c => c != null && !c.killed && c.hex != null);
+        HexPathRenderer paths = FindAnyObjectByType<HexPathRenderer>();
+        BoardNavigator nav = BoardNavigator.Instance;
+        if (who == null || paths == null || nav == null) yield break;
+        // Not under the turn's banners.
+        yield return WaitFor(() => !TurnBanner.IsShowing, 60f, "turn banner gone");
+        yield return new WaitForSecondsRealtime(4f);
+        Hex to = who.hex.GetHexesInRadius(3).Where(h => h != null && !h.IsWaterTerrain())
+            .OrderByDescending(h => (h.transform.position - who.hex.transform.position).sqrMagnitude).FirstOrDefault();
+        if (to == null) yield break;
+        float zoom = Camera.main != null ? Camera.main.orthographicSize : 5f;
+        yield return nav.FilmMove((who.hex.transform.position + to.transform.position) * 0.5f, Mathf.Lerp(nav.minZoom, nav.maxZoom, 0.1f), 0.5f);
+        paths.DrawPathBetweenHexes(who.hex.v2, to.v2, who);
+        yield return new WaitForSecondsRealtime(0.8f);
+        yield return Shot("route");
+        paths.HidePath();
+        yield return nav.FilmMove(who.hex.transform.position, zoom, 0.5f);
+    }
+
+    private static void LogCampaigns(string when)
+    {
+        CampaignObjectives campaign = CampaignObjectives.Instance;
+        if (campaign == null) { AutoTour.Log($"campaign {when}: no campaign"); return; }
+        foreach (PlayableLeader leader in campaign.AllLeaders())
+        {
+            var steps = campaign.GetMilestones(leader);
+            string open = string.Join(" | ", campaign.ActiveMilestones(leader).Select(m => $"{m.title} ({campaign.ProgressText(leader, m)})"));
+            string chars = string.Join(",", leader.controlledCharacters.Where(c => c != null && !c.killed).Select(c => $"{c.characterName}@{c.hex?.v2}"));
+            int pcs = leader.controlledPcs.Count(pc => pc != null && pc.owner == leader);
+            AutoTour.Log($"campaign {when}: {CampaignObjectives.LeaderKey(leader)}/{CampaignObjectives.VariantKey(leader)} '{campaign.CampaignTitle(leader)}' {(leader.killed ? "KILLED " : "")}reached {campaign.ReachedCount(leader)}/{steps.Count} gold={leader.goldAmount} pcs={pcs} chars=[{chars}] open=[{open}]");
+        }
     }
 
     // Film mode: the same campaign start, but with slow camera moves over the realm's towns and

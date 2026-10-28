@@ -25,7 +25,6 @@ public class HudCalendar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private readonly Image[] pips = new Image[StripDays];
     private int shownTurn = int.MinValue;
     private int shownAge;
-    private DateManager dateManager;
 
     public static HudCalendar Build(RectTransform parent, Vector2 size)
     {
@@ -144,14 +143,13 @@ public class HudCalendar : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (dateManager == null) dateManager = FindAnyObjectByType<DateManager>(FindObjectsInactive.Include);
-        dateManager?.OpenCalendar();
+        MonthCalendar.Show((RectTransform)transform);
         CursorManager.Instance?.SetClickableCursor();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        dateManager?.CloseCalendar();
+        MonthCalendar.Hide();
         CursorManager.Instance?.SetDefaultCursor();
     }
 }

@@ -53,3 +53,4 @@ MonoBehaviour:
   citySaturation: 1
   bannerFont: {fileID: 11400000, guid: 6efaeeea32eca554eb20a1f53a74f16a, type: 2}
   fogEdgeGlow: 0.12
+  titleTableShader: {fileID: 4800000, guid: e6b336d4520d44fca392f7427a1e4187, type: 3}

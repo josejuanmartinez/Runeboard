@@ -26,7 +26,8 @@ public class AgentPCAction : AgentAction
         };
         condition = (c) => {
             if (originalCondition != null && !originalCondition(c)) return false;
-            return c.hex.GetPC() != null && 
+            // An unowned PC is nobody's enemy: it is claimed with its card instead.
+            return c.hex.GetPC() != null && c.hex.GetPC().owner != null &&
             c.hex.GetPC().owner != c.GetOwner() &&
             (c.hex.GetPC().owner.GetAlignment() == AlignmentEnum.neutral || c.hex.GetPC().owner.GetAlignment() != c.GetAlignment()); 
         };

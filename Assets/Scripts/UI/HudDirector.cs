@@ -166,8 +166,9 @@ public static class HudDirector
     // Round portrait in a thin gold ring, name and score under it.
     private static void MakeMedallion(RectTransform icon)
     {
-        icon.localScale = Vector3.one * 0.82f;
-        icon.anchoredPosition = new Vector2(icon.anchoredPosition.x * 0.86f, -6f);
+        // Large enough to read the portraits and scores at a glance (0.82 was too small to see).
+        icon.localScale = Vector3.one * 1.08f;
+        icon.anchoredPosition = new Vector2(icon.anchoredPosition.x * 1.12f, -6f);
 
         if (icon.Find("LeaderImageMask") is RectTransform mask && mask.TryGetComponent(out Image maskImage))
         {

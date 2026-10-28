@@ -16,6 +16,15 @@ public class MessageDisplay : MonoBehaviour
     // in the editor, Update), so every text change here has to drive it explicitly - otherwise
     // a build shows the pill at whatever width the previous message happened to need.
     private ImageFitToTMP backgroundFit;
+    private TMP_FontAsset bodyFont;
+
+    // The End turn / "Turn in progress" button's face.
+    private static TMP_FontAsset DisplayFont()
+    {
+        EndTurnPresentation endTurn = FindAnyObjectByType<EndTurnPresentation>();
+        return endTurn != null && endTurn.label != null ? endTurn.label.font : UiTheme.Display;
+    }
+    private float bodySize;
     [SerializeField] private float displayDuration = 0.08f;
     [SerializeField] private float fadeDuration = 0.02f;
 
@@ -55,8 +64,18 @@ public class MessageDisplay : MonoBehaviour
 
     // Every write to the label goes through here so the pill behind it is always re-fitted -
     // including to nothing at all, which is what hides it when the text is cleared.
-    private void SetText(string message, Color textColor)
+    private void SetText(string message, Color textColor, bool display = false)
     {
+        // Persistent notices ("Dark Servants nations are playing") use the display face, like
+        // the "Turn in progress" button; everything else keeps the label's own font.
+        if (bodyFont == null) { bodyFont = messageText.font; bodySize = messageText.fontSize; }
+        TMP_FontAsset displayFont = display ? DisplayFont() : null;
+        TMP_FontAsset font = displayFont != null ? displayFont : bodyFont;
+        if (messageText.font != font) messageText.font = font;
+        // The plain material: the label's own is overbright and glares yellow under the bloom.
+        Material plain = UiTheme.PlainMaterial(font);
+        if (plain != null && messageText.fontSharedMaterial != plain) messageText.fontSharedMaterial = plain;
+        messageText.fontSize = display ? bodySize * 1.25f : bodySize;
         messageText.text = message;
         messageText.color = textColor;
         backgroundFit?.Fit();
@@ -338,7 +357,7 @@ public class MessageDisplay : MonoBehaviour
         isDisplayingMessage = false;
         persistentActive = true;
 
-        SetText(message, textColor);
+        SetText(message, textColor, display: true);
         canvasGroup.alpha = 1f;
         SetCanvasGroupVisible(true);
     }

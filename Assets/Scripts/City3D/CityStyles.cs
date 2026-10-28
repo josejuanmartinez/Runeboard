@@ -91,6 +91,11 @@ public static class CityStyles
         var result = new Material[CityMeshBuilder.CellCount];
         for (int i = 0; i < result.Length; i++)
         {
+            if (i == (int)CityMeshBuilder.Cell.Water)
+            {
+                result[i] = WaterMaterial(shader);
+                continue;
+            }
             Texture2D tex = i < kinds.Length ? CityTextures.Get(kinds[i], Grade(palette[i]))
                 : i == (int)CityMeshBuilder.Cell.Foliage ? CityTextures.Get(Kind.Leaves, Grade(palette[i]))
                 : CityTextures.Get(Kind.Cloth, nation.a > 0f ? nation * 0.85f : new Color(0.45f, 0.42f, 0.36f));
@@ -102,6 +107,19 @@ public static class CityStyles
             result[i] = material;
         }
         return result;
+    }
+
+    private static Material waterMaterial;
+
+    // Pools and streams in a town, laid with the board's own painted water (CityTextures.PaintedWater,
+    // mirrored so it tiles); one repeat spans about half a hex.
+    private static Material WaterMaterial(Shader shader)
+    {
+        if (waterMaterial != null) return waterMaterial;
+        Texture2D water = CityTextures.PaintedWater(tileable: true);
+        waterMaterial = new Material(shader) { name = "City water (tiled)", mainTexture = water != null ? water : CityTextures.Get(Kind.Plain, new Color(0.25f, 0.35f, 0.4f)) };
+        waterMaterial.mainTextureScale = Vector2.one * 0.2f;
+        return waterMaterial;
     }
 
     // ── Matching the painted map ────────────────────────────────────────────────────────────

@@ -143,12 +143,6 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier:
   splineSegmentsPerHex: 8
-  opportunityHintDwellSeconds: 1.6
-  hintPathMaterial: {fileID: 2100000, guid: 8e6f2e954bc214f67cba48739be3c5b3, type: 2}
-  hintMarkerFont: {fileID: 11400000, guid: 680e7ef931356a4489c7ed407e323bd6, type: 2}
-  hintMarkerFontSize: 3
-  hintMarkerPulseSeconds: 0.6
-  hintMarkerLocalOffset: {x: 0, y: 0, z: -0.1}
 --- !u!120 &2623480377557684074
 LineRenderer:
   serializedVersion: 3

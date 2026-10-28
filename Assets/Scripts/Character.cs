@@ -49,35 +49,50 @@ public class Character : MonoBehaviour
     public int health = 100;
     public int moved = 0;
     public bool killed;
+    // An enemy the scenario set by a flavour's start for its first fight (spawnCondition
+    // "requires" that flavour): it holds its hex instead of roaming, so it is still there
+    // when the player's first host comes for it. It still fights whoever comes onto its hex.
+    [NonSerialized] public bool holdsPost;
 
     [Header("Turn data")]
-    [UnityEngine.Serialization.FormerlySerializedAs("hasActionedThisTurn")]
-    [SerializeField] private bool actedThisTurn;
+    // Actions are budgeted per character: one card per turn, two for the nation's champion.
+    [SerializeField] private int actionsUsedThisTurn;
     // Status effects (Blocked, Kidnapped, Fear) that stop a character acting at all this turn.
-    // Human actions are otherwise budgeted by the leader's command points, not per character.
     public bool actionBlockedThisTurn;
 
+    /// <summary>The nation's champion (named in CampaignObjectives.json) may act twice a turn.</summary>
+    public bool IsChampion => CampaignObjectives.IsChampion(this);
+
+    public int MaxActionsPerTurn => IsChampion ? 2 : 1;
+
+    public int ActionsUsedThisTurn
+    {
+        get => actionsUsedThisTurn;
+        set => actionsUsedThisTurn = Mathf.Clamp(value, 0, MaxActionsPerTurn);
+    }
+
+    public int ActionsLeftThisTurn => Mathf.Max(0, MaxActionsPerTurn - actionsUsedThisTurn);
+
     /// <summary>
-    /// "Has acted at least once this turn". For human characters, clearing it mid-turn is how
-    /// cards and effects (Hope, rally events) refresh an action, so it hands back a command point.
+    /// "No actions left this turn". Setting it true spends every action (blocked, kidnapped,
+    /// just recruited); clearing it is how cards and effects (rally events) refresh a character.
     /// </summary>
     public bool hasActionedThisTurn
     {
-        get => actedThisTurn;
-        set
-        {
-            if (actedThisTurn && !value && isPlayerControlled && !actionBlockedThisTurn)
-                (GetOwner() as PlayableLeader)?.GrantCommandPoint();
-            actedThisTurn = value;
-        }
+        get => actionsUsedThisTurn >= MaxActionsPerTurn;
+        set => actionsUsedThisTurn = value ? MaxActionsPerTurn : 0;
     }
 
-    /// <summary>Whether a human character may play another card now (command points left, not status-blocked).</summary>
+    public void SpendAction() => ActionsUsedThisTurn = actionsUsedThisTurn + 1;
+
+    /// <summary>Hands one spent action back (Hope).</summary>
+    public void RefundAction() => ActionsUsedThisTurn = actionsUsedThisTurn - 1;
+
+    /// <summary>Whether a human character may play another card now (actions left, not status-blocked).</summary>
     public bool CanPlayerActNow()
     {
         if (killed || actionBlockedThisTurn) return false;
-        PlayableLeader leader = GetOwner() as PlayableLeader;
-        return leader == null || leader.CommandPoints > 0;
+        return ActionsLeftThisTurn > 0;
     }
     public Hex previousHex;
     public bool isEmbarked;
@@ -141,7 +156,7 @@ public class Character : MonoBehaviour
     {
         public Dictionary<StatusEffectEnum, int> statusEffectTurns;
         public int moved;
-        public bool hasActionedThisTurn;
+        public int actionsUsedThisTurn;
         public bool isEmbarked;
         public bool burningForestTroopLossPending;
         public bool poisonedFearTriggered;
@@ -257,7 +272,11 @@ public class Character : MonoBehaviour
         // entries). The matching Character card is the authoritative source for race (and
         // commander/agent/emmissary/mage/alignment), the same card PlayableLeader.RefreshStatsFromCard
         // already pulls from for playable leaders — this applies it uniformly to every Character.
+        AlignmentEnum biomeAlignment = alignment;
         ApplyStatsFromCard(GetCharacterCardData());
+        // A realm's side is its own biome's: the same hero's card can sit in several flavour decks
+        // that inherit different alignments (Sangarunya is Dark, but also in a Neutral deck).
+        if (this is NonPlayableLeader) alignment = biomeAlignment;
     }
 
     // The CardData (type "Character") that represents this character in the deck — used both to
@@ -339,7 +358,7 @@ public class Character : MonoBehaviour
 
         owner.GetOwner().controlledCharacters.Add(this);
         this.owner = owner.GetOwner();
-        actedThisTurn = false; actionBlockedThisTurn = false;
+        actionsUsedThisTurn = 0; actionBlockedThisTurn = false;
         moved = 0;
         isEmbarked = false;
         army = null;
@@ -568,25 +587,25 @@ public class Character : MonoBehaviour
         if (blocked)
         {
             moved = 0;
-            actedThisTurn = true; actionBlockedThisTurn = true;
+            hasActionedThisTurn = true; actionBlockedThisTurn = true;
             MessageDisplayNoUI.ShowMessage(hex, this, "Blocked: action lost.", Color.red);
         }
         else if (halted)
         {
             moved = GetMaxMovement();
-            actedThisTurn = false; actionBlockedThisTurn = false;
+            actionsUsedThisTurn = 0; actionBlockedThisTurn = false;
             MessageDisplayNoUI.ShowMessage(hex, this, "Halted: movement lost.", Color.yellow);
         }
         else
         {
             moved = 0;
-            actedThisTurn = false; actionBlockedThisTurn = false;
+            actionsUsedThisTurn = 0; actionBlockedThisTurn = false;
         }
 
         if (IsKidnapped())
         {
             moved = GetMaxMovement();
-            actedThisTurn = true; actionBlockedThisTurn = true;
+            hasActionedThisTurn = true; actionBlockedThisTurn = true;
         }
 
         if (HasStatusEffect(StatusEffectEnum.Frozen))
@@ -705,7 +724,7 @@ public class Character : MonoBehaviour
         {
             statusEffectTurns = new Dictionary<StatusEffectEnum, int>(statusEffectTurns),
             moved = moved,
-            hasActionedThisTurn = hasActionedThisTurn,
+            actionsUsedThisTurn = actionsUsedThisTurn,
             isEmbarked = isEmbarked,
             burningForestTroopLossPending = burningForestTroopLossPending,
             poisonedFearTriggered = poisonedFearTriggered,
@@ -730,7 +749,7 @@ public class Character : MonoBehaviour
 
         statusEffects = statusEffectTurns.Where(kv => kv.Value > 0).Select(kv => kv.Key).ToList();
         moved = snapshot.moved;
-        actedThisTurn = snapshot.hasActionedThisTurn;
+        actionsUsedThisTurn = snapshot.actionsUsedThisTurn;
         isEmbarked = snapshot.isEmbarked;
         burningForestTroopLossPending = snapshot.burningForestTroopLossPending;
         poisonedFearTriggered = snapshot.poisonedFearTriggered;
@@ -1098,7 +1117,7 @@ public class Character : MonoBehaviour
                 capitalHex.RedrawCharacters();
             }
             moved = 0;
-            actedThisTurn = false; actionBlockedThisTurn = false;
+            actionsUsedThisTurn = 0; actionBlockedThisTurn = false;
         }
 
         Hex currentHex = hex;
@@ -1234,17 +1253,23 @@ public class Character : MonoBehaviour
 
         if(!onlyMark)
         {
-            if(GetOwner().controlledCharacters.Contains(this)) GetOwner().controlledCharacters.Remove(this);
-            if(hex.characters.Contains(this)) hex.characters.Remove(this);
-            DropObjectsToHex();
-            RefreshArtifactPcVisibilityForHex(hex);
+            if(GetOwner() != null && GetOwner().controlledCharacters.Contains(this)) GetOwner().controlledCharacters.Remove(this);
+            if(hex != null && hex.characters.Contains(this)) hex.characters.Remove(this);
+            if (hex != null)
+            {
+                DropObjectsToHex();
+                RefreshArtifactPcVisibilityForHex(hex);
+            }
         }
         health = 0;
         killed = true;
-        MessageDisplayNoUI.ShowMessage(hex, this,  $"{characterName} eliminated", Color.red);        
-        hex.RedrawCharacters();
+        if (hex != null)
+        {
+            MessageDisplayNoUI.ShowMessage(hex, this,  $"{characterName} eliminated", Color.red);
+            hex.RedrawCharacters();
+        }
         RefreshSelectedCharacterIconIfSelected();
-        if(redrawArmies) hex.RedrawArmies();
+        if(redrawArmies && hex != null) hex.RedrawArmies();
         Leader owner = GetOwner();
         if (owner != null) CharacterIcons.RefreshForHumanPlayerOf(owner);
     }
@@ -1265,7 +1290,9 @@ public class Character : MonoBehaviour
     {        
         Game game = FindAnyObjectByType<Game>();
         Board board = FindAnyObjectByType<Board>();
-        if(game.IsPlayerCurrentlyPlaying() && board.selectedCharacter == this) FindAnyObjectByType<SelectedCharacterIcon>().Refresh(this);
+        // Either can be gone while a scene unloads (loading a save mid-turn).
+        if (game == null || board == null) return;
+        if (game.IsPlayerCurrentlyPlaying() && board.selectedCharacter == this) FindAnyObjectByType<SelectedCharacterIcon>()?.Refresh(this);
     }
     public void RefreshActionsIfSelected()
     {        
@@ -1310,7 +1337,7 @@ public class Character : MonoBehaviour
         killed = false;
         health = Mathf.Clamp(revivedHealth, 1, 100);
         moved = 0;
-        actedThisTurn = false; actionBlockedThisTurn = false;
+        actionsUsedThisTurn = 0; actionBlockedThisTurn = false;
         isEmbarked = false;
         kidnappedBy = null;
         kidnappedOriginalOwner = null;

@@ -677,8 +677,8 @@ public class CardData
             return false;
         }
 
-        // Human play is budgeted by the leader's command points (and status blocks such as
-        // Kidnapped/Fear). Keep this at the shared CardData playability boundary so every
+        // Human play is budgeted per character (one action, two for the champion) and by status
+        // blocks such as Kidnapped/Fear. Keep this at the shared CardData playability boundary so every
         // presentation path disables consistently. AI characters deliberately bypass this gate;
         // AITurnController limits their orders according to difficulty instead.
         if (selectedCharacter != null
@@ -824,6 +824,12 @@ public class CardData
 
         DeckManager deckManager = UnityEngine.Object.FindAnyObjectByType<DeckManager>();
         string normalizedTarget = NormalizeRegion(region);
+
+        // A leader whose character stands in the region has discovered it (the AI has no fog
+        // of its own to clear).
+        if (owner.controlledCharacters.Any(c => c != null && !c.killed && c.hex != null
+            && string.Equals(NormalizeRegion(c.hex.GetLandRegion() ?? string.Empty), normalizedTarget, StringComparison.Ordinal)))
+            return true;
 
         foreach (Hex hex in board.hexes.Values)
         {
@@ -974,8 +980,14 @@ public class DeckManager : MonoBehaviour
         public readonly List<CardData> situationPool = new List<CardData>();
         // The human player's visible hand (HandTray). Cards are moved here out of drawPile, so
         // AI scoring over drawPile never sees them; AI leaders never draw a hand.
+        // With a campaign chain there is no draw: the hand is every unlocked card (see GetHand).
         public readonly List<CardData> hand = new();
         public int lastHandDrawTurn = -1;
+        // Campaign: one card per name of the leader's whole deck setup, as composed at the start.
+        public readonly List<CardData> catalog = new();
+        // Campaign: one-time cards already played (Events, PCs founded, Lands claimed).
+        public readonly HashSet<string> spent = new(StringComparer.OrdinalIgnoreCase);
+        public int handSignature = int.MinValue;
     }
 
     public static DeckManager Instance { get; private set; }
@@ -1193,7 +1205,166 @@ public class DeckManager : MonoBehaviour
         if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return Array.Empty<CardData>();
         // Snapshot rather than the live list — callers (AI scoring) hold this across yields
         // while consumption elsewhere can mutate state.drawPile concurrently.
+        // A campaign leader (AI included) only ever plays the cards it has unlocked.
+        if (IsCampaignLeader(leader))
+            return state.drawPile.Where(c => IsCardAvailable(leader, state, c)).ToList();
         return state.drawPile.ToList();
+    }
+
+    // ---------------------------------------------------------------- campaign deck
+
+    /// <summary>A playable leader on the campaign chain: starts with part of the deck, plays
+    /// every unlocked card freely (no hand limit, no draw), and unlocks the rest step by step.</summary>
+    public static bool IsCampaignLeader(Leader leader) =>
+        leader is PlayableLeader pl && CampaignObjectives.Instance != null && CampaignObjectives.Instance.HasCampaign(pl);
+
+    /// <summary>Where a card sits in a leader's deck setup: "shared", "base" or "variant".</summary>
+    public string CardSource(CardData card)
+    {
+        if (card == null || string.IsNullOrWhiteSpace(card.deckId)) return "shared";
+        if (!deckManifestById.TryGetValue(card.deckId, out DeckManifestEntry entry) || entry == null) return "shared";
+        if (entry.sharedToAll) return "shared";
+        return string.IsNullOrWhiteSpace(entry.parentDeckId) ? "base" : "variant";
+    }
+
+    public bool IsCardUnlocked(Leader leader, CardData card)
+    {
+        if (card == null) return false;
+        if (!IsCampaignLeader(leader)) return true;
+        return CampaignObjectives.Instance.IsCardUnlocked((PlayableLeader)leader, card, CardSource(card));
+    }
+
+    /// <summary>Unlocked and, for one-time cards, not yet played (false for a leader without a deck).</summary>
+    public bool IsAvailable(Leader leader, CardData card) =>
+        leader != null && playerDecks.TryGetValue(leader, out PlayerDeckState state) && IsCardAvailable(leader, state, card);
+
+    // Unlocked and, for one-time cards, not yet played.
+    private bool IsCardAvailable(Leader leader, PlayerDeckState state, CardData card) =>
+        card != null && !state.spent.Contains(card.name ?? string.Empty) && IsCardUnlocked(leader, card);
+
+    private IEnumerable<CardData> AvailableSituationPool(Leader leader, PlayerDeckState state) =>
+        IsCampaignLeader(leader) ? state.situationPool.Where(c => IsCardAvailable(leader, state, c)) : state.situationPool;
+
+    /// <summary>One-time cards are used up when played: Events, and founding a PC or claiming a
+    /// Land. Everything else (actions, spells, armies, characters, environments) stays in the
+    /// deck; a character card recruits once and then works as that character's Inspiration.</summary>
+    public static bool IsOneTimeCard(CardData card)
+    {
+        if (card == null) return false;
+        CardTypeEnum type = card.GetCardType();
+        return type == CardTypeEnum.Event || type == CardTypeEnum.PC || type == CardTypeEnum.Land;
+    }
+
+    public sealed class DeckOverviewEntry
+    {
+        public CardData card;
+        public bool unlocked;
+        public bool spent;
+        public int stage;          // -1 starting deck, else the campaign step index
+        public string unlockedBy;  // the step's title, or the starting deck
+    }
+
+    /// <summary>Every card of the leader's deck setup with its unlock state, for the deck viewer.</summary>
+    public List<DeckOverviewEntry> GetDeckOverview(PlayableLeader leader)
+    {
+        var result = new List<DeckOverviewEntry>();
+        if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return result;
+        CampaignObjectives campaign = CampaignObjectives.Instance;
+        bool chain = IsCampaignLeader(leader);
+        foreach (CardData card in state.catalog)
+        {
+            string source = CardSource(card);
+            result.Add(new DeckOverviewEntry
+            {
+                card = card,
+                unlocked = !chain || campaign.IsCardUnlocked(leader, card, source),
+                spent = state.spent.Contains(card.name ?? string.Empty),
+                stage = chain ? campaign.UnlockStage(leader, card, source) : -1,
+                unlockedBy = chain ? campaign.UnlockedByLabel(leader, card, source) : CampaignObjectives.StartUnlockLabel,
+            });
+        }
+        return result;
+    }
+
+    /// <summary>The deck cards the campaign has handed this leader so far (starting deck, open
+    /// steps' tools, reached steps' rewards); every card for a leader without a campaign.</summary>
+    public List<CardData> GetGrantedCards(PlayableLeader leader)
+    {
+        var result = new List<CardData>();
+        if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return result;
+        CampaignObjectives campaign = CampaignObjectives.Instance;
+        bool chain = IsCampaignLeader(leader);
+        foreach (CardData card in state.catalog)
+            if (card != null && (!chain || campaign.IsGranted(leader, card, CardSource(card)))) result.Add(card);
+        return result;
+    }
+
+    /// <summary>The deck cards a campaign step unlocks for this leader.</summary>
+    public List<CardData> GetCardsUnlockedBy(PlayableLeader leader, CampaignObjective step)
+    {
+        var result = new List<CardData>();
+        CampaignObjectives campaign = CampaignObjectives.Instance;
+        if (leader == null || step == null || campaign == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return result;
+        int index = campaign.GetMilestones(leader).ToList().IndexOf(step);
+        if (index < 0) return result;
+        foreach (CardData card in state.catalog)
+            if (campaign.UnlockStage(leader, card, CardSource(card)) == index) result.Add(card);
+        return result;
+    }
+
+    public int CountCardsUnlockedBy(PlayableLeader leader, CampaignObjective step) => GetCardsUnlockedBy(leader, step).Count;
+
+    public IEnumerable<string> GetSpentCards(PlayableLeader leader) =>
+        leader != null && playerDecks.TryGetValue(leader, out PlayerDeckState state) ? state.spent.ToList() : Enumerable.Empty<string>();
+
+    public void RestoreSpentCards(PlayableLeader leader, IEnumerable<string> names)
+    {
+        if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return;
+        state.spent.Clear();
+        if (names != null) foreach (string n in names) if (!string.IsNullOrWhiteSpace(n)) state.spent.Add(n);
+        state.handSignature = int.MinValue;
+    }
+
+    // The campaign hand is the whole unlocked deck; rebuilt only when what is unlocked can have
+    // changed (a step reached, a card spent, a PC or character gained or lost).
+    private void RefreshCampaignHand(PlayableLeader leader, PlayerDeckState state)
+    {
+        int signature;
+        unchecked
+        {
+            signature = (CampaignObjectives.Instance?.UnlockVersion ?? 0) * 7919
+                + state.spent.Count * 131
+                + leader.controlledPcs.Count(pc => pc != null && pc.owner == leader) * 17
+                + leader.controlledCharacters.Count(c => c != null && !c.killed);
+        }
+        if (signature == state.handSignature) return;
+        state.handSignature = signature;
+        state.hand.Clear();
+        state.hand.AddRange(state.catalog.Where(c => IsHandCard(c) && IsCardAvailable(leader, state, c)));
+    }
+
+    private static readonly CardTypeEnum[] CatalogOrder =
+    {
+        CardTypeEnum.Character, CardTypeEnum.Army, CardTypeEnum.Action, CardTypeEnum.Spell,
+        CardTypeEnum.Event, CardTypeEnum.PC, CardTypeEnum.Land, CardTypeEnum.Environmental,
+    };
+
+    private static void BuildCatalog(PlayerDeckState state)
+    {
+        state.catalog.Clear();
+        HashSet<string> seen = new(StringComparer.OrdinalIgnoreCase);
+        foreach (CardData card in state.drawPile.Concat(state.situationPool))
+        {
+            if (!IsHandCard(card) || string.IsNullOrWhiteSpace(card.name) || !seen.Add(card.name)) continue;
+            state.catalog.Add(card);
+        }
+        state.catalog.Sort((a, b) =>
+        {
+            int ia = Array.IndexOf(CatalogOrder, a.GetCardType()), ib = Array.IndexOf(CatalogOrder, b.GetCardType());
+            if (ia < 0) ia = CatalogOrder.Length;
+            if (ib < 0) ib = CatalogOrder.Length;
+            return ia != ib ? ia.CompareTo(ib) : string.Compare(a.name, b.name, StringComparison.OrdinalIgnoreCase);
+        });
     }
 
     // Score for ranking player-facing Opportunity Cards. Deliberately not a reuse of
@@ -1241,7 +1412,7 @@ public class DeckManager : MonoBehaviour
         // belongs to this leader's configured deck and its normal costs can be paid.
         PC currentPc = hex.GetPCData();
 
-        List<CardData> candidates = state.situationPool.Where(c => c != null && (
+        List<CardData> candidates = AvailableSituationPool(leader, state).Where(c => c != null && (
             (currentPc != null && c.GetCardType() == CardTypeEnum.Character && !string.IsNullOrWhiteSpace(c.startingPC) && CardNameUtility.Equals(c.startingPC, currentPc.pcName))
             || c.MatchesAnySituation(activeSituations)
             || c.GetCardType() == CardTypeEnum.Spell
@@ -1283,7 +1454,7 @@ public class DeckManager : MonoBehaviour
         List<CardSituationEnum> activeSituations = SituationEvaluator.GetActiveSituations(character, hex);
         PC currentPc = hex.GetPCData();
 
-        List<CardData> matchedSituationCards = state.situationPool
+        List<CardData> matchedSituationCards = AvailableSituationPool(leader, state)
             .Where(c => c != null && (
                 (currentPc != null && c.GetCardType() == CardTypeEnum.Character
                     && !string.IsNullOrWhiteSpace(c.startingPC)
@@ -1394,7 +1565,7 @@ public class DeckManager : MonoBehaviour
         if (!playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
 
         PC currentPc = hex.GetPCData();
-        if (currentPc != null && state.situationPool.Any(c =>
+        if (currentPc != null && AvailableSituationPool(leader, state).Any(c =>
             c != null
             && c.GetCardType() == CardTypeEnum.Character
             && !string.IsNullOrWhiteSpace(c.startingPC)
@@ -1406,55 +1577,7 @@ public class DeckManager : MonoBehaviour
         List<CardSituationEnum> activeSituations = SituationEvaluator.GetActiveSituations(character, hex);
         if (activeSituations.Count == 0) return false;
 
-        return state.situationPool.Any(c => c != null && c.MatchesAnySituation(activeSituations));
-    }
-
-    // What the character could actually play if it walked to `hex` now and can't where it
-    // stands, best first: the opportunity cards the hand tray would offer there
-    // (GetSituationCardOffers) and the hand cards that become playable there. Each is judged exactly as on
-    // arrival — skills, resources, command points, the action's own conditions — so a hint never
-    // leads a character somewhere it then can't act. Drives the opportunity hint chips.
-    public List<(CardData card, bool fromHand)> GetPlayableCardsAtHex(PlayableLeader leader, Character character, Hex hex)
-    {
-        var result = new List<(CardData card, bool fromHand)>();
-        if (leader == null || character == null || hex == null || character.hex == null) return result;
-        if (!playerDecks.ContainsKey(leader)) return result;
-        ActionsManager actionsManager = FindAnyObjectByType<ActionsManager>();
-        if (actionsManager == null) return result;
-
-        // What is already on offer where the character stands (spells and events are offered
-        // anywhere) is no reason to walk either.
-        HashSet<string> seen = new(StringComparer.OrdinalIgnoreCase);
-        foreach (SituationCardOffer offer in GetSituationCardOffers(leader, character, character.hex))
-            if (offer.IsPlayable && offer.Card != null) seen.Add(offer.Card.name ?? GetOfferCardKey(offer.Card));
-        var handCandidates = new List<CardData>();
-        foreach (CardData c in GetHand(leader))
-        {
-            if (c == null) continue;
-            CardTypeEnum type = c.GetCardType();
-            if (type != CardTypeEnum.Action && type != CardTypeEnum.Spell && type != CardTypeEnum.Character && type != CardTypeEnum.Army) continue;
-            // Playable anywhere (or already here) is no reason to walk.
-            if (IsFullyPlayableOpportunityCard(CloneCard(c), character, actionsManager)) continue;
-            handCandidates.Add(c);
-        }
-
-        // With the character standing on the target hex for the moment: the very offer the hand
-        // tray would show on arrival (same ranking, same hand-size cap, playable ones only), then
-        // hand cards judged on clones so the real cards' playability flags don't change.
-        Hex here = character.hex;
-        try
-        {
-            character.hex = hex;
-            foreach (SituationCardOffer offer in GetSituationCardOffers(leader, character, hex))
-                if (offer.IsPlayable && offer.Card != null && seen.Add(offer.Card.name ?? GetOfferCardKey(offer.Card))) result.Add((offer.Card, false));
-            foreach (CardData c in handCandidates)
-                if (seen.Add(c.name ?? GetOfferCardKey(c)) && IsFullyPlayableOpportunityCard(CloneCard(c), character, actionsManager)) result.Add((c, true));
-        }
-        finally
-        {
-            character.hex = here;
-        }
-        return result;
+        return AvailableSituationPool(leader, state).Any(c => c != null && c.MatchesAnySituation(activeSituations));
     }
 
     public bool TryPayOpportunityCardCosts(PlayableLeader leader, CardData card)
@@ -1483,11 +1606,16 @@ public class DeckManager : MonoBehaviour
 
     public IReadOnlyList<CardData> GetHand(PlayableLeader leader)
     {
-        if (leader == null) return Array.Empty<CardData>();
-        return playerDecks.TryGetValue(leader, out PlayerDeckState state) ? state.hand : Array.Empty<CardData>();
+        if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return Array.Empty<CardData>();
+        if (IsCampaignLeader(leader)) RefreshCampaignHand(leader, state);
+        return state.hand;
     }
 
     public bool HasDeckFor(PlayableLeader leader) => leader != null && playerDecks.ContainsKey(leader);
+
+    /// <summary>Every card of the leader's deck setup, locked or not.</summary>
+    public IReadOnlyList<CardData> GetCatalog(Leader leader) =>
+        leader != null && playerDecks.TryGetValue(leader, out PlayerDeckState state) ? state.catalog : Array.Empty<CardData>();
 
     /// <summary>
     /// Tops the leader's hand up to <paramref name="size"/> once per turn, recycling the discard
@@ -1500,6 +1628,8 @@ public class DeckManager : MonoBehaviour
         if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
         if (state.lastHandDrawTurn == turn) return false;
         state.lastHandDrawTurn = turn;
+        // Campaign: nothing to draw, the hand is the whole unlocked deck.
+        if (IsCampaignLeader(leader)) return true;
         state.hand.RemoveAll(c => c == null);
         int guard = state.drawPile.Count + state.discardPile.Count + 1;
         List<Character> actors = leader.controlledCharacters.Where(c => c != null && !c.killed).ToList();
@@ -1539,12 +1669,16 @@ public class DeckManager : MonoBehaviour
     public bool RemoveFromHand(PlayableLeader leader, CardData card)
     {
         if (leader == null || card == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return false;
+        // Campaign: played cards stay in the deck (one-time ones are marked spent when consumed).
+        if (IsCampaignLeader(leader)) { state.handSignature = int.MinValue; return true; }
         return state.hand.Remove(card);
     }
 
-    /// <summary>Discards a hand card unplayed (e.g. a dead card swapped for a resource).</summary>
+    /// <summary>Discards a hand card unplayed (e.g. a dead card swapped for a resource).
+    /// Not on the campaign chain, where the hand is the whole unlocked deck.</summary>
     public bool DiscardFromHand(PlayableLeader leader, CardData card)
     {
+        if (IsCampaignLeader(leader)) return false;
         if (!RemoveFromHand(leader, card)) return false;
         playerDecks[leader].discardPile.Add(card);
         return true;
@@ -1553,9 +1687,10 @@ public class DeckManager : MonoBehaviour
     public void RestoreHand(PlayableLeader leader, IEnumerable<CardData> cards, int lastDrawTurn)
     {
         if (leader == null || !playerDecks.TryGetValue(leader, out PlayerDeckState state)) return;
+        state.lastHandDrawTurn = lastDrawTurn;
+        if (IsCampaignLeader(leader)) { state.handSignature = int.MinValue; return; }
         state.hand.Clear();
         if (cards != null) state.hand.AddRange(cards.Where(c => c != null));
-        state.lastHandDrawTurn = lastDrawTurn;
     }
 
     public int GetLastHandDrawTurn(PlayableLeader leader) =>
@@ -1573,6 +1708,7 @@ public class DeckManager : MonoBehaviour
         card = state.drawPile[index];
         state.drawPile.RemoveAt(index);
         state.discardPile.Add(card);
+        MarkSpentIfOneTime(leader, state, card);
         return true;
     }
 
@@ -1596,6 +1732,7 @@ public class DeckManager : MonoBehaviour
         state.drawPile.RemoveAt(index);
         state.discardPile.Add(consumedCard);
         ApplyCardCosts(leader, consumedCard);
+        MarkSpentIfOneTime(leader, state, consumedCard);
         return true;
     }
 
@@ -1708,7 +1845,11 @@ public class DeckManager : MonoBehaviour
         }
         if (index < 0)
         {
-            index = FindMatchingActionCardIndex(sourceList, actionClassName);
+            index = IsCampaignLeader(playableLeader)
+                ? sourceList.FindIndex(card => card != null && IsConsumableEffectCard(card)
+                    && string.Equals(card.GetActionRef(), actionClassName, StringComparison.OrdinalIgnoreCase)
+                    && IsCardAvailable(playableLeader, state, card))
+                : FindMatchingActionCardIndex(sourceList, actionClassName);
         }
         if (index < 0)
         {
@@ -1737,7 +1878,21 @@ public class DeckManager : MonoBehaviour
         sourceList.RemoveAt(index);
         state.discardPile.Add(consumedCard);
         ApplyCardCosts(playableLeader, consumedCard);
+        MarkSpentIfOneTime(playableLeader, state, consumedCard);
         return true;
+    }
+
+    // Campaign: a one-time card is spent; every other card goes straight back into the deck to be
+    // played again (the hand is the whole unlocked deck, so nothing may wait in a discard pile).
+    private static void MarkSpentIfOneTime(Leader leader, PlayerDeckState state, CardData card)
+    {
+        if (!IsCampaignLeader(leader) || card == null) return;
+        if (!IsOneTimeCard(card))
+        {
+            if (state.discardPile.Remove(card)) state.drawPile.Add(card);
+            return;
+        }
+        if (!string.IsNullOrWhiteSpace(card.name)) state.spent.Add(card.name);
     }
 
     public void ApplyMapRevealForPlayedCard(Leader leader, CardData card)
@@ -2492,6 +2647,8 @@ public class DeckManager : MonoBehaviour
         foreach (CardData card in GetLeaderCardPool(leader))
         {
             if (card == null || card.GetCardType() != CardTypeEnum.PC) continue;
+            // Campaign: only PC cards already unlocked (and not yet founded from) are offered.
+            if (playerDecks.TryGetValue(leader, out PlayerDeckState state) && !IsCardAvailable(leader, state, card)) continue;
             if (string.IsNullOrWhiteSpace(card.region)) continue;
             if (!string.Equals(NormalizeCardName(card.region), normalizedRegion, StringComparison.Ordinal)) continue;
 
@@ -2711,6 +2868,7 @@ public class DeckManager : MonoBehaviour
         ApplyBalancedDrawOrdering(state.drawPile);
 
         PopulateSituationPool(state, deckId);
+        BuildCatalog(state);
 
         // Snapshot the deck's required-material distribution now, while drawPile still equals
         // the complete composed deck (nothing has been played/discarded yet) — see
@@ -3010,6 +3168,15 @@ public class DeckManager : MonoBehaviour
             && deckManifestById.ContainsKey(selectedSubdeckId))
         {
             return selectedSubdeckId;
+        }
+
+        // A flavour whose subdeck id is not a deck id (Mithrandir's is "gandalf") has a deck
+        // named after its character ("mithrandir").
+        string variantCharacter = leader.GetSelectedVariantCharacterName();
+        if (!string.IsNullOrWhiteSpace(variantCharacter))
+        {
+            string byCharacter = variantCharacter.Trim().ToLowerInvariant().Replace(' ', '_');
+            if (deckManifestById.ContainsKey(byCharacter)) return byCharacter;
         }
 
         DeckManifestEntry byNation = deckManifestById.Values.FirstOrDefault(x =>

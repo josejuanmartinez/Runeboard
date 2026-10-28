@@ -777,7 +777,7 @@ public class SituationCardsUI : MonoBehaviour
             CardData cardData = offer?.Card;
             if (character != null && character.isPlayerControlled && !character.CanPlayerActNow())
             {
-                MessageDisplay.ShowMessage(character.actionBlockedThisTurn ? $"{character.characterName} cannot act this turn" : "No command points left this turn", Color.yellow);
+                MessageDisplay.ShowMessage(character.actionBlockedThisTurn ? $"{character.characterName} cannot act this turn" : $"{character.characterName} has already acted this turn", Color.yellow);
                 return;
             }
             if (cardData == null || character == null || leader == null || DeckManager.Instance == null)
@@ -792,7 +792,7 @@ public class SituationCardsUI : MonoBehaviour
                 if (succeeded)
                 {
                     if (offer.Source == SituationCardOfferSource.Hand) DeckManager.Instance.RemoveFromHand(leader, cardData);
-                    if (character.isPlayerControlled) leader.SpendCommandPoint();
+                    if (character.isPlayerControlled) character.SpendAction();
                 }
                 Debug.Log($"[SituationCards] '{cardData.name}' character opportunity resolved, succeeded={succeeded}");
                 return;
@@ -822,7 +822,7 @@ public class SituationCardsUI : MonoBehaviour
                 }
 
                 if (!environment.TrySetActiveCard(cardData, leader, out _)) return;
-                if (character.isPlayerControlled) leader.SpendCommandPoint();
+                if (character.isPlayerControlled) character.SpendAction();
                 Debug.Log($"[SituationCards] '{cardData.name}' environmental card activated");
                 if (flightSourceCard != null)
                     CardPlayFlight.Launch(flightSourceCard, character.hex, sourceWorldCenter: previewCenter, sourceWorldWidth: previewWidth);

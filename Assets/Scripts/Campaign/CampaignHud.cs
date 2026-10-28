@@ -21,6 +21,8 @@ public class CampaignHud : MonoBehaviour
     private const string MetColor = "#9BD37A";
     private const string UnmetColor = "#B9AE98";
     private const string MutedColor = "#8C8371";
+    private const string DeckLink = "deck";
+    private const string NextLink = "next";
 
     private CampaignObjectives objectives;
     private RectTransform canvasRoot;
@@ -30,6 +32,13 @@ public class CampaignHud : MonoBehaviour
     private TextMeshProUGUI trackerText;
     private bool trackerPlaced;
     private bool expanded = true;
+    // One goal at a time: which of the open steps (or the war's objectives) is shown, and the
+    // character it was last picked for (selecting another jumps to a step that one can work on).
+    private int focus;
+    private Character focusFor;
+
+    /// <summary>The goal the widget shows now (NextStepGuide coaches the player through it).</summary>
+    public static CampaignObjective Focused { get; private set; }
     private float nextRefresh;
     private GameObject endScreen;
 
@@ -41,6 +50,7 @@ public class CampaignHud : MonoBehaviour
             instance = go.AddComponent<CampaignHud>();
         }
         instance.Bind(source);
+        DeckViewer.Ensure();
     }
 
     public static void ShowEndScreen(bool win, string reason) => (instance ?? CreateDetached())?.BuildEndScreen(win, reason);
@@ -166,6 +176,18 @@ public class CampaignHud : MonoBehaviour
         if (link >= 0 && objectives != null && Game.Instance?.player != null)
         {
             string id = trackerText.textInfo.linkInfo[link].GetLinkID();
+            if (id == DeckLink)
+            {
+                DeckViewer.Toggle();
+                return;
+            }
+            if (id == NextLink)
+            {
+                focus++;
+                Sounds.Instance?.PlayUiClick();
+                Refresh();
+                return;
+            }
             foreach (CampaignObjective o in objectives.GetObjectives(Game.Instance.player).Concat(objectives.GetMilestones(Game.Instance.player)))
             {
                 if (o.id != id) continue;
@@ -187,8 +209,21 @@ public class CampaignHud : MonoBehaviour
         trackerRect.gameObject.SetActive(endScreen == null && game.started);
 
         var sb = new StringBuilder();
-        sb.Append(UiTheme.Eyebrow("The War of the Ring")).Append('\n');
+        string campaignTitle = objectives.CampaignTitle(player);
+        sb.Append(UiTheme.Eyebrow(string.IsNullOrWhiteSpace(campaignTitle) ? "The War of the Ring" : campaignTitle)).Append('\n');
         sb.Append($"Turn {game.turn} of {objectives.AgeLength}  <color={UiTheme.MutedHex}><size=90%>· Age ends in {objectives.TurnsLeft}</size></color>\n");
+
+        // On the campaign chain only the next step shows; the war's objectives open once it is done.
+        if (objectives.HasCampaign(player) && !objectives.IsChainComplete(player)) AppendCampaign(sb, player);
+        else AppendObjectives(sb, player);
+        AppendDeckLink(sb, player);
+        trackerText.text = sb.ToString();
+
+        FindAnyObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
+    }
+
+    private void AppendObjectives(StringBuilder sb, PlayableLeader player)
+    {
         sb.Append($"<size=92%>Your score <color={UiTheme.GoldHex}>{objectives.Score(player)}</color>/{objectives.MaxScore(player)}");
         foreach (PlayableLeader rival in objectives.AllLeaders().Where(l => l != player))
         {
@@ -196,58 +231,71 @@ public class CampaignHud : MonoBehaviour
             sb.Append(rival.killed ? $"   <color={UiTheme.MutedHex}><s>{name}</s></color>" : $"   <color={UiTheme.MutedHex}>{name} {objectives.Score(rival)}</color>");
         }
         sb.Append("</size>\n");
-        AppendAspects(sb, player);
 
-        foreach (CampaignObjective o in objectives.GetObjectives(player))
-        {
-            bool met = objectives.IsMet(player, o);
-            string color = met ? UiTheme.GoodHex : UiTheme.TextHex;
-            string tag = o.decisive ? $"<color={UiTheme.GoldHex}>WIN</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color>";
-            sb.Append($"\n{tag}  <link=\"{o.id}\"><color={color}><u>{o.title}</u></color></link>{(met && !o.decisive ? $"  <size=80%><color={UiTheme.GoodHex}>held</color></size>" : string.Empty)}");
-            if (expanded && !string.IsNullOrWhiteSpace(o.description))
-                sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{o.description}</color></size>");
-        }
-        AppendMilestones(sb, player);
-        sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>Click an objective to see where and how</color></size>");
-        trackerText.text = sb.ToString();
-
-        FindAnyObjectByType<PlayableLeaderIcons>()?.RefreshVictoryPointsForAll();
+        // One objective at a time, with how to win it; the others are a click away.
+        List<CampaignObjective> all = objectives.GetObjectives(player).ToList();
+        if (all.Count == 0) return;
+        CampaignObjective o = all[Mod(focus, all.Count)];
+        Focused = o;
+        bool met = objectives.IsMet(player, o);
+        string color = met ? UiTheme.GoodHex : UiTheme.TextHex;
+        string tag = o.decisive ? $"<color={UiTheme.GoldHex}>WIN</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color>";
+        sb.Append($"\n{tag}  <link=\"{o.id}\"><color={color}><u>{o.title}</u></color></link>{(met && !o.decisive ? $"  <size=80%><color={UiTheme.GoodHex}>held</color></size>" : string.Empty)}");
+        if (expanded && !string.IsNullOrWhiteSpace(o.description))
+            sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{o.description}</color></size>");
+        AppendNext(sb, Mod(focus, all.Count), all.Count, "objective");
     }
 
-    // The score by aspect, two to a row; an aspect you lead every living rival in shows in gold.
-    // The same icons mark the opportunity hints on the map and the milestones below.
-    private void AppendAspects(StringBuilder sb, PlayableLeader player)
+    // The campaign shows one open step: the one the selected character can work on, or the one
+    // picked with "next" — how to do it and what it unlocks. A wall of tracks at once was too much.
+    private void AppendCampaign(StringBuilder sb, PlayableLeader player)
     {
-        sb.Append("<size=88%>");
-        for (int i = 0; i < ScoreAspects.All.Length; i++)
+        IReadOnlyList<CampaignObjective> steps = objectives.GetMilestones(player);
+        List<CampaignObjective> open = objectives.ActiveMilestones(player).ToList();
+        if (open.Count == 0) return;
+        Character selected = Board.Instance != null ? Board.Instance.selectedCharacter : null;
+        if (selected != null && selected.GetOwner() != player) selected = null;
+        if (selected != focusFor)
         {
-            ScoreAspect aspect = ScoreAspects.All[i];
-            int mine = ScoreAspects.Score(player, aspect);
-            bool leading = objectives.AllLeaders().Where(l => l != player && !l.killed).All(l => ScoreAspects.Score(l, aspect) < mine);
-            string value = leading ? $"<color={UiTheme.GoldHex}>{mine}</color>" : mine.ToString();
-            sb.Append($"{ScoreAspects.Icon(aspect)} <color={UiTheme.MutedHex}>{ScoreAspects.Name(aspect)}</color> {value}");
-            sb.Append(i % 2 == 0 ? "<pos=50%>" : "\n");
+            focusFor = selected;
+            int suited = selected != null ? open.FindIndex(m => CampaignObjectives.SuitsTrack(selected, m)) : -1;
+            if (suited >= 0) focus = suited;
         }
-        sb.Append("</size>");
+        int index = Mod(focus, open.Count);
+        CampaignObjective step = open[index];
+        Focused = step;
+
+        sb.Append($"\n{UiTheme.Eyebrow("Campaign")}  <size=80%><color={UiTheme.MutedHex}>{objectives.ReachedCount(player)}/{steps.Count} steps</color></size>");
+        string track = CampaignObjectives.TrackOf(step);
+        string position = objectives.TrackLength(player, step) > 1 ? $" {objectives.TrackPosition(player, step)}/{objectives.TrackLength(player, step)}" : string.Empty;
+        sb.Append($"\n<size=78%><color={UiTheme.GoldHex}><cspace=0.06em>{track.ToUpperInvariant()}{position}</cspace></color></size>  <link=\"{step.id}\"><color={UiTheme.TextHex}><u>{step.title}</u></color></link>  <size=80%><color={UiTheme.MutedHex}>{objectives.ProgressText(player, step)}</color></size>");
+        if (expanded)
+        {
+            if (!string.IsNullOrWhiteSpace(step.how))
+                sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{step.how}</color></size>");
+            string unlocks = DeckViewer.UnlockSummary(player, step);
+            if (!string.IsNullOrWhiteSpace(unlocks))
+                sb.Append($"\n<size=84%><color={UiTheme.GoodHex}>Unlocks {unlocks}</color></size>");
+        }
+        AppendNext(sb, index, open.Count, "goal");
     }
 
-    // The next few milestones in order, with their progress; the reached ones only as a count.
-    private void AppendMilestones(StringBuilder sb, PlayableLeader player)
+    // "Goal 2 of 5 · next ›" — only when there is more than one.
+    private static void AppendNext(StringBuilder sb, int index, int count, string noun)
     {
-        IReadOnlyList<CampaignObjective> milestones = objectives.GetMilestones(player);
-        if (milestones.Count == 0) return;
-        int reached = milestones.Count(m => objectives.IsMet(player, m));
-        sb.Append($"\n\n{UiTheme.Eyebrow("Next steps")}  <size=80%><color={UiTheme.MutedHex}>{reached}/{milestones.Count} reached</color></size>");
-        int shown = 0;
-        foreach (CampaignObjective m in milestones)
-        {
-            if (objectives.IsMet(player, m)) continue;
-            if (shown++ >= (expanded ? 3 : 2)) break;
-            string reward = m.reward > 0 ? $"  <size=80%><color={UiTheme.MutedHex}>+{m.reward}</color><sprite name=\"gold\"></size>" : string.Empty;
-            sb.Append($"\n{ScoreAspects.Icon(CampaignObjectives.AspectOf(m))} <link=\"{m.id}\"><u>{m.title}</u></link>  <size=80%><color={UiTheme.MutedHex}>{objectives.ProgressText(player, m)}</color></size>{reward}");
-            if (expanded && shown == 1 && !string.IsNullOrWhiteSpace(m.how))
-                sb.Append($"\n<size=84%><color={UiTheme.MutedHex}>{m.how}</color></size>");
-        }
+        if (count <= 1) return;
+        sb.Append($"\n<size=80%><color={UiTheme.MutedHex}>{char.ToUpperInvariant(noun[0])}{noun.Substring(1)} {index + 1} of {count}  ·  </color><link=\"{NextLink}\"><color={UiTheme.GoldHex}><u>next ›</u></color></link></size>");
+    }
+
+    private static int Mod(int value, int count) => ((value % count) + count) % count;
+
+    private void AppendDeckLink(StringBuilder sb, PlayableLeader player)
+    {
+        DeckManager deck = DeckManager.Instance;
+        if (deck == null || !deck.HasDeckFor(player)) return;
+        List<DeckManager.DeckOverviewEntry> overview = deck.GetDeckOverview(player);
+        int unlocked = overview.Count(e => e.unlocked);
+        sb.Append($"\n\n<link=\"{DeckLink}\"><color={UiTheme.GoldHex}><u>Your deck</u></color></link>  <size=84%><color={UiTheme.MutedHex}>{unlocked} card{(unlocked == 1 ? "" : "s")}  ·  C</color></size>");
     }
 
     // ---------------------------------------------------------------- End screen

@@ -206,10 +206,18 @@ public class CalendarWidget : MonoBehaviour
             cellDescriptions[cell.cellObject] = hasEvent ? BuildDescription(entries) : null;
             cell.dayLabel.color = hasEvent ? DayMarkerColor(entries) : textColor;
 
-            // Day number stays top-left; the event icon(s) render centered in their own label.
+            // Day number top-left; a marked day names its event in a small line of its own (the
+            // card paintings it used to show spilled far out of the cell). Nothing leaves the cell.
             cell.dayLabel.text = day.ToString();
-            if (eventSpriteSheet != null && cell.iconLabel.spriteAsset != eventSpriteSheet) cell.iconLabel.spriteAsset = eventSpriteSheet;
-            cell.iconLabel.text = hasEvent ? BuildSpriteMarkup(entries) : string.Empty;
+            if (cell.cellObject.GetComponent<RectMask2D>() == null) cell.cellObject.AddComponent<RectMask2D>();
+            cell.iconLabel.enableAutoSizing = true;
+            cell.iconLabel.fontSizeMin = 7f;
+            cell.iconLabel.fontSizeMax = 11f;
+            cell.iconLabel.textWrappingMode = TextWrappingModes.Normal;
+            cell.iconLabel.overflowMode = TextOverflowModes.Ellipsis;
+            cell.iconLabel.alignment = TextAlignmentOptions.Bottom;
+            cell.iconLabel.color = hasEvent ? DayMarkerColor(entries) : textColor;
+            cell.iconLabel.text = hasEvent ? EventNames(entries) : string.Empty;
         }
     }
 
@@ -247,29 +255,18 @@ public class CalendarWidget : MonoBehaviour
         return mixed ? mixedColor : FactionColorFor(this, first);
     }
 
-    /// <summary>
-    /// Builds the TMP "&lt;sprite name=...&gt;" markup for a day's events. Uses each entry's
-    /// explicit spriteName when set, otherwise the normalized environmental card name
-    /// (matching how environmental cards render their sprite). Names resolve against
-    /// <see cref="eventSpriteSheet"/>.
-    /// </summary>
-    private string BuildSpriteMarkup(List<CalendarEntry> entries)
+    // The day's events by name: a scripted event's own name, else its environment card's.
+    private string EventNames(List<CalendarEntry> entries)
     {
-        List<string> names = new();
+        var names = new List<string>();
         foreach (CalendarEntry e in entries)
         {
-            string name = !string.IsNullOrWhiteSpace(e.spriteName)
-                ? e.spriteName.Trim()
-                : (!string.IsNullOrWhiteSpace(e.environment) ? CardNameUtility.Normalize(e.environment) : null);
+            string name = !string.IsNullOrWhiteSpace(e.dateEvent) ? DisplayNames.Format(e.dateEvent)
+                : calendar != null && calendar.GetEnvironmentCardForDate(e.Date) is CardData card ? card.name
+                : !string.IsNullOrWhiteSpace(e.environment) ? DisplayNames.Format(e.environment) : null;
             if (!string.IsNullOrWhiteSpace(name) && !names.Contains(name)) names.Add(name);
         }
-        if (names.Count == 0) return string.Empty;
-
-        // <sprite> has no scale attribute, so wrap the icons in a <size> tag (percent of font size).
-        // The icon label is centered and clipped, so the scaled sprite stays inside the cell.
-        int scale = Mathf.Max(100, eventSpriteScalePercent);
-        string sprites = string.Join(" ", names.Select(n => $"<sprite name=\"{n}\">"));
-        return scale == 100 ? sprites : $"<size={scale}%>{sprites}</size>";
+        return string.Join("\n", names);
     }
 
     // ---------------- Runtime wiring (behavior only; structure/style come from the prefab) ----------------

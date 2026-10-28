@@ -9,10 +9,10 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Save / load for a campaign in progress.
 ///
-/// Saving snapshots the parts of the world that decide the war: turn, leaders' treasuries and
-/// command points, every character (position, health, skills, statuses, objects, army), every
+/// Saving snapshots the parts of the world that decide the war: turn, leaders' treasuries,
+/// every character (position, health, skills, statuses, objects, army, actions used), every
 /// PC (owner, size, fort, loyalty), the human's fog of war and their hand/deck, and campaign
-/// objective progress.
+/// progress (steps reached, one-time cards played).
 ///
 /// Loading restarts the same scenario with the same leader variants (the normal spawn path),
 /// skips the intro video/tutorial, then lays the snapshot over the freshly spawned board.
@@ -86,7 +86,6 @@ public static class SaveSystem
             // loading matches them against leaders before the variant transformation runs.
             playerLeader = CampaignObjectives.LeaderKey(game.player),
             playerVariant = game.player.GetSelectedVariantName(),
-            commandPoints = game.player.CommandPoints,
         };
 
         foreach (PlayableLeader competitor in game.competitors.Where(c => c != null))
@@ -113,7 +112,7 @@ public static class SaveSystem
         foreach (Hex hex in board.hexes.Values)
         {
             if (hex == null) continue;
-            PC pc = hex.GetPC();
+            PC pc = hex.GetPCData(); // every PC, hidden ones too (GetPC is what the human can see)
             if (pc != null)
             {
                 data.pcs.Add(new PcSave
@@ -131,6 +130,10 @@ public static class SaveSystem
         {
             data.hand = deck.GetHand(game.player).Select(c => c.name).ToList();
             data.lastHandDrawTurn = deck.GetLastHandDrawTurn(game.player);
+            // Campaign: the one-time cards each leader has already played.
+            foreach (PlayableLeader leader in CampaignObjectives.Instance != null ? CampaignObjectives.Instance.AllLeaders() : Enumerable.Empty<PlayableLeader>())
+                foreach (string card in deck.GetSpentCards(leader))
+                    data.spentCards.Add(CampaignObjectives.LeaderKey(leader) + "/" + card);
         }
         if (CampaignObjectives.Instance != null) data.objectivesAchieved = CampaignObjectives.Instance.GetAchievedOnceKeys().ToList();
         return data;
@@ -149,6 +152,7 @@ public static class SaveSystem
             commander = c.GetCommander(), agent = c.GetAgent(), emmissary = c.GetEmmissary(), mage = c.GetMage(),
             moved = c.moved,
             acted = c.hasActionedThisTurn,
+            actionsUsed = c.ActionsUsedThisTurn,
             objects = c.objects?.Where(o => o != null).Select(o => o.name).ToList() ?? new List<string>(),
             characterGroup = c.characterGroup,
         };
@@ -165,6 +169,8 @@ public static class SaveSystem
             {
                 ma = army.ma, ar = army.ar, li = army.li, hi = army.hi, lc = army.lc, hc = army.hc, ca = army.ca, ws = army.ws,
                 xp = army.xp,
+                weaponTier = army.weaponTier,
+                armourTier = army.armourTier,
                 groups = army.troopAbilityGroups?.Select(g => new ArmyGroupSave
                 {
                     troopType = g.troopType.ToString(), amount = g.amount, troopName = g.troopName,
@@ -264,9 +270,12 @@ public static class SaveSystem
         foreach (PcSave ps in data.pcs)
         {
             Hex hex = board.GetHex(new Vector2Int(ps.x, ps.y));
-            PC pc = hex != null ? hex.GetPC() : null;
-            if (pc == null) continue;
+            PC pc = hex != null ? hex.GetPCData() : null;
             Leader owner = ps.owner != null && leadersByName.TryGetValue(ps.owner, out Leader o) ? o : null;
+            // Founded during play (the fresh start has no PC there yet): found it again.
+            if (pc == null && hex != null && !string.IsNullOrWhiteSpace(ps.name))
+                pc = new PC(owner, ps.name, (PCSizeEnum)ps.citySize, (FortSizeEnum)ps.fortSize, ps.hasPort, ps.isHidden, hex, ps.isCapital, ps.loyalty);
+            if (pc == null) continue;
             pc.RestoreOwnerForLoad(owner);
             pc.citySize = (PCSizeEnum)ps.citySize;
             pc.fortSize = (FortSizeEnum)ps.fortSize;
@@ -288,6 +297,7 @@ public static class SaveSystem
                 && string.Equals(x.GetOwner()?.characterName, cs.owner, StringComparison.OrdinalIgnoreCase));
             Leader owner = cs.owner != null && leadersByName.TryGetValue(cs.owner, out Leader o) ? o : null;
             Hex hex = board.GetHex(new Vector2Int(cs.x, cs.y));
+            if (c == null && !cs.killed && cs.isLeader && owner is PlayableLeader joinedTo) c = Rejoin(cs, joinedTo, live, matched);
             if (c == null && !cs.killed && owner != null && hex != null && !cs.isLeader) c = Recruit(cs, owner, hex);
             if (c == null) continue;
             matched.Add(c);
@@ -307,19 +317,41 @@ public static class SaveSystem
             if (hex != null && !hex.IsHexRevealed()) hex.Reveal(game.player);
         }
 
-        // Hand and command points.
+        // Hand.
         if (deck != null && data.hand != null)
         {
             List<CardData> hand = data.hand.Select(n => deck.FindAnyCardByName(n)).Where(c => c != null).Select(DeckManager.CloneCard).ToList();
             deck.RestoreHand(game.player, hand, data.lastHandDrawTurn);
         }
-        game.player.RestoreCommandPoints(data.commandPoints, data.turn);
+        if (deck != null && CampaignObjectives.Instance != null && data.spentCards != null)
+        {
+            foreach (PlayableLeader leader in CampaignObjectives.Instance.AllLeaders())
+            {
+                string prefix = CampaignObjectives.LeaderKey(leader) + "/";
+                deck.RestoreSpentCards(leader, data.spentCards.Where(s => s.StartsWith(prefix, StringComparison.Ordinal)).Select(s => s.Substring(prefix.Length)));
+            }
+        }
         CampaignObjectives.Instance?.RestoreAchievedOnce(data.objectivesAchieved);
 
         board.RefreshRelevantHexes();
         foreach (Hex hex in board.hexes.Values) { if (hex == null) continue; hex.RedrawCharacters(); hex.RedrawArmies(); }
         VictoryPoints.RecalculateAndAssign(game);
         game.RefreshAfterLoad();
+    }
+
+    // A realm's leader who had joined a playable leader (A Friend or Three) starts the fresh
+    // board independent again; bind them back. Their people and PCs follow by their own records.
+    private static Character Rejoin(CharacterSave cs, PlayableLeader joinedTo, List<Character> live, HashSet<Character> matched)
+    {
+        NonPlayableLeader npl = live.OfType<NonPlayableLeader>().FirstOrDefault(x => !matched.Contains(x) && !x.killed
+            && string.Equals(x.characterName, cs.name, StringComparison.OrdinalIgnoreCase) && x.GetOwner() == x);
+        if (npl == null) return null;
+        npl.controlledCharacters.Remove(npl);
+        npl.owner = joinedTo;
+        npl.joined = true;
+        npl.alignment = joinedTo.alignment;
+        if (!joinedTo.controlledCharacters.Contains(npl)) joinedTo.controlledCharacters.Add(npl);
+        return npl;
     }
 
     private static Character Recruit(CharacterSave cs, Leader owner, Hex hex)
@@ -368,7 +400,8 @@ public static class SaveSystem
         foreach (StatusEffectEnum e in Enum.GetValues(typeof(StatusEffectEnum)))
             if (!snapshot.statusEffectTurns.ContainsKey(e)) snapshot.statusEffectTurns[e] = 0;
         snapshot.moved = cs.moved;
-        snapshot.hasActionedThisTurn = cs.acted;
+        // Saves before per-character actions only stored "acted".
+        snapshot.actionsUsedThisTurn = cs.actionsUsed >= 0 ? cs.actionsUsed : (cs.acted ? c.MaxActionsPerTurn : 0);
         c.RestoreStatusSnapshot(snapshot);
 
         ApplyArmy(c, cs);
@@ -392,6 +425,8 @@ public static class SaveSystem
         current.ma = a.ma; current.ar = a.ar; current.li = a.li; current.hi = a.hi;
         current.lc = a.lc; current.hc = a.hc; current.ca = a.ca; current.ws = a.ws;
         current.xp = a.xp;
+        current.weaponTier = a.weaponTier;
+        current.armourTier = a.armourTier;
         current.troopAbilityGroups = a.groups.Select(g => new ArmyTroopAbilityGroup
         {
             troopType = Enum.TryParse(g.troopType, out TroopsTypeEnum t) ? t : TroopsTypeEnum.ma,
@@ -426,8 +461,9 @@ public static class SaveSystem
     public int turn;
     public string playerLeader;
     public string playerVariant;
-    public int commandPoints;
+    public int commandPoints; // Unused since actions became per character; kept so old saves parse.
     public int lastHandDrawTurn = -1;
+    public List<string> spentCards = new(); // "Leader/Card": campaign one-time cards already played
     public List<LeaderVariantSave> competitorVariants = new();
     public List<LeaderSave> leaders = new();
     public List<CharacterSave> characters = new();
@@ -443,11 +479,12 @@ public static class SaveSystem
 [Serializable] public class Vec { public int x, y; }
 [Serializable] public class StatusSave { public string status; public int turns; }
 [Serializable] public class ArmyGroupSave { public string troopType; public int amount; public string troopName; public List<string> abilities = new(); }
-[Serializable] public class ArmySave { public int ma, ar, li, hi, lc, hc, ca, ws, xp; public List<ArmyGroupSave> groups = new(); }
+[Serializable] public class ArmySave { public int ma, ar, li, hi, lc, hc, ca, ws, xp, weaponTier, armourTier; public List<ArmyGroupSave> groups = new(); }
 [Serializable] public class CharacterSave
 {
     public string name, owner, characterGroup;
     public bool isLeader, killed, acted, hasArmy;
+    public int actionsUsed = -1;
     public int x, y, health, commander, agent, emmissary, mage, moved;
     public List<string> objects = new();
     public List<StatusSave> statuses = new();

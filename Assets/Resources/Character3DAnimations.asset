@@ -129,3 +129,9 @@ MonoBehaviour:
     clip: {fileID: -203655887218126122, guid: 7c3972046f8935c45a08522af3c4c63f, type: 3}
   - name: standing idle
     clip: {fileID: -203655887218126122, guid: aec05679cd9ca2241b88b286edc0c90b, type: 3}
+  - name: RB Ready Idle
+    clip: {fileID: 7400000, guid: 1fe389f47d6ecc24dbc748b5887003e9, type: 2}
+  - name: RB Walk
+    clip: {fileID: 7400000, guid: 168c971406320bc4cb8552870fa1f1be, type: 2}
+  - name: RB Slash
+    clip: {fileID: 7400000, guid: 78a3cca1a19106e49a81534b07986acd, type: 2}

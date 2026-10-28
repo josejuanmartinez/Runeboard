@@ -17,6 +17,7 @@ Shader "Runeboard/FogOfWar"
         _Scale ("Cloud Scale (per world unit)", Range(0.05,2)) = 0.32
         _Speed ("Drift Speed", Vector) = (0.030, 0.010, 0, 0)
         _Opacity ("Opacity", Range(0,1)) = 0.92
+        _UnexploredOpacity ("Never-explored Opacity", Range(0,1)) = 1
         _EdgeGlow ("Edge Glow", Range(0,1)) = 0.35
         _EdgeColor ("Edge Glow Colour", Color) = (0.62,0.52,0.34,1)
         _CloudShadow ("Cloud Shadow Strength", Range(0,1)) = 0
@@ -46,7 +47,7 @@ Shader "Runeboard/FogOfWar"
             sampler2D _Mask;
             float4 _MaskRect;
             fixed4 _ShadowColor, _FogColor, _HighlightColor, _EdgeColor;
-            float _Scale, _Opacity, _EdgeGlow;
+            float _Scale, _Opacity, _UnexploredOpacity, _EdgeGlow;
             float4 _Speed;
             fixed4 _CloudShadowColor;
             float _CloudShadow, _CloudShadowScale;
@@ -96,6 +97,10 @@ Shader "Runeboard/FogOfWar"
                 // a cloud-shaped (not hex-shaped) boundary where the two meet.
                 float coverage = smoothstep(0.05, 0.85, mask + (cloud - 0.5) * 0.35);
                 float alpha = coverage * lerp(0.82, 1.0, cloud) * _Opacity;
+                // Land never explored is hidden outright (no terrain showing through); the veil
+                // over known-but-unseen land stays thin. The boundary keeps the cloud-shaped edge.
+                float unexplored = smoothstep(0.72, 0.95, mask + (cloud - 0.5) * 0.12);
+                alpha = lerp(alpha, _UnexploredOpacity, unexplored);
 
                 fixed3 col = lerp(_ShadowColor.rgb, _FogColor.rgb, cloud);
                 col += _HighlightColor.rgb * pow(cloud, 3.0) * 0.55;

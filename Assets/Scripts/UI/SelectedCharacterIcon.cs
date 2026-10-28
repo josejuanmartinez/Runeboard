@@ -306,7 +306,8 @@ public class SelectedCharacterIcon : MonoBehaviour
     {
         if (!c.isPlayerControlled) return c.hasActionedThisTurn ? "Has acted" : "Ready";
         if (c.actionBlockedThisTurn) return "Cannot act this turn";
-        return c.CanPlayerActNow() ? "Ready to act" : "No command points left";
+        if (!c.CanPlayerActNow()) return "Has acted this turn";
+        return c.ActionsLeftThisTurn > 1 ? $"Ready to act ({c.ActionsLeftThisTurn} actions, champion)" : "Ready to act";
     }
 
     private void ApplyRefresh(Character c, bool isHover = false)
@@ -714,6 +715,48 @@ public class SelectedCharacterIcon : MonoBehaviour
             renderer.gameObject.name = items[i].label;
             renderer.Initialize(items[i].spriteName, items[i].label);
         }
+        KeepDescriptionAboveArtifacts(items.Count > 0);
+    }
+
+    // The quote and the artifact/status row share the panel's lower part: while the row shows,
+    // the quote's bottom margin stops it above the row's top, and the text shrinks to fit.
+    private Vector4? descriptionBaseMargin;
+    private float descriptionBaseFontSize;
+
+    private void KeepDescriptionAboveArtifacts(bool rowShown)
+    {
+        if (descriptionWidget == null || artifactStatusGridLayoutTransform is not RectTransform row) return;
+        if (descriptionBaseMargin == null)
+        {
+            descriptionBaseMargin = descriptionWidget.margin;
+            descriptionBaseFontSize = descriptionWidget.fontSize;
+        }
+        Vector4 margin = descriptionBaseMargin.Value;
+        if (rowShown)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(row);
+            RectTransform text = descriptionWidget.rectTransform;
+            var corners = new Vector3[4];
+            text.GetWorldCorners(corners);
+            float textLeft = corners[0].x, textRight = corners[2].x;
+            float rowTop = float.MinValue;
+            var itemCorners = new Vector3[4];
+            foreach (RectTransform item in row)
+            {
+                if (!item.gameObject.activeSelf) continue;
+                item.GetWorldCorners(itemCorners);
+                // Only icons under the text's width can collide with it.
+                if (itemCorners[2].x < textLeft || itemCorners[0].x > textRight) continue;
+                rowTop = Mathf.Max(rowTop, itemCorners[1].y);
+            }
+            float scale = Mathf.Max(0.0001f, text.lossyScale.y);
+            float overlap = (rowTop - corners[0].y) / scale;
+            if (rowTop > float.MinValue && overlap > 0f) margin.w = Mathf.Max(margin.w, overlap + 4f);
+        }
+        descriptionWidget.margin = margin;
+        descriptionWidget.enableAutoSizing = true;
+        descriptionWidget.fontSizeMax = descriptionBaseFontSize;
+        descriptionWidget.fontSizeMin = descriptionBaseFontSize * 0.7f;
     }
 
     // Army/troop text used to be built here too (with "army:" TMP links for hover-preview),

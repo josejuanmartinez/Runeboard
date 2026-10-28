@@ -32,17 +32,25 @@ public static class Character3DBase
 
     public static Mesh Mesh => mesh != null ? mesh : mesh = BuildMesh();
 
-    public static Material MaterialFor(Color nation, Shader shader)
+    public static Material MaterialFor(Color nation, Shader shader) => MaterialFor(nation, shader, bronzeRim: false);
+
+    /// <summary>bronzeRim: the sloped rim in dark bronze, the nation colour on the side band only —
+    /// for a settlement's wide base, where a rim in the nation colour drowned the town.</summary>
+    public static Material MaterialFor(Color nation, Shader shader, bool bronzeRim)
     {
         Color32 key = nation.a > 0f ? (Color32)nation : (Color32)Unowned;
-        if (materials.TryGetValue(key, out Material material) && material != null) return material;
-        material = new Material(shader) { name = $"Miniature base {key}", mainTexture = BuildTexture(key) };
+        var cache = bronzeRim ? bronzeMaterials : materials;
+        if (cache.TryGetValue(key, out Material material) && material != null) return material;
+        material = new Material(shader) { name = $"Miniature base {key}{(bronzeRim ? " bronze" : "")}", mainTexture = BuildTexture(key, bronzeRim) };
         material.EnableKeyword("_MINIATURE_BASE");
-        materials[key] = material;
+        cache[key] = material;
         return material;
     }
 
-    private static Texture2D BuildTexture(Color side)
+    private static readonly Dictionary<Color32, Material> bronzeMaterials = new();
+    private static readonly Color BronzeRim = new(0.36f, 0.27f, 0.16f);
+
+    private static Texture2D BuildTexture(Color side, bool bronzeRim = false)
     {
         var tex = new Texture2D(TexWidth, TexHeight, TextureFormat.RGBA32, false)
         {
@@ -54,7 +62,7 @@ public static class Character3DBase
             for (int x = 0; x < TexWidth; x++)
             {
                 Color c = x < 16 ? TopColor * (0.9f + 0.2f * (float)random.NextDouble())
-                    : x < 24 ? Color.Lerp(side, Color.white, 0.12f) // the rim, a touch lighter than the band
+                    : x < 24 ? (bronzeRim ? BronzeRim * (0.9f + 0.2f * (float)random.NextDouble()) : Color.Lerp(side, Color.white, 0.12f)) // the rim, a touch lighter than the band
                     : side;
                 c.a = 1f;
                 px[y * TexWidth + x] = c;
@@ -105,6 +113,50 @@ public static class Character3DBase
         built.RecalculateBounds();
         return built;
     }
+
+    /// <summary>The same base in two parts: submesh 0 the rim and side band (this class's
+    /// material), submesh 1 the top, its UVs from `topUv` (a point on the unit top disc, x/z in
+    /// -TopRadius..TopRadius) — for a settlement's base laid with its hex's painting.</summary>
+    public static Mesh BuildSplit(System.Func<Vector2, Vector2> topUv, string name)
+    {
+        var vertices = new List<Vector3>();
+        var normals = new List<Vector3>();
+        var uvs = new List<Vector2>();
+        var rim = new List<int>();
+        var top = new List<int>();
+        var order = new List<int>();
+        for (int i = 0; i < Segments; i++) order.Add(i);
+        order.Sort((a, b) => MidZ(b).CompareTo(MidZ(a)));
+        Vector3 bevelNormal = new Vector3(BevelDrop, 1f - TopRadius, 0f).normalized;
+        foreach (int i in order)
+            AddBand(i, 1f, -BevelDrop, 1f, -Thickness, Vector2.right, SideU, vertices, normals, uvs, rim);
+        foreach (int i in order)
+            AddBand(i, TopRadius, 0f, 1f, -BevelDrop, new Vector2(bevelNormal.x, bevelNormal.y), BevelU, vertices, normals, uvs, rim);
+        int centre = vertices.Count;
+        vertices.Add(Vector3.zero);
+        normals.Add(Vector3.up);
+        uvs.Add(topUv(Vector2.zero));
+        for (int i = 0; i <= Segments; i++)
+        {
+            float a = i * Mathf.PI * 2f / Segments;
+            var p = new Vector3(Mathf.Cos(a) * TopRadius, 0f, Mathf.Sin(a) * TopRadius);
+            vertices.Add(p);
+            normals.Add(Vector3.up);
+            uvs.Add(topUv(new Vector2(p.x, p.z)));
+            if (i > 0) top.AddRange(new[] { centre, centre + i + 1, centre + i });
+        }
+        var built = new Mesh { name = name };
+        built.SetVertices(vertices);
+        built.SetNormals(normals);
+        built.SetUVs(0, uvs);
+        built.subMeshCount = 2;
+        built.SetTriangles(rim, 0);
+        built.SetTriangles(top, 1);
+        built.RecalculateBounds();
+        return built;
+    }
+
+    public const float TopFraction = TopRadius;
 
     private static float MidZ(int segment) => Mathf.Sin((segment + 0.5f) * Mathf.PI * 2f / Segments);
 

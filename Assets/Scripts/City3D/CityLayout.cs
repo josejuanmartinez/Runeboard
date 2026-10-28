@@ -26,6 +26,7 @@ public static class CityLayout
         public Color[] Palette;
         public CityStyles.Style Style;
         public CityTextures.Kind?[] Surfaces; // per cell, null = the style's own
+        public bool WaterGround;              // the base is water (CityRecipes "ground": "water")
     }
 
     // Footprint, as an ellipse in screen space (fractions of the hex width), and the clear middle.
@@ -34,19 +35,22 @@ public static class CityLayout
 
     private static readonly Color Keep = new(0, 0, 0, 0); // palette override: leave the style colour
 
-    public static Result Make(PC pc, float hexWidth, string artName = null)
+    public static Result Make(PC pc, float hexWidth, string artName = null) =>
+        Make(pc.pcName, pc.owner != null ? pc.owner.race : RacesEnum.Common, pc.citySize, pc.fortSize, pc.isCapital, hexWidth, artName);
+
+    // The same plan from plain values, for a settlement that is not on the board (TitleDiorama).
+    public static Result Make(string pcName, RacesEnum race, PCSizeEnum citySize, FortSizeEnum fortSize, bool isCapital, float hexWidth, string artName = null)
     {
         // A hand-made recipe for this painting, when there is one (CityRecipes).
-        CityRecipes.Recipe recipe = CityRecipes.Find(artName, pc.pcName);
+        CityRecipes.Recipe recipe = CityRecipes.Find(artName, pcName);
         if (recipe != null) return CityRecipes.Build(recipe, hexWidth);
 
         var result = new Result();
-        var rng = new System.Random(Seed(pc.pcName));
-        RacesEnum race = pc.owner != null ? pc.owner.race : RacesEnum.Common;
+        var rng = new System.Random(Seed(pcName));
         CityStyles.Style style = CityStyles.For(race);
         var ctx = new Context(result, rng, style, hexWidth);
 
-        string key = Normalize(pc.pcName);
+        string key = Normalize(pcName);
         Color[] overrides = null;
         bool landmark = true;
         switch (key)
@@ -68,9 +72,9 @@ public static class CityLayout
 
         result.Palette = CityStyles.Palette(style);
         result.Style = style;
-        Fortifications(ctx, pc.fortSize);
-        if (pc.isCapital) ctx.Add(new Vector2(0.06f, 0.2f), 0.06f, b => Spire(b, ctx));
-        int houses = pc.citySize switch
+        Fortifications(ctx, fortSize);
+        if (isCapital) ctx.Add(new Vector2(0.06f, 0.2f), 0.06f, b => Spire(b, ctx));
+        int houses = citySize switch
         {
             PCSizeEnum.camp => 4,
             PCSizeEnum.village => 5,
@@ -78,7 +82,7 @@ public static class CityLayout
             PCSizeEnum.majorTown => 11,
             _ => 15,
         };
-        bool camp = pc.citySize == PCSizeEnum.camp;
+        bool camp = citySize == PCSizeEnum.camp;
         for (int i = 0; i < houses; i++)
         {
             if (!ctx.TryPlace(0.075f, out Vector2 at)) break;

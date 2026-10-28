@@ -22,26 +22,7 @@ public class HexPathRenderer : MonoBehaviour
     // if segments are too coarse, so this needs to stay reasonably high for a fluid look.
     [SerializeField] private int splineSegmentsPerHex = 8;
 
-    // How long each opportunity-hint route stays on screen before the cycle moves on to the
-    // next candidate hex.
-    [SerializeField] private float opportunityHintDwellSeconds = 1.6f;
-
-    // Distinct material for the opportunity/encounter hint route so it reads as a separate,
-    // ambient cue rather than the actual movement plan (which uses the main LineRenderer's own
-    // material). Falls back to the movement path's material if left unassigned.
-    [SerializeField] private Material hintPathMaterial;
-
-    [Header("Opportunity Hint Marker")]
-    [SerializeField] private TMP_FontAsset hintMarkerFont;
-    [SerializeField] private float hintMarkerFontSize = 3f;
-    [SerializeField] private float hintMarkerPulseSeconds = 0.6f;
-    [SerializeField] private Vector3 hintMarkerLocalOffset = new(0f, 0f, -0.1f);
-
     private LineRenderer lineRenderer;
-    private LineRenderer hintLineRenderer;
-    private Coroutine opportunityHintCoroutine;
-    private TextMeshPro hintMarkerText;
-    private Coroutine hintMarkerPulseCoroutine;
     private Board board;
     private Dictionary<(Character, int), HashSet<Vector2Int>> rangeCache = new();
     private Dictionary<Vector2Int, bool> waterTerrainCache = new();
@@ -112,7 +93,7 @@ public class HexPathRenderer : MonoBehaviour
                 {
                     if (i != 0) hexObj.ShowMovementBlocked();
                 }
-                else hexObj.ShowMovementLeft(movementLeft, character);
+                else hexObj.ShowMovementLeft(movementLeft, character, i == path.Count - 1 && i != 0);
             }
             else
             {
@@ -398,6 +379,8 @@ public class HexPathRenderer : MonoBehaviour
     private List<Vector2Int> GetNeighbors(Vector2Int hexPos)
     {
         var neighbors = new List<Vector2Int>();
+        // The board can already be gone while a scene unloads (loading a save mid-turn).
+        if (board == null || board.hexes == null || board.evenRowNeighbors == null || board.oddRowNeighbors == null) return neighbors;
         Vector2Int[] directionsToCheck;
 
         // Round to ensure we're using integer coordinates for lookup
@@ -480,221 +463,6 @@ public class HexPathRenderer : MonoBehaviour
         FindObjectsByType<MovementCostManager>().ToList().ForEach((x) => x.Hide());
         lineRenderer.SetPositions(new Vector3[] { });
         lineRenderer.positionCount = 0;
-    }
-
-    // Cycles a fluid route (same spline + flow shader as the interactive movement path, but on
-    // a separate LineRenderer so it never fights the drag/hover preview) from the character's
-    // hex to each hex in turn, showing exactly one at a time so several candidates don't tangle
-    // into overlapping lines. Used for ambient "you could reach an opportunity card here" cues,
-    // not an actual movement plan - so unlike DrawPathBetweenHexes it never shows the per-hex
-    // movement-cost bubbles.
-    public void StartOpportunityHintCycle(Character character, List<Vector2Int> targetHexes)
-    {
-        StopOpportunityHintCycle();
-        if (character == null || character.hex == null || targetHexes == null || targetHexes.Count == 0) return;
-        EnsureHintLineRenderer();
-        hintLineRenderer.sharedMaterial = hintPathMaterial != null ? hintPathMaterial : lineRenderer.sharedMaterial;
-
-        opportunityHintCoroutine = StartCoroutine(OpportunityHintCycleRoutine(character, targetHexes));
-    }
-
-    public void StopOpportunityHintCycle()
-    {
-        if (opportunityHintCoroutine != null)
-        {
-            StopCoroutine(opportunityHintCoroutine);
-            opportunityHintCoroutine = null;
-        }
-        HideOpportunityHintPath();
-    }
-
-    // The route to one opportunity, held while its hint chip is hovered (OpportunityHexHinter):
-    // drawn once in the movement path's own look, with no "?" marker, since the chip already
-    // says what is there.
-    public void ShowHintRoute(Character character, Vector2Int targetHex)
-    {
-        StopOpportunityHintCycle();
-        if (character == null || character.hex == null) return;
-        EnsureHintLineRenderer();
-        hintLineRenderer.sharedMaterial = lineRenderer.sharedMaterial;
-        ShowOpportunityHintPath(character.hex.v2, targetHex, character);
-        HideHintMarker();
-    }
-
-    // One-shot version of the opportunity-hint cycle for a single hex that auto-stops after
-    // durationSeconds - used to point at a specific hex (e.g. an encounter card's target hex)
-    // rather than looping through several candidates forever. Guards against stomping a newer
-    // cycle: if something else (re-)started the hint cycle before this timeout fires, the stale
-    // timeout is a no-op instead of cutting the newer cycle short.
-    public void PulseHintPath(Character character, Vector2Int targetHex, float durationSeconds)
-    {
-        StartOpportunityHintCycle(character, new List<Vector2Int> { targetHex });
-        StartCoroutine(StopHintCycleAfter(opportunityHintCoroutine, durationSeconds));
-    }
-
-    private IEnumerator StopHintCycleAfter(Coroutine cycleToStop, float seconds)
-    {
-        yield return new WaitForSecondsRealtime(seconds);
-        if (opportunityHintCoroutine == cycleToStop)
-        {
-            StopOpportunityHintCycle();
-        }
-    }
-
-    private IEnumerator OpportunityHintCycleRoutine(Character character, List<Vector2Int> targetHexes)
-    {
-        var wait = new WaitForSeconds(opportunityHintDwellSeconds);
-        while (true)
-        {
-            for (int i = 0; i < targetHexes.Count; i++)
-            {
-                if (character == null || character.hex == null) yield break;
-                ShowOpportunityHintPath(character.hex.v2, targetHexes[i], character);
-                yield return wait;
-            }
-        }
-    }
-
-    private void ShowOpportunityHintPath(Vector2Int from, Vector2Int to, Character character)
-    {
-        EnsureHintLineRenderer();
-
-        List<Vector2Int> path = FindPath(from, to, character);
-        if (path == null || path.Count == 0)
-        {
-            hintLineRenderer.positionCount = 0;
-            HideHintMarker();
-            return;
-        }
-
-        var hexCenters = new List<Vector3>(path.Count);
-        foreach (Vector2Int hexPos in path)
-        {
-            if (board.hexes.TryGetValue(hexPos, out Hex hexObj))
-            {
-                hexCenters.Add(hexObj.transform.position);
-            }
-        }
-
-        if (hexCenters.Count == 0)
-        {
-            hintLineRenderer.positionCount = 0;
-            HideHintMarker();
-            return;
-        }
-
-        if (hexCenters.Count == 1)
-        {
-            hintLineRenderer.positionCount = 1;
-            hintLineRenderer.SetPosition(0, hexCenters[0]);
-            ShowHintMarkerAt(hexCenters[0]);
-            return;
-        }
-
-        List<Vector3> curve = BuildCatmullRomSpline(hexCenters, splineSegmentsPerHex);
-        hintLineRenderer.positionCount = curve.Count;
-        hintLineRenderer.SetPositions(curve.ToArray());
-        ShowHintMarkerAt(hexCenters[hexCenters.Count - 1]);
-    }
-
-    private void HideOpportunityHintPath()
-    {
-        if (hintLineRenderer != null) hintLineRenderer.positionCount = 0;
-        HideHintMarker();
-    }
-
-    // Animated "?" cue (Tiny5 font, pulsing white/black) marking the end hex of whichever route
-    // is currently being pulsed - the opportunity-hint cycle or the encounter-card one-shot
-    // pulse both funnel through ShowOpportunityHintPath, so both get the marker for free.
-    private void ShowHintMarkerAt(Vector3 endHexWorldPosition)
-    {
-        EnsureHintMarker();
-        hintMarkerText.transform.position = endHexWorldPosition + hintMarkerLocalOffset;
-        if (!hintMarkerText.gameObject.activeSelf) hintMarkerText.gameObject.SetActive(true);
-        if (hintMarkerPulseCoroutine == null)
-        {
-            hintMarkerPulseCoroutine = StartCoroutine(PulseHintMarkerRoutine());
-        }
-    }
-
-    private void HideHintMarker()
-    {
-        if (hintMarkerPulseCoroutine != null)
-        {
-            StopCoroutine(hintMarkerPulseCoroutine);
-            hintMarkerPulseCoroutine = null;
-        }
-        if (hintMarkerText != null) hintMarkerText.gameObject.SetActive(false);
-    }
-
-    private IEnumerator PulseHintMarkerRoutine()
-    {
-        while (true)
-        {
-            yield return LerpMarkerColor(Color.white, Color.black, hintMarkerPulseSeconds);
-            yield return LerpMarkerColor(Color.black, Color.white, hintMarkerPulseSeconds);
-        }
-    }
-
-    private IEnumerator LerpMarkerColor(Color from, Color to, float duration)
-    {
-        float t = 0f;
-        while (t < duration)
-        {
-            t += Time.deltaTime;
-            hintMarkerText.color = Color.Lerp(from, to, t / duration);
-            yield return null;
-        }
-        hintMarkerText.color = to;
-    }
-
-    private void EnsureHintMarker()
-    {
-        if (hintMarkerText != null) return;
-
-        GameObject markerObj = new("OpportunityHintMarker");
-        markerObj.transform.SetParent(transform, false);
-        hintMarkerText = markerObj.AddComponent<TextMeshPro>();
-        hintMarkerText.text = "?";
-        hintMarkerText.font = hintMarkerFont;
-        hintMarkerText.fontSize = hintMarkerFontSize;
-        hintMarkerText.alignment = TextAlignmentOptions.Center;
-        hintMarkerText.color = Color.white;
-
-        MeshRenderer markerRenderer = markerObj.GetComponent<MeshRenderer>();
-        if (markerRenderer != null)
-        {
-            markerRenderer.sortingLayerID = hintLineRenderer.sortingLayerID;
-            markerRenderer.sortingOrder = hintLineRenderer.sortingOrder + 1;
-        }
-
-        markerObj.SetActive(false);
-    }
-
-    // Mirrors the authored movement-path LineRenderer's look (material, width, gradient,
-    // sorting) onto a second LineRenderer dedicated to the opportunity-hint cue, built lazily
-    // so boards that never hint an opportunity never pay for it.
-    private void EnsureHintLineRenderer()
-    {
-        if (hintLineRenderer != null) return;
-
-        GameObject hintObj = new("OpportunityHintPath");
-        hintObj.transform.SetParent(transform, false);
-        hintLineRenderer = hintObj.AddComponent<LineRenderer>();
-
-        hintLineRenderer.sharedMaterial = hintPathMaterial != null ? hintPathMaterial : lineRenderer.sharedMaterial;
-        hintLineRenderer.widthCurve = lineRenderer.widthCurve;
-        hintLineRenderer.widthMultiplier = lineRenderer.widthMultiplier;
-        hintLineRenderer.colorGradient = lineRenderer.colorGradient;
-        hintLineRenderer.numCornerVertices = lineRenderer.numCornerVertices;
-        hintLineRenderer.numCapVertices = lineRenderer.numCapVertices;
-        hintLineRenderer.alignment = lineRenderer.alignment;
-        hintLineRenderer.textureMode = lineRenderer.textureMode;
-        hintLineRenderer.textureScale = lineRenderer.textureScale;
-        hintLineRenderer.useWorldSpace = true;
-        hintLineRenderer.sortingLayerID = lineRenderer.sortingLayerID;
-        hintLineRenderer.sortingOrder = lineRenderer.sortingOrder;
-        hintLineRenderer.positionCount = 0;
     }
 
     public HashSet<Vector2Int> FindAllHexesV2InRange(Character character)
@@ -796,15 +564,16 @@ public class HexPathRenderer : MonoBehaviour
     public List<Hex> FindAllHexesInRange(Character character, int movementBudget)
         => ResolveHexes(FindAllHexesV2InRange(character, movementBudget));
 
-    // Movement-remaining-aware variant of FindAllHexesInRange, used for the selected-character
-    // opportunity-card hex hint (Part 6): highlights where the character could still move to
-    // and play an opportunity card THIS turn, not a fresh-turn full-movement range.
+    // Movement-remaining-aware variant of FindAllHexesInRange: where the character could still
+    // move to THIS turn, not a fresh-turn full-movement range.
     public List<Hex> FindAllHexesInRemainingRange(Character character)
         => FindAllHexesInRange(character, character.GetMovementLeft());
 
     private List<Hex> ResolveHexes(HashSet<Vector2Int> v2Hexes)
     {
-        var result = new List<Hex>(v2Hexes.Count);
+        var result = new List<Hex>(v2Hexes != null ? v2Hexes.Count : 0);
+        if (board == null) board = Board.Instance;
+        if (v2Hexes == null || board == null || board.hexes == null) return result;
         foreach (var v2 in v2Hexes)
         {
             if (board.hexes.TryGetValue(v2, out var hex))

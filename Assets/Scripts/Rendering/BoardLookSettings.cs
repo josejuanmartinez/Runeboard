@@ -110,6 +110,10 @@ public class BoardLookSettings : ScriptableObject
     [Tooltip("Where the ground rim starts fading along the hex's lower edges (1 = the hex edge; lower = a wider fade).")]
     [Range(0.3f, 1f)] public float pcRimStart = 0.72f;
 
+    [Header("Title screen (TitleDiorama)")]
+    [Tooltip("Hidden/Runeboard/TitleTable — the procedural wooden table under the title board.")]
+    public Shader titleTableShader;
+
     private static BoardLookSettings instance;
     private static bool looked;
 

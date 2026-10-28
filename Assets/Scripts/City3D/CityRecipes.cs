@@ -24,6 +24,7 @@ public static class CityRecipes
         public string style;         // CityStyles.Style: Mannish, Elven, Dwarven, Hobbit, Orcish, Southron, Northman
         public string[] colors;      // per cell, "#RRGGBB" or "" to keep the style's
         public string[] surfaces;    // per cell, a CityTextures.Kind name or "" to keep the style's
+        public string ground;        // "water": the town's base is water (Lake-town, island holds); default land
         public Building[] buildings;
     }
 
@@ -113,6 +114,11 @@ public static class CityRecipes
         }
         result.Palette = CityStyles.Palette(result.Style, overrides);
         result.Surfaces = surfaces;
+        result.WaterGround = string.Equals(recipe.ground, "water", StringComparison.OrdinalIgnoreCase);
+        bool water = result.WaterGround;
+        // A blue accent is the recipe's water: its flat pools and streams take the painted water.
+        Color accent = result.Palette[(int)Cell.Accent];
+        bool accentWater = accent.b > accent.r + 0.05f && accent.b >= accent.g - 0.03f;
 
         if (recipe.buildings == null) return result;
         int seedBase = Key(recipe.name).GetHashCode();
@@ -125,14 +131,23 @@ public static class CityRecipes
             result.Plans.Add(new CityLayout.Plan
             {
                 Screen = at * s,
-                Build = b => { foreach (Part part in building.parts) Draw(b, part, building.yaw, s, seed); },
+                Build = b => { foreach (Part part in building.parts) Draw(b, part, building.yaw, s, seed, water, accentWater); },
             });
         }
         return result;
     }
 
-    private static void Draw(CityMeshBuilder b, Part p, float buildingYaw, float s, int seed)
+    // A flat footprint in a ground colour (water, lava, a path, a lawn) — in hex widths. Thin
+    // upright details (windows and doors, a few thousandths deep) never qualify.
+    private static bool IsGround(float height, float x, float z, Cell cell) =>
+        height <= 0.015f && Mathf.Min(x, z) >= 0.012f && Mathf.Max(x, z) >= 0.03f
+        && cell is Cell.Accent or Cell.Trim or Cell.Stone or Cell.Foliage;
+
+    private static void Draw(CityMeshBuilder b, Part p, float buildingYaw, float s, int seed, bool waterGround, bool accentWater)
     {
+        // On a water base the water is the base itself: the recipe's own pools and seas go.
+        if (waterGround && p.cell != null && p.cell.Equals("accent", StringComparison.OrdinalIgnoreCase)
+            && (p.shape == "box" || p.shape == "wall") && (p.size == null || p.size.Length < 2 || p.size[1] <= 0.015f) && p.height <= 0.015f) return;
         Vector3 pos = V3(p.pos) * s;
         Quaternion around = Quaternion.Euler(0f, buildingYaw, 0f);
         b.At(around * pos, buildingYaw + p.yaw);
@@ -144,8 +159,17 @@ public static class CityRecipes
         switch ((p.shape ?? "").ToLowerInvariant())
         {
             case "box":
-                b.Box(Vector3.zero, V3(p.size) * s, cell, top);
+            {
+                // A flat footprint of water, path or lava is ground, not a slab: draw it as a
+                // shaped patch (piers and decks, in wood, stay boxes).
+                Vector3 size = V3(p.size);
+                if (IsGround(size.y, size.x, size.z, cell))
+                    b.Patch(Vector3.zero, size.x * s, size.z * s, size.y * s, seed + p.seed + Mathf.RoundToInt(pos.x * 997f + pos.z * 1499f),
+                        accentWater && cell == Cell.Accent ? Cell.Water : cell);
+                else
+                    b.Box(Vector3.zero, size * s, cell, top);
                 break;
+            }
             case "gable":
             {
                 Vector3 size = V3(p.size) * s;
@@ -156,7 +180,12 @@ public static class CityRecipes
                 b.Cone(Vector3.zero, radius, height, 4, cell, p.twist != 0f ? p.twist : 0.125f);
                 break;
             case "cone":
-                b.Cone(Vector3.zero, radius, height, sides, cell, p.twist);
+                // Older recipes drew crags and mountains as plain stone cones: give them a peak's ridges.
+                if ((cell == Cell.Stone && p.height >= 0.1f) || (p.radius >= 0.2f && cell is Cell.Stone or Cell.Trim))
+                    b.Peak(Vector3.zero, radius, height, 11, seed + p.seed + Mathf.RoundToInt(pos.x * 997f), Cell.Stone,
+                        cell == Cell.Trim ? Cell.Trim : null, 0.5f, 1f, 0.35f);
+                else
+                    b.Cone(Vector3.zero, radius, height, sides, cell, p.twist);
                 break;
             case "cylinder":
                 b.Cylinder(Vector3.zero, radius, height, sides, cell, top, p.taper > 0f ? p.taper : 1f, p.twist);
@@ -187,8 +216,13 @@ public static class CityRecipes
             {
                 Cell? snow = string.IsNullOrEmpty(p.top) ? null : top;
                 float stretch = p.radius > 0f ? Mathf.Max(1f, p.length / (2f * p.radius)) : 1f;
-                b.Peak(Vector3.zero, radius, height, p.sides > 0 ? p.sides : 11, seed + p.seed, ParseCell(p.cell, Cell.Stone),
-                    snow, p.snow > 0f ? p.snow : 0.6f, stretch, p.taper > 0f ? p.taper : 0.35f);
+                // Tall peaks stand as a massif (shoulders and boulders at the foot), not a lone cone.
+                if (p.height >= 0.25f)
+                    b.Massif(Vector3.zero, radius, height, p.sides > 0 ? p.sides : 11, seed + p.seed, ParseCell(p.cell, Cell.Stone),
+                        snow, p.snow > 0f ? p.snow : 0.6f, stretch, p.taper > 0f ? p.taper : 0.35f);
+                else
+                    b.Peak(Vector3.zero, radius, height, p.sides > 0 ? p.sides : 11, seed + p.seed, ParseCell(p.cell, Cell.Stone),
+                        snow, p.snow > 0f ? p.snow : 0.6f, stretch, p.taper > 0f ? p.taper : 0.35f);
                 break;
             }
             case "reeds":
@@ -208,6 +242,13 @@ public static class CityRecipes
                 float yaw = buildingYaw - Mathf.Atan2(d.z, d.x) * Mathf.Rad2Deg;
                 b.At(around * ((from + end) * 0.5f), yaw);
                 float thick = (p.thickness > 0f ? p.thickness : 0.025f) * s;
+                // A wall at ground level in a ground colour is a crack or a stream drawn along a line.
+                if (IsGround(p.height, d.magnitude / s, thick / s, cell))
+                {
+                    b.Patch(Vector3.zero, d.magnitude + thick, thick, height, seed + p.seed + Mathf.RoundToInt(pos.x * 997f + pos.z * 1499f),
+                        accentWater && cell == Cell.Accent ? Cell.Water : cell);
+                    break;
+                }
                 b.Box(Vector3.zero, new Vector3(d.magnitude + thick, height, thick), cell, top);
                 if (p.count > 0) b.WallBattlements(Vector3.up * height, d.magnitude, thick, 0.014f * s, cell);
                 break;

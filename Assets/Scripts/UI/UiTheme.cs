@@ -55,6 +55,35 @@ public static class UiTheme
         text.color = color ?? Gold;
     }
 
+    /// <summary>A nation's colour lifted to read as a ring or border on the dark HUD.</summary>
+    public static Color NationRing(Color nation)
+    {
+        Color.RGBToHSV(nation, out float h, out float s, out float v);
+        Color c = Color.HSVToRGB(h, Mathf.Max(s, 0.4f), Mathf.Max(v, 0.8f));
+        c.a = 1f;
+        return c;
+    }
+
+    // One clean material per font: white face (the text colour shows true), no glow or HDR
+    // boost for the bloom to catch.
+    private static readonly System.Collections.Generic.Dictionary<TMP_FontAsset, Material> plainMaterials = new();
+
+    public static Material PlainMaterial(TMP_FontAsset font)
+    {
+        if (font == null || font.material == null) return null;
+        if (plainMaterials.TryGetValue(font, out Material m) && m != null) return m;
+        m = new Material(font.material) { name = font.name + " (plain)" };
+        m.SetColor(ShaderUtilities.ID_FaceColor, Color.white);
+        if (m.HasProperty(ShaderUtilities.ID_GlowPower)) m.SetFloat(ShaderUtilities.ID_GlowPower, 0f);
+        m.DisableKeyword(ShaderUtilities.Keyword_Glow);
+        // No outline or dilation: on the display face either one read as heavy bold.
+        if (m.HasProperty(ShaderUtilities.ID_OutlineWidth)) m.SetFloat(ShaderUtilities.ID_OutlineWidth, 0f);
+        if (m.HasProperty(ShaderUtilities.ID_FaceDilate)) m.SetFloat(ShaderUtilities.ID_FaceDilate, 0f);
+        m.DisableKeyword(ShaderUtilities.Keyword_Underlay);
+        plainMaterials[font] = m;
+        return m;
+    }
+
     /// <summary>Small-caps section label in the body face ("THE WAR OF THE RING").</summary>
     public static string Eyebrow(string label) => $"<size=78%><color={GoldHex}><cspace=0.08em>{label.ToUpperInvariant()}</cspace></color></size>";
 }

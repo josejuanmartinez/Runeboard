@@ -82,7 +82,12 @@ public class BoardNavigator : MonoBehaviour
     private Vector3 pivot;
 
     /// <summary>Degrees the board camera looks up the board (0 = straight down).</summary>
-    public static float CurrentTilt { get; private set; }
+    public static float CurrentTilt => TitleTilt > 0f ? TitleTilt : rigTilt;
+    private static float rigTilt;
+
+    /// <summary>The title diorama's camera tilt while it shows (0 = none): units and towns there
+    /// lean and light as they would on a board seen at that tilt (see TitleDiorama).</summary>
+    public static float TitleTilt { get; set; }
 
     /// <summary>The board point at the centre of the screen (z = the straight-down camera's z).</summary>
     public Vector3 Pivot => pivot;
@@ -104,7 +109,7 @@ public class BoardNavigator : MonoBehaviour
         if (boardCamera == null) return;
         BoardLookSettings look = BoardLookSettings.Instance;
         bool tilted = look.cameraTilt > 0.01f && Game.Instance != null && Game.Instance.started;
-        CurrentTilt = tilted ? look.cameraTilt : 0f;
+        rigTilt = tilted ? look.cameraTilt : 0f;
         if (!tilted)
         {
             if (!boardCamera.orthographic) boardCamera.orthographic = true;
@@ -298,6 +303,14 @@ public class BoardNavigator : MonoBehaviour
         yield return Ease(pivot, boardCamera.orthographicSize, target, toZoom, duration, 0f, 0f);
         targetZoom = toZoom;
         closeUpMoving = false;
+    }
+
+    /// <summary>Ends a FilmMove cut short (its coroutine stopped mid-way), releasing board input
+    /// and keeping the zoom it reached.</summary>
+    public void EndFilm()
+    {
+        closeUpMoving = false;
+        if (boardCamera != null) targetZoom = Mathf.Clamp(boardCamera.orthographicSize, minZoom, maxZoom);
     }
 
     /// <summary>Jumps the zoom to an orthographic size (used by AutoTour screenshots).</summary>

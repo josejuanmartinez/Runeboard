@@ -12,8 +12,10 @@ using UnityEngine.Playables;
 public class Character3DAnimator : MonoBehaviour
 {
     private const int Slots = 4;
-    private static readonly string[] IdleVariants = { "standing idle 02", "Standing Idle 03", "Standing Idle 04" };
-    private const string Idle = "standing idle";
+    // Idle life: none for now. The Mixamo variants ("standing idle 02", "Standing Idle 03/04") are
+    // twisted combat stances made for empty hands; a unit stands in RB Ready Idle, weapon held.
+    private static readonly string[] IdleVariants = { };
+    private const string Idle = "RB Ready Idle"; // AnimationForge
 
     private class Track
     {
@@ -38,6 +40,10 @@ public class Character3DAnimator : MonoBehaviour
     /// <summary>Off for units that aren't the player's: the idle variants are combat-ready stances
     /// with weapon swings, which read as other nations' units attacking out of nowhere.</summary>
     public bool IdleVariety = true;
+    // This figure's own tempo on every clip (troopers differ a little, so a rank never moves in lockstep).
+    public float Pace = 1f;
+    // Start every new loop at a random point, not only the first one.
+    public bool LoopRandomPhase;
 
     public string Current => current?.Name;
     public bool IsBusy => current != null && current.OneShot && !current.Hold;
@@ -72,7 +78,7 @@ public class Character3DAnimator : MonoBehaviour
         bool changed = baseLoop != clipName;
         baseLoop = clipName;
         if (current == null || (!current.OneShot && (changed || current.Name != clipName)))
-            StartClip(clipName, fade, oneShot: false, hold: false, speed: 1f, done: null, randomPhase: current == null);
+            StartClip(clipName, fade, oneShot: false, hold: false, speed: 1f, done: null, randomPhase: current == null || LoopRandomPhase);
     }
 
     // Plays a clip once over the base loop, then crossfades back to it (or, with hold, stays on
@@ -108,7 +114,7 @@ public class Character3DAnimator : MonoBehaviour
         int slot = FreeSlot();
         var playable = AnimationClipPlayable.Create(graph, clip);
         playable.SetApplyFootIK(true);
-        playable.SetSpeed(speed);
+        playable.SetSpeed(speed * Pace);
         if (randomPhase) playable.SetTime(Random.value * clip.length);
         if (oneShot) playable.SetDuration(clip.length);
         graph.Connect(playable, 0, mixer, slot);
@@ -189,7 +195,7 @@ public class Character3DAnimator : MonoBehaviour
             {
                 // Idle life: a variant once in a while, then back to the plain idle.
                 idleTimer += dt;
-                if (idleTimer >= nextIdleVariant)
+                if (idleTimer >= nextIdleVariant && IdleVariants.Length > 0)
                 {
                     nextIdleVariant = Random.Range(8f, 18f);
                     PlayOnce(IdleVariants[Random.Range(0, IdleVariants.Length)], 0.35f);

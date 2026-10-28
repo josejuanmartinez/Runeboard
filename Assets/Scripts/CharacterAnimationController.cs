@@ -161,7 +161,6 @@ public class CharacterAnimationController : MonoBehaviour
     // cached so SetOutlineAlpha() can dim the outline's alpha in step with the sprite's, without
     // needing to re-resolve the alignment/material lookup itself.
     private Color outlineBaseColor = Color.white;
-    private Color auraBaseColor = Color.white;
     private static readonly int OutlineColorShaderId = Shader.PropertyToID("_OutlineColor");
     private static readonly int OutlineSizeShaderId = Shader.PropertyToID("_OutlineSize");
     private static readonly int AuraSizeShaderId = Shader.PropertyToID("_AuraSize");
@@ -374,27 +373,53 @@ public class CharacterAnimationController : MonoBehaviour
         if (spriteRenderer.sharedMaterial != resolvedMaterial) spriteRenderer.sharedMaterial = resolvedMaterial;
     }
 
-    // True whenever the outline currently applied is the enemy (red) one — read by
-    // Hex.UpdateEnemyAlertVisibility to decide whether a sprite entering the camera's view is
-    // worth an alert pulse, without that call site re-deriving the alignment resolution below.
+    // True whenever the outlined unit is one the player can fight (see IsHostileToPlayer) — read
+    // by Hex.UpdateEnemyAlertVisibility to decide whether a sprite entering the camera's view is
+    // worth an alert pulse.
     public bool IsShowingEnemyOutline { get; private set; }
 
-    // Sets the outline color by the character's alignment relative to the human player: if either
-    // side is neutral there is no ally/enemy relationship to show, so it always reads as neutral;
-    // otherwise same-alignment-as-viewer vs. opposing-alignment picks the ally/enemy look. Called
-    // by Hex whenever the character this controller is showing changes. Returns whether the
-    // resolved outline is the enemy (red) one, so callers can decide whether this is worth an
-    // alert pulse (see PlayEnemyAlertPulse) without duplicating the alignment resolution above.
+    // The unit the outline is drawn for: its owner's nation colour is the outline, re-read every
+    // frame so a realm changing hands recolours its people at once.
+    private Character outlinedCharacter;
+
+    // The outline is the colour of the unit's nation. Units the player can fight (another
+    // alignment, or any other nation when the player is neutral) wear it with a heartbeat pulse
+    // and a wider halo; everyone else's is steady. Called by Hex whenever the character this
+    // controller is showing changes. Returns whether the unit is hostile, so callers can decide
+    // whether it is worth an alert pulse (see PlayEnemyAlertPulse).
     public bool SetOutlineForCharacter(Character character)
     {
+        outlinedCharacter = character;
         Material material = ResolveOutlineMaterial(character);
         ApplyOutlineMaterial(material);
-        ApplyOutlineSettings(GetMaterialOutlineColor(material), outlineSize);
-        auraBaseColor = material != null && material == neutralOutlineMaterial
-            ? new Color(0.64f, 0.69f, 0.75f) : new Color(0.43f, 0.76f, 0.61f);
-        IsShowingEnemyOutline = enemyOutlineMaterial != null && material == enemyOutlineMaterial;
+        ApplyOutlineSettings(NationOutlineColor(character, GetMaterialOutlineColor(material).a), outlineSize);
+        IsShowingEnemyOutline = IsHostileToPlayer(character);
         if (!IsShowingEnemyOutline) ResetEnemyAlert();
         return IsShowingEnemyOutline;
+    }
+
+    /// <summary>Whether the human player can attack this unit (and it them): it is not the
+    /// player's, and its alignment differs from the player's or the player is neutral.</summary>
+    public static bool IsHostileToPlayer(Character character)
+    {
+        Game game = Game.Instance;
+        Leader player = game != null ? game.player : null;
+        if (character == null || player == null) return false;
+        Leader owner = character.GetOwner();
+        if (owner == player) return false;
+        AlignmentEnum mine = player.GetAlignment();
+        return mine == AlignmentEnum.neutral || character.GetAlignment() != mine;
+    }
+
+    // The owner's nation colour, lifted a little so dark nations still read against the map.
+    private static Color NationOutlineColor(Character character, float alpha)
+    {
+        Leader owner = character != null ? character.GetOwner() : null;
+        Color nation = owner != null ? owner.nationColor : new Color(0.7f, 0.7f, 0.7f);
+        Color.RGBToHSV(nation, out float h, out float sat, out float v);
+        Color lifted = Color.HSVToRGB(h, Mathf.Max(sat, 0.45f), Mathf.Max(v, 0.75f));
+        lifted.a = alpha > 0f ? alpha : 1f;
+        return lifted;
     }
 
     // Brief "alarm" pulse on the outline — played the moment an enemy character first becomes
@@ -464,10 +489,15 @@ public class CharacterAnimationController : MonoBehaviour
 
     private void UpdateOutlinePresentation(float time, float deltaTime)
     {
-        if (goldRing != null && (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite)) goldRing.enabled = false;
-        if (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite) return;
+        // The 3D figure (Character3DView) hides the sprite but still reads this frame's rim
+        // colour, so the colour is worked out whether or not the sprite itself is drawn.
         focusAmount = Mathf.MoveTowards(focusAmount, focusTarget, deltaTime * 5f);
-        UpdateGoldRing();
+        if (outlinedCharacter != null)
+        {
+            Color nation = NationOutlineColor(outlinedCharacter, outlineBaseColor.a);
+            outlineBaseColor = nation;
+            IsShowingEnemyOutline = IsHostileToPlayer(outlinedCharacter);
+        }
         // Two rounded beats followed by a rest: a heartbeat rather than a flashing alarm.
         float phase = Mathf.Repeat(time * enemyHeartbeatSpeed, 1f);
         float first = Mathf.Exp(-Mathf.Pow((phase - 0.18f) / 0.075f, 2f));
@@ -475,11 +505,18 @@ public class CharacterAnimationController : MonoBehaviour
         float breath = 0.5f + 0.5f * Mathf.Sin(time * 1.8f);
         float pulse = IsShowingEnemyOutline ? first + second : breath * 0.18f;
         float size = Mathf.Max(0f, requestedOutlineSize < 0f ? outlineSize : requestedOutlineSize);
-        Color aura = IsShowingEnemyOutline ? new Color(0.9f, 0.025f, 0.055f, 1f) : auraBaseColor;
+        Color aura = outlineBaseColor;
         Color rim = IsShowingEnemyOutline
-            ? Color.Lerp(new Color(0.72f, 0.055f, 0.075f), new Color(1f, 0.32f, 0.19f), pulse)
-            : Color.Lerp(outlineBaseColor, Color.white, 0.2f + focusAmount * 0.3f);
-        rim.a = outlineBaseColor.a * outlineAlpha * (0.8f + 0.2f * Mathf.Max(pulse, focusAmount));
+            ? Color.Lerp(outlineBaseColor * 0.75f, Color.Lerp(outlineBaseColor, Color.white, 0.5f), pulse)
+            : Color.Lerp(outlineBaseColor, Color.white, 0.1f + focusAmount * 0.3f);
+        rim.a = outlineBaseColor.a * outlineAlpha * (IsShowingEnemyOutline
+            ? 0.85f + 0.15f * Mathf.Max(pulse, focusAmount)
+            : 0.55f + 0.35f * focusAmount);
+        PresentationRimColor = size <= 0f ? Color.clear : rim;
+
+        if (goldRing != null && (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite)) goldRing.enabled = false;
+        if (!spriteRenderer || !spriteRenderer.enabled || !spriteRenderer.sprite) return;
+        UpdateGoldRing();
 
         // Restrict halo sampling to the current animation cell, avoiding adjacent atlas frames.
         if (outlineSprite != spriteRenderer.sprite)
@@ -508,8 +545,6 @@ public class CharacterAnimationController : MonoBehaviour
             : Mathf.Clamp01(haloIntensity) * outlineAlpha * outlineBaseColor.a);
         outlinePropertyBlock.SetVector(OutlineUvRectShaderId, outlineUvRect);
         spriteRenderer.SetPropertyBlock(outlinePropertyBlock);
-
-        PresentationRimColor = size <= 0f ? Color.clear : rim;
     }
 
     private Material ResolveOutlineMaterial(Character character)
@@ -535,9 +570,10 @@ public class CharacterAnimationController : MonoBehaviour
     public void ClearOutline()
     {
         ResetEnemyAlert();
-        auraBaseColor = Color.white;
+        outlinedCharacter = null;
         ApplyOutlineMaterial();
-        ApplyOutlineSettings(Color.white, outlineSize);
+        // A figure not yet known: a faint grey edge, no nation.
+        ApplyOutlineSettings(new Color(0.62f, 0.62f, 0.62f, 0.7f), outlineSize);
         IsShowingEnemyOutline = false;
     }
 

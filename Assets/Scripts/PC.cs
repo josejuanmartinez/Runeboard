@@ -185,7 +185,7 @@ public class PC
             hex.EnsurePersistentScouting(owner);
         }
 
-        if (previousOwner != null && previousOwner.controlledPcs.Count < 1) previousOwner.Killed(leader);
+        if (previousOwner != null && previousOwner.controlledPcs.Count < 1 && LosingLastPcEliminates(previousOwner)) previousOwner.Killed(leader);
 
         MessageDisplayNoUI.ShowMessage(hex, owner,  $"{pcName} was captured!", Color.red);
     }
@@ -298,8 +298,12 @@ public class PC
             owner.hex.RedrawPC();
         } 
         
-        if (owner.controlledPcs.Count < 1) owner.Killed(leader);
+        if (owner.controlledPcs.Count < 1 && LosingLastPcEliminates(owner)) owner.Killed(leader);
     }
+
+    // With the campaign's avatar start a playable leader is their avatar: they begin with no PCs
+    // at all, so losing the last one is a setback, not the end (the avatar's death still is).
+    private static bool LosingLastPcEliminates(Leader leader) => !(leader is PlayableLeader && CampaignObjectives.AvatarStart);
 
 
     public void DecreaseSize()

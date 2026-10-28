@@ -21,6 +21,10 @@ public class Army
     [SerializeField] public int ca = 0;
     [SerializeField] public int ws = 0;
     [SerializeField] public int xp = 25;
+    // What the troops fight with (ArmyEquipment): 0 = wooden weapons / leather armour, then iron,
+    // steel, mithril. Re-armed at the battle screen from the owner's stores.
+    public int weaponTier;
+    public int armourTier;
     [SerializeField] public int specialAbilityProcChance = 100;
     [SerializeField] public List<ArmyTroopAbilityGroup> troopAbilityGroups = new();
 
@@ -303,6 +307,7 @@ public class Army
 
         strength = ApplyCommanderBonus(strength);
         strength = ApplyTrainingBonus(strength);
+        strength = Mathf.RoundToInt(strength * ArmyEquipment.Multiplier(weaponTier));
         strength = ApplyArtifactAttackBonus(strength, enemyArmy);
         strength = ApplyStatusAttackBonus(strength);
         strength = ApplyChargingAttackModifier(strength, enemyArmy);
@@ -348,6 +353,7 @@ public class Army
 
         defence = ApplyCommanderBonus(defence);
         defence = ApplyTrainingBonus(defence);
+        defence = Mathf.RoundToInt(defence * ArmyEquipment.Multiplier(armourTier));
         defence = ApplyArtifactDefenseBonus(defence, enemyArmy);
         defence = ApplyEnemyArtifactDefensePenalty(defence);
         defence = ApplyStatusDefenseBonus(defence);
@@ -711,6 +717,23 @@ public class Army
             : $"Odds vs {target}'s walls: {odds}. Expected losses: you ~{myLosses}.";
     }
 
+    /// <summary>The first army an attack on this hex would meet (the same rules as Attack), or null.</summary>
+    public Army FindDefender(Hex targetHex)
+    {
+        if (targetHex?.armies == null || commander == null) return null;
+        Leader mine = commander.GetOwner();
+        AlignmentEnum alignment = commander.GetAlignment();
+        foreach (Army other in targetHex.armies)
+        {
+            if (other == null || other == this || other.killed || other.commander == null || other.commander.killed) continue;
+            Leader theirs = other.commander.GetOwner();
+            if (theirs == mine) continue;
+            if (mine is NonPlayableLeader && theirs is NonPlayableLeader) continue;
+            if (alignment == AlignmentEnum.neutral || other.GetAlignment() == AlignmentEnum.neutral || other.GetAlignment() != alignment) return other;
+        }
+        return null;
+    }
+
     public void Attack(Hex targetHex)
     {
         Leader attackerLeader = commander.GetOwner();
@@ -762,6 +785,8 @@ public class Army
               $"Army#{System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(a)} commander={(a.commander != null ? $"{a.commander.characterName}#{a.commander.GetEntityId()} (owner={a.commander.GetOwner()?.characterName ?? "null"})" : "null")} killed={a.killed}")));
           foreach (Army defenderArmy in defenderSnapshot)
           {
+            // An earlier battle in this loop may have killed the attacker.
+            if (killed || commander == null || commander.killed) break;
             if(defenderArmy == null || defenderArmy.commander == null || defenderArmy.killed || defenderArmy.commander.killed || defenderArmy.killed) continue;
             // Don't attack your own armies (check ownership)
             bool isOwnArmy = defenderArmy.commander.GetOwner() == commander.GetOwner();
@@ -919,7 +944,7 @@ public class Army
         }
 
         // Add defense from Population Center if it exists and is aligned with defender
-        if (targetHex.GetPC() != null && targetHex.GetPC().owner.GetAlignment() == defenderAlignment)
+        if (targetHex.GetPC()?.owner != null && targetHex.GetPC().owner.GetAlignment() == defenderAlignment)
         {
             pcDefenseContribution = targetHex.GetPC().GetDefense();
             defenderDefense += pcDefenseContribution;
@@ -934,6 +959,11 @@ public class Army
         // Calculate raw damage values
         float attackerDamage = Math.Max(0, attackerStrength - defenderDefense);
         float defenderDamage = Math.Max(0, defenderStrength - attackerDefence);
+        // The dice: each side rolls 2d6, which swings the harm it deals between 70% and 130%.
+        // Strength still decides most battles; a lucky roll decides the close ones.
+        var dice = new BattleDice(UnityEngine.Random.Range(1, 7), UnityEngine.Random.Range(1, 7), UnityEngine.Random.Range(1, 7), UnityEngine.Random.Range(1, 7));
+        attackerDamage *= dice.AttackerSwing;
+        defenderDamage *= dice.DefenderSwing;
 
         // Calculate casualty percentages (as decimals)
         float attackerCasualtyPercent = defenderDamage / (attackerStrength * CombatLethalityDivisor);
@@ -1041,7 +1071,20 @@ public class Army
                 noticeMessages,
                 attackerStatusBefore, defenderStatusBefore,
                 attackerNewStatusEffects, defenderNewStatusEffects,
-                onComplete: () => ShowHudMessagesAfterPopup(targetHex, hudActor, hudMessages));
+                onComplete: () => ShowHudMessagesAfterPopup(targetHex, hudActor, hudMessages),
+                battle: new BattleReport
+                {
+                    dice = dice,
+                    attackerArmy = this,
+                    defenderArmy = defenderArmy,
+                    attackerStrength = attackerStrength,
+                    attackerDefence = attackerDefence,
+                    defenderStrength = defenderStrength,
+                    defenderDefence = defenderDefense,
+                    attackerLosses = attackerLosses.Any ? attackerLossesText : null,
+                    defenderLosses = defenderLosses.Any ? defenderLossesText : null,
+                    stalemate = stalemateNote,
+                });
         }
     }
 
@@ -1404,10 +1447,12 @@ public class Army
         if (isOwnPC) return;
 
         // If the defending leader is gone (null or killed), capture immediately
+        // (Unowned PCs are common: every avatar's old seat starts empty.)
         if (defenderDeadOrMissing)
         {
-            targetHex.GetPC().CapturePC(attackerLeader);
-            MessageDisplayNoUI.ShowMessage(commander.hex, commander, $"{targetHex.GetPC().pcName} was captured", Color.green);
+            PC captured = targetHex.GetPCData();
+            captured?.CapturePC(attackerLeader);
+            if (captured != null && commander != null) MessageDisplayNoUI.ShowMessage(commander.hex, commander, $"{captured.pcName} was captured", Color.green);
             return;
         }
 
@@ -1477,7 +1522,7 @@ public class Army
             {
                 // Reduce fort size first
                 targetHex.GetPC().DecreaseFort();
-                MessageDisplayNoUI.ShowMessage(commander.hex, commander, $"Defenses at {targetHex.GetPC().pcName} were damaged", Color.yellow);
+                if (commander != null) MessageDisplayNoUI.ShowMessage(commander.hex, commander, $"Defenses at {targetHex.GetPC().pcName} were damaged", Color.yellow);
             }
             else
             {
@@ -1486,7 +1531,7 @@ public class Army
         }
         else
         {
-            MessageDisplayNoUI.ShowMessage(commander.hex, commander, $"{targetHex.GetPC().pcName} defenses resisted the attack", Color.red);
+            if (commander != null) MessageDisplayNoUI.ShowMessage(commander.hex, commander, $"{targetHex.GetPC().pcName} defenses resisted the attack", Color.red);
         }
 
         GrantCombatXp(this, attackerDamage > 0 ? "Siege success" : "Assault");
@@ -1586,7 +1631,7 @@ public class Army
 
             // Damage PC if it belongs to a different alignment OR attacker is neutral OR PC is neutral
             // BUT never damage your own PC
-            if (!isOwnPC && (targetHex.GetPC().owner.GetAlignment() != attackerAlignment ||
+            if (!isOwnPC && (targetHex.GetPC().owner == null || targetHex.GetPC().owner.GetAlignment() != attackerAlignment ||
                 attackerAlignment == AlignmentEnum.neutral ||
                 targetHex.GetPC().owner.GetAlignment() == AlignmentEnum.neutral))
             {
@@ -1687,18 +1732,20 @@ public class Army
         return breakdown;
     }
 
+    // "<icon> 3 archers, <icon> 1 heavy infantry": the troop's icon, the count and its name.
     private static string BuildCasualtySpriteString(CasualtyBreakdown breakdown)
     {
-        StringBuilder casualties = new StringBuilder();
-        if (breakdown.ma > 0) casualties.Append($"<sprite name=\"ma\">ma[{breakdown.ma}]");
-        if (breakdown.ar > 0) casualties.Append($"<sprite name=\"ar\">ar[{breakdown.ar}]");
-        if (breakdown.li > 0) casualties.Append($"<sprite name=\"li\">li[{breakdown.li}]");
-        if (breakdown.hi > 0) casualties.Append($"<sprite name=\"hi\">hi[{breakdown.hi}]");
-        if (breakdown.lc > 0) casualties.Append($"<sprite name=\"lc\">lc[{breakdown.lc}]");
-        if (breakdown.hc > 0) casualties.Append($"<sprite name=\"hc\">hc[{breakdown.hc}]");
-        if (breakdown.ca > 0) casualties.Append($"<sprite name=\"ca\">ca[{breakdown.ca}]");
-        if (breakdown.ws > 0) casualties.Append($"<sprite name=\"ws\">ws[{breakdown.ws}]");
-        return casualties.ToString();
+        var parts = new List<string>();
+        void Add(int n, string sprite, string name) { if (n > 0) parts.Add($"<sprite name=\"{sprite}\"> {n} {name}"); }
+        Add(breakdown.ma, "ma", "men-at-arms");
+        Add(breakdown.ar, "ar", breakdown.ar == 1 ? "archer" : "archers");
+        Add(breakdown.li, "li", "light infantry");
+        Add(breakdown.hi, "hi", "heavy infantry");
+        Add(breakdown.lc, "lc", "light cavalry");
+        Add(breakdown.hc, "hc", "heavy cavalry");
+        Add(breakdown.ca, "ca", breakdown.ca == 1 ? "catapult" : "catapults");
+        Add(breakdown.ws, "ws", breakdown.ws == 1 ? "warship" : "warships");
+        return string.Join(", ", parts);
     }
 
     private static string BuildLossesShort(CasualtyBreakdown breakdown)
@@ -2020,9 +2067,12 @@ public class Army
         if (target == null || target.killed || target.commander == null || target.commander.killed) return;
 
         float scaledCasualtyPercent = casualtyPercent * Mathf.Max(0.25f, GetAbilityCoverageRatio(ability));
+        // Read the names first: the volley can destroy the target army and its commander link.
+        string attackerName = commander.characterName;
+        string targetName = target.commander.characterName;
         target.ReceiveCasualties(scaledCasualtyPercent, commander.GetOwner(), false);
-        battleMessages.Add(($"{commander.characterName}'s {label} hits {target.commander.characterName}'s army.", Color.yellow));
-        battleNarration.Add(BuildAbilityNarration(ability, commander.characterName, target.commander.characterName, false));
+        battleMessages.Add(($"{attackerName}'s {label} hits {targetName}'s army.", Color.yellow));
+        battleNarration.Add(BuildAbilityNarration(ability, attackerName, targetName, false));
     }
 
     private Army FindRandomEnemyArmyInRadius(Hex origin, int radius)
@@ -2427,7 +2477,7 @@ public class Army
 
     public Character GetCommander()
     {
-        if(commander.killed) return null;
+        if(commander == null || commander.killed) return null;
         return commander;
     }
 

@@ -57,6 +57,7 @@ public class LeaderSelector : SearcherByName
     LeaderSelectionEntry lastVoicedSelection;
     bool startConfirmationPending;
     Canvas rootCanvas;
+    LeaderSelectionBackdrop backdrop;
     void Awake()
     {
         rootCanvas = GetComponentInParent<Canvas>(true);
@@ -147,15 +148,20 @@ public class LeaderSelector : SearcherByName
         if (pending == null && AutoTour.Active)
         {
             // Let the tour photograph the selection screen before starting.
-            if (!selectionScreenShown) return;
+            if (!selectionScreenShown || FindAnyObjectByType<StartupLoadingScreen>() != null) return;
             if (autoTourSelectionSince < 0f) autoTourSelectionSince = Time.realtimeSinceStartup;
-            if (Time.realtimeSinceStartup - autoTourSelectionSince < 4f) return;
+            if (Time.realtimeSinceStartup - autoTourSelectionSince < 10f) return;
             pending = new SaveGame { playerLeader = AutoTour.Leader };
         }
         if (pending == null || autoStartForLoadDone || !loadedFirst || startConfirmationPending) return;
         int index = selectionEntries.FindIndex(e => e != null
             && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase)
             && string.Equals(e.variantName ?? string.Empty, pending.playerVariant ?? string.Empty, System.StringComparison.OrdinalIgnoreCase));
+        // The tour can name a flavour by its subdeck id (-autotour-variant the_white_hand).
+        if (index < 0 && SaveSystem.PendingLoad == null && !string.IsNullOrWhiteSpace(AutoTour.Variant))
+            index = selectionEntries.FindIndex(e => e != null
+                && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase)
+                && string.Equals(e.subdeckId, AutoTour.Variant, System.StringComparison.OrdinalIgnoreCase));
         if (index < 0)
             index = selectionEntries.FindIndex(e => e != null && string.Equals(e.baseLeaderName, pending.playerLeader, System.StringComparison.OrdinalIgnoreCase));
         if (index < 0) return;
@@ -351,6 +357,7 @@ public class LeaderSelector : SearcherByName
 
         selectionScreenShown = true;
         selectionScreenQueued = false;
+        backdrop = LeaderSelectionBackdrop.Attach(leaderSelectionFullScreen);
         Music.Instance?.PlayLeaderSelectionAmbience();
         ApplyCurrentSkinFont();
         SelectLeader(leaderCarousel != null ? leaderCarousel.GetCurrentIndex() : 0);
@@ -672,6 +679,7 @@ public class LeaderSelector : SearcherByName
             SelectLeader(selectedIndex);
         }
 
+        backdrop?.Release();
         Game.Instance.StartGame();
     }
 
@@ -707,6 +715,9 @@ public class LeaderSelector : SearcherByName
 
             UpdateBannerImage(player);
             Game.Instance.SelectPlayer(player);
+            // Only a backdrop: it must never stop a leader being chosen.
+            try { backdrop?.Show(StartArt(player, selection.subdeckId)); }
+            catch (Exception e) { Debug.LogException(e); }
 
             if (selectionScreenShown && selection != lastVoicedSelection)
             {
@@ -721,6 +732,40 @@ public class LeaderSelector : SearcherByName
                 if (played) lastVoicedSelection = selection;
             }
         }
+    }
+
+    // The painting of the place the flavour's campaign begins at: its seat (or authored start
+    // PC), else the PC the leader stands on, else the flavour's deck art.
+    static Sprite StartArt(PlayableLeader leader, string subdeckId)
+    {
+        Illustrations art = FindAnyObjectByType<Illustrations>();
+        if (art == null || leader == null) return null;
+        CampaignLeaderObjectives entry = CampaignObjectives.LoadEntry(leader);
+        string seat = entry?.milestones != null && entry.milestones.Count > 0 ? entry.milestones[0].pc : null;
+        foreach (string place in new[] { entry?.startPc, seat, StartHex(leader)?.GetPCData()?.pcName })
+        {
+            if (string.IsNullOrWhiteSpace(place)) continue;
+            if (art.TryGetCardArtByName(place, out Sprite sprite) && sprite != null) return sprite;
+            if (art.TryGetIllustrationByName(place, out sprite) && sprite != null) return sprite;
+        }
+        return !string.IsNullOrWhiteSpace(subdeckId) ? art.GetDeckArtByName(subdeckId, false) : null;
+    }
+
+    // Where the selected flavour's campaign begins: its authored start PC, else where the
+    // leader stands in the scenario.
+    static Hex StartHex(PlayableLeader leader)
+    {
+        if (leader == null) return null;
+        string startPc = CampaignObjectives.LoadEntry(leader)?.startPc;
+        if (!string.IsNullOrWhiteSpace(startPc) && Board.Instance?.hexes != null)
+        {
+            foreach (Hex hex in Board.Instance.hexes.Values)
+            {
+                PC pc = hex != null ? hex.GetPCData() : null;
+                if (pc != null && string.Equals(pc.pcName, startPc, StringComparison.OrdinalIgnoreCase)) return hex;
+            }
+        }
+        return leader.hex;
     }
 
     void ApplyCurrentSkinFont(GameObject root = null)

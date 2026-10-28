@@ -237,8 +237,61 @@ public class HexSeamlessTerrain : MonoBehaviour
         SpriteRenderer renderer = hex.terrainTexture;
         if (renderer == null) return;
 
+        // Tri-state per direction: 1 = rendered neighbor (blend + feather), 0 = no neighbor / no
+        // art (crisp edge), -1 = fog-of-war neighbor (fade our own rim into the fog; never sample
+        // the hidden art — that would preview unscouted terrain).
+        Vector2Int[] neighbors = ((hex.v2.x & 1) == 0) ? board.evenRowNeighbors : board.oddRowNeighbors;
+        for (int d = 0; d < 6; d++)
+        {
+            neighborValid[d] = 0f;
+            neighborSprite[d] = null;
+            if (board.hexes.TryGetValue(hex.v2 + neighbors[d], out Hex neighbor) &&
+                neighbor != null && neighbor.terrainTexture != null)
+            {
+                if (!neighbor.IsHexRevealed() && !BoardLook.ShroudActive)
+                {
+                    neighborValid[d] = -1f;
+                }
+                else
+                {
+                    Sprite neighborArt = neighbor.terrainTexture.sprite;
+                    if (neighborArt != null && neighborArt.texture != null)
+                    {
+                        neighborValid[d] = 1f;
+                        neighborSprite[d] = neighborArt;
+                    }
+                }
+            }
+        }
+        Apply(renderer, hex.GetTerrainDrawnWorldSize(), board.hexSize);
+    }
+
+    private static readonly float[] neighborValid = new float[6];
+    private static readonly Sprite[] neighborSprite = new Sprite[6];
+
+    /// <summary>
+    /// The seamless blend for a terrain sprite that is not a board hex (TitleDiorama). Neighbors
+    /// in Rebuild's direction order (0=SE, 1=E, 2=NE, 3=NW, 4=W, 5=SW); a null one is the edge of
+    /// the map, where the rim dissolves as it does into fog.
+    /// </summary>
+    public static void ApplyStandalone(SpriteRenderer renderer, Vector2 drawnSize, Vector2 hexSize, Sprite[] neighbors)
+    {
+        EnsureInstance();
+        if (!EnsureMaterial()) return;
+        for (int d = 0; d < 6; d++)
+        {
+            Sprite art = neighbors[d];
+            bool valid = art != null && art.texture != null;
+            neighborValid[d] = valid ? 1f : -1f;
+            neighborSprite[d] = valid ? art : null;
+        }
+        Apply(renderer, drawnSize, hexSize);
+    }
+
+    // Writes the blend's property block from neighborValid / neighborSprite.
+    private static void Apply(SpriteRenderer renderer, Vector2 drawnSize, Vector2 hexSize)
+    {
         Sprite sprite = renderer.sprite;
-        Vector2 drawnSize = hex.GetTerrainDrawnWorldSize();
         if (sprite == null || sprite.texture == null || drawnSize.x <= 0f || drawnSize.y <= 0f) return;
 
         if (renderer.sharedMaterial != material) renderer.sharedMaterial = material;
@@ -256,8 +309,8 @@ public class HexSeamlessTerrain : MonoBehaviour
         // Board.evenRowNeighbors/oddRowNeighbors (both tables resolve to the same six world
         // directions): 0=(row+1) SE, 1=E, 2=(row-1) NE, 3=NW, 4=W, 5=SW.
         float width = drawnSize.x;
-        float colX = board.hexSize.x / width;
-        float rowY = board.hexSize.y / width;
+        float colX = hexSize.x / width;
+        float rowY = hexSize.y / width;
         mpb.SetFloat(AspectYId, drawnSize.y / width);
         mpb.SetVector(NeighborOffsetIds[0], new Vector4(colX * 0.5f, -rowY));  // SE (row+1)
         mpb.SetVector(NeighborOffsetIds[1], new Vector4(colX, 0f));            // E
@@ -268,35 +321,18 @@ public class HexSeamlessTerrain : MonoBehaviour
 
         // Map-space center in tile-width units, y-up — only feeds the grid's rainbow hue, so any
         // shared origin works.
-        Vector3 position = hex.transform.position;
+        Vector3 position = renderer.transform.position;
         mpb.SetVector(CellCenterId, new Vector4(position.x / width, position.y / width));
 
-        Vector2Int[] neighbors = ((hex.v2.x & 1) == 0) ? board.evenRowNeighbors : board.oddRowNeighbors;
         for (int d = 0; d < 6; d++)
         {
-            // Tri-state: 1 = rendered neighbor (blend + feather), 0 = no neighbor / no art (crisp
-            // edge), -1 = fog-of-war neighbor (fade our own rim into the fog; never sample the
-            // hidden art — that would preview unscouted terrain).
-            float valid = 0f;
-            if (board.hexes.TryGetValue(hex.v2 + neighbors[d], out Hex neighbor) &&
-                neighbor != null && neighbor.terrainTexture != null)
+            Sprite neighbor = neighborSprite[d];
+            if (neighbor != null)
             {
-                if (!neighbor.IsHexRevealed() && !BoardLook.ShroudActive)
-                {
-                    valid = -1f;
-                }
-                else
-                {
-                    Sprite neighborSprite = neighbor.terrainTexture.sprite;
-                    if (neighborSprite != null && neighborSprite.texture != null)
-                    {
-                        valid = 1f;
-                        mpb.SetTexture(NeighborTexIds[d], neighborSprite.texture);
-                        mpb.SetVector(NeighborUVIds[d], NormalizedRect(neighborSprite));
-                    }
-                }
+                mpb.SetTexture(NeighborTexIds[d], neighbor.texture);
+                mpb.SetVector(NeighborUVIds[d], NormalizedRect(neighbor));
             }
-            mpb.SetFloat(NeighborValidIds[d], valid);
+            mpb.SetFloat(NeighborValidIds[d], neighborValid[d]);
         }
 
         renderer.SetPropertyBlock(mpb);

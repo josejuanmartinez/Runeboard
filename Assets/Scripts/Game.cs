@@ -185,7 +185,12 @@ public class Game : MonoBehaviour
             PlayableLeader savedSibling = savedVariant != null
                 ? siblings.FirstOrDefault(s => string.Equals(s.GetSelectedVariantName() ?? string.Empty, savedVariant, StringComparison.OrdinalIgnoreCase))
                 : null;
-            PlayableLeader survivor = siblings.Contains(player) ? player : savedSibling ?? siblings[UnityEngine.Random.Range(0, siblings.Count)];
+            // An AutoTour run may name the rival flavour (-autotour-rivals Saruman=sharkey).
+            string tourVariant = AutoTour.RivalVariant(group.Key);
+            PlayableLeader tourSibling = tourVariant != null
+                ? siblings.FirstOrDefault(s => string.Equals(s.GetSelectedSubdeckId(), tourVariant, StringComparison.OrdinalIgnoreCase))
+                : null;
+            PlayableLeader survivor = siblings.Contains(player) ? player : savedSibling ?? tourSibling ?? siblings[UnityEngine.Random.Range(0, siblings.Count)];
 
             foreach (PlayableLeader sibling in siblings)
             {
@@ -246,6 +251,17 @@ public class Game : MonoBehaviour
         // Same timing: resolve independent spawnCondition characters/armies (any leader + variant,
         // not necessarily an ownership relationship).
         board.nationSpawner?.ReconcileScenarioSpawnConditions();
+        // The campaign starts every playable leader as their avatar alone, at the place their
+        // flavour's campaign names (a loaded game rebuilds this same start before restoring).
+        if (board.ActiveScenario != null && CampaignObjectives.AvatarStart && board.nationSpawner != null)
+        {
+            List<PlayableLeader> playable = new() { player };
+            if (competitors != null) playable.AddRange(competitors);
+            playable.RemoveAll(l => l == null);
+            board.nationSpawner.StripToAvatars(playable);
+            foreach (PlayableLeader leader in playable)
+                board.nationSpawner.PlaceAvatar(leader, CampaignObjectives.LoadEntry(leader)?.startPc);
+        }
         // Same timing again: scenario Zone of Control hexes need the final leader instance to
         // mark as permanently revealed, so this must come after the reconciliation above.
         board.nationSpawner?.ApplyScenarioZoneOfControl(board.ActiveScenario);
@@ -358,6 +374,10 @@ public class Game : MonoBehaviour
     private void FinalizeCampaignStart()
     {
         player?.ApplyVariantTransformation();
+        // Rivals play their own flavour's campaign, built around that avatar, so they become it too.
+        if (competitors != null)
+            foreach (PlayableLeader competitor in competitors)
+                if (competitor != null && !competitor.killed) competitor.ApplyVariantTransformation();
     }
 
     private IEnumerator ShowTurnZeroBanner()
@@ -421,7 +441,6 @@ public class Game : MonoBehaviour
     {
         Card.RequestInteractionRefreshAll();
         FindAnyObjectByType<ActionsManager>()?.RefreshInteractableState();
-        OpportunityHexHinter.Refresh(current);
     }
 
     private IEnumerator RefreshDeckUiAfterStartup()
@@ -498,11 +517,10 @@ public class Game : MonoBehaviour
         // actually read and click it (bloom mode in particular anchors to that character's
         // hex, so panning away mid-offer makes it unreachable).
         if (SituationCardsUI.IsShowing) return false;
-        // With command points spent there is nothing left to point at; keep the selection put.
-        if (player == null || player.CommandPoints <= 0) return false;
+        if (player == null) return false;
 
         // Make sure all characters have actioned
-        Character stillNotActioned = player.controlledCharacters.Find(x => !x.hasActionedThisTurn && !x.killed && board.selectedCharacter != x);
+        Character stillNotActioned = player.controlledCharacters.Find(x => x.CanPlayerActNow() && board.selectedCharacter != x);
         if ( stillNotActioned != null) board.SelectCharacter(stillNotActioned, true, 1.0f, 2.0f);
         return stillNotActioned != null;
     }
@@ -527,23 +545,22 @@ public class Game : MonoBehaviour
         {
             int i = (startIndex + offset) % characters.Count;
             var c = characters[i];
-            if (c != null && !c.killed && !c.hasActionedThisTurn)
+            if (c != null && c.CanPlayerActNow())
             {
                 nextCharacter = c;
                 break;
             }
         }
 
-        if (nextCharacter != null && player.CommandPoints > 0)
+        if (nextCharacter != null)
         {
             board.SelectCharacter(nextCharacter);
             return;
         }
-        if (player.CommandPoints > 0) return;
 
-        // Command points spent; offer to finish turn
+        // Every character has acted; offer to finish turn
         bool finish = await ConfirmationDialog.AskImmediate(
-            "All command points are spent. You may still have movement left. Finish the turn?",
+            "All your characters have acted. You may still have movement left. Finish the turn?",
             "Finish Turn",
             "Cancel");
         if (finish)
@@ -612,10 +629,10 @@ public class Game : MonoBehaviour
 
         if (shouldPrompt)
         {
-            int commandPointsLeft = player.CommandPoints;
+            int readyCharacters = player.controlledCharacters.Count(c => c != null && c.CanPlayerActNow());
             bool hasPlayableCards = HasPlayableCardsInHand();
-            string message = (commandPointsLeft > 0 && hasPlayableCards)
-                ? $"You still have {commandPointsLeft} command point{(commandPointsLeft == 1 ? "" : "s")}. End turn?"
+            string message = (readyCharacters > 0 && hasPlayableCards)
+                ? $"{readyCharacters} character{(readyCharacters == 1 ? " has" : "s have")} not acted yet. End turn?"
                 : "End turn?";
 
             endTurnConfirmationPending = true;
@@ -626,7 +643,7 @@ public class Game : MonoBehaviour
             {
                 playerTurnAcceptingInput = true;
                 if (nextTurnButton != null) nextTurnButton.interactable = true;
-                Character nextCharacter = player.controlledCharacters.Find(x => !x.killed && !x.hasActionedThisTurn);
+                Character nextCharacter = player.controlledCharacters.Find(x => x.CanPlayerActNow());
                 if (nextCharacter != null)
                 {
                     board.SelectCharacter(nextCharacter, true, 1.0f, 0.0f);
@@ -687,7 +704,7 @@ public class Game : MonoBehaviour
         {
             SetAiTurnFrameRate(true);
             HideHumanPlayerWidgetsWidgets();
-            MessageDisplay.ShowPersistent($"{GetAlignmentDisplayName(currentlyPlaying.alignment)} nations are playing", Color.yellow);
+            MessageDisplay.ShowPersistent($"{GetAlignmentDisplayName(currentlyPlaying.alignment)} nations are playing", UiTheme.Gold);
             MessageDisplayNoUI.SetPaused(true);
             board.RefreshRelevantHexes();
             currentlyPlaying.NewTurn();
@@ -1074,7 +1091,6 @@ public class Game : MonoBehaviour
         ConfirmationDialog.CloseAll();
         SelectionDialog.CloseAll();
         SituationCardsUI.Instance?.DismissForAutoplay();
-        OpportunityHexHinter.ClearAll();
         MessageDisplay.ShowPersistent("Autoplay enabled — Ctrl+Shift+Tab to stop", Color.yellow);
 
         if (currentlyPlaying == player && playerTurnAcceptingInput && !playerAutoplayTurnRunning)
@@ -1124,7 +1140,6 @@ public class Game : MonoBehaviour
         ConfirmationDialog.CloseAll();
         SelectionDialog.CloseAll();
         SituationCardsUI.Instance?.DismissForAutoplay();
-        OpportunityHexHinter.ClearAll();
 
         yield return AITurnController.ExecuteLeaderTurn(
             player,

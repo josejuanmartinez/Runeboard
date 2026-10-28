@@ -248,10 +248,12 @@ public class CardGallery : MonoBehaviour
         labelGo.transform.SetParent(parent, false);
 
         TextMeshProUGUI label = labelGo.AddComponent<TextMeshProUGUI>();
+        // The body face on a plain material: TMP's default material glows under the bloom and
+        // read as a heavy, haloed bold under each card.
+        UiTheme.StyleBody(label, labelFontSize, labelColor);
+        label.fontSharedMaterial = UiTheme.PlainMaterial(label.font);
         if (labelSpriteAsset != null) label.spriteAsset = labelSpriteAsset;
         label.text = labelSelector(data);
-        label.fontSize = labelFontSize;
-        label.color = labelColor;
         label.alignment = labelAlignment;
         label.raycastTarget = false;
         label.textWrappingMode = TextWrappingModes.Normal;

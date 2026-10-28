@@ -251,6 +251,7 @@ public class PopupManager : MonoBehaviour
                 scrollRect.offsetMin = new Vector2(first || hasActor2 ? 281 : 35, scrollRect.offsetMin.y);
             }
         }
+        StyleMeeting(data);
         if (!ShowContainer())
         {
             // A modal that cannot render must not retain IsShowing/startup input locks.
@@ -385,6 +386,142 @@ public class PopupManager : MonoBehaviour
             // complete text if its Content is inactive; CanvasGroup alone controls popup visibility.
             typeWriterEffect.StartWriting();
         }
+    }
+
+    // ── The meeting header ──────────────────────────────────────────────────────────────────
+    // The two parties of a popup (a leader and the realm it meets, say) as round, gold-ringed
+    // portraits facing each other across a crossed-swords mark at the top, the title centred
+    // under them and the text at full width below — instead of two square paintings stacked
+    // down the side. A popup with one portrait shows it alone, centred.
+
+    private const float MeetingPortrait = 168f;
+    private RectTransform meeting;
+    private Image meetingLeft, meetingRight;
+    private TextMeshProUGUI meetingMark;
+    private Vector2 textOffsetMin, textOffsetMax, titleAnchoredPosition, titleSize;
+    private bool meetingLayoutSaved;
+
+    private void StyleMeeting(PopupData data)
+    {
+        if (container == null || titleWidget == null) return;
+        RectTransform box = container.transform as RectTransform;
+        var textScroll = textWidget != null ? textWidget.GetComponentInParent<ScrollRect>() : null;
+        RectTransform scrollRect = textScroll != null ? (RectTransform)textScroll.transform : null;
+        RectTransform title = titleWidget.rectTransform;
+        if (!meetingLayoutSaved)
+        {
+            meetingLayoutSaved = true;
+            titleAnchoredPosition = title.anchoredPosition;
+            titleSize = title.sizeDelta;
+            if (scrollRect != null) { textOffsetMin = scrollRect.offsetMin; textOffsetMax = scrollRect.offsetMax; }
+        }
+
+        bool first = data.spriteActor1 != null, second = data.spriteActor2 != null;
+        bool any = first || second;
+        EnsureMeeting(box);
+        meeting.gameObject.SetActive(any);
+        // The old portrait column gives way to the header.
+        if (actor1 != null) actor1.transform.parent.gameObject.SetActive(false);
+        if (actor2 != null) actor2.transform.parent.gameObject.SetActive(false);
+        if (!any)
+        {
+            title.anchoredPosition = titleAnchoredPosition;
+            title.sizeDelta = titleSize;
+            if (scrollRect != null) { scrollRect.offsetMin = textOffsetMin; scrollRect.offsetMax = textOffsetMax; }
+            return;
+        }
+
+        bool pair = first && second;
+        SetPortrait(meetingLeft, first ? data.spriteActor1 : data.spriteActor2);
+        SetPortrait(meetingRight, pair ? data.spriteActor2 : null);
+        ((RectTransform)meetingLeft.transform.parent.parent).anchoredPosition = new Vector2(pair ? -150f : 0f, -36f);
+        ((RectTransform)meetingRight.transform.parent.parent).anchoredPosition = new Vector2(150f, -36f);
+        meetingMark.transform.parent.gameObject.SetActive(pair);
+
+        // The title under the portraits, centred; the text below it, full width.
+        title.anchorMin = title.anchorMax = new Vector2(0.5f, 1f);
+        title.pivot = new Vector2(0.5f, 1f);
+        title.anchoredPosition = new Vector2(0f, -36f - MeetingPortrait - 22f);
+        title.sizeDelta = new Vector2(box.rect.width - 120f, 56f);
+        titleWidget.alignment = TextAlignmentOptions.Center;
+        titleWidget.enableAutoSizing = true;
+        titleWidget.fontSizeMax = Mathf.Max(titleWidget.fontSizeMax, 40f);
+        titleWidget.fontSizeMin = 24f;
+        if (scrollRect != null)
+        {
+            scrollRect.offsetMin = new Vector2(80f, textOffsetMin.y);
+            scrollRect.offsetMax = new Vector2(-80f, -(36f + MeetingPortrait + 22f + 70f));
+        }
+    }
+
+    private void EnsureMeeting(RectTransform box)
+    {
+        if (meeting != null) return;
+        meeting = new GameObject("Meeting", typeof(RectTransform)).GetComponent<RectTransform>();
+        meeting.SetParent(box, false);
+        meeting.anchorMin = new Vector2(0f, 1f);
+        meeting.anchorMax = new Vector2(1f, 1f);
+        meeting.pivot = new Vector2(0.5f, 1f);
+        meeting.anchoredPosition = Vector2.zero;
+        meeting.sizeDelta = new Vector2(0f, MeetingPortrait + 40f);
+
+        // Crossed swords between the two, on a short gold rule (drawn under the portraits).
+        var rule = new GameObject("Rule", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<Image>();
+        rule.rectTransform.SetParent(meeting, false);
+        rule.rectTransform.anchorMin = rule.rectTransform.anchorMax = new Vector2(0.5f, 1f);
+        rule.rectTransform.sizeDelta = new Vector2(140f, 1.5f);
+        rule.rectTransform.anchoredPosition = new Vector2(0f, -36f - MeetingPortrait * 0.5f);
+        rule.color = new Color(UiTheme.Gold.r, UiTheme.Gold.g, UiTheme.Gold.b, 0.6f);
+        rule.raycastTarget = false;
+        meetingMark = new GameObject("Mark", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI)).GetComponent<TextMeshProUGUI>();
+        meetingMark.rectTransform.SetParent(rule.rectTransform, false);
+        meetingMark.rectTransform.sizeDelta = new Vector2(60f, 40f);
+        meetingMark.alignment = TextAlignmentOptions.Center;
+        meetingMark.fontSize = 30f;
+        meetingMark.text = "<sprite name=\"sword\">";
+        meetingMark.raycastTarget = false;
+
+        meetingLeft = Portrait(meeting, "Left");
+        meetingRight = Portrait(meeting, "Right");
+    }
+
+    private static Image Portrait(RectTransform parent, string name)
+    {
+        var holder = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<RectTransform>();
+        holder.SetParent(parent, false);
+        holder.anchorMin = holder.anchorMax = new Vector2(0.5f, 1f);
+        holder.pivot = new Vector2(0.5f, 1f);
+        holder.sizeDelta = new Vector2(MeetingPortrait, MeetingPortrait);
+        var ring = holder.GetComponent<Image>();
+        ring.sprite = HudSprites.Circle;
+        ring.color = UiTheme.Gold;
+        ring.raycastTarget = false;
+        var window = new GameObject("Window", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Mask)).GetComponent<RectTransform>();
+        window.SetParent(holder, false);
+        window.anchorMin = Vector2.zero;
+        window.anchorMax = Vector2.one;
+        window.offsetMin = new Vector2(4f, 4f);
+        window.offsetMax = new Vector2(-4f, -4f);
+        var mask = window.GetComponent<Image>();
+        mask.sprite = HudSprites.Circle;
+        mask.raycastTarget = false;
+        window.GetComponent<Mask>().showMaskGraphic = false;
+        var face = new GameObject("Face", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image)).GetComponent<Image>();
+        face.rectTransform.SetParent(window, false);
+        face.rectTransform.anchorMin = Vector2.zero;
+        face.rectTransform.anchorMax = Vector2.one;
+        // A little larger than the window and lifted, so the face sits in the circle.
+        face.rectTransform.offsetMin = new Vector2(-12f, -24f);
+        face.rectTransform.offsetMax = new Vector2(12f, 6f);
+        face.raycastTarget = false;
+        foreach (Image part in holder.GetComponentsInChildren<Image>(true)) part.gameObject.AddComponent<ImageUnaffectedBySkin>();
+        return face;
+    }
+
+    private static void SetPortrait(Image face, Sprite sprite)
+    {
+        face.transform.parent.parent.gameObject.SetActive(sprite != null);
+        face.sprite = sprite;
     }
 
     private static void SetActorVisuals(Image image, Sprite fallbackSprite)

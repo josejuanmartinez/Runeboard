@@ -106,6 +106,8 @@ public class CombatBanner : MonoBehaviour
         public List<StatusEffectEnum> attackerNewStatusEffects;
         public List<StatusEffectEnum> defenderNewStatusEffects;
         public Action onComplete;
+        // Army battles: the dice, both sides' numbers and losses (null for duels and the like).
+        public BattleReport battle;
     }
 
     // Queued rather than interrupted (contrast TurnBanner.Show's StopAllCoroutines): several
@@ -240,7 +242,8 @@ public class CombatBanner : MonoBehaviour
         List<StatusEffectEnum> defenderExistingStatusEffects = null,
         List<StatusEffectEnum> attackerNewStatusEffects = null,
         List<StatusEffectEnum> defenderNewStatusEffects = null,
-        Action onComplete = null)
+        Action onComplete = null,
+        BattleReport battle = null)
     {
         if (Instance == null)
         {
@@ -272,7 +275,8 @@ public class CombatBanner : MonoBehaviour
             defenderExistingStatusEffects = defenderExistingStatusEffects != null ? new List<StatusEffectEnum>(defenderExistingStatusEffects) : null,
             attackerNewStatusEffects = attackerNewStatusEffects != null ? new List<StatusEffectEnum>(attackerNewStatusEffects) : null,
             defenderNewStatusEffects = defenderNewStatusEffects != null ? new List<StatusEffectEnum>(defenderNewStatusEffects) : null,
-            onComplete = onComplete
+            onComplete = onComplete,
+            battle = battle,
         });
 
         if (!Instance.isPlaying) Instance.StartCoroutine(Instance.ProcessQueue());
@@ -295,6 +299,27 @@ public class CombatBanner : MonoBehaviour
         Debug.Log($"[CenterLock] CombatBanner '{request.title}' waiting for CenterDisplayLock...");
         yield return CenterDisplayLock.WaitCoroutine();
         Debug.Log($"[CenterLock] CombatBanner '{request.title}' acquired lock, playing.");
+
+        // The battle stage (3D figures, dice) has replaced this banner's 2D clash.
+        yield return BattleScreen.Play(new BattleScreen.Fight
+        {
+            title = request.title,
+            verb = request.verb,
+            location = request.locationLabel,
+            attacker = request.attacker,
+            defender = request.defender,
+            attackerWounded = request.attackerWounded,
+            attackerKilled = request.attackerKilled,
+            defenderWounded = request.defenderWounded,
+            defenderKilled = request.defenderKilled,
+            notices = BuildNoticeLines(request),
+            attackerNewStatus = request.attackerNewStatusEffects,
+            defenderNewStatus = request.defenderNewStatusEffects,
+            battle = request.battle,
+        });
+        CenterDisplayLock.Release();
+        Debug.Log($"[CenterLock] CombatBanner '{request.title}' released lock.");
+        yield break;
 
         Leader attackerOwner = request.attacker.GetOwner();
         Leader defenderOwner = request.defender.GetOwner();
@@ -446,7 +471,7 @@ public class CombatBanner : MonoBehaviour
     // nation banner: a PlayableLeader's selected variant can override the base biome's banner,
     // everyone else (NonPlayableLeader included) just uses the biome's own. Returns null (and
     // the caller hides the image) if this leader has no banner set at all.
-    private static Sprite ResolveBannerSprite(Leader owner)
+    internal static Sprite ResolveBannerSprite(Leader owner)
     {
         if (owner == null) return null;
         LeaderBiomeConfig biome = owner.GetBiome();

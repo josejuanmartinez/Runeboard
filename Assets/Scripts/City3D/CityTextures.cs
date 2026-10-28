@@ -4,14 +4,17 @@ using UnityEngine;
 // Tiling surface textures for the procedural settlements (see CityStyles), generated once per
 // kind and colour: limewashed plaster, half-timbering, cut stone, fieldstone, clay roof tiles,
 // thatch, slate, turf, wooden planks, cloth. Weathered and uneven on purpose — the board is a
-// medieval world, and flat clean colours made the towns look newly built. Each is 64×64, tiles
+// medieval world, and flat clean colours made the towns look newly built. Each is 128×128 (the
+// layout of stones, timbers and tiles drawn on a 64-cell grid, the grain at full detail), tiles
 // seamlessly (all noise is periodic), and is mapped by CityMeshBuilder's planar UVs at a fixed
 // world scale, u along a face and v up it (up the slope, on a roof).
 public static class CityTextures
 {
     public enum Kind { Plaster, HalfTimber, Ashlar, Fieldstone, Tiles, Thatch, Slate, Turf, Planks, Plain, Cloth, Leaves }
 
-    private const int Size = 64;
+    private const int Size = 128;
+    private const int Grid = 64;          // cells the patterns are laid out on
+    private const int K = Size / Grid;
     private static readonly Dictionary<string, Texture2D> cache = new();
     private static readonly Color Timber = new(0.22f, 0.15f, 0.1f);
 
@@ -24,7 +27,7 @@ public static class CityTextures
         for (int y = 0; y < Size; y++)
             for (int x = 0; x < Size; x++)
             {
-                Color c = Sample(kind, colour, x, y, seed);
+                Color c = Paint(Sample(kind, colour, x, y, seed), kind, x, y, seed);
                 c.a = 1f;
                 px[y * Size + x] = c;
             }
@@ -38,15 +41,16 @@ public static class CityTextures
         return tex;
     }
 
-    private static Color Sample(Kind kind, Color c, int x, int y, int seed)
+    private static Color Sample(Kind kind, Color c, int fx, int fy, int seed)
     {
-        float grain = Fbm(x, y, 8, seed) - 0.5f;   // fine, tileable mottling
-        float blotch = Fbm(x, y, 2, seed + 3) - 0.5f; // large stains
+        float grain = Fbm(fx, fy, 16, seed) - 0.5f;   // fine, tileable mottling
+        float blotch = Fbm(fx, fy, 2, seed + 3) - 0.5f; // large stains
+        int x = fx / K, y = fy / K;                     // the pattern's grid
         switch (kind)
         {
             case Kind.Plaster:
                 // Limewash: mottled, with grime gathering low on the wall.
-                return c * (1f + grain * 0.14f + blotch * 0.12f) * Mathf.Lerp(0.82f, 1f, y / (float)Size);
+                return c * (1f + grain * 0.14f + blotch * 0.12f) * Mathf.Lerp(0.82f, 1f, y / (float)Grid);
 
             case Kind.HalfTimber:
             {
@@ -70,11 +74,11 @@ public static class CityTextures
                 // Rows of overlapping clay tiles: a dark lip under each row, a gap between tiles,
                 // each tile its own fired shade.
                 int row = y / 8, py = y % 8;
-                int tx = (x + (row % 2) * 4) % Size;
+                int tx = (x + (row % 2) * 4) % Grid;
                 int col = tx / 8, px = tx % 8;
                 float shade = 0.82f + 0.3f * Hash(col & 7, row & 7, seed);
-                float lip = py < 2 ? 0.6f : Mathf.Lerp(0.85f, 1.05f, py / 8f);
-                float edge = px == 0 ? 0.7f : 1f;
+                float lip = py < 2 ? 0.72f : Mathf.Lerp(0.86f, 1.05f, py / 8f);
+                float edge = px == 0 ? 0.8f : 1f;
                 float round = 1f - 0.18f * Mathf.Abs(px - 4f) / 4f; // barrel-curved tiles
                 return c * shade * lip * edge * round * (1f + grain * 0.1f);
             }
@@ -83,7 +87,7 @@ public static class CityTextures
             case Kind.Turf:
             {
                 // Straw: fine vertical streaks, laid in courses with a darker shadowed lip.
-                float streak = Hash(x, 0, seed) * 0.5f + Fbm(x * 4, y, 4, seed + 9) * 0.5f;
+                float streak = Hash(fx, 0, seed) * 0.5f + Fbm(fx * 4, fy, 8, seed + 9) * 0.5f;
                 float course = Mathf.Lerp(0.7f, 1.05f, (y % 16) / 16f);
                 Color tone = c * (0.75f + streak * 0.45f) * course;
                 if (kind == Kind.Turf)
@@ -94,12 +98,12 @@ public static class CityTextures
             case Kind.Slate:
             {
                 int row = y / 8, py = y % 8;
-                int sx = (x + (row % 2) * 8) % Size;
+                int sx = (x + (row % 2) * 8) % Grid;
                 int col = sx / 16, px = sx % 16;
                 float h = Hash(col & 7, row, seed);
                 Color tint = Color.Lerp(c, new Color(c.r * 0.9f, c.g * 0.98f, c.b * 1.12f), h); // blue-green variety
-                float lip = py < 2 ? 0.55f : 1f;
-                float gap = px == 0 ? 0.6f : 1f;
+                float lip = py < 2 ? 0.7f : 1f;
+                float gap = px == 0 ? 0.75f : 1f;
                 return tint * (0.85f + h * 0.25f) * lip * gap * (1f + grain * 0.12f);
             }
 
@@ -107,7 +111,7 @@ public static class CityTextures
             {
                 int plank = x / 8, px = x % 8;
                 float tone = 0.8f + 0.35f * Hash(plank, 3, seed);
-                float gap = px == 0 ? 0.45f : 1f;
+                float gap = px == 0 ? 0.62f : 1f;
                 float wood = 0.92f + 0.12f * Mathf.Sin((y + Hash(plank, 7, seed) * 40f) * 0.5f + grain * 6f);
                 return c * tone * gap * wood;
             }
@@ -115,31 +119,119 @@ public static class CityTextures
             case Kind.Leaves:
             {
                 // Clumps of leaves: light tops and dark hollows, speckled.
-                float clump = Fbm(x, y, 4, seed + 17);
-                float speck = Hash(x, y, seed) > 0.85f ? 1.15f : 1f;
+                float clump = Fbm(fx, fy, 6, seed + 17);
+                float speck = Hash(fx, fy, seed) > 0.85f ? 1.15f : 1f;
                 return c * Mathf.Lerp(0.6f, 1.2f, clump) * speck;
             }
 
             case Kind.Cloth:
-                return c * (1f + ((x + y) % 2 == 0 ? 0.04f : -0.04f) + grain * 0.1f);
+                return c * (1f + ((fx + fy) % 2 == 0 ? 0.04f : -0.04f) + grain * 0.1f);
 
             default:
                 return c * (1f + grain * 0.1f + blotch * 0.06f);
         }
     }
 
+    // Over every surface, the look of the painted board rather than a flat fill: short brush
+    // strokes (laid along the surface, across it on roofs), warm lights and cool shadows, a touch
+    // more contrast and colour. The pattern underneath (stones, tiles, timbers) stays as drawn.
+    private static Color Paint(Color c, Kind kind, int x, int y, int seed)
+    {
+        bool across = kind is Kind.Tiles or Kind.Slate or Kind.Thatch or Kind.Turf;
+        // Strokes: noise stretched one way, a few cells long, with a wobble so they don't line up.
+        float sx = across ? 1f : 5f, sy = across ? 5f : 1f;
+        float stroke = Fbm(Mathf.RoundToInt(x / sx), Mathf.RoundToInt(y / sy), 12, seed + 101) - 0.5f;
+        float dab = Fbm(x, y, 24, seed + 131) - 0.5f;
+        float value = 1f + stroke * 0.22f + dab * 0.1f;
+        Color painted = c * value;
+
+        // Warm where it is lit, cool where it falls into shadow.
+        float light = Mathf.Clamp01((value - 0.85f) / 0.3f);
+        painted = Color.Lerp(painted * new Color(0.94f, 0.97f, 1.08f), painted * new Color(1.07f, 1.02f, 0.92f), light);
+
+        // A little more contrast and saturation than the flat palette.
+        float grey = painted.r * 0.3f + painted.g * 0.59f + painted.b * 0.11f;
+        painted = Color.Lerp(new Color(grey, grey, grey), painted, 1.18f);
+        painted = (painted - new Color(0.5f, 0.5f, 0.5f) * 0.12f) * 1.12f;
+        return new Color(Mathf.Clamp01(painted.r), Mathf.Clamp01(painted.g), Mathf.Clamp01(painted.b), 1f);
+    }
+
+    private static Texture2D paintedWater, paintedWaterTiled;
+
+    /// <summary>The board's own shallow-water painting (a crop from the middle of its tile), for a
+    /// town's water. Tileable = mirrored 2×2 so it repeats without seams. Null without a board.</summary>
+    public static Texture2D PaintedWater(bool tileable = false)
+    {
+        if (tileable && paintedWaterTiled != null) return paintedWaterTiled;
+        if (!tileable && paintedWater != null) return paintedWater;
+        Board board = Board.Instance;
+        HexTextureMapping mapping = board != null && board.hexPrefab != null ? board.hexPrefab.GetComponent<HexTextureMapping>() : null;
+        if (mapping == null) mapping = Object.FindAnyObjectByType<HexTextureMapping>();
+        if (mapping == null) return null;
+        Random.State saved = Random.state;
+        Random.InitState(4211);
+        Sprite sprite = mapping.GetTerrainBaseSprite(TerrainEnum.shallowWater);
+        Random.state = saved;
+        if (sprite == null || sprite.texture == null) return null;
+
+        // The art isn't CPU-readable: copy it through a render texture, then read the middle back.
+        Texture source = sprite.texture;
+        var rt = RenderTexture.GetTemporary(source.width, source.height, 0, RenderTextureFormat.ARGB32);
+        Graphics.Blit(source, rt);
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = rt;
+        Rect r = sprite.textureRect;
+        int crop = Mathf.RoundToInt(Mathf.Min(r.width, r.height) * 0.42f);
+        int x0 = Mathf.RoundToInt(r.center.x - crop * 0.5f), y0 = Mathf.RoundToInt(r.center.y - crop * 0.5f);
+        var read = new Texture2D(crop, crop, TextureFormat.RGBA32, false);
+        read.ReadPixels(new Rect(x0, y0, crop, crop), 0, 0);
+        read.Apply();
+        RenderTexture.active = previous;
+        RenderTexture.ReleaseTemporary(rt);
+
+        paintedWater = Resize(read, 256, mirror: false);
+        paintedWaterTiled = Resize(read, 256, mirror: true);
+        Object.Destroy(read);
+        return tileable ? paintedWaterTiled : paintedWater;
+    }
+
+    private static Texture2D Resize(Texture2D source, int size, bool mirror)
+    {
+        var tex = new Texture2D(size, size, TextureFormat.RGBA32, true)
+        {
+            wrapMode = TextureWrapMode.Repeat, filterMode = FilterMode.Trilinear, name = mirror ? "City painted water (tiled)" : "City painted water",
+        };
+        var px = new Color[size * size];
+        for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+            {
+                float u = (x + 0.5f) / size, v = (y + 0.5f) / size;
+                if (mirror)
+                {
+                    u = u < 0.5f ? u * 2f : 2f - u * 2f;
+                    v = v < 0.5f ? v * 2f : 2f - v * 2f;
+                }
+                Color c = source.GetPixelBilinear(u, v);
+                c.a = 1f;
+                px[y * size + x] = c;
+            }
+        tex.SetPixels(px);
+        tex.Apply(true, true);
+        return tex;
+    }
+
     // Courses of cut stones: mortar lines, each block its own shade, worn edges.
     private static Color Blocks(Color c, int x, int y, int rowHeight, int blockWidth, float variety, float grain, int seed)
     {
-        int rows = Size / rowHeight;
+        int rows = Grid / rowHeight;
         int row = Mathf.Min(y / rowHeight, rows - 1);
-        int height = row == rows - 1 ? Size - row * rowHeight : rowHeight;
+        int height = row == rows - 1 ? Grid - row * rowHeight : rowHeight;
         int py = y - row * rowHeight;
         int shift = (row % 2) * (blockWidth / 2);
-        int bx = (x + shift) % Size;
+        int bx = (x + shift) % Grid;
         int col = bx / blockWidth, px = bx % blockWidth;
 
-        if (py == 0 || px == 0) return c * 0.55f; // mortar
+        if (py == 0 || px == 0) return c * (0.7f + grain * 0.1f); // mortar
         float shade = 1f - variety + 2f * variety * Hash(col, row, seed);
         float edge = (py == 1 || px == 1) ? 1.08f : (py == height - 1 || px == blockWidth - 1) ? 0.85f : 1f;
         return c * shade * edge * (1f + grain * 0.15f);

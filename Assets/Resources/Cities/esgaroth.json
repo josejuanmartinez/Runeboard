@@ -4,6 +4,7 @@
   "style": "Northman",
   "colors":   ["#7A5A3A", "#A28A4C", "#6A4E32", "#7E7A6A", "#A8BCC0", "#2A241C", "#3E6478", "", "#4A5A2E"],
   "surfaces": ["Planks", "Thatch", "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "ground": "water",
   "buildings": [
     { "note": "the lake", "at": [0.0, 0.0], "parts": [
       { "shape": "box", "pos": [0, 0, 0], "size": [1.0, 0.004, 1.19], "cell": "accent" },

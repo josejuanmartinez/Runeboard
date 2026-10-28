@@ -97,9 +97,17 @@ public class Character3DModel : DepthSlabbed
     public static bool TryResolve(Character character, out string folder)
     {
         folder = null;
-        if (character == null || !CatalogReady()) return false;
-        RaceStandIns.TryGetValue(character.race, out string standIn);
-        foreach (string candidate in new[] { character.characterName, character.SpriteVariantBaseName, character.race.ToString(), standIn, "Common" })
+        return character != null && TryResolve(character.race, out folder, character.characterName, character.SpriteVariantBaseName);
+    }
+
+    // The same tiers from plain names, for a figure that is not a board character (TitleDiorama).
+    public static bool TryResolve(RacesEnum race, out string folder, params string[] names)
+    {
+        folder = null;
+        if (!CatalogReady()) return false;
+        RaceStandIns.TryGetValue(race, out string standIn);
+        var candidates = new List<string>(names) { race.ToString(), standIn, "Common" };
+        foreach (string candidate in candidates)
         {
             if (string.IsNullOrWhiteSpace(candidate)) continue;
             string stripped = candidate.Replace(" ", "");
@@ -150,6 +158,10 @@ public class Character3DModel : DepthSlabbed
         rootGo.transform.SetParent(parent, false);
         rootGo.transform.rotation = Quaternion.identity;
         GameObject model = Instantiate(prefab, rootGo.transform, false);
+        // Some FBXs were exported with their scene's camera (and lights) inside: a live camera
+        // there renders over the board camera from the model's own fixed viewpoint.
+        foreach (Camera stray in model.GetComponentsInChildren<Camera>(true)) Destroy(stray.gameObject);
+        foreach (Light stray in model.GetComponentsInChildren<Light>(true)) Destroy(stray.gameObject);
         var created = rootGo.AddComponent<Character3DModel>();
         created.Init(model, folder);
         return created;
@@ -228,9 +240,13 @@ public class Character3DModel : DepthSlabbed
             ModelHeight = Mathf.Max(bounds.size.y / scale, 1e-4f);
             model.transform.localPosition = new Vector3(0f, -(bounds.min.y - transform.position.y) / scale, 0f);
         }
+        rigRestLocal = model.transform.localPosition;
 
         // Still in the bind pose: where each hand closes, for the weapons (Arm).
-        rightGrip = MeasureGrip(model.transform, HumanBodyBones.RightHand, HumanBodyBones.RightLowerArm, "right", 0.3f, -0.08f);
+        // The fist closes round the hilt a little past the palm's middle.
+        rightGrip = MeasureGrip(model.transform, HumanBodyBones.RightHand, HumanBodyBones.RightLowerArm, "right", 0.42f, -0.22f);
+        rightFist = MeasureFist(RightFingers, HumanBodyBones.RightHand);
+        leftFist = MeasureFist(LeftFingers, HumanBodyBones.LeftHand);
         leftGrip = MeasureGrip(model.transform, HumanBodyBones.LeftHand, HumanBodyBones.LeftLowerArm, "left", -0.35f, 0.12f);
     }
 
@@ -270,6 +286,119 @@ public class Character3DModel : DepthSlabbed
 
     // reach / back: where the grip sits from the wrist, in forearm lengths, down the forearm and
     // out of the back of the hand (negative = into the palm).
+    // ── Falling ─────────────────────────────────────────────────────────────────────────────
+    // Root motion is off, so a death clip that drops the hips to the floor would leave the body
+    // lying at standing height, in mid air. A fallen figure is lowered until its lowest part
+    // rests on the ground (never raised above where it stands).
+
+    /// <summary>The figure has fallen (a death played): keep it on the ground.</summary>
+    public bool Fallen;
+    private Vector3 rigRestLocal;
+    private float fallDrop;
+
+    private static readonly HumanBodyBones[] BodyBones =
+    {
+        HumanBodyBones.Hips, HumanBodyBones.Spine, HumanBodyBones.Chest, HumanBodyBones.Head,
+        HumanBodyBones.LeftUpperLeg, HumanBodyBones.RightUpperLeg, HumanBodyBones.LeftLowerLeg, HumanBodyBones.RightLowerLeg,
+        HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot, HumanBodyBones.LeftUpperArm, HumanBodyBones.RightUpperArm,
+        HumanBodyBones.LeftLowerArm, HumanBodyBones.RightLowerArm, HumanBodyBones.LeftHand, HumanBodyBones.RightHand,
+    };
+
+    private void GroundFallen()
+    {
+        if (animator == null || animator.transform == transform) return;
+        float target = 0f;
+        if (Fallen && animator.isHuman)
+        {
+            float lowest = float.MaxValue;
+            foreach (HumanBodyBones bone in BodyBones)
+            {
+                Transform t = animator.GetBoneTransform(bone);
+                if (t != null) lowest = Mathf.Min(lowest, t.position.y);
+            }
+            if (lowest < float.MaxValue)
+            {
+                // Joints sit inside the body: leave a limb's thickness under the lowest one.
+                float pad = 0.05f * ModelHeight * transform.lossyScale.y;
+                float gap = lowest - pad - transform.position.y;
+                target = Mathf.Min(0f, fallDrop - gap);
+            }
+        }
+        fallDrop = Mathf.Lerp(fallDrop, target, 0.35f);
+        float scale = Mathf.Max(transform.lossyScale.y, 1e-6f);
+        animator.transform.localPosition = rigRestLocal + new Vector3(0f, fallDrop / scale, 0f);
+    }
+
+    // ── Fists ───────────────────────────────────────────────────────────────────────────────
+    // The clips were made for empty hands, so a hand holding a weapon (or a shield's strap) is
+    // closed into a fist after the animator: each finger joint is set to its bind rotation plus a
+    // fixed curl toward the palm, measured in the bind pose. Only the finger bones are touched,
+    // and the result does not depend on the previous frame.
+
+    private struct FingerJoint
+    {
+        public Transform Bone;
+        public Quaternion Bind;
+        public Vector3 Axis;   // in the bone's own space: turning about it curls toward the palm
+        public float Angle;
+    }
+
+    private FingerJoint[] rightFist, leftFist;
+
+    private static readonly HumanBodyBones[][] RightFingers =
+    {
+        new[] { HumanBodyBones.RightIndexProximal, HumanBodyBones.RightIndexIntermediate, HumanBodyBones.RightIndexDistal },
+        new[] { HumanBodyBones.RightMiddleProximal, HumanBodyBones.RightMiddleIntermediate, HumanBodyBones.RightMiddleDistal },
+        new[] { HumanBodyBones.RightRingProximal, HumanBodyBones.RightRingIntermediate, HumanBodyBones.RightRingDistal },
+        new[] { HumanBodyBones.RightLittleProximal, HumanBodyBones.RightLittleIntermediate, HumanBodyBones.RightLittleDistal },
+    };
+    private static readonly HumanBodyBones[][] LeftFingers =
+    {
+        new[] { HumanBodyBones.LeftIndexProximal, HumanBodyBones.LeftIndexIntermediate, HumanBodyBones.LeftIndexDistal },
+        new[] { HumanBodyBones.LeftMiddleProximal, HumanBodyBones.LeftMiddleIntermediate, HumanBodyBones.LeftMiddleDistal },
+        new[] { HumanBodyBones.LeftRingProximal, HumanBodyBones.LeftRingIntermediate, HumanBodyBones.LeftRingDistal },
+        new[] { HumanBodyBones.LeftLittleProximal, HumanBodyBones.LeftLittleIntermediate, HumanBodyBones.LeftLittleDistal },
+    };
+    private static readonly float[] CurlByJoint = { 70f, 85f, 60f };
+
+    // In the bind pose (palms down): each joint's curl axis, from the finger's direction and the
+    // palm's.
+    private FingerJoint[] MeasureFist(HumanBodyBones[][] fingers, HumanBodyBones handBone)
+    {
+        if (animator == null || !animator.isHuman) return null;
+        Transform hand = animator.GetBoneTransform(handBone);
+        if (hand == null) return null;
+        Vector3 palm = -transform.up; // the back of the hand faces up in the bind pose
+        var joints = new List<FingerJoint>();
+        foreach (HumanBodyBones[] chain in fingers)
+            for (int j = 0; j < chain.Length; j++)
+            {
+                Transform bone = animator.GetBoneTransform(chain[j]);
+                if (bone == null) continue;
+                Transform next = j + 1 < chain.Length ? animator.GetBoneTransform(chain[j + 1]) : null;
+                Vector3 along = next != null ? next.position - bone.position
+                    : j > 0 && animator.GetBoneTransform(chain[j - 1]) is Transform prev ? bone.position - prev.position
+                    : bone.position - hand.position;
+                Vector3 axis = Vector3.Cross(along.normalized, palm);
+                if (axis.sqrMagnitude < 1e-6f) continue;
+                joints.Add(new FingerJoint { Bone = bone, Bind = bone.localRotation, Axis = bone.InverseTransformDirection(axis.normalized), Angle = CurlByJoint[j] });
+            }
+        return joints.Count > 0 ? joints.ToArray() : null;
+    }
+
+    private void CloseHands()
+    {
+        if (!armed) return;
+        if (loadout.Right != Character3DWeapons.Weapon.None && rightFist != null) Clench(rightFist);
+        if (loadout.Shield && leftFist != null) Clench(leftFist);
+    }
+
+    private static void Clench(FingerJoint[] joints)
+    {
+        foreach (FingerJoint j in joints)
+            if (j.Bone != null) j.Bone.localRotation = j.Bind * Quaternion.AngleAxis(j.Angle, j.Axis);
+    }
+
     private Grip MeasureGrip(Transform model, HumanBodyBones handBone, HumanBodyBones forearmBone, string side, float reach, float back)
     {
         Transform hand = animator.isHuman ? animator.GetBoneTransform(handBone) : null;
@@ -345,6 +474,8 @@ public class Character3DModel : DepthSlabbed
             float tilt = spec.Tilt * Mathf.Deg2Rad;
             Vector3 blade = rightGrip.Forward * Mathf.Cos(tilt) - rightGrip.Forearm * Mathf.Sin(tilt);
             all.Add(Hold(right, spec, rightGrip, Quaternion.LookRotation(blade, rightGrip.Forearm), loadout.Scale, settings));
+            bladeLocal = blade.normalized;
+            longWeapon = loadout.Right is Character3DWeapons.Weapon.Spear or Character3DWeapons.Weapon.Staff;
         }
         if (shield != null && shield.Mesh != null)
         {
@@ -353,6 +484,117 @@ public class Character3DModel : DepthSlabbed
             all.Add(Hold(shield, spec, leftGrip, Quaternion.LookRotation(leftGrip.Back, -leftGrip.Forearm), 1f, settings));
         }
         renderers = all.ToArray();
+    }
+
+    // ── The weapon arm (procedural) ─────────────────────────────────────────────────────────
+    // The clips were made for empty hands, so the weapon arm is posed by hand on top of them, after
+    // the animator, every frame:
+    //   • in the ready idle and the walk, the wrist turns the weapon to point where a held weapon
+    //     points (a blade up and forward, a spear or staff upright) — never across the body;
+    //   • a blow (Swing) is a designed path for the blade — ready, wound back over the shoulder,
+    //     a fast cut forward and down, follow-through, back to ready — with the arm solved to
+    //     carry it (two-bone IK) and the chest turning into it.
+
+    private Vector3 bladeLocal;     // the held weapon's axis in the hand bone's space
+    private bool longWeapon;
+    private float swingStart = -1f, swingSpeed = 1f;
+    private float readyWeight;
+
+    public const float SwingSeconds = 1.05f;
+    public bool Swinging => swingStart >= 0f && (Time.time - swingStart) * swingSpeed < SwingSeconds;
+
+    /// <summary>Strikes one blow with the weapon in hand (or the fist).</summary>
+    public void Swing(float speed = 1f)
+    {
+        swingStart = Time.time;
+        swingSpeed = Mathf.Max(speed, 0.05f);
+    }
+
+    // Swing keys, in the figure's own frame (x right, y up, z forward; units of its height):
+    // time, the hand, where the blade points, and the chest's turn (+ = right shoulder back).
+    private static readonly (float t, Vector3 hand, Vector3 blade, float twist)[] SwingKeys =
+    {
+        (0.00f, new(0.17f, 0.50f, 0.18f), new(0.05f, 0.75f, 0.65f), 0f),
+        (0.36f, new(0.20f, 0.96f, -0.06f), new(0.05f, -0.35f, -0.95f), 28f),
+        (0.50f, new(0.03f, 0.64f, 0.40f), new(-0.10f, -0.20f, 1.00f), -18f),
+        (0.64f, new(-0.12f, 0.40f, 0.28f), new(-0.60f, -0.75f, 0.30f), -26f),
+        (1.00f, new(0.17f, 0.50f, 0.18f), new(0.05f, 0.75f, 0.65f), 0f),
+    };
+
+    private void PoseWeaponArm()
+    {
+        if (animator == null || !animator.isHuman || rightGrip.Hand == null) return;
+        Transform hand = rightGrip.Hand;
+        Transform upper = animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+        Transform lower = animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
+        Transform chest = animator.GetBoneTransform(HumanBodyBones.Chest) ?? animator.GetBoneTransform(HumanBodyBones.Spine);
+        if (upper == null || lower == null) return;
+        Vector3 axis = bladeLocal.sqrMagnitude > 0.5f ? bladeLocal : rightGrip.Forward;
+        Transform root = transform;
+        float h = ModelHeight * root.lossyScale.y;
+        Vector3 Dir(Vector3 v) => (root.right * v.x + root.up * v.y + root.forward * v.z).normalized;
+
+        if (Swinging)
+        {
+            float u = (Time.time - swingStart) * swingSpeed / SwingSeconds;
+            int k = 0;
+            while (k < SwingKeys.Length - 2 && u > SwingKeys[k + 1].t) k++;
+            var a = SwingKeys[k];
+            var b = SwingKeys[k + 1];
+            float e = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(a.t, b.t, u));
+            Vector3 handTarget = Vector3.Lerp(a.hand, b.hand, e);
+            Vector3 bladeTarget = Vector3.Slerp(a.blade.normalized, b.blade.normalized, e);
+            float twist = Mathf.Lerp(a.twist, b.twist, e);
+            // Into the blow from whatever the clip shows, and back out of it.
+            float w = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(u / 0.1f)) * Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((1f - u) / 0.12f));
+
+            Quaternion chestFrom = chest != null ? chest.rotation : Quaternion.identity;
+            Quaternion upperFrom = upper.rotation, lowerFrom = lower.rotation, handFrom = hand.rotation;
+            if (chest != null) chest.rotation = Quaternion.AngleAxis(twist, root.up) * chest.rotation;
+            Vector3 target = root.position + (root.right * handTarget.x + root.up * handTarget.y + root.forward * handTarget.z) * h;
+            Vector3 hint = upper.position + (root.right * 0.35f - root.up * 0.25f - root.forward * 0.15f) * h;
+            TwoBoneIK(upper, lower, hand, target, hint);
+            hand.rotation = Quaternion.FromToRotation(hand.TransformVector(axis).normalized, Dir(bladeTarget)) * hand.rotation;
+            if (w < 1f)
+            {
+                if (chest != null) chest.rotation = Quaternion.Slerp(chestFrom, chest.rotation, w);
+                upper.rotation = Quaternion.Slerp(upperFrom, upper.rotation, w);
+                lower.rotation = Quaternion.Slerp(lowerFrom, lower.rotation, w);
+                hand.rotation = Quaternion.Slerp(handFrom, hand.rotation, w);
+            }
+            return;
+        }
+
+        // Ready: only while standing ready or walking, and only with something in the hand.
+        string clip = Animation != null ? Animation.Current : null;
+        bool ready = bladeLocal.sqrMagnitude > 0.5f && (clip == "RB Ready Idle" || clip == "RB Walk");
+        readyWeight = Mathf.MoveTowards(readyWeight, ready ? 1f : 0f, Time.deltaTime * 4f);
+        if (readyWeight <= 0f) return;
+        Vector3 want = Dir(longWeapon ? new Vector3(0.05f, 1f, 0.22f) : new Vector3(0.12f, 0.75f, 0.65f));
+        // The hand bones carry the FBX's mirrored scale: TransformVector, not rotation * axis.
+        Quaternion turn = Quaternion.FromToRotation(hand.TransformVector(axis).normalized, want);
+        hand.rotation = Quaternion.Slerp(Quaternion.identity, turn, readyWeight) * hand.rotation;
+    }
+
+    // Bends a shoulder–elbow–wrist chain so the wrist reaches `target` (or as near as the arm's
+    // length allows), the elbow toward `hint`.
+    private static void TwoBoneIK(Transform a, Transform b, Transform c, Vector3 target, Vector3 hint)
+    {
+        float la = Vector3.Distance(a.position, b.position), lb = Vector3.Distance(b.position, c.position);
+        Vector3 toTarget = target - a.position;
+        float d = Mathf.Clamp(toTarget.magnitude, Mathf.Abs(la - lb) + 1e-4f, (la + lb) * 0.999f);
+        Vector3 dir = toTarget.sqrMagnitude > 1e-8f ? toTarget.normalized : a.forward;
+        Vector3 toHint = hint - a.position;
+        Vector3 bendAxis = Vector3.Cross(dir, toHint);
+        if (bendAxis.sqrMagnitude < 1e-8f) bendAxis = Vector3.Cross(dir, Vector3.up);
+        bendAxis.Normalize();
+        float angle = Mathf.Acos(Mathf.Clamp((la * la + d * d - lb * lb) / (2f * la * d), -1f, 1f)) * Mathf.Rad2Deg;
+        Vector3 elbowDir = Quaternion.AngleAxis(angle, bendAxis) * dir;
+        if (Vector3.Dot(elbowDir, toHint) < Vector3.Dot(Quaternion.AngleAxis(-angle, bendAxis) * dir, toHint))
+            elbowDir = Quaternion.AngleAxis(-angle, bendAxis) * dir;
+        a.rotation = Quaternion.FromToRotation(b.position - a.position, elbowDir) * a.rotation;
+        Vector3 wrist = a.position + dir * d;
+        b.rotation = Quaternion.FromToRotation(c.position - b.position, wrist - b.position) * b.rotation;
     }
 
     // One weapon mesh under the hand bone: the spec's grip point at the grip, its grip → tip axis
@@ -497,6 +739,9 @@ public class Character3DModel : DepthSlabbed
             if (!armed) TryArm(); // drawn by the leader
             return;
         }
+        CloseHands();
+        GroundFallen();
+        PoseWeaponArm();
         if (lightingPublishedFrame != Time.frameCount)
         {
             lightingPublishedFrame = Time.frameCount;

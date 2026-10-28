@@ -30,51 +30,6 @@ public class PlayableLeader : Leader
     // LeaderSelector must show exactly one carousel entry for it instead of the full variant menu.
     public bool scenarioVariantLocked;
 
-    // ---- Command points: the human leader's per-turn action budget (replaces "one card per
-    // character per turn"). Any character may spend them; refreshed lazily whenever the game
-    // turn changes so no turn-start hook ordering matters.
-    public const int BaseCommandPoints = 3;
-    public const int MaxCommandPoints = 6;
-    private int commandPoints;
-    private int commandPointsTurn = -1;
-    public event Action CommandPointsChanged;
-
-    public int CommandPointsMax => Mathf.Clamp(BaseCommandPoints + controlledPcs.Count(pc => pc != null && pc.owner == this) / 4, BaseCommandPoints, MaxCommandPoints);
-
-    public int CommandPoints
-    {
-        get { SyncCommandPoints(); return commandPoints; }
-    }
-
-    private void SyncCommandPoints()
-    {
-        int turn = Game.Instance != null ? Game.Instance.turn : 0;
-        if (turn == commandPointsTurn) return;
-        commandPointsTurn = turn;
-        commandPoints = CommandPointsMax;
-    }
-
-    public void SpendCommandPoint()
-    {
-        SyncCommandPoints();
-        commandPoints = Mathf.Max(0, commandPoints - 1);
-        CommandPointsChanged?.Invoke();
-    }
-
-    public void GrantCommandPoint()
-    {
-        SyncCommandPoints();
-        commandPoints = Mathf.Min(MaxCommandPoints, commandPoints + 1);
-        CommandPointsChanged?.Invoke();
-    }
-
-    public void RestoreCommandPoints(int points, int turn)
-    {
-        commandPoints = points;
-        commandPointsTurn = turn;
-        CommandPointsChanged?.Invoke();
-    }
-
     private static string NormalizeCardName(string cardName)
     {
         if (string.IsNullOrWhiteSpace(cardName)) return string.Empty;
@@ -113,6 +68,11 @@ public class PlayableLeader : Leader
         ApplyStatsFromCard(card);
     }
 
+    private static bool HasCharacterCard(string name) =>
+        !string.IsNullOrWhiteSpace(name) && DeckManager.Instance?.cards != null
+        && DeckManager.Instance.cards.Exists(c => string.Equals(c.name, name, StringComparison.OrdinalIgnoreCase)
+            && string.Equals(c.type, "Character", StringComparison.OrdinalIgnoreCase));
+
     public void ApplyVariantTransformation()
     {
         if (string.IsNullOrWhiteSpace(selectedVariantCharacterName)) return;
@@ -121,8 +81,10 @@ public class PlayableLeader : Leader
         string fromName = characterName;
         baseCharacterName = fromName;
         characterName = selectedVariantCharacterName;
-        RefreshStatsFromCard();
-        Sounds.Instance?.PlayArtifactFound();
+        // The flavour's own card may be named after the flavour rather than the character
+        // ("The Deceiver" is Annatar, "The Dark Eye" is Sauron): prefer it when it exists.
+        RefreshStatsFromCard(HasCharacterCard(selectedVariantName) ? selectedVariantName : null);
+        if (Game.Instance != null && Game.Instance.player == this) Sounds.Instance?.PlayArtifactFound();
         CharacterIcons.RefreshForHumanPlayerOf(this);
     }
 
@@ -140,6 +102,9 @@ public class PlayableLeader : Leader
     {
         return string.IsNullOrWhiteSpace(selectedLeaderDescription) ? GetBiome()?.description : selectedLeaderDescription;
     }
+
+    /// <summary>The selected flavour's own character name (e.g. "Mithrandir"), or null for the base.</summary>
+    public string GetSelectedVariantCharacterName() => selectedVariantCharacterName;
 
     public string GetSelectedVariantName()
     {
@@ -166,6 +131,7 @@ public class PlayableLeader : Leader
     override public void Killed(Leader killedBy, bool onlyMask = false)
     {
         if (killed) return;
+        if (CampaignObjectives.AvatarStart && FallBack()) return;
 
         PlayableLeaderIcons leaderIcons = FindAnyObjectByType<PlayableLeaderIcons>();
         leaderIcons?.AddDeadIcon(this);
@@ -183,6 +149,48 @@ public class PlayableLeader : Leader
 
         base.Killed(killedBy);
     }
+    private const int FallBackHealth = 30;
+    private const int FallBackHaltTurns = 2;
+
+    // With the avatar start a playable leader is their avatar: the whole campaign rests on one
+    // figure, so they are not slain but borne back to their nearest PC (or left where they lie)
+    // to recover, halted for a while (their surviving army goes with them).
+    private bool FallBack()
+    {
+        if (hex == null) return false;
+        Hex refuge = controlledPcs
+            .Where(pc => pc != null && pc.owner == this && pc.hex != null)
+            .Select(pc => pc.hex)
+            .OrderBy(h => (h.transform.position - hex.transform.position).sqrMagnitude)
+            .FirstOrDefault() ?? hex;
+
+        if (refuge != hex)
+        {
+            Hex from = hex;
+            Army army = IsArmyCommander() && !GetArmy().killed ? GetArmy() : null;
+            from.characters.Remove(this);
+            if (!refuge.characters.Contains(this)) refuge.characters.Add(this);
+            if (army != null)
+            {
+                from.armies.Remove(army);
+                if (!refuge.armies.Contains(army)) refuge.armies.Add(army);
+            }
+            hex = refuge;
+            from.RedrawCharacters();
+            refuge.RedrawCharacters();
+            if (army != null) { from.RedrawArmies(); refuge.RedrawArmies(); }
+        }
+        health = FallBackHealth;
+        Halt(FallBackHaltTurns);
+        string place = refuge.GetPCData()?.pcName;
+        MessageDisplayNoUI.ShowMessage(refuge, this, string.IsNullOrWhiteSpace(place)
+            ? $"{characterName} falls, but is not slain"
+            : $"{characterName} falls, and is borne back to {place} to recover", Color.yellow);
+        CharacterIcons.RefreshForHumanPlayerCharacter(this);
+        Debug.Log($"[AvatarStart] {characterName} fell and recovers at {refuge.v2}.");
+        return true;
+    }
+
     new public void NewTurn()
     {
         PlayableLeaderIcons leaderIcons = FindAnyObjectByType<PlayableLeaderIcons>();

@@ -29,6 +29,11 @@ public class PCAction : MaterialRetrieval
             if (character.hex.IsWaterTerrain()) return false;
             if (!IsRegionDiscovered(character)) return false;
 
+            // An unowned PC is claimed on its own hex; elsewhere in its region the card would
+            // only be spent.
+            PC unowned = FindAssociatedPcInGame();
+            if (unowned != null && unowned.owner == null && unowned.hex != character.hex) return false;
+
             PC hexPc = character.hex.GetPCData();
             if (hexPc != null && hexPc.citySize != PCSizeEnum.NONE)
             {
@@ -58,7 +63,18 @@ public class PCAction : MaterialRetrieval
                     && existingPc.owner != actingOwner
                     && existingPc.owner.GetAlignment() != actingOwner.GetAlignment();
 
-                if (heldByEnemy)
+                // An unowned PC (an avatar's old seat, a ruin) is claimed by whoever plays its
+                // card standing there.
+                if (existingPc.owner == null && actingOwner != null && existingPc.hex == character.hex)
+                {
+                    if (existingPc.ClaimUnowned(actingOwner))
+                    {
+                        existingPc.hex.RedrawPC();
+                        MessageDisplayNoUI.ShowMessage(character.hex, character, $"{existingPc.pcName} is yours.", Color.green);
+                    }
+                    ApplyResources(character);
+                }
+                else if (heldByEnemy)
                 {
                     int loyaltyLoss = UnityEngine.Random.Range(5, 11);
                     existingPc.loyalty = Mathf.Max(0, existingPc.loyalty - loyaltyLoss);
@@ -170,6 +186,10 @@ public class PCAction : MaterialRetrieval
         if (board == null) return false;
 
         string normalizedTarget = PcDescriptionBuilder.NormalizeLookupKey(pcRegion);
+
+        // Standing in the region is discovering it (the AI has no fog of its own to clear).
+        if (string.Equals(PcDescriptionBuilder.NormalizeLookupKey(character.hex?.GetLandRegion() ?? string.Empty), normalizedTarget, StringComparison.OrdinalIgnoreCase))
+            return true;
 
         foreach (Hex hex in board.GetHexes())
         {
@@ -330,6 +350,8 @@ public static class PcDescriptionBuilder
     }
 
     public static string FormatDisplayRegionName(string value) => DisplayNames.Format(value);
+
+    public static string ResourceSummary(CardData data) => BuildResourceSummary(data);
 
     private static string BuildResourceSummary(CardData data)
     {

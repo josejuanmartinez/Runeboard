@@ -20,7 +20,7 @@ public class Character3DView : MonoBehaviour
     // Which view currently shows each character — how UnitAnimations finds a unit.
     private static readonly Dictionary<Character, Character3DView> byCharacter = new();
 
-    private const string Idle = "standing idle";
+    private const string Idle = "RB Ready Idle"; // AnimationForge
     private const float FacingHold = 2.5f;        // seconds a unit keeps facing whoever it fought
     private const float SpriteEchoSuppress = 1.2f; // ignore the sprite's own copy of a move just played
 
@@ -206,7 +206,7 @@ public class Character3DView : MonoBehaviour
         bool hidden = character != null && character.IsHidden();
         bool moving = spriteState == "Standing Walk Forward" || moveSpeed > 0.05f;
         string loop = moving
-            ? hidden ? "Crouch Walk Forward" : moveSpeed > settings.runSpeed ? "Standing Run Forward" : "Standing Walk Forward"
+            ? hidden ? "Crouch Walk Forward" : moveSpeed > settings.runSpeed ? "Standing Run Forward" : "RB Walk"
             : hidden ? "Crouch Idle" : Idle;
         if (!anim.IsHolding) anim.SetBaseLoop(loop, 0.2f);
         if (regiment != null) regiment.Mirror(loop);
@@ -415,7 +415,7 @@ public class Character3DView : MonoBehaviour
 
     // Telling your units from the rest at a glance, without hiding anyone: the human player's own
     // miniatures always have a faint warm light on their base and stand at full brightness; other
-    // nations' figures sit a shade dimmer (enemies keep their red outline on top). Hover and
+    // nations' figures sit a shade dimmer (those you can fight keep their pulsing nation-colour outline on top). Hover and
     // selection light the base further and brighten the figure — never a colour tint, and nobody
     // else fades out.
     private const float OwnBaseLight = 0.22f;

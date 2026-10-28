@@ -53,6 +53,8 @@ public class EnvironmentalCardManager : MonoBehaviour
         Layout layout = FindAnyObjectByType<Layout>();
         Debug.Log($"[EnvCardToken] SetActiveCard('{card?.name}') — layout found={layout != null}, instanceId={(layout != null ? layout.GetEntityId().ToString() : "n/a")}");
         layout?.SetEnvironmentalCard(card);
+        // The weather rolls in across the top of the screen (not when a save restores it).
+        if (card != null && SaveSystem.PendingLoad == null) EnvironmentBurst.Play(card);
     }
 
     public bool CanNationPlay(Leader leader, int turn, out string reason)

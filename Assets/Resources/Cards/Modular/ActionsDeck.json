@@ -2481,7 +2481,7 @@
                                            ],
                       "commanderSkillRequired":  0,
                       "agentSkillRequired":  0,
-                      "emissarySkillRequired":  2,
+                      "emissarySkillRequired":  1,
                       "mageSkillRequired":  0,
                       "difficulty":  0,
                       "leatherRequired":  0,

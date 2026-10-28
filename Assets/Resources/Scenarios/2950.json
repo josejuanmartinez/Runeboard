@@ -43561,6 +43561,26 @@
             "startingObjects": []
         },
         {
+            "row": 5,
+            "col": 5,
+            "characterName": "Tharkun",
+            "ownerLeaderName": "Gandalf",
+            "ownerVariantId": "tharkun",
+            "fallbackOwnerName": "",
+            "variantId": "tharkun",
+            "spawnConditionLeaderName": "",
+            "spawnConditionVariantId": "",
+            "spawnConditionExclude": false,
+            "army": {
+                "xp": 0,
+                "stacks": [],
+                "spawnConditionLeaderName": "",
+                "spawnConditionVariantId": "",
+                "spawnConditionExclude": false
+            },
+            "startingObjects": ["Narya"]
+        },
+        {
             "row": 6,
             "col": 7,
             "characterName": "Kili",
@@ -47226,8 +47246,8 @@
             "startingObjects": []
         },
         {
-            "row": 14,
-            "col": 31,
+            "row": 17,
+            "col": 10,
             "characterName": "Belceborg",
             "ownerLeaderName": "Murazor",
             "ownerVariantId": "",
@@ -47489,7 +47509,7 @@
                 "stacks": [
                     {
                         "armyCardName": "Dorwinion Mariners",
-                        "amount": 100
+                        "amount": 1
                     }
                 ],
                 "spawnConditionLeaderName": "Sauron",
@@ -47514,7 +47534,7 @@
                 "stacks": [
                     {
                         "armyCardName": "Rangers Of Ithilien",
-                        "amount": 100
+                        "amount": 1
                     }
                 ],
                 "spawnConditionLeaderName": "Sauron",
@@ -47539,7 +47559,7 @@
                 "stacks": [
                     {
                         "armyCardName": "Cave Goblins",
-                        "amount": 100
+                        "amount": 1
                     }
                 ],
                 "spawnConditionLeaderName": "Gandalf",
@@ -47611,7 +47631,7 @@
                 "stacks": [
                     {
                         "armyCardName": "Wargs",
-                        "amount": 100
+                        "amount": 1
                     }
                 ],
                 "spawnConditionLeaderName": "Gandalf",

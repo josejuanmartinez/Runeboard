@@ -10,8 +10,8 @@ using UnityEngine;
 // +Z away from the viewer, origin on the ground; Rotate/Translate place a part before it is added.
 public class CityMeshBuilder
 {
-    public enum Cell { Wall, Roof, Wood, Stone, Trim, Dark, Accent, Nation, Foliage }
-    public const int CellCount = 9;
+    public enum Cell { Wall, Roof, Wood, Stone, Trim, Dark, Accent, Nation, Foliage, Water }
+    public const int CellCount = 10;
 
     private readonly List<Vector3> vertices = new();
     private readonly List<Vector3> normals = new();
@@ -92,6 +92,39 @@ public class CityMeshBuilder
         Tri(a, c, d, outward, cell);
     }
 
+    // A triangle with its own normal at each corner, for round surfaces (towers, domes, cone
+    // roofs): lit as one smooth curve instead of a band of facets.
+    private void TriSmooth(Vector3 a, Vector3 b, Vector3 c, Vector3 na, Vector3 nb, Vector3 nc, Cell cell)
+    {
+        a = P(a); b = P(b); c = P(c);
+        na = (rotation * na).normalized; nb = (rotation * nb).normalized; nc = (rotation * nc).normalized;
+        Vector3 n = Vector3.Cross(b - a, c - a);
+        if (n.sqrMagnitude < 1e-12f) return;
+        if (Vector3.Dot(n, na + nb + nc) < 0f) { (b, c) = (c, b); (nb, nc) = (nc, nb); n = -n; }
+        n.Normalize();
+        int start = vertices.Count;
+        vertices.Add(a); vertices.Add(b); vertices.Add(c);
+        normals.Add(na); normals.Add(nb); normals.Add(nc);
+        Vector3 u = Vector3.Cross(Vector3.up, n);
+        u = u.sqrMagnitude < 0.01f ? Vector3.right : u.normalized;
+        Vector3 v = Vector3.Cross(n, u).normalized;
+        uvs.Add(new Vector2(Vector3.Dot(a, u), Vector3.Dot(a, v)) * UvScale);
+        uvs.Add(new Vector2(Vector3.Dot(b, u), Vector3.Dot(b, v)) * UvScale);
+        uvs.Add(new Vector2(Vector3.Dot(c, u), Vector3.Dot(c, v)) * UvScale);
+        List<int> cellTriangles = triangles[(int)cell];
+        cellTriangles.Add(start); cellTriangles.Add(start + 1); cellTriangles.Add(start + 2);
+        Track(a); Track(b); Track(c);
+    }
+
+    private void QuadSmooth(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 na, Vector3 nb, Vector3 nc, Vector3 nd, Cell cell)
+    {
+        TriSmooth(a, b, c, na, nb, nc, cell);
+        TriSmooth(a, c, d, na, nc, nd, cell);
+    }
+
+    // One hex width in builder units (UvScale repeats textures every tenth of a hex).
+    private float HexWidth => UvScale > 0f ? 10f / UvScale : 1f;
+
     private void Track(Vector3 p)
     {
         Height = Mathf.Max(Height, p.y);
@@ -114,33 +147,148 @@ public class CityMeshBuilder
         Quad(v000, v001, v011, v010, Vector3.left, cell);
         Quad(v100, v101, v111, v110, Vector3.right, cell);
         Quad(v010, v110, v111, v011, Vector3.up, top ?? cell);
+        Dress(bottomCentre, size, cell);
     }
 
-    /// <summary>A gable roof on a w x d footprint at height y, ridge along X, with a little overhang.</summary>
+    // A building's walls are more than a slab: a stone footing, a cornice under the eaves, and
+    // windows in rows up the visible faces. Only boxes the size of a house or a hall in a
+    // wall-like surface get them, not town walls, steps, plinths or props.
+    private void Dress(Vector3 c, Vector3 size, Cell cell)
+    {
+        float w = HexWidth;
+        if (cell != Cell.Wall && cell != Cell.Stone) return;
+        if (size.y < 0.045f * w || Mathf.Min(size.x, size.z) < 0.04f * w || size.y > 0.5f * w) return;
+        float hx = size.x * 0.5f, hz = size.z * 0.5f;
+        float proud = 0.0025f * w;
+
+        // Footing and cornice: thin bands standing a little proud of the wall.
+        float footing = Mathf.Min(0.008f * w, size.y * 0.12f);
+        Band(c, hx + proud, hz + proud, 0f, footing, Cell.Stone);
+        float cornice = Mathf.Min(0.006f * w, size.y * 0.1f);
+        Band(c, hx + proud, hz + proud, size.y - cornice, cornice, Cell.Trim);
+
+        // Windows: rows up the front and the two sides (the board is seen from the front).
+        float storey = 0.05f * w, winW = 0.011f * w, winH = 0.017f * w, spacing = 0.032f * w;
+        int rows = Mathf.Clamp(Mathf.FloorToInt((size.y - footing - cornice) / storey), 1, 6);
+        for (int face = 0; face < 3; face++)
+        {
+            float length = face == 0 ? size.x : size.z;
+            int cols = Mathf.FloorToInt((length - spacing * 0.5f) / spacing);
+            if (cols < 1) continue;
+            for (int row = 0; row < rows; row++)
+            {
+                float y = footing + (row + 0.55f) * (size.y - footing - cornice) / rows - winH * 0.5f;
+                for (int col = 0; col < cols; col++)
+                {
+                    float t = (col + 0.5f) / cols - 0.5f;
+                    Vector3 centre, along, outward;
+                    if (face == 0) { centre = c + new Vector3(t * length, y, -hz - 0.0008f * w); along = Vector3.right; outward = Vector3.back; }
+                    else if (face == 1) { centre = c + new Vector3(-hx - 0.0008f * w, y, t * length); along = Vector3.forward; outward = Vector3.left; }
+                    else { centre = c + new Vector3(hx + 0.0008f * w, y, t * length); along = Vector3.back; outward = Vector3.right; }
+                    Window(centre, along, outward, winW, winH, proud);
+                }
+            }
+        }
+    }
+
+    // A ring of four flat strips around a box footprint, from y0 up `height`, standing out to hx/hz.
+    private void Band(Vector3 c, float hx, float hz, float y0, float height, Cell cell)
+    {
+        Vector3 b0 = c + new Vector3(-hx, y0, -hz), b1 = c + new Vector3(hx, y0, -hz);
+        Vector3 b2 = c + new Vector3(hx, y0, hz), b3 = c + new Vector3(-hx, y0, hz);
+        Vector3 up = Vector3.up * height;
+        Quad(b0, b1, b1 + up, b0 + up, Vector3.back, cell);
+        Quad(b1, b2, b2 + up, b1 + up, Vector3.right, cell);
+        Quad(b2, b3, b3 + up, b2 + up, Vector3.forward, cell);
+        Quad(b3, b0, b0 + up, b3 + up, Vector3.left, cell);
+        Quad(b0 + up, b1 + up, b2 + up, b3 + up, Vector3.up, cell);
+    }
+
+    // A window: a dark pane in a pale frame, set just out from the wall (centre = its sill middle).
+    private void Window(Vector3 centre, Vector3 along, Vector3 outward, float width, float height, float proud)
+    {
+        float frame = width * 0.18f;
+        Vector3 h = along * (width * 0.5f + frame), v = Vector3.up * (height + frame * 2f);
+        Vector3 o = centre - Vector3.up * frame;
+        Quad(o - h, o + h, o + h + v, o - h + v, outward, Cell.Trim);
+        Vector3 inner = centre + outward * proud * 0.3f;
+        Vector3 ih = along * (width * 0.5f);
+        Quad(inner - ih, inner + ih, inner + ih + Vector3.up * height, inner - ih + Vector3.up * height, outward, Cell.Dark);
+    }
+
+    /// <summary>A gable roof on a w x d footprint at height y, ridge along X: overhanging eaves
+    /// and gable ends, a visible thickness with a shadowed underside, and a ridge cap.</summary>
     public void GableRoof(Vector3 bottomCentre, float width, float depth, float height, Cell roof, Cell gable)
     {
-        float hx = width * 0.5f + 0.006f, hz = depth * 0.5f + 0.008f;
-        Vector3 c = bottomCentre;
+        float w = HexWidth;
+        float overX = Mathf.Max(0.006f, 0.08f * width), overZ = Mathf.Max(0.008f, 0.12f * depth);
+        float thick = Mathf.Min(0.006f * w, height * 0.25f);
+        float hx = width * 0.5f + overX, hz = depth * 0.5f + overZ;
+        // The eaves hang a little lower than the wall top, as the slope runs on past it.
+        float drop = height * overZ / (depth * 0.5f + overZ);
+        Vector3 c = bottomCentre - Vector3.up * drop;
+        float rise = height + drop;
         Vector3 fl = c + new Vector3(-hx, 0, -hz), fr = c + new Vector3(hx, 0, -hz);
         Vector3 bl = c + new Vector3(-hx, 0, hz), br = c + new Vector3(hx, 0, hz);
-        Vector3 rl = c + new Vector3(-hx, height, 0), rr = c + new Vector3(hx, height, 0);
-        Quad(fl, fr, rr, rl, new Vector3(0, hz, -height), roof);
-        Quad(bl, br, rr, rl, new Vector3(0, hz, height), roof);
-        Tri(fl, bl, rl, Vector3.left, gable);
-        Tri(fr, br, rr, Vector3.right, gable);
+        Vector3 rl = c + new Vector3(-hx, rise, 0), rr = c + new Vector3(hx, rise, 0);
+        Vector3 t = Vector3.up * thick;
+        // Top slopes (lifted by the thickness), undersides, and the edges between them.
+        Quad(fl + t, fr + t, rr + t, rl + t, new Vector3(0, hz, -rise), roof);
+        Quad(bl + t, br + t, rr + t, rl + t, new Vector3(0, hz, rise), roof);
+        Quad(fl, fr, rr, rl, new Vector3(0, -hz, rise), Cell.Dark);
+        Quad(bl, br, rr, rl, new Vector3(0, -hz, -rise), Cell.Dark);
+        Quad(fl, fr, fr + t, fl + t, Vector3.back, Cell.Wood);
+        Quad(bl, br, br + t, bl + t, Vector3.forward, Cell.Wood);
+        Quad(fl, rl, rl + t, fl + t, Vector3.left, Cell.Wood);
+        Quad(rl, bl, bl + t, rl + t, Vector3.left, Cell.Wood);
+        Quad(fr, rr, rr + t, fr + t, Vector3.right, Cell.Wood);
+        Quad(rr, br, br + t, rr + t, Vector3.right, Cell.Wood);
+        // Gable ends, set back under the overhang.
+        float gx = width * 0.5f;
+        Vector3 gc = bottomCentre;
+        Tri(gc + new Vector3(-gx, 0, -depth * 0.5f), gc + new Vector3(-gx, 0, depth * 0.5f), gc + new Vector3(-gx, height, 0), Vector3.left, gable);
+        Tri(gc + new Vector3(gx, 0, -depth * 0.5f), gc + new Vector3(gx, 0, depth * 0.5f), gc + new Vector3(gx, height, 0), Vector3.right, gable);
+        // Ridge cap.
+        float cap = thick * 0.9f;
+        Vector3 r0 = rl + t, r1 = rr + t;
+        Quad(r0 + new Vector3(0, 0, -cap), r1 + new Vector3(0, 0, -cap), r1 + Vector3.up * cap * 0.8f, r0 + Vector3.up * cap * 0.8f, new Vector3(0, 1, -1), Cell.Dark);
+        Quad(r0 + new Vector3(0, 0, cap), r1 + new Vector3(0, 0, cap), r1 + Vector3.up * cap * 0.8f, r0 + Vector3.up * cap * 0.8f, new Vector3(0, 1, 1), Cell.Dark);
     }
 
     /// <summary>A pyramid (n = 4) or cone (n > 4) standing on y, apex at y + height.</summary>
     public void Cone(Vector3 bottomCentre, float radius, float height, int sides, Cell cell, float twist = 0f)
     {
         Vector3 apex = bottomCentre + Vector3.up * height;
+        // Round cones (not pyramids) are shaded smooth; a roof flares out a little at the eave.
+        bool round = sides > 4;
+        if (cell == Cell.Roof && round)
+        {
+            float flare = radius * 1.14f, lip = height * 0.06f;
+            Vector3 low = bottomCentre - Vector3.up * lip;
+            for (int i = 0; i < sides; i++)
+            {
+                Vector3 a = Ring(bottomCentre, radius, i, sides, twist), b = Ring(bottomCentre, radius, i + 1, sides, twist);
+                Vector3 c = Ring(low, flare, i + 1, sides, twist), d = Ring(low, flare, i, sides, twist);
+                Vector3 na = ConeNormal(a - bottomCentre, radius, height), nb = ConeNormal(b - bottomCentre, radius, height);
+                QuadSmooth(a, b, c, d, na, nb, nb, na, cell);
+                Quad(d, c, Ring(low, radius * 0.9f, i + 1, sides, twist), Ring(low, radius * 0.9f, i, sides, twist), Vector3.down, Cell.Dark);
+            }
+        }
         for (int i = 0; i < sides; i++)
         {
             Vector3 a = Ring(bottomCentre, radius, i, sides, twist);
             Vector3 b = Ring(bottomCentre, radius, i + 1, sides, twist);
             Vector3 mid = (a + b) * 0.5f - bottomCentre;
-            Tri(a, b, apex, new Vector3(mid.x, radius * 0.5f, mid.z), cell);
+            if (!round) { Tri(a, b, apex, new Vector3(mid.x, radius * 0.5f, mid.z), cell); continue; }
+            Vector3 na = ConeNormal(a - bottomCentre, radius, height), nb = ConeNormal(b - bottomCentre, radius, height);
+            TriSmooth(a, b, apex, na, nb, ConeNormal(mid, radius, height), cell);
         }
+    }
+
+    private static Vector3 ConeNormal(Vector3 radial, float radius, float height)
+    {
+        radial.y = 0f;
+        return (radial.normalized * height + Vector3.up * radius).normalized;
     }
 
     /// <summary>A prism with n sides (a cylinder for n ≥ 8) standing on y; tapers to topScale.</summary>
@@ -152,7 +300,12 @@ public class CityMeshBuilder
             Vector3 a = Ring(bottomCentre, radius, i, sides, twist), b = Ring(bottomCentre, radius, i + 1, sides, twist);
             Vector3 c = Ring(topCentre, radius * topScale, i + 1, sides, twist), d = Ring(topCentre, radius * topScale, i, sides, twist);
             Vector3 mid = (a + b) * 0.5f - bottomCentre;
-            Quad(a, b, c, d, new Vector3(mid.x, 0, mid.z), cell);
+            if (sides >= 8)
+            {
+                Vector3 na = new Vector3(a.x - bottomCentre.x, 0f, a.z - bottomCentre.z), nb = new Vector3(b.x - bottomCentre.x, 0f, b.z - bottomCentre.z);
+                QuadSmooth(a, b, c, d, na, nb, nb, na, cell);
+            }
+            else Quad(a, b, c, d, new Vector3(mid.x, 0, mid.z), cell);
             if (top.HasValue) Tri(topCentre, d, c, Vector3.up, top.Value);
         }
     }
@@ -170,11 +323,20 @@ public class CityMeshBuilder
             {
                 Vector3 a = Ring(c0, r0, i, sides), b = Ring(c0, r0, i + 1, sides);
                 Vector3 c = Ring(c1, r1, i + 1, sides), d = Ring(c1, r1, i, sides);
-                Vector3 outward = ((a + b + c + d) * 0.25f - bottomCentre);
-                if (r == rings - 1) Tri(a, b, c, outward, cell);
-                else Quad(a, b, c, d, outward, cell);
+                Vector3 na = DomeNormal(a - bottomCentre, radius, height), nb = DomeNormal(b - bottomCentre, radius, height);
+                Vector3 nc = DomeNormal(c - bottomCentre, radius, height), nd = DomeNormal(d - bottomCentre, radius, height);
+                if (r == rings - 1) TriSmooth(a, b, c, na, nb, nc, cell);
+                else QuadSmooth(a, b, c, d, na, nb, nc, nd, cell);
             }
         }
+    }
+
+    // The outward normal of an ellipsoid with these radii at a point on it (a hanging dome too).
+    private static Vector3 DomeNormal(Vector3 p, float radius, float height)
+    {
+        float h = Mathf.Abs(height) < 1e-5f ? 1e-5f : height;
+        var n = new Vector3(p.x / (radius * radius), p.y / (h * h), p.z / (radius * radius));
+        return n.sqrMagnitude < 1e-12f ? Vector3.up * Mathf.Sign(h) : n.normalized * Mathf.Sign(h);
     }
 
     /// <summary>Merlons around the top rim of a round tower.</summary>
@@ -351,6 +513,100 @@ public class CityMeshBuilder
                 Tri(a, b, c, outward, Face((a.y + b.y + c.y) / 3f, ridge, i, ring));
                 Tri(a, c, d, outward, Face((a.y + c.y + d.y) / 3f, ridge, i + 101, ring));
             }
+    }
+
+    /// <summary>A flat patch of ground (a pool, a stream, a lava crack, a path) filling a `width` ×
+    /// `depth` footprint, `height` thick: a rounded blob whose edge wanders a little, or — when the
+    /// footprint is long and thin — a ribbon that meanders along it and tapers at the ends, so water
+    /// and paths lie on the land as shapes rather than as rectangles.</summary>
+    public void Patch(Vector3 bottomCentre, float width, float depth, float height, int seed, Cell cell)
+    {
+        float rx = width * 0.5f, rz = depth * 0.5f;
+        if (Mathf.Max(rx, rz) > 2.5f * Mathf.Min(rx, rz))
+        {
+            Ribbon(bottomCentre, width, depth, height, seed, cell);
+            return;
+        }
+        const int segments = 28;
+        float p1 = Jitter(seed, 1) * 6.28f, p2 = Jitter(seed, 2) * 6.28f, p3 = Jitter(seed, 3) * 6.28f;
+        var rim = new Vector3[segments];
+        for (int i = 0; i < segments; i++)
+        {
+            float a = i / (float)segments * Mathf.PI * 2f;
+            float c = Mathf.Cos(a), s = Mathf.Sin(a);
+            // A softened superellipse, wobbled by a few slow waves.
+            const float roundness = 2.4f;
+            float x = Mathf.Sign(c) * Mathf.Pow(Mathf.Abs(c), 2f / roundness) * rx;
+            float z = Mathf.Sign(s) * Mathf.Pow(Mathf.Abs(s), 2f / roundness) * rz;
+            float wobble = 1f - 0.09f * (1f + Mathf.Sin(a * 2f + p1)) - 0.05f * (1f + Mathf.Sin(a * 3f + p2)) - 0.03f * (1f + Mathf.Sin(a * 5f + p3));
+            rim[i] = bottomCentre + new Vector3(x * wobble, height, z * wobble);
+        }
+        Vector3 middle = bottomCentre + Vector3.up * height;
+        for (int i = 0; i < segments; i++)
+        {
+            Vector3 a = rim[i], b = rim[(i + 1) % segments];
+            Tri(middle, a, b, Vector3.up, cell);
+            if (height > 1e-5f)
+            {
+                Vector3 outward = (a + b) * 0.5f - bottomCentre; outward.y = 0f;
+                Quad(a - Vector3.up * height, b - Vector3.up * height, b, a, outward, cell);
+            }
+        }
+    }
+
+    // A long, thin patch: a strip down the footprint's long axis that bends a couple of times,
+    // breathes in width and narrows to points at both ends.
+    private void Ribbon(Vector3 bottomCentre, float width, float depth, float height, int seed, Cell cell)
+    {
+        const int steps = 18;
+        bool alongX = width >= depth;
+        float length = alongX ? width : depth, breadth = alongX ? depth : width;
+        Vector3 along = alongX ? Vector3.right : Vector3.forward;
+        Vector3 across = alongX ? Vector3.forward : Vector3.right;
+        float bends = 1.2f + Jitter(seed, 4) * 1.3f, phase = Jitter(seed, 5) * 6.28f;
+        var left = new Vector3[steps + 1];
+        var right = new Vector3[steps + 1];
+        for (int i = 0; i <= steps; i++)
+        {
+            float t = i / (float)steps;
+            // The centre line swings across the footprint; the strip keeps inside it.
+            float swing = Mathf.Sin(t * Mathf.PI * bends + phase) * 0.6f + Mathf.Sin(t * Mathf.PI * 5.3f + phase * 2f) * 0.15f;
+            float half = breadth * 0.5f * (0.75f + 0.25f * Mathf.Sin(t * 9f + phase)) * Mathf.Sqrt(Mathf.Sin(t * Mathf.PI) + 0.05f);
+            Vector3 centre = bottomCentre + along * ((t - 0.5f) * length) + across * (swing * breadth * 0.5f) + Vector3.up * height;
+            left[i] = centre - across * half;
+            right[i] = centre + across * half;
+        }
+        for (int i = 0; i < steps; i++)
+        {
+            Quad(left[i], right[i], right[i + 1], left[i + 1], Vector3.up, cell);
+            if (height > 1e-5f)
+            {
+                Quad(left[i] - Vector3.up * height, left[i + 1] - Vector3.up * height, left[i + 1], left[i], -across, cell);
+                Quad(right[i] - Vector3.up * height, right[i + 1] - Vector3.up * height, right[i + 1], right[i], across, cell);
+            }
+        }
+    }
+
+    /// <summary>A mountain as a massif rather than a lone cone: the peak, two lower shoulders
+    /// leaning against it at seeded bearings, and a few boulders at its foot.</summary>
+    public void Massif(Vector3 bottom, float radius, float height, int sides, int seed, Cell cell,
+        Cell? snow = null, float snowline = 0.6f, float stretch = 1f, float fullness = 0.35f)
+    {
+        Peak(bottom, radius, height, sides, seed, cell, snow, snowline, stretch, fullness);
+        for (int i = 0; i < 2; i++)
+        {
+            float a = (Jitter(seed, 600 + i) * 0.5f + i * 0.5f) * Mathf.PI * 2f;
+            var at = bottom + new Vector3(Mathf.Cos(a) * radius * 0.72f * stretch, 0f, Mathf.Sin(a) * radius * 0.5f);
+            float h = height * (0.38f + 0.22f * Jitter(seed, 610 + i));
+            Peak(at, radius * (0.5f + 0.15f * Jitter(seed, 620 + i)), h, Mathf.Max(7, sides - 2), seed + 31 * (i + 1), cell,
+                snow, snowline + 0.12f, 1f + 0.3f * Jitter(seed, 630 + i), fullness);
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            float a = Jitter(seed, 640 + i) * Mathf.PI * 2f;
+            var at = bottom + new Vector3(Mathf.Cos(a) * radius * 0.95f * stretch, 0f, Mathf.Sin(a) * radius * 0.8f);
+            Rock(at, radius * (0.12f + 0.08f * Jitter(seed, 650 + i)), height * 0.06f, seed + 97 * (i + 1), cell);
+        }
     }
 
     /// <summary>A clump of reeds or rushes: `count` thin blades leaning out from a spot `radius` wide,

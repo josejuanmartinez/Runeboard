@@ -682,29 +682,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         !cardData.encounterRevealed &&
         cardData.encounterTargetHex != null;
 
-    // Points at an unplayed encounter card's target hex with the same fluid HexPathRenderer
-    // pulse used for the ambient opportunity-card hint (see OpportunityHexHinter), rather than a
-    // separate flashing-frame cue.
-    private void ShowEncounterHintPath(Character fromCharacter)
-    {
-        if (cardData?.encounterTargetHex == null) return;
-        EnsureManagersLoaded();
-        if (pathRenderer == null) return;
-
-        Character source = fromCharacter ?? ResolveSelectedCharacter();
-        if (source?.hex == null) return;
-
-        pathRenderer.PulseHintPath(source, cardData.encounterTargetHex.v2, 5f);
-    }
-
-    private static Character ResolveSelectedCharacter()
-    {
-        Board board = Board.Instance;
-        if (board != null && board.selectedCharacter != null) return board.selectedCharacter;
-        SelectedCharacterIcon icon = FindAnyObjectByType<SelectedCharacterIcon>();
-        return icon != null ? icon.CurrentCharacter : null;
-    }
-
     private void ClearEncounterHiddenVisualsInstant()
     {
         if (encounterArtOverlay != null)
@@ -1232,7 +1209,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
                 if (IsUnplayedEncounterWithHex())
                 {
                     BoardNavigator.Instance?.LookAt(cardData.encounterTargetHex.transform.position);
-                    ShowEncounterHintPath(null);
                 }
                 return;
             }
@@ -1268,7 +1244,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             if (IsUnplayedEncounterWithHex())
             {
                 BoardNavigator.Instance?.LookAt(cardData.encounterTargetHex.transform.position);
-                ShowEncounterHintPath(selectedCharacter);
             }
             else if (selectedCharacter?.hex != null)
             {
@@ -1436,7 +1411,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
             if (IsUnplayedEncounterWithHex())
             {
                 BoardNavigator.Instance?.LookAt(cardData.encounterTargetHex.transform.position);
-                ShowEncounterHintPath(playedSelected);
             }
             else if (playedSelected?.hex != null)
             {
@@ -1898,10 +1872,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         {
             if (cardData.playability.failsAlreadyActioned)
             {
-                PlayableLeader human = Game.Instance != null ? Game.Instance.player : null;
-                messages.Add(human != null && human.CommandPoints <= 0
-                    ? "<sprite name=\"error\">No command points left this turn."
-                    : "<sprite name=\"error\">This character cannot act this turn.");
+                messages.Add("<sprite name=\"error\">This character has already acted this turn.");
             }
             else if (cardData.IsEncounterCard() && cardData.encounterTargetHex != null)
             {
@@ -2264,58 +2235,12 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
         if (existing == null)
         {
-            if (!playerLeader.HasCharacterSlot())
-            {
-                Debug.LogWarning($"[CardPlay/Character] '{cardData.name}': no character slots available for '{playerLeader.characterName}'.");
-                MessageDisplay.ShowMessage("No character slots available.", Color.red);
-                return Task.FromResult(false);
-            }
-
-            CharacterInstantiator instantiator = FindAnyObjectByType<CharacterInstantiator>();
-            if (instantiator == null)
-            {
-                Debug.LogWarning($"[CardPlay/Character] '{cardData.name}': no CharacterInstantiator found in scene.");
-                return Task.FromResult(false);
-            }
-
-            BiomeConfig config = new()
-            {
-                characterName = characterName,
-                alignment = (AlignmentEnum)cardData.alignment,
-                race = cardData.race,
-                sex = cardData.sex,
-                commander = cardData.commander,
-                agent = cardData.agent,
-                emmissary = cardData.emmissary,
-                mage = cardData.mage,
-                artifacts = cardData.artifacts != null ? new List<string>(cardData.artifacts) : new List<string>()
-            };
-
-            Character newCharacter = instantiator.InstantiateCharacter(playerLeader, hex, config);
+            Character newCharacter = CharacterRecruitment.Spawn(playerLeader, hex, cardData);
             if (newCharacter == null)
             {
+                Debug.LogWarning($"[CardPlay/Character] '{cardData.name}': could not recruit for '{playerLeader.characterName}'.");
                 return Task.FromResult(false);
             }
-
-            newCharacter.startingCharacter = false;
-            newCharacter.characterGroup = cardData.characterGroup;
-            newCharacter.hasActionedThisTurn = true;
-            newCharacter.isPlayerControlled = playerLeader == game.player;
-            playerLeader.TryConsumeCharacterSlot();
-            hex.RedrawCharacters();
-
-            string joinMessage = $"{characterName} has joined {playerLeader.characterName}.";
-            MessageDisplayNoUI.ShowMessage(hex, newCharacter, joinMessage, Color.green, recordRumour: false);
-
-            Rumour rumour = new Rumour
-            {
-                leader = playerLeader,
-                character = newCharacter,
-                characterName = characterName,
-                rumour = joinMessage,
-                v2 = hex.v2
-            };
-            RumoursManager.AddRumour(rumour, isPublic: false);
 
             return Task.FromResult(true);
         }

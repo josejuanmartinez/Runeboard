@@ -8,11 +8,13 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The human player's always-visible card tray, replacing the hidden per-character bloom wheel.
-/// Left group: the leader's hand, drawn from their deck each turn (DeckManager.DrawHandForTurn).
+/// Left group: the leader's hand. On the campaign chain that is every card unlocked so far (no
+/// draw, no limit); otherwise it is drawn from their deck each turn (DeckManager.DrawHandForTurn).
+/// Only the cards the selected character can play where they stand are shown.
 /// Right group: situational opportunities for the selected character where they stand.
-/// Every play costs one of the leader's command points, and any character may spend them.
+/// Every play spends one of the selected character's actions (one a turn, two for the champion).
 /// Hover = full card preview, left click = play with the selected character,
-/// right click (hand only) = discard for a random resource.
+/// right click (hand only, off the campaign chain) = discard for a random resource.
 ///
 /// Layout: cards are placed by hand on a shallow arc (no layout group). Pointer input goes to a
 /// separate row of fixed, non-overlapping hit strips, so lifting, scaling or re-ordering a card
@@ -49,7 +51,7 @@ public class HandTray : MonoBehaviour
     private Character opportunitiesFor;
     private Hex opportunitiesHex;
     private Character lastSelected;
-    private int lastCommandPoints = -1;
+    private int lastActionsLeft = -1;
     private int lastTurn = -1;
     private int handSignature;
     private bool dirty = true;
@@ -123,12 +125,13 @@ public class HandTray : MonoBehaviour
             opportunitiesFor = null;
             dirty = true;
         }
-        int cp = player.CommandPoints;
-        if (cp != lastCommandPoints || game.turn != lastTurn) { lastCommandPoints = cp; lastTurn = game.turn; dirty = true; }
+        int actionsLeft = selected != null ? selected.ActionsLeftThisTurn : -1;
+        if (actionsLeft != lastActionsLeft || game.turn != lastTurn) { lastActionsLeft = actionsLeft; lastTurn = game.turn; dirty = true; }
         int signature = ComputeHandSignature(deck.GetHand(player));
         if (signature != handSignature) { handSignature = signature; dirty = true; }
 
         // Don't rebuild under a hovered card unless something actually changed the hand.
+        if (expandedFamily != null && Input.GetKeyDown(KeyCode.Escape)) { expandedFamily = null; dirty = true; }
         if (dirty && !playing) Rebuild(player, selected);
         else if (Time.unscaledTime >= nextPlayabilityRefresh && !playing) RefreshTints(selected);
     }
@@ -230,24 +233,68 @@ public class HandTray : MonoBehaviour
         float available = PlaceRoot(CardHeight);
 
         string selectedName = selected != null && selected.GetOwner() == player ? selected.characterName : null;
-        int cp = player.CommandPoints;
-        string text = $"{UiTheme.Eyebrow("Command")} <color={UiTheme.GoldHex}>{cp}</color><color={UiTheme.MutedHex}>/{player.CommandPointsMax}</color>"
-            + (selectedName != null ? $"   <color={UiTheme.MutedHex}>·</color>   {selectedName}" : $"   <color={UiTheme.MutedHex}>·   Select a character to play cards</color>");
+        string text = selectedName != null
+            ? $"{selectedName}   <color={UiTheme.MutedHex}>·</color>   {UiTheme.Eyebrow(selected.IsChampion ? "Champion actions" : "Actions")} <color={UiTheme.GoldHex}>{selected.ActionsLeftThisTurn}</color><color={UiTheme.MutedHex}>/{selected.MaxActionsPerTurn}</color>"
+            : $"<color={UiTheme.MutedHex}>Select a character to play cards</color>";
 
         // Only cards the selected character can play right now are shown; the rest stay in hand
         // (counted in the header) until the situation, character or resources make them live.
+        // Look-alike cards (every Buy, every Sell, every army...) sit in one stack: the fan shows
+        // one card per family, and clicking a stack fans out just that family.
+        var playable = new List<CardData>();
         int held = 0;
         foreach (CardData card in hand)
         {
-            if (!IsPlayable(card, selected)) { held++; continue; }
-            slots.Add(CreateSlot(new SituationCardOffer(card, SituationCardOfferSource.Hand, true), isHand: true));
+            if (IsPlayable(card, selected)) playable.Add(card);
+            else held++;
         }
-        int handCount = slots.Count;
-        foreach (SituationCardOffer offer in opportunities)
-            if (IsPlayable(offer.Card, selected))
-                slots.Add(CreateSlot(new SituationCardOffer(offer.Card, offer.Source, true), isHand: false));
+        if (selected != expandedFor || expandedFamily != null && !playable.Any(c => FamilyOf(c) == expandedFamily)) expandedFamily = null;
+        if (selected != expandedFor) page = 0;
+        expandedFor = selected;
 
-        if (held > 0) text += $"   <color={UiTheme.MutedHex}>·   +{held} in hand, not playable here</color>";
+        // Everything playable, most useful first; the fan then shows one page of it.
+        var entries = new List<(SituationCardOffer offer, bool isHand, string family, int count)>();
+        if (expandedFamily != null)
+        {
+            foreach (CardData card in playable.Where(c => FamilyOf(c) == expandedFamily))
+                entries.Add((new SituationCardOffer(card, SituationCardOfferSource.Hand, true), true, null, 1));
+        }
+        else
+        {
+            foreach (IGrouping<string, CardData> family in playable
+                .OrderBy(c => Priority(player, c))
+                .GroupBy(FamilyOf))
+            {
+                int count = family.Count();
+                entries.Add((new SituationCardOffer(family.First(), SituationCardOfferSource.Hand, true), true, count > 1 ? family.Key : null, count));
+            }
+            // What is on offer at this hex follows the hand. An offer that is already a card in
+            // the hand would only show it twice.
+            HashSet<string> inHand = new(playable.Select(c => c.name), System.StringComparer.OrdinalIgnoreCase);
+            foreach (SituationCardOffer offer in opportunities)
+                if (!inHand.Contains(offer.Card.name) && IsPlayable(offer.Card, selected))
+                    entries.Add((new SituationCardOffer(offer.Card, offer.Source, true), false, null, 1));
+        }
+
+        int pages = Mathf.Max(1, Mathf.CeilToInt(entries.Count / (float)PageSize));
+        page = Mathf.Clamp(page, 0, pages - 1);
+        foreach (var e in entries.Skip(page * PageSize).Take(PageSize))
+        {
+            HandTraySlot slot = CreateSlot(e.offer, isHand: e.isHand);
+            if (e.family != null) slot.MakeStack(e.family, e.count);
+            slots.Add(slot);
+        }
+        int handCount = slots.Count(sl => sl.IsHand);
+        if (expandedFamily != null) extras.Add(CreateBackChip(FamilyName(expandedFamily), entries.Count));
+        if (pages > 1) AddPager(pages);
+
+        bool campaign = DeckManager.IsCampaignLeader(player);
+        if (selected != null && slots.Count == 0)
+            // Nothing to play: say why, and where the next step is.
+            text += selected.ActionsLeftThisTurn <= 0
+                ? $"   <color={UiTheme.MutedHex}>·   no actions left this turn: end the turn</color>"
+                : $"   <color={UiTheme.MutedHex}>·   nothing to play here: the </color><color={UiTheme.GoldHex}>Next</color><color={UiTheme.MutedHex}> panel above shows where to go</color>";
+        else if (held > 0) text += $"   <color={UiTheme.MutedHex}>·   +{held} {(campaign ? "more in your deck" : "in hand")}, not playable here</color>";
         header.text = text;
 
         if (slots.Count == 0)
@@ -268,7 +315,8 @@ public class HandTray : MonoBehaviour
         float gap = handCount > 0 && opp > 0 ? GroupGap : 0f;
         float maxStep = CardWidth * 0.92f;
         float step = n <= 1 ? 0f : Mathf.Min(maxStep, (available - CardWidth * 1.3f - gap) / (n - 1));
-        step = Mathf.Max(step, CardWidth * 0.42f);
+        // The campaign hand can hold many playable cards at once; let them overlap further.
+        step = Mathf.Max(step, CardWidth * 0.3f);
         float span = step * (n - 1) + gap;
         float maxAngle = Mathf.Min(9f, 1.8f * n);
         float maxDrop = Mathf.Min(16f, 3f * n);
@@ -319,7 +367,7 @@ public class HandTray : MonoBehaviour
         return SituationCardsUI.IsOfferPlayable(card, selected);
     }
 
-    // Playability changes as resources, positions and command points change mid-turn.
+    // Playability changes as resources, positions and actions left change mid-turn.
     private void RefreshTints(Character selected)
     {
         nextPlayabilityRefresh = Time.unscaledTime + 0.5f;
@@ -329,6 +377,148 @@ public class HandTray : MonoBehaviour
             bool playable = IsPlayable(slot.Offer.Card, selected);
             if (playable != slot.Playable) slot.SetPlayable(playable);
         }
+    }
+
+    // ------------------------------------------------------------------ Card families
+
+    private string expandedFamily;
+    private Character expandedFor;
+
+    // The fan never holds more than a page of cards; the rest are a flip away.
+    private const int PageSize = 8;
+    private int page;
+
+    // What to show first: the open campaign step's cards, then actions and spells (what a
+    // character does), then heroes, armies, places and lands, then the markets.
+    private static int Priority(PlayableLeader player, CardData card)
+    {
+        if (IsForOpenStep(player, card)) return 0;
+        string family = FamilyOf(card);
+        if (family.StartsWith("card:")) return card.GetCardType() is CardTypeEnum.Action or CardTypeEnum.Spell ? 1 : 2;
+        return family switch
+        {
+            "Character" => 3,
+            "Army" => 4,
+            "PC" or "Land" => 5,
+            _ => 6,
+        };
+    }
+
+    private void Flip(int delta)
+    {
+        page += delta;
+        dirty = true;
+        Sounds.Instance?.PlayUiHover();
+    }
+
+    // "‹  2 / 5  ›" under the header, over the fan's right end.
+    private void AddPager(int pages)
+    {
+        var go = new GameObject("Pager", typeof(RectTransform));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(hitLayer, false);
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0f);
+        rt.pivot = new Vector2(0.5f, 0f);
+        rt.sizeDelta = new Vector2(150f, 30f);
+        rt.anchoredPosition = new Vector2(0f, CardHeight + HoverLift + 30f + (expandedFamily != null ? 36f : 0f));
+        extras.Add(go);
+
+        TextMeshProUGUI label = CreateText(rt, "Page", 13f, TextAlignmentOptions.Center);
+        label.text = $"<color={UiTheme.MutedHex}>{page + 1} / {pages}</color>";
+        Stretch(label.rectTransform);
+        PagerArrow(rt, "‹", -1, page > 0);
+        PagerArrow(rt, "›", 1, page < pages - 1);
+    }
+
+    private void PagerArrow(RectTransform parent, string glyph, int delta, bool live)
+    {
+        var go = new GameObject(delta < 0 ? "Previous" : "Next", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel), typeof(Button));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(parent, false);
+        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(delta < 0 ? 0f : 1f, 0.5f);
+        rt.sizeDelta = new Vector2(34f, 30f);
+        var face = go.GetComponent<CinematicPanel>();
+        face.ornament = 0f;
+        face.raycastTarget = true;
+        var button = go.GetComponent<Button>();
+        button.targetGraphic = face;
+        button.interactable = live;
+        if (live) button.onClick.AddListener(() => Flip(delta));
+        TextMeshProUGUI label = CreateText(rt, "Glyph", 18f, TextAlignmentOptions.Center);
+        UiTheme.StyleTitle(label, 18f, live ? UiTheme.Gold : UiTheme.Muted);
+        label.text = glyph;
+        Stretch(label.rectTransform);
+    }
+
+    private void Expand(string family)
+    {
+        expandedFamily = family;
+        page = 0;
+        dirty = true;
+        Sounds.Instance?.PlayUiClick();
+    }
+
+    // Cards that differ only in what they trade or raise share a family; anything else is its own.
+    private static string FamilyOf(CardData card)
+    {
+        string name = card.name ?? string.Empty;
+        if (name.StartsWith("Buy ", System.StringComparison.OrdinalIgnoreCase)) return "Buy";
+        if (name.StartsWith("Sell ", System.StringComparison.OrdinalIgnoreCase)) return "Sell";
+        return card.GetCardType() switch
+        {
+            CardTypeEnum.Army => "Army",
+            CardTypeEnum.PC => "PC",
+            CardTypeEnum.Land => "Land",
+            CardTypeEnum.Character => "Character",
+            _ => "card:" + name,
+        };
+    }
+
+    private static string FamilyName(string family) => family switch
+    {
+        "Buy" => "Buy goods",
+        "Sell" => "Sell goods",
+        "Army" => "Armies",
+        "PC" => "Places",
+        "Land" => "Lands",
+        "Character" => "Heroes",
+        _ => family,
+    };
+
+    internal static string StackLabel(string family, int count) => $"{FamilyName(family)}  ×{count}";
+
+    // A tool of a campaign step that is open right now: what the guide is asking for.
+    private static bool IsForOpenStep(PlayableLeader player, CardData card)
+    {
+        CampaignObjectives campaign = CampaignObjectives.Instance;
+        DeckManager deck = DeckManager.Instance;
+        if (campaign == null || deck == null || !campaign.HasCampaign(player)) return false;
+        int tool = campaign.ToolStage(player, card, deck.CardSource(card));
+        if (tool < 0) return false;
+        IReadOnlyList<CampaignObjective> steps = campaign.GetMilestones(player);
+        return tool < steps.Count && campaign.IsActive(player, steps[tool]);
+    }
+
+    // Above an opened family: its name and the way back to the whole hand.
+    private GameObject CreateBackChip(string familyName, int count)
+    {
+        var go = new GameObject("BackToHand", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel), typeof(Button));
+        var rt = go.GetComponent<RectTransform>();
+        rt.SetParent(hitLayer, false);
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0f);
+        rt.pivot = new Vector2(0.5f, 0f);
+        rt.sizeDelta = new Vector2(300f, 30f);
+        rt.anchoredPosition = new Vector2(0f, CardHeight + HoverLift + 30f);
+        var face = go.GetComponent<CinematicPanel>();
+        face.ornament = 0f;
+        face.raycastTarget = true;
+        var button = go.GetComponent<Button>();
+        button.targetGraphic = face;
+        button.onClick.AddListener(() => { expandedFamily = null; page = 0; dirty = true; Sounds.Instance?.PlayUiClick(); });
+        TextMeshProUGUI label = CreateText(rt, "Label", 13f, TextAlignmentOptions.Center);
+        label.text = $"<color={UiTheme.GoldHex}>‹  All cards</color>   <color={UiTheme.MutedHex}>·   {familyName} ({count})</color>";
+        Stretch(label.rectTransform);
+        return go;
     }
 
     private GameObject CreateEmptyNote(string message)
@@ -511,7 +701,7 @@ public class HandTray : MonoBehaviour
         return handler;
     }
 
-    private static Sprite ResolveArt(CardData data)
+    internal static Sprite ResolveArt(CardData data)
     {
         if (illustrations == null) illustrations = FindAnyObjectByType<Illustrations>();
         if (illustrations == null || data == null) return null;
@@ -528,7 +718,7 @@ public class HandTray : MonoBehaviour
         return null;
     }
 
-    private static string TypeLabel(CardData data)
+    internal static string TypeLabel(CardData data)
     {
         CardTypeEnum type = data.GetCardType();
         return type switch
@@ -580,7 +770,12 @@ public class HandTray : MonoBehaviour
 
         if (rightClick)
         {
-            if (slot.IsHand) await DiscardForResource(player, slot.Offer.Card);
+            if (slot.IsHand && !DeckManager.IsCampaignLeader(player)) await DiscardForResource(player, slot.Offer.Card);
+            return;
+        }
+        if (slot.StackFamily != null)
+        {
+            Expand(slot.StackFamily);
             return;
         }
 
@@ -689,6 +884,51 @@ public class HandTraySlot : MonoBehaviour
     public bool IsHand { get; private set; }
     public bool Playable { get; private set; }
     public RectTransform TokenHolder { get; set; }
+    /// <summary>The family this card stands for in the fan (null for a single card): clicking
+    /// it opens the family instead of playing.</summary>
+    public string StackFamily { get; private set; }
+
+    public void MakeStack(string family, int count)
+    {
+        StackFamily = family;
+        // Two card edges peeking out behind, and a tab naming the family and its size.
+        for (int i = 2; i >= 1; i--)
+        {
+            var back = new GameObject($"StackEdge{i}", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel));
+            var br = back.GetComponent<RectTransform>();
+            br.SetParent(visual, false);
+            br.SetAsFirstSibling();
+            br.anchorMin = Vector2.zero;
+            br.anchorMax = Vector2.one;
+            br.offsetMin = new Vector2(4f * i, 5f * i);
+            br.offsetMax = new Vector2(4f * i, 5f * i);
+            var edge = back.GetComponent<CinematicPanel>();
+            edge.ornament = 0f;
+            edge.fillTop = new Color(0.12f, 0.10f, 0.08f, 1f);
+            edge.fillBottom = new Color(0.05f, 0.045f, 0.04f, 1f);
+            edge.line = new Color(0.86f, 0.70f, 0.40f, 0.6f);
+            edge.raycastTarget = false;
+        }
+        var tab = new GameObject("StackTab", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var tr = tab.GetComponent<RectTransform>();
+        tr.SetParent(visual, false);
+        tr.anchorMin = tr.anchorMax = new Vector2(0.5f, 1f);
+        tr.pivot = new Vector2(0.5f, 0.5f);
+        tr.sizeDelta = new Vector2(118f, 20f);
+        tr.anchoredPosition = new Vector2(0f, -2f);
+        var tabImage = tab.GetComponent<Image>();
+        tabImage.color = UiTheme.Gold;
+        tabImage.raycastTarget = false;
+        var text = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI)).GetComponent<TextMeshProUGUI>();
+        text.rectTransform.SetParent(tr, false);
+        text.rectTransform.anchorMin = Vector2.zero;
+        text.rectTransform.anchorMax = Vector2.one;
+        text.rectTransform.offsetMin = text.rectTransform.offsetMax = Vector2.zero;
+        UiTheme.StyleTitle(text, 11f, new Color(0.08f, 0.06f, 0.03f, 1f));
+        text.alignment = TextAlignmentOptions.Center;
+        text.raycastTarget = false;
+        text.text = HandTray.StackLabel(family, count);
+    }
 
     private HandTray tray;
     private RectTransform visual;

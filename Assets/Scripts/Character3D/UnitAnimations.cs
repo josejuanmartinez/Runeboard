@@ -22,8 +22,9 @@ public static class UnitAnimations
         { Move.BigCast, new[] { "Standing 2H Magic Area Attack 01", "Standing 2H Magic Area Attack 02", "Standing 2H Magic Attack 01",
             "Standing 2H Magic Attack 02", "Standing 2H Magic Attack 03", "Standing 2H Magic Attack 04", "Standing 2H Magic Attack 05", "Standing 2H Cast Spell 01" } },
         { Move.Gesture, new[] { "standing 1H cast spell 01", "Standing 2H Cast Spell 01" } },
-        { Move.Strike, new[] { "Standing Melee Attack Downward", "Standing 1H Magic Attack 02" } },
-        { Move.Attack, new[] { "Standing Melee Attack Downward" } },
+        { Move.Strike, new[] { "RB Slash" } },
+        // Runeboard's own blow (AnimationForge): a planted overhead cut made for a held weapon.
+        { Move.Attack, new[] { "RB Slash" } },
         { Move.Hit, new[] { "Standing React Small From Front", "Standing React Small From Left", "Standing React Small From Right", "Standing React Small From Back" } },
         { Move.HitLarge, new[] { "Standing React Large From Front", "Standing React Large From Left", "Standing React Large From Right", "Standing React Large From Back" } },
         { Move.Block, new[] { "Standing Block React Large" } },
@@ -146,6 +147,19 @@ public static class UnitAnimations
             case Move.Cast:
             case Move.BigCast:
                 anim.PlayOnce(clip, 0.12f, 1.15f);
+                break;
+            case Move.Attack:
+            case Move.Strike:
+                // A blow is the weapon arm's own swing (Character3DModel.Swing) over the ready stance.
+                Character3DModel model = anim.GetComponentInParent<Character3DModel>();
+                if (model != null) model.Swing();
+                else if (clip != null) anim.PlayOnce(clip, 0.12f);
+                break;
+            case Move.Death:
+                // Down for good: hold the last frame and keep the body on the ground.
+                Character3DModel fallen = anim.GetComponentInParent<Character3DModel>();
+                if (fallen != null) fallen.Fallen = true;
+                if (clip != null) anim.PlayOnce(clip, 0.12f, 1f, hold: true);
                 break;
             default:
                 if (clip != null) anim.PlayOnce(clip, 0.12f);

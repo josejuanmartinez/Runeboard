@@ -91,7 +91,8 @@ public class MedallionSatellites : MonoBehaviour
             icon.border.sprite = HudSprites.Ring;
             icon.border.type = Image.Type.Simple;
             icon.border.rectTransform.localScale = Vector3.one;
-            if (icon.border.color.r < 0.99f || icon.border.color.g < 0.99f) icon.border.color = new Color(0.88f, 0.72f, 0.42f, 1f);
+            // The realm's own colour, as its borders show on the map.
+            if (icon.nonPlayableLeader != null) icon.border.color = UiTheme.NationRing(icon.nonPlayableLeader.nationColor);
         }
         if (icon.alignmentImage != null) icon.alignmentImage.gameObject.SetActive(false);
     }

@@ -457,6 +457,65 @@ public class NationSpawner : MonoBehaviour
         characterVariantOwnership.Clear();
     }
 
+    // The campaign's avatar start (CampaignObjectivesData.avatarStart): every playable leader
+    // begins as their avatar alone. Their scenario PCs stay on the map unowned, to be claimed
+    // again by playing their card there; companions leave (their cards recruit them later), a
+    // non-playable leader's own identity goes back to its realm, and the avatar's army disbands.
+    // Called from Game.StartGame once every variant is final, before the Zone of Control.
+    public void StripToAvatars(IEnumerable<PlayableLeader> leaders)
+    {
+        foreach (PlayableLeader leader in leaders)
+        {
+            if (leader == null) continue;
+            foreach (PC pc in leader.controlledPcs.ToList())
+            {
+                if (pc == null) continue;
+                leader.controlledPcs.Remove(pc);
+                if (pc.hex != null && pc.hex != leader.hex) leader.visibleHexes.Remove(pc.hex);
+                if (pc.owner != leader) continue;
+                pc.owner = null;
+                pc.hex?.RedrawPC();
+            }
+
+            foreach (Character character in leader.controlledCharacters.ToList())
+            {
+                if (character == null || character == leader) continue;
+                bool realmStillHasThem = character is NonPlayableLeader
+                    && FindObjectsByType<NonPlayableLeader>(FindObjectsSortMode.None)
+                        .Any(n => n != null && n != character && !n.killed && string.Equals(n.characterName, character.characterName, StringComparison.OrdinalIgnoreCase));
+                if (character is NonPlayableLeader && !realmStillHasThem)
+                {
+                    leader.controlledCharacters.Remove(character);
+                    character.owner = null;
+                    continue;
+                }
+                RemoveUnresolvedScenarioCharacter(character);
+            }
+
+            if (leader.IsArmyCommander() && leader.GetArmy() != null && !leader.GetArmy().killed)
+                leader.GetArmy().Killed(null, false);
+            Debug.Log($"[AvatarStart] {leader.characterName} ({leader.GetSelectedSubdeckId()}) begins alone at {leader.hex?.v2}.");
+        }
+    }
+
+    /// <summary>Moves an avatar to the named PC's hex before the war begins.</summary>
+    public void PlaceAvatar(PlayableLeader leader, string pcName)
+    {
+        if (leader == null || string.IsNullOrWhiteSpace(pcName) || board?.hexes == null) return;
+        Hex target = board.hexes.Values.FirstOrDefault(h => h != null && h.GetPCData() != null
+            && string.Equals(h.GetPCData().pcName, pcName, StringComparison.OrdinalIgnoreCase));
+        if (target == null) { Debug.LogWarning($"[AvatarStart] start PC '{pcName}' not found for {leader.characterName}."); return; }
+        if (leader.hex == target) return;
+        Hex from = leader.hex;
+        from?.characters.Remove(leader);
+        if (!target.characters.Contains(leader)) target.characters.Add(leader);
+        leader.hex = target;
+        if (from != null && !leader.LeaderSeesHex(from)) leader.visibleHexes.Remove(from);
+        if (!leader.visibleHexes.Contains(target)) leader.visibleHexes.Add(target);
+        from?.RedrawCharacters();
+        target.RedrawCharacters();
+    }
+
     // Resolves every scenario character/army authored with an independent spawnCondition, once
     // every playable leader's variant choice is final (same timing as
     // ReconcileScenarioVariantOwnership, called right after it from Game.StartGame). Unlike
@@ -491,7 +550,12 @@ public class NationSpawner : MonoBehaviour
         foreach ((Character character, string requiredLeaderName, string requiredVariantId, bool exclude) in characterSpawnConditions)
         {
             if (character == null || character.hex == null) continue; // already removed by something else
-            if (satisfied[character]) continue;
+            if (satisfied[character])
+            {
+                // Placed for one flavour only: the guard at that flavour's start.
+                if (!exclude && character.GetOwner() is NonPlayableLeader) character.holdsPost = true;
+                continue;
+            }
 
             // A non-playable self-owned leader card (e.g. Faramir) registers itself here too (see
             // SpawnFromScenario step 1) — unlike a plain companion, it can own PCs/characters of
@@ -844,9 +908,15 @@ public class NationSpawner : MonoBehaviour
             if (biome == null || biome.variants == null) continue;
             if (!string.Equals(biome.characterName, sc.ownerLeaderName, StringComparison.OrdinalIgnoreCase)) continue;
 
+            // By the flavour's character name, or its display name when the scenario card is
+            // named after the flavour rather than the character ("The Dark Eye" is "Sauron").
             LeaderVariantConfig match = biome.variants.Find(v =>
                 v != null && !string.IsNullOrWhiteSpace(v.characterName)
-                && string.Equals(v.characterName, sc.characterName, StringComparison.OrdinalIgnoreCase));
+                && string.Equals(v.characterName, sc.characterName, StringComparison.OrdinalIgnoreCase))
+                ?? biome.variants.Find(v =>
+                v != null && !string.IsNullOrWhiteSpace(v.displayName)
+                && string.Equals(v.displayName, sc.characterName, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(v.variantId, sc.ownerVariantId, StringComparison.OrdinalIgnoreCase));
             if (match == null) continue;
 
             playable = biome;
@@ -1007,11 +1077,21 @@ public class NationSpawner : MonoBehaviour
     // more. Must run after scenario leader identity is final (see
     // ReconcileScenarioSpawnConditions) so a playable leader's ZoC resolves against the variant
     // that actually survived selection, not just whichever sibling happens to be spawned.
+    private const int StartRevealRadius = 4;
+
     public void ApplyScenarioZoneOfControl(ScenarioData scenario)
     {
         if (board?.hexes == null || scenario == null) return;
 
         PlayableLeader humanPlayer = Game.Instance != null ? Game.Instance.player : null;
+        bool avatarStart = CampaignObjectives.AvatarStart;
+        // A small start: of the player's painted realm, only what lies near their own characters is
+        // known at first; the rest opens as they explore (the whole realm at once was too much).
+        var nearStart = new HashSet<Hex>();
+        if (humanPlayer != null)
+            foreach (Character c in humanPlayer.controlledCharacters)
+                if (c != null && !c.killed && c.hex != null)
+                    foreach (Hex h in c.hex.GetHexesInRadius(StartRevealRadius)) nearStart.Add(h);
 
         foreach (ScenarioZoneOfControlCell cell in scenario.zoneOfControl ?? new List<ScenarioZoneOfControlCell>())
         {
@@ -1037,9 +1117,13 @@ public class NationSpawner : MonoBehaviour
             }
             if (leader == null) continue;
 
+            // Avatar start: a playable leader's old painted realm is no longer theirs; only what
+            // lies around the avatar is known, for the AI as for the human.
+            if (avatarStart && leader is PlayableLeader && (leader.hex == null || leader.hex.GetHexesInRadius(StartRevealRadius).IndexOf(hex) < 0)) continue;
+
             if (leader == humanPlayer)
             {
-                hex.RevealMapOnlyArea(0, false, false);
+                if (nearStart.Count == 0 || nearStart.Contains(hex)) hex.RevealMapOnlyArea(0, false, false);
             }
             else
             {

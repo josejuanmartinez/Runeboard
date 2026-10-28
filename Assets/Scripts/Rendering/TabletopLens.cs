@@ -38,7 +38,7 @@ public static class TabletopLens
     {
         BoardLookSettings settings = BoardLookSettings.Instance;
         if (!settings.tiltShift || settings.maxBlur <= 0f || material == null) return;
-        if (camera.cameraType != CameraType.Game || camera.targetTexture != null || camera != Camera.main) return;
+        if (camera.cameraType != CameraType.Game || camera.targetTexture != null || (camera != Camera.main && camera != TitleDiorama.Camera)) return;
         UniversalAdditionalCameraData data = camera.GetUniversalAdditionalCameraData();
         if (data == null || data.scriptableRenderer == null) return;
 

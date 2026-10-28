@@ -4,6 +4,7 @@
   "style": "Mannish",
   "colors":   ["#C8BC9C", "#3E5470", "#6A4E34", "#8A8070", "#A88A4C", "#2A2A2A", "#3E5E6A", "", "#3E5A30"],
   "surfaces": ["Ashlar",  "Slate",   "Planks", "Fieldstone", "Plain", "", "Plain", "", ""],
+  "ground": "water",
   "buildings": [
     { "note": "sea left", "at": [-0.41, -0.02], "parts": [
       { "shape": "box", "size": [0.17, 0.004, 1.0], "cell": "accent" }

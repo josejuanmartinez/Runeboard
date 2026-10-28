@@ -33,9 +33,6 @@ public class Character3DRegiment : MonoBehaviour
         new[] { new Vector2(-0.27f, -0.16f), new Vector2(0.27f, -0.16f), new Vector2(-0.1f, -0.34f), new Vector2(0.1f, -0.34f) },
     };
 
-    // Army size where the regiment grows to 3 and 4 troopers (2 below the first).
-    private static readonly int[] SizeThresholds = { 150, 650 };
-
     // What the rank and file act out with their leader: the fighting, not the spells or errands.
     private static readonly HashSet<UnitAnimations.Move> Followed = new()
     {
@@ -69,15 +66,9 @@ public class Character3DRegiment : MonoBehaviour
 
     // ── Army → regiment ─────────────────────────────────────────────────────────────────────
 
-    public static int TroopCount(Army army)
-    {
-        int size = army != null ? army.GetSize() : 0;
-        if (size <= 0) return 0;
-        int count = 2;
-        foreach (int threshold in SizeThresholds)
-            if (size >= threshold) count++;
-        return count;
-    }
+    // No rank and file for now: troopers crowded a hex as overlapping copies of one figure, so an
+    // army shows as its commander alone (its size is on the banners and the unit panel).
+    public static int TroopCount(Army army) => 0;
 
     // The army's main fighting troop type (catapults and warships aside).
     public static TroopsTypeEnum MainTroopType(Army army)
@@ -173,7 +164,7 @@ public class Character3DRegiment : MonoBehaviour
         {
             if (t.Dying) continue;
             t.Loop = baseLoop;
-            t.LoopAt = now + Random.Range(0f, 0.3f);
+            t.LoopAt = now + Random.Range(0f, 0.7f);
         }
     }
 
@@ -188,7 +179,7 @@ public class Character3DRegiment : MonoBehaviour
             t.Move = move;
             t.HasMove = true;
             t.MoveHidden = hidden;
-            t.MoveAt = now + Random.Range(0.05f, 0.35f);
+            t.MoveAt = now + Random.Range(0.1f, 0.6f);
         }
     }
 
@@ -215,9 +206,13 @@ public class Character3DRegiment : MonoBehaviour
     {
         Character3DModel model = Character3DModel.CreateTrooper(prefab, drawnFolder, leader);
         Transform t = model.transform;
-        t.localRotation = Quaternion.identity;
-        t.localScale = Vector3.one * (TrooperScale * leader.ModelHeight / model.ModelHeight);
-        model.Animation.IdleVariety = false;
+        // Each trooper its own man: a little turned, a little taller or shorter, its own tempo and
+        // idle fidgets — copies of one figure moving in lockstep read as clones.
+        t.localRotation = Quaternion.Euler(0f, Random.Range(-16f, 16f), 0f);
+        t.localScale = Vector3.one * (TrooperScale * Random.Range(0.93f, 1.05f) * leader.ModelHeight / model.ModelHeight);
+        model.Animation.IdleVariety = true;
+        model.Animation.Pace = Random.Range(0.86f, 1.14f);
+        model.Animation.LoopRandomPhase = true;
         model.Animation.SetBaseLoop(loop, 0f); // idle until the leader's loop is known
         var trooper = new Trooper { Model = model, Index = spawned++ };
         model.Arm(Character3DWeapons.ForTroop(drawnFolder, troopType, trooper.Index));

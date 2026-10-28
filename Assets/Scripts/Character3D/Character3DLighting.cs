@@ -36,12 +36,16 @@ public static class Character3DLighting
         return (BoardFrame(settings) * towardLight).normalized;
     }
 
-    public static void Publish(Character3DSettings settings)
+    public static void Publish(Character3DSettings settings) =>
+        Publish(settings, settings.keyColor, settings.skyColor, settings.groundColor);
+
+    // The same light with other colours, for a scene of its own (the title's lantern-lit table).
+    public static void Publish(Character3DSettings settings, Color key, Color sky, Color ground)
     {
         Shader.SetGlobalVector(LightDirId, LightDirection(settings));
-        Shader.SetGlobalColor(KeyColorId, settings.keyColor);
-        Shader.SetGlobalColor(SkyColorId, settings.skyColor);
-        Shader.SetGlobalColor(GroundColorId, settings.groundColor);
+        Shader.SetGlobalColor(KeyColorId, key);
+        Shader.SetGlobalColor(SkyColorId, sky);
+        Shader.SetGlobalColor(GroundColorId, ground);
         Shader.SetGlobalColor(ShadowColorId, settings.shadowColor);
         Shader.SetGlobalFloat(OutlineWidthId, settings.outlineWidth);
         Shader.SetGlobalVector(ShadowShapeId, new Vector4(CharacterCastShadow.Shear, CharacterCastShadow.Squash, 0f, 0f));

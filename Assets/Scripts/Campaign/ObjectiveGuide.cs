@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -45,6 +46,7 @@ public class ObjectiveGuide : MonoBehaviour
         instance = owner.gameObject.AddComponent<ObjectiveGuide>();
         instance.game = owner;
         owner.HumanTurnStarted += instance.OnHumanTurnStarted;
+        NextStepGuide.Attach(owner);
     }
 
     private void OnDestroy()
@@ -100,6 +102,8 @@ public class ObjectiveGuide : MonoBehaviour
             if (b.hex != null) b.hex.SetObjectiveMarker(false);
         }
         beacons.Clear();
+        // While the campaign chain runs, the war's objectives are not on the map yet.
+        if (objectives.HasCampaign(game.player) && !objectives.IsChainComplete(game.player)) return;
         foreach (CampaignObjective o in objectives.GetObjectives(game.player))
         {
             foreach (Hex hex in objectives.GetTargetHexes(o))
@@ -161,7 +165,11 @@ public class ObjectiveGuide : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.4f);
 
         TourRunning = true;
-        List<CampaignObjective> list = new(objectives.GetObjectives(game.player));
+        bool campaign = objectives.HasCampaign(game.player) && !objectives.IsChainComplete(game.player);
+        // One goal, the one the objectives widget shows first (CampaignHud): a wall of steps up
+        // front was more than a new player can take in.
+        List<CampaignObjective> all = campaign ? objectives.ActiveMilestones(game.player) : new(objectives.GetObjectives(game.player));
+        List<CampaignObjective> list = all.Count > 0 ? new List<CampaignObjective> { all[0] } : all;
         int total = list.Count + 1;
         for (int i = 0; i < list.Count && !skip; i++)
             yield return Step(list[i], null, i + 1, total, lastStep: false);
@@ -184,6 +192,12 @@ public class ObjectiveGuide : MonoBehaviour
     {
         CampaignObjectives objectives = CampaignObjectives.Instance;
         List<Hex> targets = objectives != null ? objectives.GetTargetHexes(o) : new List<Hex>();
+        // A campaign step flies to where it is done (a hero's home to recruit at, else your capital).
+        if (o.milestone && targets.Count == 0 && objectives != null)
+        {
+            Hex focus = objectives.GetFocusHex(game.player, o);
+            if (focus != null && focus != game.player.hex) targets.Add(focus);
+        }
 
         focusedHexes.Clear();
         foreach (Hex h in targets) if (h != null) focusedHexes.Add(h);
@@ -204,7 +218,8 @@ public class ObjectiveGuide : MonoBehaviour
             if (home != null) { world = home.transform.position; BoardNavigator.Instance?.LookAt(world.Value, 0.9f); }
         }
 
-        string reward = o.milestone ? $"MILESTONE · <color={UiTheme.GoldHex}>+{o.reward}</color> GOLD"
+        int unlockCount = o.milestone && DeckManager.Instance != null ? DeckManager.Instance.CountCardsUnlockedBy(game.player, o) : 0;
+        string reward = o.milestone ? $"{CampaignObjectives.TrackOf(o).ToUpperInvariant()} STEP · UNLOCKS <color={UiTheme.GoldHex}>{unlockCount}</color> CARDS"
             : o.decisive ? $"<color={UiTheme.GoldHex}>WINS THE WAR</color>" : $"<color={UiTheme.GoldHex}>+{o.points}</color> POINTS";
         string step = index > 0 ? $"<color={UiTheme.MutedHex}>{index} / {total}</color>   " : "";
         string places = targets.Count > 1 ? $"\n<color={UiTheme.MutedHex}>{targets.Count} places, all marked on the map</color>" : "";
@@ -212,15 +227,27 @@ public class ObjectiveGuide : MonoBehaviour
         bool met = objectives != null && objectives.IsMet(game.player, o);
         string status = met ? $"\n<color={UiTheme.GoodHex}>Currently held</color>" : "";
 
-        string body = o.milestone
-            ? $"Builds your {ScoreAspects.Icon(CampaignObjectives.AspectOf(o))} {ScoreAspects.Name(CampaignObjectives.AspectOf(o))}: {ScoreAspects.Describe(CampaignObjectives.AspectOf(o))}. Look for its icon on the map hints when a character is selected."
-            : $"{o.description}{places}{status}";
-        ShowCallout($"{step}<size=78%><cspace=0.1em>{(o.milestone ? string.Empty : "OBJECTIVE · ")}{reward}</cspace></size>",
-            o.title,
-            body,
-            string.IsNullOrWhiteSpace(how) ? null : how,
-            lastStep ? "Got it" : "Next",
-            showSkip: !lastStep && index > 0);
+        if (o.milestone)
+        {
+            ShowCallout($"{step}<size=78%><cspace=0.1em>{CampaignObjectives.TrackOf(o).ToUpperInvariant()} STEP</cspace></size>",
+                o.title,
+                ObjectiveLines(o, objectives),
+                null,
+                lastStep ? "Got it" : "Next",
+                showSkip: !lastStep && index > 0,
+                story: string.IsNullOrWhiteSpace(o.story) ? o.description : o.story,
+                art: StepArt(o));
+        }
+        else
+        {
+            ShowCallout($"{step}<size=78%><cspace=0.1em>OBJECTIVE · {reward}</cspace></size>",
+                o.title,
+                $"{o.description}{places}{status}",
+                string.IsNullOrWhiteSpace(how) ? null : how,
+                lastStep ? "Got it" : "Next",
+                showSkip: !lastStep && index > 0,
+                art: StepArt(o));
+        }
         anchorWorld = world;
         anchorUi = uiAnchor;
 
@@ -228,11 +255,61 @@ public class ObjectiveGuide : MonoBehaviour
         focusedHexes.Clear();
     }
 
+    // The step as an objective: its instruction one sentence a line, numbered; where it stands;
+    // and the cards it brings, by name.
+    private string ObjectiveLines(CampaignObjective o, CampaignObjectives objectives)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.Append(UiTheme.Eyebrow("Your objective")).Append('\n');
+        string[] sentences = System.Text.RegularExpressions.Regex.Split((o.how ?? string.Empty).Trim(), @"(?<=[.:!?])\s+(?=[A-Z])");
+        int n = 0;
+        foreach (string sentence in sentences)
+        {
+            if (string.IsNullOrWhiteSpace(sentence)) continue;
+            sb.Append($"<color={UiTheme.GoldHex}>{++n}.</color>  {sentence.Trim()}\n");
+        }
+        if (objectives != null)
+            sb.Append($"<size=90%><color={UiTheme.MutedHex}>Now: {objectives.ProgressText(game.player, o)}</color></size>\n");
+        if (DeckManager.Instance != null)
+        {
+            List<string> names = DeckManager.Instance.GetCardsUnlockedBy(game.player, o).Select(c => DisplayNames.Format(c.name)).Distinct().ToList();
+            if (names.Count > 0)
+                sb.Append($"<size=90%><color={UiTheme.GoodHex}>Brings:</color> {string.Join(", ", names.Take(6))}{(names.Count > 6 ? $" and {names.Count - 6} more" : string.Empty)}</size>");
+        }
+        return sb.ToString().TrimEnd();
+    }
+
+    // What the step is about, as a picture: the person for a recruit or a battle, else the place
+    // (its card's painting, or its map tile), else the player's own leader.
+    private Sprite StepArt(CampaignObjective o)
+    {
+        Illustrations art = FindAnyObjectByType<Illustrations>();
+        if (!string.IsNullOrWhiteSpace(o.character) && art != null)
+        {
+            Sprite who = art.GetCharacterArtByName(o.character, logMissing: false);
+            if (who != null) return who;
+        }
+        if (!string.IsNullOrWhiteSpace(o.pc))
+        {
+            CardData card = DeckManager.Instance != null ? DeckManager.Instance.FindPcCardByPcName(o.pc) : null;
+            Sprite place = card != null ? HandTray.ResolveArt(card) : null;
+            if (place != null) return place;
+            Hex hex = CampaignObjectives.Instance != null ? CampaignObjectives.Instance.GetTargetHexes(o).FirstOrDefault() : null;
+            if (hex != null && hex.pcTexture != null && hex.pcTexture.sprite != null) return hex.pcTexture.sprite;
+        }
+        return art != null && game.player != null ? art.GetCharacterArtByName(game.player.characterName, logMissing: false) : null;
+    }
+
     private IEnumerator TrackerStep(RectTransform tracker, int total)
     {
+        CampaignObjectives objectives = CampaignObjectives.Instance;
+        bool campaign = objectives != null && objectives.HasCampaign(game.player) && !objectives.IsChainComplete(game.player);
+        string body = campaign
+            ? "You begin alone. Your campaign lives here: first one step, then a few at once. Each step puts the cards that do it in your hand, and reaching it adds more: win realms over, recruit heroes, raise hosts. Click a step to fly to where it is done. When the last chapter is done your deck is complete and the war's final objectives open.\nOpen \"Your deck\" (or press C) to see every card: the ones you hold, and the step that brings each of the others."
+            : "Your objectives and score live here. Click any of them to see how to achieve it. Open \"Your deck\" (or press C) to see every card you hold.";
         ShowCallout($"<color={UiTheme.MutedHex}>{total} / {total}</color>",
             "Your war at a glance",
-            $"Your objectives, your score by aspect and your next steps live here. Click any of them to see how to achieve it.\nSelect a character and the map shows what it can do nearby, marked with the same icons: {ScoreAspects.Icon(ScoreAspect.Military)} Military, {ScoreAspects.Icon(ScoreAspect.Economy)} Economy, {ScoreAspects.Icon(ScoreAspect.Realm)} Realm, {ScoreAspects.Icon(ScoreAspect.Heroes)} Heroes.",
+            body,
             null, "Begin", showSkip: false);
         anchorWorld = null;
         anchorUi = tracker;
@@ -264,7 +341,8 @@ public class ObjectiveGuide : MonoBehaviour
 
     private float K => canvasRoot != null ? Mathf.Max(0.5f, canvasRoot.rect.height / 1080f) : 1f;
 
-    private void ShowCallout(string eyebrow, string title, string body, string how, string nextLabel, bool showSkip)
+    private void ShowCallout(string eyebrow, string title, string body, string how, string nextLabel, bool showSkip,
+        string story = null, Sprite art = null)
     {
         HideCallout();
         if (!EnsureCanvas()) return;
@@ -300,7 +378,13 @@ public class ObjectiveGuide : MonoBehaviour
         callout.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         AddText(callout, eyebrow, 13f, UiTheme.Text, false);
+        if (art != null) AddArt(callout, art);
         AddText(callout, title, 26f, UiTheme.Gold, true);
+        if (!string.IsNullOrWhiteSpace(story))
+        {
+            AddText(callout, $"<i>{story.Trim()}</i>", 14.5f, new Color(0.86f, 0.8f, 0.67f), false);
+            AddRule(callout);
+        }
         AddText(callout, body, 14.5f, UiTheme.Text, false);
         if (how != null) AddText(callout, $"<color={UiTheme.GoodHex}>How:</color> {how}", 14f, UiTheme.Muted, false);
 
@@ -394,6 +478,50 @@ public class ObjectiveGuide : MonoBehaviour
         var rt = go.GetComponent<RectTransform>();
         rt.SetParent(parent, false);
         return rt;
+    }
+
+    // A wide band of the picture, cropped to fill (the painting's middle), framed in gold.
+    private static void AddArt(RectTransform parent, Sprite sprite)
+    {
+        const float height = 150f;
+        var frame = NewRect("Art", parent);
+        frame.gameObject.AddComponent<LayoutElement>().preferredHeight = height;
+        var border = frame.gameObject.AddComponent<Image>();
+        border.color = new Color(UiTheme.Gold.r, UiTheme.Gold.g, UiTheme.Gold.b, 0.55f);
+        border.raycastTarget = false;
+        var window = NewRect("Window", frame);
+        window.anchorMin = Vector2.zero;
+        window.anchorMax = Vector2.one;
+        window.offsetMin = new Vector2(1.5f, 1.5f);
+        window.offsetMax = new Vector2(-1.5f, -1.5f);
+        window.gameObject.AddComponent<RectMask2D>();
+        var picture = NewRect("Picture", window);
+        picture.anchorMin = picture.anchorMax = new Vector2(0.5f, 0.5f);
+        var image = picture.gameObject.AddComponent<Image>();
+        image.sprite = sprite;
+        image.raycastTarget = false;
+        image.gameObject.AddComponent<ImageUnaffectedBySkin>();
+        var fit = picture.gameObject.AddComponent<AspectRatioFitter>();
+        fit.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+        fit.aspectRatio = sprite.rect.height > 0f ? sprite.rect.width / sprite.rect.height : 1f;
+        // A soft fade at the bottom into the panel.
+        var fade = NewRect("Fade", window);
+        fade.anchorMin = Vector2.zero;
+        fade.anchorMax = new Vector2(1f, 0.35f);
+        fade.offsetMin = fade.offsetMax = Vector2.zero;
+        var fadeImage = fade.gameObject.AddComponent<Image>();
+        fadeImage.sprite = HudSprites.FadeUp;
+        fadeImage.color = new Color(0.03f, 0.03f, 0.027f, 0.85f);
+        fadeImage.raycastTarget = false;
+    }
+
+    private static void AddRule(RectTransform parent)
+    {
+        var rule = NewRect("Rule", parent);
+        rule.gameObject.AddComponent<LayoutElement>().preferredHeight = 1f;
+        var image = rule.gameObject.AddComponent<Image>();
+        image.color = new Color(UiTheme.Gold.r, UiTheme.Gold.g, UiTheme.Gold.b, 0.35f);
+        image.raycastTarget = false;
     }
 
     private static void AddText(RectTransform parent, string value, float size, Color color, bool display)

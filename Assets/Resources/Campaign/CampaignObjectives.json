@@ -1,55 +1,4924 @@
 {
   "ageLength": 60,
+  "avatarStart": true,
   "leaders": [
     {
       "leader": "Gandalf",
+      "variant": "gandalf",
+      "title": "Mithrandir · The Elven Road",
+      "startPc": "Elostirion",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
       "objectives": [
-        { "id": "gandalf_mount_doom", "title": "Into the Fire", "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.", "type": "ReachPC", "pc": "MountDoom", "points": 0, "decisive": true },
-        { "id": "gandalf_minas_tirith", "title": "The White City Stands", "description": "Minas Tirith is held by the Free Peoples when the Age ends.", "type": "HoldPC", "pc": "Minas Tirith", "side": true, "points": 3 },
-        { "id": "gandalf_imladris", "title": "The Last Homely House", "description": "Imladris is held by the Free Peoples when the Age ends.", "type": "HoldPC", "pc": "Imladris", "side": true, "points": 1 },
-        { "id": "gandalf_rally", "title": "Rally the West", "description": "Your own realm holds 5 or more PCs when the Age ends.", "type": "PCCount", "count": 5, "points": 2 }
+        {
+          "id": "mithrandir_doom",
+          "title": "Into the Fire",
+          "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.",
+          "type": "ReachPC",
+          "points": 0,
+          "decisive": true,
+          "pc": "MountDoom"
+        },
+        {
+          "id": "mithrandir_imladris",
+          "title": "The Last Homely House",
+          "description": "Imladris is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Imladris"
+        },
+        {
+          "id": "mithrandir_lorien",
+          "title": "The Golden Wood",
+          "description": "Caras Galadhon is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Caras Galadhon"
+        },
+        {
+          "id": "mithrandir_mirkwood",
+          "title": "The Woodland Realm",
+          "description": "Thranduil's Halls is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "side": true,
+          "pc": "Thranduil's Halls"
+        },
+        {
+          "id": "mithrandir_realm",
+          "title": "The Elven Alliance",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
       ],
       "milestones": [
-        { "id": "gandalf_m_companions", "title": "Gather the Company", "type": "Characters", "count": 1, "aspect": "Heroes", "reward": 15, "how": "Walk a character to the home of a Free Peoples hero — their character card is offered there — and recruit them." },
-        { "id": "gandalf_m_rumours", "title": "Ears in Every Inn", "type": "Gold", "count": 20, "aspect": "Economy", "reward": 10, "how": "With an emissary at one of your own PCs, Sell goods you have spare; Hear Stories there to learn what the Enemy is about." },
-        { "id": "gandalf_m_relic", "title": "Relics of the Elder Days", "type": "Artifacts", "count": 1, "aspect": "Heroes", "reward": 20, "how": "Take a mage where an artifact lies (Scry Artifact shows where) and play Find Artifact." },
-        { "id": "gandalf_m_wisdom", "title": "Counsel of the Wise", "type": "Levels", "count": 3, "aspect": "Heroes", "reward": 15, "how": "Keep your characters busy: every action they play has a chance to raise the skill it uses." },
-        { "id": "gandalf_m_allies", "title": "Friends in Every Hall", "type": "PCs", "count": 1, "aspect": "Realm", "reward": 20, "how": "Found a new PC from a PC card in your hand, or bring a host to a Shadow-held PC and play Siege." },
-        { "id": "gandalf_m_riders", "title": "The West Answers", "type": "Armies", "count": 1, "aspect": "Military", "reward": 25, "how": "Play an army card with a commander at one of your PCs to raise a new host." }
+        {
+          "track": "Seat",
+          "title": "The Tower Hills",
+          "type": "HoldPC",
+          "pc": "Elostirion",
+          "story": "The white towers watch the sea, and no one keeps them. A grey pilgrim climbs to Elostirion to light a beacon there again.",
+          "how": "You stand at Elostirion. Play the Elostirion card here and it becomes your seat.",
+          "id": "mithrandir_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Elostirion"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Lindon",
+                "The Grey Havens",
+                "Harlond",
+                "Forlond"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Trade of the Shipwrights",
+          "type": "Gold",
+          "count": 6,
+          "story": "Shipwrights need timber and iron, and a wizard's road is paid in gold. Sell what the hills give you.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "mithrandir_trade",
+          "after": [
+            "mithrandir_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Road to the Havens",
+          "type": "ReachPC",
+          "pc": "The Grey Havens",
+          "story": "West lies Mithlond, where the grey ships wait, and Círdan who has watched three Ages from his quays.",
+          "how": "Walk west from the Tower Hills to the Grey Havens.",
+          "id": "mithrandir_havens",
+          "after": [
+            "mithrandir_trade"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Tharudan"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Shipwright",
+          "type": "Recruit",
+          "character": "Cirdan",
+          "pc": "The Grey Havens",
+          "story": "Círdan gave you the Red Ring long ago. Ask him now for his people.",
+          "how": "Go to The Grey Havens and play A Friend or Three there. Win Cirdan over and their whole realm joins you.",
+          "id": "mithrandir_allies",
+          "after": [
+            "mithrandir_havens"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Cirdan",
+                "Caravans",
+                "Counsel By Firelight"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "Wardens of Lindon",
+          "type": "Armies",
+          "count": 1,
+          "story": "Lindon's spears have rusted in long peace. Call the wardens to arms.",
+          "how": "With a commander at one of your PCs, play an army card (Elven Scouts or Archers).",
+          "id": "mithrandir_host",
+          "after": [
+            "mithrandir_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Elven Scouts",
+                "Archers",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "Wolves on the Tower Hills",
+          "type": "Defeat",
+          "character": "Belceborg",
+          "story": "On the way back east, wolves howl on the Tower Hills: a dark captain holds the slope below Elostirion.",
+          "how": "Belceborg's wolves hold the hex beside Elostirion. March your army onto them and play Attack: break their army or slay Belceborg.",
+          "id": "mithrandir_battle",
+          "after": [
+            "mithrandir_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Climbing the White Hills",
+                "Rallied Men",
+                "Half Elves"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Quiet Shire",
+          "type": "ReachPC",
+          "pc": "Hobbiton",
+          "story": "East of the hills the Shire sleeps, and a hobbit there keeps a ring he should not.",
+          "how": "Walk east into the Shire, to Hobbiton.",
+          "id": "mithrandir_shire",
+          "after": [
+            "mithrandir_battle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Frodo",
+                "Mithrandir",
+                "TheShire",
+                "Hobbiton",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Road East",
+          "type": "ReachPC",
+          "pc": "The Angle",
+          "story": "Past Bree and Weathertop the road runs into the wild Angle, where Elrond's riders keep watch.",
+          "how": "Follow the East Road to the Angle, between the rivers.",
+          "id": "mithrandir_angle",
+          "after": [
+            "mithrandir_shire"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Rivendell",
+                "The Angle",
+                "Imladris",
+                "Battle of Songs",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Last Homely House",
+          "type": "ReachPC",
+          "pc": "Imladris",
+          "story": "Hidden in its valley, Rivendell waits. Its door opens only to those who know the way.",
+          "how": "Go on to Imladris, the hidden valley north of the Angle.",
+          "id": "mithrandir_imladris",
+          "after": [
+            "mithrandir_angle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Glorfindel",
+                "Arwen",
+                "Festival Night",
+                "Halt"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "The Council",
+          "type": "Recruit",
+          "character": "Elrond",
+          "pc": "Imladris",
+          "story": "In the Last Homely House the wise sit long over their wine. Win Elrond, and all of Rivendell rides with you.",
+          "how": "Go to Imladris and play A Friend or Three there. Win Elrond over and their whole realm joins you.",
+          "id": "mithrandir_war",
+          "after": [
+            "mithrandir_imladris"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Elrond",
+                "Far-Speaking Thought",
+                "Hope Reborn",
+                "Wood Elves",
+                "Hall Guards Of Thranduil"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Gandalf",
+      "variant": "stormcrow",
+      "title": "Stormcrow · The Northmen's Road",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "stormcrow_doom",
+          "title": "Into the Fire",
+          "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.",
+          "type": "ReachPC",
+          "points": 0,
+          "decisive": true,
+          "pc": "MountDoom"
+        },
+        {
+          "id": "stormcrow_edoras",
+          "title": "The Mark Stands",
+          "description": "Edoras is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Edoras"
+        },
+        {
+          "id": "stormcrow_esgaroth",
+          "title": "The Lake-town",
+          "description": "Esgaroth is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "side": true,
+          "pc": "Esgaroth"
+        },
+        {
+          "id": "stormcrow_tirith",
+          "title": "The White City Stands",
+          "description": "Minas Tirith is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "stormcrow_realm",
+          "title": "The Free North",
+          "description": "Your own realm holds 8 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 8
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "Beorn's House",
+          "type": "HoldPC",
+          "pc": "BeornHouse",
+          "story": "Beorn's hall stands among the oaks, open to friends and death to foes. Make it your shelter in the Vale.",
+          "how": "You stand at BeornHouse. Play the BeornHouse card here and it becomes your seat.",
+          "id": "stormcrow_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "BeornHouse"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Anduin",
+                "Maethelburg",
+                "The Carrock",
+                "GladdenFields"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Honey and Mead",
+          "type": "Gold",
+          "count": 6,
+          "story": "Honey, mead and fleeces go down the river to market. A friend of the Beornings may share the profit.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "stormcrow_trade",
+          "after": [
+            "stormcrow_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Carrock",
+          "type": "ReachPC",
+          "pc": "The Carrock",
+          "story": "The Carrock rises from the river like a stair for giants. From its top the whole Vale lies open.",
+          "how": "Walk west to the Carrock, the rock in the Anduin.",
+          "id": "stormcrow_carrock",
+          "after": [
+            "stormcrow_trade"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Beorn",
+                "Sarn Lothduin",
+                "Framsburg"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Éothéod",
+          "type": "Recruit",
+          "character": "Ingomer",
+          "pc": "Maethelburg",
+          "story": "North of the Carrock the horse-folk of Maethelburg keep their herds. Their lord Ingomer is proud, but no friend of wargs.",
+          "how": "Go to Maethelburg and play A Friend or Three there. Win Ingomer over and their whole realm joins you.",
+          "id": "stormcrow_allies",
+          "after": [
+            "stormcrow_carrock"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Ingomer",
+                "Caravans",
+                "CounselNoOneWanted"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "Riders of the Vales",
+          "type": "Armies",
+          "count": 1,
+          "story": "Horsemen of the Vale wait for a captain. Give them one.",
+          "how": "With a commander at one of your PCs, play an army card (Light Cavalry or Men At Arms).",
+          "id": "stormcrow_host",
+          "after": [
+            "stormcrow_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Light Cavalry",
+                "Men At Arms",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "Wargs in the Vale",
+          "type": "Defeat",
+          "character": "Bugrug",
+          "story": "Wargs gather south of Beorn's House, and their riders laugh at the bees.",
+          "how": "Bugrug's wargs hold the ground two hexes south of Beorn's House. March your army onto them and play Attack: break their army or slay Bugrug.",
+          "id": "stormcrow_battle",
+          "after": [
+            "stormcrow_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Rallied Men",
+                "CaptainOfTheOuterWall",
+                "Beast Of The Woods"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Woodmen",
+          "type": "Recruit",
+          "character": "Beoraborn",
+          "pc": "Woodmen town",
+          "story": "The Woodmen guard the eaves of Mirkwood and trust few. Earn the trust of their town.",
+          "how": "Go to Woodmen town and play A Friend or Three there. Win Beoraborn over and their whole realm joins you.",
+          "id": "stormcrow_woodmen",
+          "after": [
+            "stormcrow_battle"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Grimbeorn",
+                "SouthernMirkwood",
+                "Woodmen town",
+                "Hope Reborn",
+                "Ill News Before Dawn"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Long Lake",
+          "type": "ReachPC",
+          "pc": "Esgaroth",
+          "story": "East through the forest road, the lake-town stands on its stilts, rebuilt after the dragon's fall.",
+          "how": "Cross Mirkwood eastward to Esgaroth on the Long Lake.",
+          "id": "stormcrow_lake",
+          "after": [
+            "stormcrow_woodmen"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Rhovanion",
+                "Esgaroth",
+                "Dale",
+                "BuhrWidu",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The King in Dale",
+          "type": "Recruit",
+          "character": "Bard",
+          "pc": "Esgaroth",
+          "story": "Bard the Bowman rules Dale and the lake. His black arrow brought down a dragon; it can serve again.",
+          "how": "Go to Esgaroth and play A Friend or Three there. Win Bard over and their whole realm joins you.",
+          "id": "stormcrow_dale",
+          "after": [
+            "stormcrow_lake"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Bard",
+                "NewsFlyToTheMark",
+                "Decrease Loyalty"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Heroes",
+          "title": "The Heir of Dale",
+          "type": "Recruit",
+          "character": "Bain",
+          "pc": "Dale",
+          "story": "In Dale, Bard's heir keeps the old songs. With Bain beside you, the North stands as one.",
+          "how": "Go to Dale, where Bain lives, and play the Bain card there: they join you.",
+          "id": "stormcrow_war",
+          "after": [
+            "stormcrow_dale"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Bain"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Lossoth",
+                "Men Of Bree"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Gandalf",
+      "variant": "disturber_of_the_peace",
+      "title": "Disturber of the Peace · The Shire Road",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "disturber_doom",
+          "title": "Into the Fire",
+          "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.",
+          "type": "ReachPC",
+          "points": 0,
+          "decisive": true,
+          "pc": "MountDoom"
+        },
+        {
+          "id": "disturber_shire",
+          "title": "The Shire Endures",
+          "description": "You hold Hobbiton when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "pc": "Hobbiton"
+        },
+        {
+          "id": "disturber_bree",
+          "title": "The Road Kept Open",
+          "description": "Bree is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Bree"
+        },
+        {
+          "id": "disturber_imladris",
+          "title": "The Last Homely House",
+          "description": "Imladris is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "side": true,
+          "pc": "Imladris"
+        },
+        {
+          "id": "disturber_realm",
+          "title": "Friends of the Shire",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "Bag End",
+          "type": "HoldPC",
+          "pc": "Hobbiton",
+          "story": "A wizard's cart rolls into Hobbiton, and the hobbits peer from their round doors. Make Bag End your home in the Shire.",
+          "how": "You stand at Hobbiton. Play the Hobbiton card here and it becomes your seat.",
+          "id": "disturber_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Hobbiton"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Sam",
+                "TheShire",
+                "Michel Delving",
+                "Stock",
+                "Buckland"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Pipe-weed Markets",
+          "type": "Gold",
+          "count": 6,
+          "story": "Pipe-weed from the Southfarthing fetches good silver at market. Bring your goods.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "disturber_trade",
+          "after": [
+            "disturber_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Allies",
+          "title": "The Tooks",
+          "type": "Recruit",
+          "character": "Pippin",
+          "pc": "Michel Delving",
+          "story": "The Tooks love adventure more than is proper. Seek young Pippin at Michel Delving, a short walk west.",
+          "how": "Go to Michel Delving and play A Friend or Three there. Win Pippin over and their whole realm joins you.",
+          "id": "disturber_allies",
+          "after": [
+            "disturber_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Paladin",
+                "Old Forest",
+                "Crickhollow",
+                "BagginsDontLeaveHere",
+                "Caravans"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "Bounders and Shirriffs",
+          "type": "Armies",
+          "count": 1,
+          "story": "Bounders walk the borders and Shirriffs keep the peace. Muster them into something sharper.",
+          "how": "You are no captain: have a Took commander play an army card (Bounders or Hobbit Archers) at one of your PCs.",
+          "id": "disturber_host",
+          "after": [
+            "disturber_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Bounders",
+                "Hobbit Archers",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "Wolves in the Shire",
+          "type": "Defeat",
+          "character": "Gorbag",
+          "story": "Wolves have crossed the Brandywine and lurk by Hobbiton. The Shire has not fought since the Greenfields.",
+          "how": "Gorbag's wolves hold the hex beside Hobbiton. March your army onto them and play Attack: break their army or slay Gorbag.",
+          "id": "disturber_battle",
+          "after": [
+            "disturber_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Climbing the White Hills",
+                "LanternsAtBreeGate",
+                "Elven Scouts"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "Through the Marish",
+          "type": "ReachPC",
+          "pc": "Stock",
+          "story": "East through the Marish the lanes wind to Stock and the Brandywine ferry.",
+          "how": "Walk east from Hobbiton to Stock.",
+          "id": "disturber_marish",
+          "after": [
+            "disturber_battle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Merry",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Old Forest",
+          "type": "ReachPC",
+          "pc": "Old Forest",
+          "story": "Beyond Buckland the trees are old and awake. Somewhere among them a strange fellow sings.",
+          "how": "Cross the Brandywine and go into the Old Forest.",
+          "id": "disturber_forest",
+          "after": [
+            "disturber_marish"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Tom Bombadil",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Prancing Pony",
+          "type": "ReachPC",
+          "pc": "Bree",
+          "story": "At Bree the Prancing Pony hears every rumour on the road. Go and listen.",
+          "how": "Leave the Forest by the East Road and go on to Bree.",
+          "id": "disturber_bree",
+          "after": [
+            "disturber_forest"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "HarryGoatleaf",
+                "Arthedain",
+                "Bree",
+                "AmonSul",
+                "Steal Gold"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "Strider",
+          "type": "Recruit",
+          "character": "Aragorn",
+          "pc": "Bree",
+          "story": "A grim Ranger sits in a corner of the inn, his hood drawn. Win Strider, and the Dúnedain follow.",
+          "how": "Go to Bree and play A Friend or Three there. Win Aragorn over and their whole realm joins you.",
+          "id": "disturber_war",
+          "after": [
+            "disturber_bree"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Halbarad",
+                "Elven Lull",
+                "Bree Rumours",
+                "Dwarven Explorers",
+                "Hobbit Slingers"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Gandalf",
+      "variant": "tharkun",
+      "title": "Tharkûn · The Dwarf Road",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "tharkun_doom",
+          "title": "Into the Fire",
+          "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.",
+          "type": "ReachPC",
+          "points": 0,
+          "decisive": true,
+          "pc": "MountDoom"
+        },
+        {
+          "id": "tharkun_erebor",
+          "title": "The Lonely Mountain",
+          "description": "You hold Erebor (Lost) when the Age ends.",
+          "type": "HoldPC",
+          "points": 3,
+          "decisive": false,
+          "pc": "Erebor (Lost)"
+        },
+        {
+          "id": "tharkun_ironhills",
+          "title": "The Iron Hills Stand",
+          "description": "Azanulimbar-Dum is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "side": true,
+          "pc": "Azanulimbar-Dum"
+        },
+        {
+          "id": "tharkun_realm",
+          "title": "The Seven Houses",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "Thorin's Halls",
+          "type": "HoldPC",
+          "pc": "ThorinHall",
+          "story": "Thorin's Halls are a poor exile's home, but they are dwarf-built and strong. Make them your seat.",
+          "how": "You stand at ThorinHall. Play the ThorinHall card here and it becomes your seat.",
+          "id": "tharkun_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "ThorinHall"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "EredLuin",
+                "Belegost",
+                "Telenaug",
+                "Noegrod"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Heroes",
+          "title": "Oakenshield",
+          "type": "Recruit",
+          "character": "Thorin",
+          "pc": "ThorinHall",
+          "story": "Thorin Oakenshield broods on a lost mountain and a dragon's hoard. He will listen to a wizard.",
+          "how": "Go to ThorinHall, where Thorin lives, and play the Thorin card there: they join you.",
+          "id": "tharkun_hero",
+          "after": [
+            "tharkun_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Thorin"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Fili",
+                "Kili"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "The Dwarf-road Trade",
+          "type": "Gold",
+          "count": 6,
+          "story": "Dwarf-smiths sell iron and steel to Men along the road. Fill your purse in that trade.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "tharkun_trade",
+          "after": [
+            "tharkun_hero"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Host",
+          "title": "Axes of the Blue Mountains",
+          "type": "Armies",
+          "count": 1,
+          "story": "Axes hang idle on the walls of the Blue Mountains. Call the dwarves to march.",
+          "how": "With a commander at one of your PCs, play an army card (Dwarven Explorers or Men At Arms).",
+          "id": "tharkun_host",
+          "after": [
+            "tharkun_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Dwarven Explorers",
+                "Men At Arms",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "Goblins in the Halls",
+          "type": "Defeat",
+          "character": "Gorbag",
+          "story": "Goblins creep out of the deep roads by Thorin's Halls. Show them dwarf-steel.",
+          "how": "Gorbag's cave goblins hold the hex beside Thorin's Halls. March your army onto them and play Attack: break their army or slay Gorbag.",
+          "id": "tharkun_battle",
+          "after": [
+            "tharkun_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Rallied Men",
+                "Seal the Lower Gates",
+                "Dwarven Archers"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Ruins of Belegost",
+          "type": "ReachPC",
+          "pc": "Belegost",
+          "story": "South along the mountains, ruined Belegost sleeps where the dwarves of old once delved.",
+          "how": "Walk south from Thorin's Halls to Belegost.",
+          "id": "tharkun_belegost",
+          "after": [
+            "tharkun_battle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Balin",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Lords of Belegost",
+          "type": "Recruit",
+          "character": "Gloin",
+          "pc": "Belegost",
+          "story": "Glóin keeps what is left of Belegost and remembers its glory. Win him, and the Blue Mountains are yours.",
+          "how": "Go to Belegost and play A Friend or Three there. Win Gloin over and their whole realm joins you.",
+          "id": "tharkun_allies",
+          "after": [
+            "tharkun_belegost"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Caravans",
+                "Erebor Beckons"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "Telenaug",
+          "type": "ReachPC",
+          "pc": "Telenaug",
+          "story": "Further south the road climbs to Telenaug, where Dwalin keeps the forge-fires lit.",
+          "how": "Go on south to Telenaug.",
+          "id": "tharkun_telenaug",
+          "after": [
+            "tharkun_allies"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Dwalin",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "Nogrod Remembered",
+          "type": "ReachPC",
+          "pc": "Noegrod",
+          "story": "At the southern end of the Blue Mountains lies Nogrod, the other great hall of old. Reach it, and the dwarf-road is yours end to end.",
+          "how": "Go to Noegrod, at the southern end of the mountains.",
+          "id": "tharkun_war",
+          "after": [
+            "tharkun_telenaug"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Bombur",
+                "Miners",
+                "Conquerors Of Moria"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Gandalf",
+      "variant": "gandalf_the_white",
+      "title": "Gandalf the White · The White Rider",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "white_doom",
+          "title": "Into the Fire",
+          "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.",
+          "type": "ReachPC",
+          "points": 0,
+          "decisive": true,
+          "pc": "MountDoom"
+        },
+        {
+          "id": "white_tirith",
+          "title": "The White City Stands",
+          "description": "Minas Tirith is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 3,
+          "decisive": false,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "white_osgiliath",
+          "title": "The Bridge Held",
+          "description": "You hold Osgiliath when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Osgiliath"
+        },
+        {
+          "id": "white_edoras",
+          "title": "The Mark Stands",
+          "description": "Edoras is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "side": true,
+          "pc": "Edoras"
+        },
+        {
+          "id": "white_realm",
+          "title": "The West Restored",
+          "description": "Your own realm holds 8 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 8
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Ruined Bridge",
+          "type": "HoldPC",
+          "pc": "Osgiliath",
+          "story": "Osgiliath lies broken across the Anduin, the last crossing against Mordor. Hold it.",
+          "how": "You stand at Osgiliath. Play the Osgiliath card here and it becomes your seat.",
+          "id": "white_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Osgiliath"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Boromir",
+                "Ithilien",
+                "Henneth Annun"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "The Guard of the Bridge",
+          "type": "Armies",
+          "count": 1,
+          "story": "Boromir's men hold the western bank, few and weary. Raise a host to stand with them.",
+          "how": "With a commander at one of your PCs, play an army card (Swordmen or Archers).",
+          "id": "white_host",
+          "after": [
+            "white_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Swordmen",
+                "Archers",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "Orcs at the Bridge",
+          "type": "Defeat",
+          "character": "Gorbag",
+          "story": "Orcs hold the ruins by the river and mock the fallen city. Break them.",
+          "how": "Gorbag's orcs hold the hex beside Osgiliath. March your army onto them and play Attack: break their army or slay Gorbag.",
+          "id": "white_battle",
+          "after": [
+            "white_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Steward's Muster",
+                "Rallied Men",
+                "Lossoth"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "The Harlond Markets",
+          "type": "Gold",
+          "count": 6,
+          "story": "The Harlond's quays still unload grain and steel for the city. Gondor needs every coin.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "white_trade",
+          "after": [
+            "white_battle"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Allies",
+          "title": "The Steward of Gondor",
+          "type": "Recruit",
+          "character": "Denethor",
+          "pc": "Minas Tirith",
+          "story": "Denethor sits in his tower, proud and grieving, two hexes west. Win the Steward, and Minas Tirith is yours to lead.",
+          "how": "Go to Minas Tirith and play A Friend or Three there. Win Denethor over and their whole realm joins you.",
+          "id": "white_allies",
+          "after": [
+            "white_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Beregond",
+                "NorthernGondor",
+                "Minas Tirith",
+                "MinasArthor",
+                "Pelargir",
+                "Caravans",
+                "Storm Warning from Pelargir"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The River Isle",
+          "type": "ReachPC",
+          "pc": "CairAndros",
+          "story": "North up the Anduin, Cair Andros guards the river's last crossing. Faramir's rangers watch from there.",
+          "how": "Ride north from Minas Tirith to Cair Andros.",
+          "id": "white_river",
+          "after": [
+            "white_allies"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Faramir",
+                "Nindalf",
+                "CairAndros",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Wild Men",
+          "type": "Recruit",
+          "character": "GhanBuriGhan",
+          "pc": "Druadan Forest",
+          "story": "In the Drúadan Forest, west of the river, the Woses know hidden ways. Ghân-buri-Ghân will guide riders who come in peace.",
+          "how": "Go to Druadan Forest and play A Friend or Three there. Win GhanBuriGhan over and their whole realm joins you.",
+          "id": "white_woses",
+          "after": [
+            "white_river"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "GhanBuriGhan",
+                "Druadan Forest",
+                "Imdorad",
+                "BlackSailsRumoured",
+                "Counsel in the White Tower"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "Ride to Edoras",
+          "type": "ReachPC",
+          "pc": "Edoras",
+          "story": "Rohan's king must be roused. Ride north-west across the Eastfold to Edoras.",
+          "how": "Ride on north-west to Edoras, the Golden Hall.",
+          "id": "white_rohan",
+          "after": [
+            "white_woses"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Rohan",
+                "Eastfold",
+                "Derndingle",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "Théoden Rides",
+          "type": "Recruit",
+          "character": "Theoden",
+          "pc": "Edoras",
+          "story": "Théoden stands in the Golden Hall under a poisoned word. Help him cast it off and the Rohirrim ride.",
+          "how": "Go to Edoras and play A Friend or Three there. Win Theoden over and their whole realm joins you.",
+          "id": "white_war",
+          "after": [
+            "white_rohan"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hope Reborn",
+                "White Script of the Citadel",
+                "Gondorian Archers",
+                "Meduseld Guards"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Saruman",
+      "variant": "saruman_the_white",
+      "title": "Saruman the White · The Voice of Isengard",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "saruman_white_master",
+          "title": "Master of the West",
+          "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.",
+          "type": "HoldAllPCs",
+          "points": 0,
+          "decisive": true,
+          "pcs": [
+            "Edoras",
+            "Minas Tirith"
+          ]
+        },
+        {
+          "id": "saruman_white_edoras",
+          "title": "Lord of the Mark",
+          "description": "You hold Edoras when the Age ends.",
+          "type": "HoldPC",
+          "points": 3,
+          "decisive": false,
+          "pc": "Edoras"
+        },
+        {
+          "id": "saruman_white_orthanc",
+          "title": "Orthanc Unbroken",
+          "description": "You hold Orthanc when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Orthanc"
+        },
+        {
+          "id": "saruman_white_realm",
+          "title": "Industry of Isengard",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Tower of Orthanc",
+          "type": "HoldPC",
+          "pc": "Orthanc",
+          "story": "Orthanc's black tower is yours by the Steward's gift. Take up its keys.",
+          "how": "You stand at Orthanc. Play the Orthanc card here and it becomes your seat.",
+          "id": "saruman_white_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Orthanc"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Grima",
+                "GapOfRohan",
+                "WestFold"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "The Wealth of Isengard",
+          "type": "Gold",
+          "count": 6,
+          "story": "Isengard's wealth lies in its forges and granaries. Turn them into gold.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "saruman_white_trade",
+          "after": [
+            "saruman_white_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Dunland Hills",
+          "type": "ReachPC",
+          "pc": "Treforn",
+          "story": "Just west of the tower the Dunland hills begin, and their bitter folk watch the horse-lords' fields.",
+          "how": "Walk west from Orthanc to Treforn.",
+          "id": "saruman_white_hills",
+          "after": [
+            "saruman_white_trade"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Dunland",
+                "Larach Duhnnan"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Dunlendings",
+          "type": "Recruit",
+          "character": "Waulfa",
+          "pc": "Larach Duhnnan",
+          "story": "The Dunlendings hate the horse-lords. A sweet voice at Larach Duhnnan can turn that hatred to use.",
+          "how": "Go to Larach Duhnnan and play A Friend or Three there. Win Waulfa over and their whole realm joins you.",
+          "id": "saruman_white_allies",
+          "after": [
+            "saruman_white_hills"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Waulfa",
+                "Caravans",
+                "Hope Reborn"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "The Wardens of the Tower",
+          "type": "Armies",
+          "count": 1,
+          "story": "Dunland's warriors gather for the White Wizard. Arm them.",
+          "how": "With a commander at one of your PCs, play an army card (Spearmen or Men At Arms).",
+          "id": "saruman_white_host",
+          "after": [
+            "saruman_white_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Spearmen",
+                "Men At Arms",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Westfold",
+          "type": "ReachPC",
+          "pc": "WestFold",
+          "story": "South of the hills lie the Westfold's farms, the edge of Rohan. Walk them and be seen as a friend.",
+          "how": "Lead your host south-east to the Westfold.",
+          "id": "saruman_white_westfold",
+          "after": [
+            "saruman_white_host"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Guard Character",
+                "Guard PC",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "The Voice of Saruman",
+          "type": "Recruit",
+          "character": "Theoden",
+          "pc": "Edoras",
+          "story": "Théoden is old and tired. Speak to him gently at Edoras, and Rohan becomes your shield.",
+          "how": "Go to Edoras and play A Friend or Three there. Win Theoden over and their whole realm joins you.",
+          "id": "saruman_white_war",
+          "after": [
+            "saruman_white_westfold"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Theoden",
+                "Rohan",
+                "Edoras",
+                "Aldburg",
+                "Eastfold",
+                "Voice of Authority",
+                "Decrease Loyalty",
+                "Beast Of The Woods"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Saruman",
+      "variant": "of_many_colours",
+      "title": "Saruman of Many Colours · The Shattered Light",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "multicoloured_master",
+          "title": "Master of the West",
+          "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.",
+          "type": "HoldAllPCs",
+          "points": 0,
+          "decisive": true,
+          "pcs": [
+            "Edoras",
+            "Minas Tirith"
+          ]
+        },
+        {
+          "id": "multicoloured_edoras",
+          "title": "Lord of the Mark",
+          "description": "You hold Edoras when the Age ends.",
+          "type": "HoldPC",
+          "points": 3,
+          "decisive": false,
+          "pc": "Edoras"
+        },
+        {
+          "id": "multicoloured_ost",
+          "title": "The Jewel of Eregion",
+          "description": "You hold Ost-in-Edhil when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Ost-in-Edhil"
+        },
+        {
+          "id": "multicoloured_realm",
+          "title": "A Realm of Many Colours",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "Ost-in-Edhil",
+          "type": "HoldPC",
+          "pc": "Ost-in-Edhil",
+          "story": "Ost-in-Edhil lies in ruins, where the Elven-smiths once forged the Rings. Make it your seat and your forge.",
+          "how": "You stand at Ost-in-Edhil. Play the Ost-in-Edhil card here and it becomes your seat.",
+          "id": "multicoloured_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Ost-in-Edhil"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Eregion",
+                "Nin-in-eilph"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Rings for Sale",
+          "type": "Gold",
+          "count": 6,
+          "story": "Trinkets of Eregion's craft fetch high prices from greedy hands. Sell your wonders.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "multicoloured_trade",
+          "after": [
+            "multicoloured_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Swanfleet",
+          "type": "ReachPC",
+          "pc": "Nin-in-eilph",
+          "story": "North-west, the marshes of the Swanfleet hide old Elven roads. Your servants hold a camp there.",
+          "how": "Walk north-west from Ost-in-Edhil to Nin-in-eilph.",
+          "id": "multicoloured_swanfleet",
+          "after": [
+            "multicoloured_trade"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Dunlendings",
+          "type": "Recruit",
+          "character": "Waulfa",
+          "pc": "Larach Duhnnan",
+          "story": "South of the marshes the Dunlendings would follow anyone who promises them vengeance. Promise it at Larach Duhnnan.",
+          "how": "Go to Larach Duhnnan and play A Friend or Three there. Win Waulfa over and their whole realm joins you.",
+          "id": "multicoloured_allies",
+          "after": [
+            "multicoloured_swanfleet"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Waulfa",
+                "Aonghas",
+                "Dunland",
+                "Larach Duhnnan",
+                "Decrease Loyalty",
+                "Undouble Character"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "Hosts of Many Colours",
+          "type": "Armies",
+          "count": 1,
+          "story": "White light breaks into many colours. Raise a host as strange as your new robes.",
+          "how": "With a commander at one of your PCs, play an army card (Spearmen or Men At Arms).",
+          "id": "multicoloured_host",
+          "after": [
+            "multicoloured_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Spearmen",
+                "Men At Arms",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Road to the Tower",
+          "type": "ReachPC",
+          "pc": "Treforn",
+          "story": "South-east lies Treforn, at the edge of the hills, one march from Isengard.",
+          "how": "Lead the host south-east to Treforn.",
+          "id": "multicoloured_treforn",
+          "after": [
+            "multicoloured_host"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Enion",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Tower Reclaimed",
+          "type": "ReachPC",
+          "pc": "Orthanc",
+          "story": "Orthanc stands over the circle of Isengard. Walk in as its master, wearing every colour.",
+          "how": "Go on to Orthanc.",
+          "id": "multicoloured_war",
+          "after": [
+            "multicoloured_treforn"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Saruman",
+                "Grima",
+                "GapOfRohan",
+                "Orthanc",
+                "Haradrim Infantry",
+                "Southrons"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Saruman",
+      "variant": "the_white_hand",
+      "title": "The White Hand · Isengard's Forge",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "white_hand_master",
+          "title": "Master of the West",
+          "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.",
+          "type": "HoldAllPCs",
+          "points": 0,
+          "decisive": true,
+          "pcs": [
+            "Edoras",
+            "Minas Tirith"
+          ]
+        },
+        {
+          "id": "white_hand_edoras",
+          "title": "Lord of the Mark",
+          "description": "You hold Edoras when the Age ends.",
+          "type": "HoldPC",
+          "points": 3,
+          "decisive": false,
+          "pc": "Edoras"
+        },
+        {
+          "id": "white_hand_orthanc",
+          "title": "Orthanc Unbroken",
+          "description": "You hold Orthanc when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Orthanc"
+        },
+        {
+          "id": "white_hand_realm",
+          "title": "Industry of Isengard",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Tower of Orthanc",
+          "type": "HoldPC",
+          "pc": "Orthanc",
+          "story": "Orthanc stands over the circle of Isengard, and the trees are already falling. Take its keys.",
+          "how": "You stand at Orthanc. Play the Orthanc card here and it becomes your seat.",
+          "id": "white_hand_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Orthanc"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Grima",
+                "GapOfRohan",
+                "FangornSCamp"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "The Furnaces' Hunger",
+          "type": "Gold",
+          "count": 6,
+          "story": "The furnaces eat timber and iron day and night. Buy and sell what they need.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "white_hand_trade",
+          "after": [
+            "white_hand_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Heroes",
+          "title": "The First of the Uruk-hai",
+          "type": "Recruit",
+          "character": "Lurtz",
+          "pc": "FangornSCamp",
+          "story": "In the pits by Fangorn's edge a new breed has woken. Lurtz is the first of the Uruk-hai; bind him to you.",
+          "how": "Go to FangornSCamp, where Lurtz lives, and play the Lurtz card there: they join you.",
+          "id": "white_hand_hero",
+          "after": [
+            "white_hand_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Lurtz"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Ugluk"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "The Furnaces Burn",
+          "type": "Armies",
+          "count": 1,
+          "story": "The hammers ring at Fangorn's camp. Arm the first host.",
+          "how": "With a commander at one of your PCs, play an army card (Spearmen or Men At Arms).",
+          "id": "white_hand_host",
+          "after": [
+            "white_hand_hero"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Spearmen",
+                "Men At Arms",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "Spies in the Westfold",
+          "type": "ReachPC",
+          "pc": "WestFold",
+          "story": "South-west, the Westfold's farms lie open. Your spies have counted every one.",
+          "how": "March the host south-west to the Westfold.",
+          "id": "white_hand_westfold",
+          "after": [
+            "white_hand_host"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Deeping Wall",
+          "type": "ReachPC",
+          "pc": "HelmDeep",
+          "story": "At the end of the Westfold, Helm's Deep shelters Rohan's people. Bring your host to its walls.",
+          "how": "Go on to Helm's Deep.",
+          "id": "white_hand_helm",
+          "after": [
+            "white_hand_westfold"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "The Uruk-hai March",
+          "type": "Armies",
+          "count": 1,
+          "story": "Ten thousand Uruk-hai wait for the word. Raise one more host and let them march on Rohan.",
+          "how": "Raise one more army: a commander at one of your PCs plays an army card.",
+          "id": "white_hand_war",
+          "after": [
+            "white_hand_helm"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Spearmen",
+                "Men At Arms"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Bog Swarm",
+                "Crebain"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "leader": "Saruman",
+      "variant": "sharkey",
+      "title": "Sharkey · The Scouring",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "sharkey_master",
+          "title": "Master of the West",
+          "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.",
+          "type": "HoldAllPCs",
+          "points": 0,
+          "decisive": true,
+          "pcs": [
+            "Edoras",
+            "Minas Tirith"
+          ]
+        },
+        {
+          "id": "sharkey_shire",
+          "title": "Boss of the Shire",
+          "description": "You hold Hobbiton when the Age ends.",
+          "type": "HoldPC",
+          "points": 3,
+          "decisive": false,
+          "pc": "Hobbiton"
+        },
+        {
+          "id": "sharkey_orthanc",
+          "title": "Orthanc Unbroken",
+          "description": "You hold Orthanc when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Orthanc"
+        },
+        {
+          "id": "sharkey_realm",
+          "title": "Sharkey's Men",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 2,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Green Dragon",
+          "type": "HoldPC",
+          "pc": "Bywater",
+          "story": "Bywater's Green Dragon is a fine inn for a fallen wizard. Make it your headquarters.",
+          "how": "You stand at Bywater. Play the Bywater card here and it becomes your seat.",
+          "id": "sharkey_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Bywater"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "TheShire",
+                "The Lockholes",
+                "Stock",
+                "Hobbiton"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Gatherers and Sharers",
+          "type": "Gold",
+          "count": 6,
+          "story": "Gatherers take, and sharers keep. Fill the purse.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "sharkey_trade",
+          "after": [
+            "sharkey_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Allies",
+          "title": "The Chief",
+          "type": "Recruit",
+          "character": "Lotho Sackville-Baggins",
+          "pc": "The Lockholes",
+          "story": "Lotho calls himself the Chief and fills the Lockholes with hobbits who won't share. Make him your creature.",
+          "how": "Go to The Lockholes and play A Friend or Three there. Win Lotho Sackville-Baggins over and their whole realm joins you.",
+          "id": "sharkey_allies",
+          "after": [
+            "sharkey_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Lotho Sackville-Baggins",
+                "Michel Delving",
+                "Buckland",
+                "Crickhollow",
+                "BagginsDontLeaveHere",
+                "Caravans"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "Ruffians",
+          "type": "Armies",
+          "count": 1,
+          "story": "Ruffians come up the Greenway looking for work. Give it to them.",
+          "how": "With a commander at one of your PCs, play an army card (Men At Arms or Spearmen).",
+          "id": "sharkey_host",
+          "after": [
+            "sharkey_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Men At Arms",
+                "Spearmen",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Pipe-weed Monopoly"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "Gathering Along the Marish",
+          "type": "ReachPC",
+          "pc": "Stock",
+          "story": "East through the Marish lie farms that haven't shared yet.",
+          "how": "March east to Stock.",
+          "id": "sharkey_stock",
+          "after": [
+            "sharkey_host"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Old Forest",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Heroes",
+          "title": "A Squint-eyed Friend",
+          "type": "Recruit",
+          "character": "Bill Ferny",
+          "pc": "Bree",
+          "story": "In Bree, Bill Ferny would sell his own mother. He knows every road south.",
+          "how": "Go to Bree, where Bill Ferny lives, and play the Bill Ferny card there: they join you.",
+          "id": "sharkey_bree",
+          "after": [
+            "sharkey_stock"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Bill Ferny"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Mat Heathertoes",
+                "Arthedain",
+                "Bree"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Greenway South",
+          "type": "ReachPC",
+          "pc": "Tharbad",
+          "story": "The Greenway runs south past ruined Tharbad toward Dunland and old friends.",
+          "how": "Go south along the Greenway to Tharbad.",
+          "id": "sharkey_tharbad",
+          "after": [
+            "sharkey_bree"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Cardolan",
+                "Tharbad",
+                "Sarn Ford",
+                "ErynVorn",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "Old Friends in Dunland",
+          "type": "Recruit",
+          "character": "Waulfa",
+          "pc": "Larach Duhnnan",
+          "story": "The Dunlendings remember who paid them. Win Waulfa at Larach Duhnnan, and the ruffians have an army behind them.",
+          "how": "Go to Larach Duhnnan and play A Friend or Three there. Win Waulfa over and their whole realm joins you.",
+          "id": "sharkey_war",
+          "after": [
+            "sharkey_tharbad"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Waulfa",
+                "Dunland",
+                "Larach Duhnnan",
+                "Bree Rumours",
+                "Voice of Authority",
+                "Bounders",
+                "Hobbit Archers"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Sauron",
+      "variant": "the_dark_eye",
+      "title": "The Dark Eye · The Lidless Eye",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "dark_eye_tirith",
+          "title": "The White City Falls",
+          "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.",
+          "type": "HoldPC",
+          "points": 0,
+          "decisive": true,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "dark_eye_osgiliath",
+          "title": "Osgiliath Burns",
+          "description": "Osgiliath is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Osgiliath"
+        },
+        {
+          "id": "dark_eye_baraddur",
+          "title": "The Dark Tower Stands",
+          "description": "You hold Barad-dur when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Barad-dur"
+        },
+        {
+          "id": "dark_eye_realm",
+          "title": "Darkness Spreads",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 3,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Dark Tower",
+          "type": "HoldPC",
+          "pc": "Barad-dur",
+          "story": "The Dark Tower rises again over Gorgoroth. Take your throne.",
+          "how": "You stand at Barad-dur. Play the Barad-dur card here and it becomes your seat.",
+          "id": "dark_eye_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Barad-dur"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Urzahil",
+                "Gorgoroth",
+                "BaradWath",
+                "MountDoom",
+                "LagVrasfotak"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "The Tribute of Nurn",
+          "type": "Gold",
+          "count": 6,
+          "story": "The slave-fields of Nurn send their tribute north. Collect it.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "dark_eye_trade",
+          "after": [
+            "dark_eye_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Heroes",
+          "title": "The Lieutenant",
+          "type": "Recruit",
+          "character": "Mouth of Sauron",
+          "pc": "Barad-dur",
+          "story": "Your Mouth speaks with your will. Raise the Lieutenant of Barad-dûr to your side.",
+          "how": "Go to Barad-dur, where Mouth of Sauron lives, and play the Mouth of Sauron card there: they join you.",
+          "id": "dark_eye_hero",
+          "after": [
+            "dark_eye_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Mouth of Sauron"
+              ]
+            }
+          ],
+          "unlocks": [],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Fire Mountain",
+          "type": "ReachPC",
+          "pc": "MountDoom",
+          "story": "West of the tower, Orodruin smokes. Its fires remember the Ring.",
+          "how": "Walk west to Mount Doom.",
+          "id": "dark_eye_doom",
+          "after": [
+            "dark_eye_hero"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Gollum",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "Ren the Unclean",
+          "type": "Recruit",
+          "character": "Ren the Unclean",
+          "pc": "Barad Ungol",
+          "story": "At Barad Ungol, Ren the Unclean waits for his master's call. Give it.",
+          "how": "Go to Barad Ungol and play A Friend or Three there. Win Ren the Unclean over and their whole realm joins you.",
+          "id": "dark_eye_allies",
+          "after": [
+            "dark_eye_doom"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Ren the Unclean",
+                "Ungol",
+                "Barad Ungol",
+                "CirithUngol",
+                "Minas Morgul",
+                "Decrease Loyalty",
+                "Undouble Character"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "The Black Host",
+          "type": "Armies",
+          "count": 1,
+          "story": "The Black Host gathers in the vales. Arm it.",
+          "how": "With a commander at one of your PCs, play an army card (Men At Arms or Spearmen).",
+          "id": "dark_eye_host",
+          "after": [
+            "dark_eye_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Gorgoroth Militia",
+                "Nurn Reavers",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Allies",
+          "title": "The Witch-king",
+          "type": "Recruit",
+          "character": "Murazor",
+          "pc": "Minas Morgul",
+          "story": "Minas Morgul glows pale over its vale. The Witch-king waits there for the word.",
+          "how": "Go to Minas Morgul and play A Friend or Three there. Win Murazor over and their whole realm joins you.",
+          "id": "dark_eye_morgul",
+          "after": [
+            "dark_eye_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Gothmog",
+                "Shelob's Lair",
+                "Olbamarl",
+                "Create Port",
+                "Double Character"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "Durthang",
+          "type": "Recruit",
+          "character": "Hoarmurath",
+          "pc": "Durthang",
+          "story": "North, Durthang watches the passes. Bend its captain to your will.",
+          "how": "Go to Durthang and play A Friend or Three there. Win Hoarmurath over and their whole realm joins you.",
+          "id": "dark_eye_durthang",
+          "after": [
+            "dark_eye_morgul"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hoarmurath",
+                "Ithilien",
+                "Durthang",
+                "LagScara",
+                "Increase Fortifications"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Battle",
+          "title": "The Rangers of Ithilien",
+          "type": "Defeat",
+          "character": "Faramir",
+          "story": "Faramir's rangers creep through the hills west of Durthang and ambush your roads.",
+          "how": "Faramir's rangers hold the hills near the Morannon. March your army onto them and play Attack: break their army or slay Faramir.",
+          "id": "dark_eye_battle",
+          "after": [
+            "dark_eye_durthang"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Rallied Men",
+                "Well-equipped Army",
+                "Black Númenórean Guard"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Black Gate",
+          "type": "ReachPC",
+          "pc": "Morannon",
+          "story": "The Black Gate stands at the head of the plain. Bring your host to it, and the West will tremble.",
+          "how": "Take your host to the Morannon.",
+          "id": "dark_eye_war",
+          "after": [
+            "dark_eye_battle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Dendra Dwar",
+                "Udun",
+                "Morannon",
+                "Carach Angren",
+                "Durthang Orcs",
+                "Torch Bearers"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Sauron",
+      "variant": "the_deceiver",
+      "title": "The Deceiver · Annatar's Gifts",
+      "startPc": "Lugarlur",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "deceiver_tirith",
+          "title": "The White City Falls",
+          "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.",
+          "type": "HoldPC",
+          "points": 0,
+          "decisive": true,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "deceiver_umbar",
+          "title": "The Havens of Umbar",
+          "description": "Havens of Umbar is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Havens of Umbar"
+        },
+        {
+          "id": "deceiver_osgiliath",
+          "title": "Osgiliath Burns",
+          "description": "Osgiliath is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "side": true,
+          "pc": "Osgiliath"
+        },
+        {
+          "id": "deceiver_realm",
+          "title": "The Lords of the South",
+          "description": "Your own realm holds 8 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 3,
+          "decisive": false,
+          "count": 8
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Gifts of Annatar",
+          "type": "Recruit",
+          "character": "Adunaphel",
+          "pc": "Lugarlur",
+          "story": "Adûnaphel rules at Lugarlur, and she remembers Annatar, the Lord of Gifts. Win her back.",
+          "how": "You stand at Lugarlur, Adûnaphel's seat. Play A Friend or Three here: win her over and her realm joins you.",
+          "id": "deceiver_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Southron Scout",
+                "FarHarad",
+                "Lugarlur",
+                "JugRijeisha",
+                "Kas Shadoul"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Gifts Bought and Sold",
+          "type": "Gold",
+          "count": 6,
+          "story": "Gifts are bought and sold. A fair face makes for good trade.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "deceiver_trade",
+          "after": [
+            "deceiver_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Host",
+          "title": "The Black Númenóreans",
+          "type": "Armies",
+          "count": 1,
+          "story": "The Black Númenóreans of the coast are proud and cruel. Raise them.",
+          "how": "With a commander at one of your PCs, play an army card (Men At Arms or Spearmen).",
+          "id": "deceiver_host",
+          "after": [
+            "deceiver_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Men At Arms",
+                "Spearmen",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "The Road to Near Harad",
+          "type": "ReachPC",
+          "pc": "KasShafra",
+          "story": "North-west the road leaves the desert for Near Harad's towns, rich and quarrelsome.",
+          "how": "March north-west to Kas Shafra.",
+          "id": "deceiver_road",
+          "after": [
+            "deceiver_host"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "NearHarad",
+                "KasShafra",
+                "Methir",
+                "CarasTolfalas",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Lords of Kas Shadoul",
+          "type": "ReachPC",
+          "pc": "Kas Shadoul",
+          "story": "Haruth Rammam rules Kas Shadoul and sells his spears to the highest bidder. See what he asks.",
+          "how": "Go on west to Kas Shadoul.",
+          "id": "deceiver_shadoul",
+          "after": [
+            "deceiver_road"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "BaradHarn",
+                "Vamag",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Battle",
+          "title": "Gondor's Watch",
+          "type": "Defeat",
+          "character": "Thorondir",
+          "story": "Near Umbar, Thorondir's soldiers keep Gondor's watch on the coast. Break it.",
+          "how": "Thorondir's soldiers hold the coast north of Umbar. March your army onto them and play Attack: break their army or slay Thorondir.",
+          "id": "deceiver_battle",
+          "after": [
+            "deceiver_shadoul"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Rallied Men",
+                "Well-equipped Army",
+                "Archers"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "The Corsairs",
+          "type": "Recruit",
+          "character": "Sangarunya",
+          "pc": "Havens of Umbar",
+          "story": "The Corsairs of Umbar sail for whoever pays best. Pay them, and the sea is yours.",
+          "how": "Go to Havens of Umbar and play A Friend or Three there. Win Sangarunya over and their whole realm joins you.",
+          "id": "deceiver_war",
+          "after": [
+            "deceiver_battle"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Umbar",
+                "Havens of Umbar",
+                "Caldur",
+                "CarasMirilond",
+                "Caravans",
+                "Decrease Loyalty",
+                "Haradrim Infantry",
+                "Southrons"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Sauron",
+      "variant": "the_necromancer",
+      "title": "The Necromancer · The Shadow in Mirkwood",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "necromancer_tirith",
+          "title": "The White City Falls",
+          "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.",
+          "type": "HoldPC",
+          "points": 0,
+          "decisive": true,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "necromancer_dolguldur",
+          "title": "The Hill of Sorcery",
+          "description": "Dol Guldur is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Dol Guldur"
+        },
+        {
+          "id": "necromancer_baraddur",
+          "title": "The Dark Tower Stands",
+          "description": "You hold Barad-dur when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Barad-dur"
+        },
+        {
+          "id": "necromancer_realm",
+          "title": "Darkness Spreads",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 3,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "The Hidden Hold",
+          "type": "HoldPC",
+          "pc": "Thuringwathost",
+          "story": "A hidden hold in the marshes keeps your shadow safe. Make it your seat.",
+          "how": "You stand at Thuringwathost. Play the Thuringwathost card here and it becomes your seat.",
+          "id": "necromancer_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Thuringwathost"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Ethacali",
+                "Dagorlad"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Tithes of the Dead",
+          "type": "Gold",
+          "count": 6,
+          "story": "The dead pay their tithe in grave-gold. Gather it.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "necromancer_trade",
+          "after": [
+            "necromancer_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Road",
+          "title": "Out of the Marshes",
+          "type": "ReachPC",
+          "pc": "AmonLhaw",
+          "story": "West of the marshes the Brown Lands stretch bare to the river. Walk out under the grey sky.",
+          "how": "Walk west from the hold to Amon Lhaw.",
+          "id": "necromancer_brown",
+          "after": [
+            "necromancer_trade"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "BrownLands",
+                "AmonLhaw",
+                "Ongushar",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Heroes",
+          "title": "The Orc-chief",
+          "type": "Recruit",
+          "character": "Bugrug",
+          "pc": "Ongushar",
+          "story": "At Ongushar, Bugrug's orcs squabble over scraps. Give them a master.",
+          "how": "Go to Ongushar, where Bugrug lives, and play the Bugrug card there: they join you.",
+          "id": "necromancer_hero",
+          "after": [
+            "necromancer_brown"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Bugrug"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Morthrog"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Host",
+          "title": "The Dead Awaken",
+          "type": "Armies",
+          "count": 1,
+          "story": "The dead awaken under your gaze. Raise them.",
+          "how": "With a commander at one of your PCs, play an army card (Men At Arms or Spearmen).",
+          "id": "necromancer_host",
+          "after": [
+            "necromancer_hero"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Forest Orcs",
+                "Ruins Spiders",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "The Woodmen's Watch",
+          "type": "Defeat",
+          "character": "Beoraborn",
+          "story": "The Woodmen watch the forest's edge for your servants. Blind them.",
+          "how": "Beoraborn's woodmen hold the eaves by Dol Guldur. March your army onto them and play Attack: break their army or slay Beoraborn.",
+          "id": "necromancer_battle",
+          "after": [
+            "necromancer_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Chopping the Trees",
+                "Rallied Men",
+                "Bog Swarm"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "The Shadow Returns",
+          "type": "Recruit",
+          "character": "Khamul",
+          "pc": "Dol Guldur",
+          "story": "Dol Guldur waits on its hill in Mirkwood. Khamûl keeps it for you; come home.",
+          "how": "Go to Dol Guldur and play A Friend or Three there. Win Khamul over and their whole realm joins you.",
+          "id": "necromancer_war",
+          "after": [
+            "necromancer_battle"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "The Necromancer",
+                "The Grimburgoth",
+                "SouthernMirkwood",
+                "Dol Guldur",
+                "Decrease Loyalty",
+                "Undouble Character",
+                "Cave Goblins",
+                "Goblins Of Moria"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Sauron",
+      "variant": "shadow_of_the_east",
+      "title": "Shadow of the East · The Wainriders",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "shadow_east_tirith",
+          "title": "The White City Falls",
+          "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.",
+          "type": "HoldPC",
+          "points": 0,
+          "decisive": true,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "shadow_east_osgiliath",
+          "title": "Osgiliath Burns",
+          "description": "Osgiliath is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "Osgiliath"
+        },
+        {
+          "id": "shadow_east_tolburuth",
+          "title": "The Eastern Hold",
+          "description": "You hold Tol Buruth when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "Tol Buruth"
+        },
+        {
+          "id": "shadow_east_realm",
+          "title": "The East Rises",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 3,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "Tol Buruth",
+          "type": "HoldPC",
+          "pc": "Tol Buruth",
+          "story": "Tol Buruth stands among the wagons of the Wainriders. Make it yours.",
+          "how": "You stand at Tol Buruth. Play the Tol Buruth card here and it becomes your seat.",
+          "id": "shadow_east_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "Tol Buruth"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Din Ohtar",
+                "SeaOfRhun",
+                "Elgaer",
+                "Raider Hold"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "Wine and Wagons",
+          "type": "Gold",
+          "count": 6,
+          "story": "Wine and wagons fill the markets of the east. Profit from them.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "shadow_east_trade",
+          "after": [
+            "shadow_east_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Host",
+          "title": "The Wagon-guard",
+          "type": "Armies",
+          "count": 1,
+          "story": "The wagons need guards. Raise them.",
+          "how": "With a commander at one of your PCs, play an army card (Men At Arms or Spearmen).",
+          "id": "shadow_east_host",
+          "after": [
+            "shadow_east_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Archers",
+                "Spearmen",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Train Army"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "The Wine-lords' Fleet",
+          "type": "Defeat",
+          "character": "Vardun",
+          "story": "Vardun's mariners hold the shore of the Sea of Rhûn by your island. Drive them off.",
+          "how": "Vardun's mariners hold the shore west of Tol Buruth. March your army onto them and play Attack: break their army or slay Vardun.",
+          "id": "shadow_east_battle",
+          "after": [
+            "shadow_east_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Rallied Men",
+                "Well-equipped Army",
+                "Hounds"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Wine-lands",
+          "type": "ReachPC",
+          "pc": "Riavod",
+          "story": "West across the water lie the vineyards of Dorwinion, rich and soft.",
+          "how": "Go west to Riavod.",
+          "id": "shadow_east_wine",
+          "after": [
+            "shadow_east_battle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Tros Hesnef",
+                "Dorwinion",
+                "Riavod",
+                "Shrel-Kain",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Lord of Shrel-Kain",
+          "type": "Recruit",
+          "character": "Annatorion",
+          "pc": "Shrel-Kain",
+          "story": "North along the shore, Annatorion rules Shrel-Kain. A wine-lord loves gold more than freedom.",
+          "how": "Go to Shrel-Kain and play A Friend or Three there. Win Annatorion over and their whole realm joins you.",
+          "id": "shadow_east_allies",
+          "after": [
+            "shadow_east_wine"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Caravans",
+                "Decrease Loyalty"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "The Blue Wizard's Road",
+          "type": "ReachPC",
+          "pc": "Ilanin",
+          "story": "Further north at Ilanin, rumours speak of a blue-robed wizard among the Easterlings.",
+          "how": "Go on north to Ilanin.",
+          "id": "shadow_east_ilanin",
+          "after": [
+            "shadow_east_allies"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Rhun",
+                "Ilanin",
+                "Mistrand",
+                "Carvarad",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "The Wain Host",
+          "type": "Armies",
+          "count": 1,
+          "story": "The wain host rolls west in a great dust. Raise one more host and lead it.",
+          "how": "Raise one more army: a commander at one of your PCs plays an army card.",
+          "id": "shadow_east_war",
+          "after": [
+            "shadow_east_ilanin"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Balchoth",
+                "Spearmen"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Bog Swarm",
+                "Camel Riders"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "leader": "Sauron",
+      "variant": "the_iron_crown",
+      "title": "The Iron Crown · Angmar Rises",
+      "startPc": "",
+      "champion": "",
+      "start": [
+        {
+          "names": [
+            "Endless Stairs",
+            "Duel",
+            "Find Artifact",
+            "Scry Artifact",
+            "Heal"
+          ]
+        }
+      ],
+      "objectives": [
+        {
+          "id": "iron_crown_tirith",
+          "title": "The White City Falls",
+          "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.",
+          "type": "HoldPC",
+          "points": 0,
+          "decisive": true,
+          "side": true,
+          "pc": "Minas Tirith"
+        },
+        {
+          "id": "iron_crown_fornost",
+          "title": "The North Kingdom Falls",
+          "description": "FornostErain is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "points": 2,
+          "decisive": false,
+          "side": true,
+          "pc": "FornostErain"
+        },
+        {
+          "id": "iron_crown_carndum",
+          "title": "The Iron Crown",
+          "description": "You hold CarnDum when the Age ends.",
+          "type": "HoldPC",
+          "points": 1,
+          "decisive": false,
+          "pc": "CarnDum"
+        },
+        {
+          "id": "iron_crown_realm",
+          "title": "Angmar Reborn",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "points": 3,
+          "decisive": false,
+          "count": 6
+        }
+      ],
+      "milestones": [
+        {
+          "track": "Seat",
+          "title": "Carn Dûm",
+          "type": "HoldPC",
+          "pc": "CarnDum",
+          "story": "Carn Dûm's iron gates open again after a thousand years. Take the throne of Angmar.",
+          "how": "You stand at CarnDum. Play the CarnDum card here and it becomes your seat.",
+          "id": "iron_crown_seat",
+          "after": [],
+          "tools": [
+            {
+              "names": [
+                "CarnDum"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Hear Stories",
+                "Increase Loyalty",
+                "Broggha",
+                "Angmar",
+                "MtGram",
+                "The Ettenmoors",
+                "Gundabad"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Trade",
+          "title": "The Iron Tithe",
+          "type": "Gold",
+          "count": 6,
+          "story": "The iron mines of Angmar pay their tithe. Collect it.",
+          "how": "Gather 6 more gold. Play a Sell card at any of your PCs, or let your PCs' dues fill the purse turn by turn.",
+          "id": "iron_crown_trade",
+          "after": [
+            "iron_crown_seat"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Sell 5 Leather",
+                "Sell 5 Timber",
+                "Sell 5 Iron"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Buy 5 Food",
+                "Buy 5 Leather"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Host",
+          "title": "The Host of Angmar",
+          "type": "Armies",
+          "count": 1,
+          "story": "The host of Angmar gathers under the black banner. Arm it.",
+          "how": "With a commander at one of your PCs, play an army card (Men At Arms or Spearmen).",
+          "id": "iron_crown_host",
+          "after": [
+            "iron_crown_trade"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Lossoth",
+                "Ruins Spiders",
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Block",
+                "Orc-host of Angmar"
+              ]
+            }
+          ]
+        },
+        {
+          "track": "Battle",
+          "title": "The Last Rangers",
+          "type": "Defeat",
+          "character": "Halbarad",
+          "story": "The last Rangers of the North stand by Carn Dûm, few but stubborn. Crush them.",
+          "how": "Halbarad's men hold the hex beside Carn Dûm. March your army onto them and play Attack: break their army or slay Halbarad.",
+          "id": "iron_crown_battle",
+          "after": [
+            "iron_crown_host"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Attack"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "The Witch-king's Decree",
+                "Train Army",
+                "Angmarin"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Road",
+          "title": "Mount Gram",
+          "type": "ReachPC",
+          "pc": "MtGram",
+          "story": "South, the goblin-holes of Mount Gram are full of hungry mouths.",
+          "how": "March south to Mount Gram.",
+          "id": "iron_crown_gram",
+          "after": [
+            "iron_crown_battle"
+          ],
+          "tools": [],
+          "unlocks": [
+            {
+              "names": [
+                "Golfimbul",
+                "Guard Character",
+                "Guard PC"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Heroes",
+          "title": "The Hillman Chief",
+          "type": "Recruit",
+          "character": "Seammu",
+          "pc": "CamethBrin",
+          "story": "In Rhudaur, at Cameth Brin, the hill-men's chief Seammu would serve a strong lord.",
+          "how": "Go to CamethBrin, where Seammu lives, and play the Seammu card there: they join you.",
+          "id": "iron_crown_hero",
+          "after": [
+            "iron_crown_gram"
+          ],
+          "tools": [
+            {
+              "names": [
+                "Seammu"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Rhudaur",
+                "CamethBrin",
+                "FennasDrunin",
+                "The Trollshaws",
+                "Courage",
+                "Fear"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "Allies",
+          "title": "The Hill-men of Rhudaur",
+          "type": "Recruit",
+          "character": "Arfanhil",
+          "pc": "FennasDrunin",
+          "story": "Arfanhil rules the hill-men from Fennas Drúnin, next door. They remember Angmar's glory.",
+          "how": "Go to FennasDrunin and play A Friend or Three there. Win Arfanhil over and their whole realm joins you.",
+          "id": "iron_crown_allies",
+          "after": [
+            "iron_crown_hero"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "Morgul Passage",
+                "Decrease Loyalty"
+              ]
+            }
+          ],
+          "count": 0
+        },
+        {
+          "track": "War",
+          "title": "Goblin-town",
+          "type": "Recruit",
+          "character": "Goblin King",
+          "pc": "Goblin Gate",
+          "story": "East, under the Misty Mountains, the Goblin King rules his caves. Bend him to your will.",
+          "how": "Go to Goblin Gate and play A Friend or Three there. Win Goblin King over and their whole realm joins you.",
+          "id": "iron_crown_war",
+          "after": [
+            "iron_crown_allies"
+          ],
+          "tools": [
+            {
+              "names": [
+                "AFriendOrThree"
+              ]
+            }
+          ],
+          "unlocks": [
+            {
+              "names": [
+                "The Sack of Bag End",
+                "Undouble Character",
+                "Hillmen",
+                "Undead"
+              ]
+            }
+          ],
+          "count": 0
+        }
+      ]
+    },
+    {
+      "leader": "Gandalf",
+      "objectives": [
+        {
+          "id": "gandalf_mount_doom",
+          "title": "Into the Fire",
+          "description": "Any of your characters reaches Mount Doom. Decisive: wins the war at once.",
+          "type": "ReachPC",
+          "pc": "MountDoom",
+          "points": 0,
+          "decisive": true
+        },
+        {
+          "id": "gandalf_minas_tirith",
+          "title": "The White City Stands",
+          "description": "Minas Tirith is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "pc": "Minas Tirith",
+          "side": true,
+          "points": 3
+        },
+        {
+          "id": "gandalf_imladris",
+          "title": "The Last Homely House",
+          "description": "Imladris is held by the Free Peoples when the Age ends.",
+          "type": "HoldPC",
+          "pc": "Imladris",
+          "side": true,
+          "points": 1
+        },
+        {
+          "id": "gandalf_rally",
+          "title": "Rally the West",
+          "description": "Your own realm holds 5 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "count": 5,
+          "points": 2
+        }
+      ],
+      "milestones": [
+        {
+          "id": "gandalf_emissary_1",
+          "track": "Emissary",
+          "title": "Ears in Every Inn",
+          "type": "Gold",
+          "count": 20,
+          "how": "With an emissary at one of your own PCs, Sell goods you have spare and Hear Stories there.",
+          "unlocks": [
+            {
+              "skills": [
+                "Emissary"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gandalf_emissary_2",
+          "track": "Emissary",
+          "title": "Hearts of the West",
+          "type": "Loyalty",
+          "count": 20,
+          "how": "With an emissary at your own PCs, play Increase Loyalty (it comes with the first emissary step).",
+          "unlocks": [
+            {
+              "types": [
+                "PC",
+                "Land"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gandalf_commander_1",
+          "track": "Commander",
+          "title": "The West Answers",
+          "type": "Armies",
+          "count": 1,
+          "how": "With a commander at one of your PCs, play one of your army cards to raise a new host.",
+          "unlocks": [
+            {
+              "types": [
+                "Army"
+              ]
+            },
+            {
+              "types": [
+                "Event"
+              ],
+              "skills": [
+                "Commander"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gandalf_commander_2",
+          "track": "Commander",
+          "title": "Retake What Was Lost",
+          "type": "Captured",
+          "count": 1,
+          "how": "March a host to an enemy PC and Attack until it falls to you.",
+          "unlocks": [
+            {
+              "skills": [
+                "Commander"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gandalf_agent_1",
+          "track": "Agent",
+          "title": "Rangers in the Wild",
+          "type": "AgentLevels",
+          "count": 1,
+          "how": "Keep your agents busy: Guard your PCs and characters, or Steal Gold at enemy PCs. Every action can raise their skill.",
+          "unlocks": [
+            {
+              "skills": [
+                "Agent"
+              ],
+              "maxLevel": 3
+            }
+          ]
+        },
+        {
+          "id": "gandalf_agent_2",
+          "track": "Agent",
+          "title": "Shadows of the North",
+          "type": "AgentLevels",
+          "count": 3,
+          "how": "Use your new agent actions (steal goods, sabotage, steal artifacts); every one can raise the agent's skill.",
+          "unlocks": [
+            {
+              "skills": [
+                "Agent"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gandalf_mage_1",
+          "track": "Mage",
+          "title": "Relics of the Elder Days",
+          "type": "Artifacts",
+          "count": 1,
+          "how": "Take a mage where an artifact lies (Scry Artifact shows where) and play Find Artifact.",
+          "unlocks": [
+            {
+              "skills": [
+                "Mage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gandalf_heroes_1",
+          "track": "Heroes",
+          "title": "Gather the Company",
+          "type": "Characters",
+          "count": 1,
+          "how": "Walk any character to the home of a hero whose card you hold (click to fly there) and play their card to recruit them.",
+          "unlocks": [
+            {
+              "types": [
+                "Character"
+              ]
+            }
+          ]
+        }
+      ],
+      "champion": "",
+      "start": [
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Hear Stories",
+            "Sell 5 Steel",
+            "Sell 5 Leather",
+            "Sell 5 Mounts",
+            "Sell 5 Iron",
+            "Sell 5 Timber",
+            "Sell 5 Mithril",
+            "Buy 5 Food",
+            "Buy 5 Leather",
+            "Buy 5 Mounts",
+            "Buy 5 Iron",
+            "Buy 5 Timber",
+            "Buy 5 Mithril",
+            "Buy 5 Steel"
+          ]
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Attack",
+            "Block",
+            "Duel"
+          ]
+        },
+        {
+          "types": [
+            "Army"
+          ],
+          "from": "base"
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Guard PC",
+            "Guard Character",
+            "Steal Gold"
+          ]
+        },
+        {
+          "types": [
+            "Spell"
+          ],
+          "names": [
+            "Heal",
+            "Scry Artifact"
+          ]
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Find Artifact"
+          ]
+        },
+        {
+          "types": [
+            "Character"
+          ],
+          "from": "base"
+        },
+        {
+          "names": [
+            "Endless Stairs"
+          ]
+        }
       ]
     },
     {
       "leader": "Saruman",
       "objectives": [
-        { "id": "saruman_master", "title": "Master of the West", "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.", "type": "HoldAllPCs", "pcs": [ "Edoras", "Minas Tirith" ], "points": 0, "decisive": true },
-        { "id": "saruman_edoras", "title": "Lord of the Mark", "description": "You hold Edoras when the Age ends.", "type": "HoldPC", "pc": "Edoras", "points": 3 },
-        { "id": "saruman_orthanc", "title": "Orthanc Unbroken", "description": "You hold Orthanc when the Age ends.", "type": "HoldPC", "pc": "Orthanc", "points": 1 },
-        { "id": "saruman_industry", "title": "Industry of Isengard", "description": "Your own realm holds 6 or more PCs when the Age ends.", "type": "PCCount", "count": 6, "points": 2 }
+        {
+          "id": "saruman_master",
+          "title": "Master of the West",
+          "description": "Hold Edoras and Minas Tirith at the same time. Decisive: wins the war at once.",
+          "type": "HoldAllPCs",
+          "pcs": [
+            "Edoras",
+            "Minas Tirith"
+          ],
+          "points": 0,
+          "decisive": true
+        },
+        {
+          "id": "saruman_edoras",
+          "title": "Lord of the Mark",
+          "description": "You hold Edoras when the Age ends.",
+          "type": "HoldPC",
+          "pc": "Edoras",
+          "points": 3
+        },
+        {
+          "id": "saruman_orthanc",
+          "title": "Orthanc Unbroken",
+          "description": "You hold Orthanc when the Age ends.",
+          "type": "HoldPC",
+          "pc": "Orthanc",
+          "points": 1
+        },
+        {
+          "id": "saruman_industry",
+          "title": "Industry of Isengard",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "count": 6,
+          "points": 2
+        }
       ],
       "milestones": [
-        { "id": "saruman_m_uruks", "title": "Fighting Uruk-hai", "type": "Armies", "count": 1, "aspect": "Military", "reward": 15, "how": "Play an army card with a commander at Orthanc or another of your PCs." },
-        { "id": "saruman_m_furnaces", "title": "The Furnaces of Isengard", "type": "Gold", "count": 30, "aspect": "Economy", "reward": 15, "how": "Have emissaries Sell iron, timber and steel at your own PCs, and send agents to Steal Gold from rival PCs." },
-        { "id": "saruman_m_muster", "title": "Ten Thousand Strong", "type": "Troops", "count": 5, "aspect": "Military", "reward": 20, "how": "Keep playing army cards at your PCs to add troops to your hosts — and keep them alive." },
-        { "id": "saruman_m_voice", "title": "The Voice of Saruman", "type": "PCs", "count": 1, "aspect": "Realm", "reward": 20, "how": "Found a new PC from a PC card, or bring a host to a rival PC and play Siege; emissaries can Decrease Loyalty there first." },
-        { "id": "saruman_m_wheels", "title": "Wheels and Engines", "type": "Production", "count": 3, "aspect": "Economy", "reward": 20, "how": "Every PC you add produces goods each turn: found new ones from PC cards or take them by force." },
-        { "id": "saruman_m_spies", "title": "Crebain and Spies", "type": "Levels", "count": 3, "aspect": "Heroes", "reward": 15, "how": "Use your agents and emissaries often: every action has a chance to raise the skill it uses." }
+        {
+          "id": "saruman_emissary_1",
+          "track": "Emissary",
+          "title": "The Furnaces of Isengard",
+          "type": "Gold",
+          "count": 30,
+          "how": "With an emissary at one of your own PCs, Sell goods you have spare and Hear Stories there.",
+          "unlocks": [
+            {
+              "skills": [
+                "Emissary"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "saruman_emissary_2",
+          "track": "Emissary",
+          "title": "The Voice of Saruman",
+          "type": "Loyalty",
+          "count": 20,
+          "how": "With an emissary at your own PCs, play Increase Loyalty (it comes with the first emissary step).",
+          "unlocks": [
+            {
+              "types": [
+                "PC",
+                "Land"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "saruman_commander_1",
+          "track": "Commander",
+          "title": "Fighting Uruk-hai",
+          "type": "Armies",
+          "count": 1,
+          "how": "With a commander at one of your PCs, play one of your army cards to raise a new host.",
+          "unlocks": [
+            {
+              "types": [
+                "Army"
+              ]
+            },
+            {
+              "types": [
+                "Event"
+              ],
+              "skills": [
+                "Commander"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "saruman_commander_2",
+          "track": "Commander",
+          "title": "The Mark Burns",
+          "type": "Captured",
+          "count": 1,
+          "how": "March a host to an enemy PC and Attack until it falls to you.",
+          "unlocks": [
+            {
+              "skills": [
+                "Commander"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "saruman_agent_1",
+          "track": "Agent",
+          "title": "Crebain and Spies",
+          "type": "AgentLevels",
+          "count": 1,
+          "how": "Keep your agents busy: Guard your PCs and characters, or Steal Gold at enemy PCs. Every action can raise their skill.",
+          "unlocks": [
+            {
+              "skills": [
+                "Agent"
+              ],
+              "maxLevel": 3
+            }
+          ]
+        },
+        {
+          "id": "saruman_agent_2",
+          "track": "Agent",
+          "title": "Many Eyes Abroad",
+          "type": "AgentLevels",
+          "count": 3,
+          "how": "Use your new agent actions (steal goods, sabotage, steal artifacts); every one can raise the agent's skill.",
+          "unlocks": [
+            {
+              "skills": [
+                "Agent"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "saruman_mage_1",
+          "track": "Mage",
+          "title": "Lore of the Rings",
+          "type": "Artifacts",
+          "count": 1,
+          "how": "Take a mage where an artifact lies (Scry Artifact shows where) and play Find Artifact.",
+          "unlocks": [
+            {
+              "skills": [
+                "Mage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "saruman_heroes_1",
+          "track": "Heroes",
+          "title": "Servants of the White Hand",
+          "type": "Characters",
+          "count": 1,
+          "how": "Walk any character to the home of a hero whose card you hold (click to fly there) and play their card to recruit them.",
+          "unlocks": [
+            {
+              "types": [
+                "Character"
+              ]
+            }
+          ]
+        }
+      ],
+      "champion": "",
+      "start": [
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Hear Stories",
+            "Sell 5 Steel",
+            "Sell 5 Leather",
+            "Sell 5 Mounts",
+            "Sell 5 Iron",
+            "Sell 5 Timber",
+            "Sell 5 Mithril",
+            "Buy 5 Food",
+            "Buy 5 Leather",
+            "Buy 5 Mounts",
+            "Buy 5 Iron",
+            "Buy 5 Timber",
+            "Buy 5 Mithril",
+            "Buy 5 Steel"
+          ]
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Attack",
+            "Block",
+            "Duel"
+          ]
+        },
+        {
+          "types": [
+            "Army"
+          ],
+          "from": "base"
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Guard PC",
+            "Guard Character",
+            "Steal Gold"
+          ]
+        },
+        {
+          "types": [
+            "Spell"
+          ],
+          "names": [
+            "Heal",
+            "Scry Artifact"
+          ]
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Find Artifact"
+          ]
+        },
+        {
+          "types": [
+            "Character"
+          ],
+          "from": "base"
+        },
+        {
+          "names": [
+            "Endless Stairs"
+          ]
+        }
       ]
     },
     {
       "leader": "Sauron",
       "objectives": [
-        { "id": "sauron_minas_tirith", "title": "The White City Falls", "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.", "type": "HoldPC", "pc": "Minas Tirith", "side": true, "points": 0, "decisive": true },
-        { "id": "sauron_osgiliath", "title": "Osgiliath Burns", "description": "Osgiliath is held by the Dark Servants when the Age ends.", "type": "HoldPC", "pc": "Osgiliath", "side": true, "points": 2 },
-        { "id": "sauron_barad_dur", "title": "The Dark Tower Stands", "description": "You hold Barad-dur when the Age ends.", "type": "HoldPC", "pc": "Barad-dur", "points": 1 },
-        { "id": "sauron_darkness", "title": "Darkness Spreads", "description": "Your own realm holds 6 or more PCs when the Age ends.", "type": "PCCount", "count": 6, "points": 3 }
+        {
+          "id": "sauron_minas_tirith",
+          "title": "The White City Falls",
+          "description": "Minas Tirith is held by the Dark Servants. Decisive: wins the war at once.",
+          "type": "HoldPC",
+          "pc": "Minas Tirith",
+          "side": true,
+          "points": 0,
+          "decisive": true
+        },
+        {
+          "id": "sauron_osgiliath",
+          "title": "Osgiliath Burns",
+          "description": "Osgiliath is held by the Dark Servants when the Age ends.",
+          "type": "HoldPC",
+          "pc": "Osgiliath",
+          "side": true,
+          "points": 2
+        },
+        {
+          "id": "sauron_barad_dur",
+          "title": "The Dark Tower Stands",
+          "description": "You hold Barad-dur when the Age ends.",
+          "type": "HoldPC",
+          "pc": "Barad-dur",
+          "points": 1
+        },
+        {
+          "id": "sauron_darkness",
+          "title": "Darkness Spreads",
+          "description": "Your own realm holds 6 or more PCs when the Age ends.",
+          "type": "PCCount",
+          "count": 6,
+          "points": 3
+        }
       ],
       "milestones": [
-        { "id": "sauron_m_host", "title": "The Host of Mordor", "type": "Armies", "count": 1, "aspect": "Military", "reward": 15, "how": "Play an army card with a commander at one of your PCs to raise another host." },
-        { "id": "sauron_m_iron", "title": "An Iron Grip", "type": "Fortifications", "count": 1, "aspect": "Military", "reward": 15, "how": "With an emissary at one of your own PCs, play Increase Fortifications." },
-        { "id": "sauron_m_tribute", "title": "Tribute of the East", "type": "Gold", "count": 30, "aspect": "Economy", "reward": 15, "how": "Send agents to Steal Gold at enemy PCs; have emissaries Sell surplus goods at your own." },
-        { "id": "sauron_m_gates", "title": "The Black Gate Opens", "type": "Troops", "count": 6, "aspect": "Military", "reward": 20, "how": "Keep playing army cards at your PCs to swell your hosts, and don't throw them away." },
-        { "id": "sauron_m_shadow", "title": "The Shadow Spreads", "type": "PCs", "count": 2, "aspect": "Realm", "reward": 25, "how": "March a host to an enemy PC and play Siege; emissaries can Decrease Loyalty there first to weaken it." },
-        { "id": "sauron_m_nine", "title": "The Nine Abroad", "type": "Levels", "count": 3, "aspect": "Heroes", "reward": 15, "how": "Keep your servants acting: every action has a chance to raise the skill it uses." }
+        {
+          "id": "sauron_emissary_1",
+          "track": "Emissary",
+          "title": "Tribute of the East",
+          "type": "Gold",
+          "count": 30,
+          "how": "With an emissary at one of your own PCs, Sell goods you have spare and Hear Stories there.",
+          "unlocks": [
+            {
+              "skills": [
+                "Emissary"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sauron_emissary_2",
+          "track": "Emissary",
+          "title": "Fear Holds Them",
+          "type": "Loyalty",
+          "count": 20,
+          "how": "With an emissary at your own PCs, play Increase Loyalty (it comes with the first emissary step).",
+          "unlocks": [
+            {
+              "types": [
+                "PC",
+                "Land"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sauron_commander_1",
+          "track": "Commander",
+          "title": "The Host of Mordor",
+          "type": "Armies",
+          "count": 1,
+          "how": "With a commander at one of your PCs, play one of your army cards to raise a new host.",
+          "unlocks": [
+            {
+              "types": [
+                "Army"
+              ]
+            },
+            {
+              "types": [
+                "Event"
+              ],
+              "skills": [
+                "Commander"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sauron_commander_2",
+          "track": "Commander",
+          "title": "The Shadow Spreads",
+          "type": "Captured",
+          "count": 1,
+          "how": "March a host to an enemy PC and Attack until it falls to you.",
+          "unlocks": [
+            {
+              "skills": [
+                "Commander"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sauron_agent_1",
+          "track": "Agent",
+          "title": "Spies of Mordor",
+          "type": "AgentLevels",
+          "count": 1,
+          "how": "Keep your agents busy: Guard your PCs and characters, or Steal Gold at enemy PCs. Every action can raise their skill.",
+          "unlocks": [
+            {
+              "skills": [
+                "Agent"
+              ],
+              "maxLevel": 3
+            }
+          ]
+        },
+        {
+          "id": "sauron_agent_2",
+          "track": "Agent",
+          "title": "Whispers in the Dark",
+          "type": "AgentLevels",
+          "count": 3,
+          "how": "Use your new agent actions (steal goods, sabotage, steal artifacts); every one can raise the agent's skill.",
+          "unlocks": [
+            {
+              "skills": [
+                "Agent"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sauron_mage_1",
+          "track": "Mage",
+          "title": "Seek the Ring-lore",
+          "type": "Artifacts",
+          "count": 1,
+          "how": "Take a mage where an artifact lies (Scry Artifact shows where) and play Find Artifact.",
+          "unlocks": [
+            {
+              "skills": [
+                "Mage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sauron_heroes_1",
+          "track": "Heroes",
+          "title": "Servants of the Eye",
+          "type": "Characters",
+          "count": 1,
+          "how": "Walk any character to the home of a hero whose card you hold (click to fly there) and play their card to recruit them.",
+          "unlocks": [
+            {
+              "types": [
+                "Character"
+              ]
+            }
+          ]
+        }
+      ],
+      "champion": "Mouth of Sauron",
+      "start": [
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Hear Stories",
+            "Sell 5 Steel",
+            "Sell 5 Leather",
+            "Sell 5 Mounts",
+            "Sell 5 Iron",
+            "Sell 5 Timber",
+            "Sell 5 Mithril",
+            "Buy 5 Food",
+            "Buy 5 Leather",
+            "Buy 5 Mounts",
+            "Buy 5 Iron",
+            "Buy 5 Timber",
+            "Buy 5 Mithril",
+            "Buy 5 Steel"
+          ]
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Attack",
+            "Block",
+            "Duel"
+          ]
+        },
+        {
+          "types": [
+            "Army"
+          ],
+          "from": "base"
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Guard PC",
+            "Guard Character",
+            "Steal Gold"
+          ]
+        },
+        {
+          "types": [
+            "Spell"
+          ],
+          "names": [
+            "Heal",
+            "Scry Artifact"
+          ]
+        },
+        {
+          "types": [
+            "Action"
+          ],
+          "names": [
+            "Find Artifact"
+          ]
+        },
+        {
+          "types": [
+            "Character"
+          ],
+          "from": "base"
+        },
+        {
+          "names": [
+            "Endless Stairs"
+          ]
+        }
       ]
     }
   ]

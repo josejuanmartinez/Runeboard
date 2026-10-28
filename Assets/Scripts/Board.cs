@@ -753,6 +753,10 @@ public class Board : MonoBehaviour
     // by the walk/turn is deliberately left as-is (not reset to Forward) so the character stays
     // facing the direction it actually landed in; see Character.lastFacingOrientation for how
     // that facing then carries over to the next hex's own controller instance.
+    // Seconds to cross one hex: the walk's stride (RB Walk, ~0.95 world units a second at the
+    // miniatures' size) over a hex width, so the feet keep pace with the ground instead of skating.
+    private const float HexWalkSeconds = 1.1f;
+
     private IEnumerator WalkCharacterOnHex(
         Character character,
         CharacterAnimationController controller,
@@ -1216,13 +1220,13 @@ public class Board : MonoBehaviour
                             startPortPos,
                             endPortPos,
                             usePort,
-                            0.35f);
+                            HexWalkSeconds);
                     }
                 }
 
                 if (canAnimateChar)
                 {
-                    charTween = WalkCharacterOnHex(character, controller, fromSR, toSR, startPos, endPos, 0.35f);
+                    charTween = WalkCharacterOnHex(character, controller, fromSR, toSR, startPos, endPos, HexWalkSeconds, ease: AnimationCurve.Linear(0f, 0f, 1f, 1f));
                 }
             }
             catch (Exception e)
@@ -1330,7 +1334,7 @@ public class Board : MonoBehaviour
     // always-eligible-to-focus behavior since they only ever call this once anyway.
     public void MoveCharacterOneHex(Character character, Hex previousHex, Hex newHex, bool finishMovement = false, bool lookAt = true, bool rememberPreviousHex = true, bool deferVisibilityRefresh = false, bool[] walkCameraFocused = null) {
         int movedBefore = character.moved;
-        bool actionedBefore = character.hasActionedThisTurn;
+        int actionsBefore = character.ActionsUsedThisTurn;
         bool wasWater = previousHex != null && previousHex.IsWaterTerrain();
         bool isWater = newHex != null && newHex.IsWaterTerrain();
         Game g = GetGame();
@@ -1439,7 +1443,7 @@ public class Board : MonoBehaviour
                 // Embarking/disembarking ends movement, but it is not an action. Preserve the
                 // character's action state explicitly so sailing can never consume the human
                 // player's one action through movement-side callbacks or UI refreshes.
-                if (wasWater != isWater) character.hasActionedThisTurn = actionedBefore;
+                if (wasWater != isWater) character.ActionsUsedThisTurn = actionsBefore;
                 if(!wasWater && isWater) MessageDisplayNoUI.ShowMessage(newHex, character, "Set Sail!", Color.cyan);
                 if(wasWater && !isWater) MessageDisplayNoUI.ShowMessage(newHex, character, "Disembarked", Color.cyan);
             }
@@ -1901,6 +1905,8 @@ public class Board : MonoBehaviour
     // (another owned PC/region at turn start, or another leader's turn-start grant sharing the
     // same action type) would re-Initialize the shared instance out from under the first,
     // corrupting its character/card fields mid-flight.
+    private readonly Dictionary<PC, int> pcPaidOnTurn = new();
+
     public async void TriggerOwnPcGrantIfStandingOnOne(Character character, Hex hex, bool quickTurnStartSequence = false, bool suppressPresentation = false)
     {
         if (character == null || character.killed || hex == null)
@@ -1915,6 +1921,12 @@ public class Board : MonoBehaviour
             if (DevLog.Verbose) Debug.Log($"[PCGrant] aborted — no PC on {hex.name}, or not owned by {character.characterName}'s leader (pc={pc != null})");
             return;
         }
+
+        // Once a turn per PC: the turn-start gathering and arriving there later in the turn
+        // would otherwise both pay (stepping out and back in paid again).
+        int turnNow = Game.Instance != null ? Game.Instance.turn : 0;
+        if (pcPaidOnTurn.TryGetValue(pc, out int paidTurn) && paidTurn == turnNow) return;
+        pcPaidOnTurn[pc] = turnNow;
 
         DeckManager deckManager = DeckManager.Instance != null ? DeckManager.Instance : DeckManager.Instance;
         CardData pcCard = deckManager?.FindPcCardByPcName(pc.pcName);
@@ -1971,6 +1983,9 @@ public class Board : MonoBehaviour
                 // every source hex: the flight still marks each destination on the board, but
                 // retaining the current camera makes a large resource collection immediate.
                 CardCenterPreview.Instance?.ShowPreview(pcCard, quickTurnStartSequence ? 2f : 1f);
+                string yields = PcDescriptionBuilder.ResourceSummary(pcCard);
+                if (!string.IsNullOrEmpty(yields))
+                    MessageDisplay.ShowMessage($"{DisplayNames.Format(pc.pcName)} pays its goods: {yields}", UiTheme.Text);
                 await Task.Delay(TimeSpan.FromSeconds(quickTurnStartSequence ? 0.75 : 1.5));
                 CardCenterPreview.Instance?.HidePreview();
 

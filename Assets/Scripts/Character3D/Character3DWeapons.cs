@@ -96,7 +96,8 @@ public static class Character3DWeapons
             case "Southron":
             case "Easterling": return new Loadout(Weapon.Scimitar, shield);
             case "Wildman": return new Loadout(Weapon.Spear);
-            default: return new Loadout(Weapon.Sword, shield);
+            // A mixed line: every third man carries a spear.
+            default: return new Loadout(index % 3 == 2 ? Weapon.Spear : Weapon.Sword, shield);
         }
     }
 
@@ -142,8 +143,8 @@ public static class Character3DWeapons
         { Weapon.Axe, new Spec(new(0.8f, 0.1f, 0.24f), new(0.19f, 0.8f, 0.47f), Vector3.right, 0.5f, 15f) },
         { Weapon.Scimitar, new Spec(new(0.46f, 0.06f, 0.89f), new(0.26f, 1f, 0.06f), Vector3.forward, 0.5f, 20f) },
         { Weapon.MorningStar, new Spec(new(0.5f, 0.12f, 0.5f), new(0.5f, 1f, 0.5f), Vector3.right, 0.5f, 15f) },
-        { Weapon.Spear, new Spec(new(0.5f, 0.4f, 0.5f), new(0.5f, 1f, 0.5f), Vector3.right, 1.15f, 65f) },
-        { Weapon.Staff, new Spec(new(0.38f, 0.42f, 0.61f), new(0.38f, 1f, 0.61f), Vector3.right, 1f, 72f) },
+        { Weapon.Spear, new Spec(new(0.5f, 0.4f, 0.5f), new(0.5f, 1f, 0.5f), Vector3.right, 1.15f, -28f) },
+        { Weapon.Staff, new Spec(new(0.38f, 0.42f, 0.61f), new(0.38f, 1f, 0.61f), Vector3.right, 1f, -32f) },
         { Weapon.Shield, new Spec(new(0.5f, 0.55f, 0f), new(0.5f, 0.55f, 1f), Vector3.up, 0.42f, 0f) },
     };
 

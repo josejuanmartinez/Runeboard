@@ -41,7 +41,7 @@ public static class AITurnController
             Debug.LogException(economyCardsTask.Exception);
         }
 
-        foreach (Character character in leader.controlledCharacters.Where(c => c != null && !c.killed))
+        foreach (Character character in leader.controlledCharacters.Where(c => c != null && !c.killed).ToList())
         {
             if (skipAlreadyActionedCharacters && character.hasActionedThisTurn) continue;
             game?.RefreshPlayerControlState();
@@ -53,6 +53,9 @@ public static class AITurnController
             // now only biases the character it's actually about.
             CharacterBlackboard blackboard = CharacterBlackboardStore.GetOrCreate(leader, character);
             (string activeHtnTaskId, IReadOnlyList<string> preferredParameters, Hex activeHtnTargetHex) = AdvanceHtnStrategy(leader, character, blackboard);
+            // A campaign step for this character outranks the general strategy's destination.
+            Hex campaignTarget = leader is PlayableLeader campaignLeader ? CampaignAI.TravelTargetFor(campaignLeader, character) : null;
+            if (campaignTarget != null) activeHtnTargetHex = campaignTarget;
 
             Task task = ExecuteCharacterAsync(leader, character, actionsManager, activeHtnTaskId, preferredParameters, activeHtnTargetHex, presentChosenCards);
             while (!task.IsCompleted) yield return null;
@@ -148,6 +151,15 @@ public static class AITurnController
         {
             if (card == null) continue;
             if (!card.EvaluatePlayability(actor)) continue;
+            // A PC card must be played where it works (an unowned PC only on its own hex), or
+            // it is spent for nothing.
+            if (card.GetCardType() == CardTypeEnum.PC)
+            {
+                CharacterAction pcAction = ResolveActionByRef(NormalizeActionRef(card.GetActionRef()), actionsManager);
+                if (pcAction == null) continue;
+                pcAction.Initialize(actor, card);
+                if (!pcAction.FulfillsConditions()) continue;
+            }
             if (!deckManager.TryConsumeCard(leader, card.name, out CardData consumedCard)) continue;
             // No ApplyMapRevealForPlayedCard here: turn-start PC/region grants (see
             // Board.TriggerTurnStartResourceGrants) already cover the leader's own controlled
@@ -157,7 +169,7 @@ public static class AITurnController
         }
     }
 
-    private static async Task<bool> ExecuteCardEffectForAiAsync(CardData card, Character actor, ActionsManager actionsManager)
+    public static async Task<bool> ExecuteCardEffectForAiAsync(CardData card, Character actor, ActionsManager actionsManager)
     {
         if (card == null || actor == null || actionsManager == null) return false;
 
@@ -286,6 +298,14 @@ public static class AITurnController
             await MoveCharacterTowardsHexAsync(character, activeHtnTargetHex);
             moveMs += moveStopwatch.Elapsed.TotalMilliseconds;
             movedFirst = true;
+        }
+
+        // At a campaign step's place: do the step first (claim, recruit, win a realm, raise a host).
+        if (leader is PlayableLeader campaignLeader)
+        {
+            System.Diagnostics.Stopwatch campaignStopwatch = System.Diagnostics.Stopwatch.StartNew();
+            if (await CampaignAI.TryActAsync(campaignLeader, character, actionsManager)) movedFirst = true;
+            executeMs += campaignStopwatch.Elapsed.TotalMilliseconds;
         }
 
         // Moving invalidates UtilityAIContextCacheManager's cached proximity data (built from
@@ -556,7 +576,7 @@ public static class AITurnController
     // acting (see ExecuteCharacterAsync) or after (the old, still-used fallback-chase path).
     private static async Task MoveCharacterTowardsHexAsync(Character character, Hex target)
     {
-        if (character == null) return;
+        if (character == null || character.holdsPost) return;
         if (character.moved >= character.GetMaxMovement()) return;
         if (target == null || target == character.hex) return;
 

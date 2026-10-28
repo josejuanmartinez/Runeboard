@@ -41,30 +41,52 @@ public class TurnBanner : MonoBehaviour
     private const float BarHeight = 88f;
     private const float LineThickness = 1.5f;
     private const float LineMaxHalfWidth = 320f;
-    private const float BannerRestX = 460f;
-    private const float BannerStartX = 700f;
+    // The flags hang at the plate's inner edges, in front of it (the plate is PlateWidth wide,
+    // centred PlateDrop below the title); they slide in from just outside it.
+    private const float PlateWidth = 1220f, PlateHeight = 264f, PlateDrop = 55f;
+    // Without a story line the plate closes up under the date.
+    private const float ShortPlateHeight = 196f, ShortPlateDrop = 30f;
+    private RectTransform scrim;
+    private bool shortPlate;
+    private const float BannerRestX = 532f;
+    private const float BannerStartX = 760f;
     private const float EnterDuration = 0.38f;
     private const float FlashDuration = 0.22f;
     private const float HoldDuration = 1.1f;
     private const float ExitDuration = 0.28f;
 
-    public Color GoldColor = new(0.83f, 0.70f, 0.46f);
+    private float BannerY => (textRect != null ? textRect.anchoredPosition.y : 0f) - (shortPlate ? ShortPlateDrop : PlateDrop);
+
+    private void FitScrim()
+    {
+        if (scrim == null && textRect != null && textRect.parent != null) scrim = textRect.parent.Find("BannerScrim") as RectTransform;
+        if (scrim == null) return;
+        scrim.sizeDelta = new Vector2(PlateWidth, shortPlate ? ShortPlateHeight : PlateHeight);
+        scrim.anchoredPosition = textRect.anchoredPosition + new Vector2(0f, -(shortPlate ? ShortPlateDrop : PlateDrop));
+    }
+
+    public Color GoldColor = new(0.86f, 0.72f, 0.47f);
 
     // Soft dark plate behind the centre text so the date/lore lines read over a busy board.
     private void EnsureScrim()
     {
         if (textRect == null || textRect.parent == null || textRect.parent.Find("BannerScrim") != null) return;
-        var go = new GameObject("BannerScrim", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        // A dark panel with a gold hairline behind the title and its lines (the Next panel's
+        // look), so "TURN 3" and "Gathering Resources" read over any part of the board.
+        var go = new GameObject("BannerScrim", typeof(RectTransform), typeof(CanvasRenderer), typeof(CinematicPanel));
         var rt = go.GetComponent<RectTransform>();
         rt.SetParent(textRect.parent, false);
         rt.SetSiblingIndex(textRect.GetSiblingIndex());
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
-        rt.anchoredPosition = textRect.anchoredPosition + new Vector2(0f, -60f);
-        rt.sizeDelta = new Vector2(1500f, 460f);
-        var img = go.GetComponent<Image>();
-        img.sprite = BoardLook.SoftEllipseSprite();
-        img.color = new Color(0f, 0f, 0f, 0.62f);
-        img.raycastTarget = false;
+        rt.anchoredPosition = textRect.anchoredPosition + new Vector2(0f, -PlateDrop);
+        rt.sizeDelta = new Vector2(PlateWidth, PlateHeight);
+        var panel = go.GetComponent<CinematicPanel>();
+        panel.fillTop = new Color(0.075f, 0.064f, 0.052f, 1f);
+        panel.fillBottom = new Color(0.035f, 0.03f, 0.026f, 1f);
+        panel.raycastTarget = false;
+        // The flags in front of the plate, not peeking out from behind it.
+        if (leftBannerRect != null) leftBannerRect.SetAsLastSibling();
+        if (rightBannerRect != null) rightBannerRect.SetAsLastSibling();
     }
 
     // Whether PlayAnimation currently holds CenterDisplayLock. Show() below calls
@@ -171,12 +193,18 @@ public class TurnBanner : MonoBehaviour
 
         bool hasBanner = bannerSprite != null;
 
+        // Plain font materials: the scene's title material has an HDR face colour that the bloom
+        // turned into a glaring yellow.
+        foreach (TMP_Text text in new TMP_Text[] { turnText, dateText, infoText })
+            if (text != null) text.fontSharedMaterial = UiTheme.PlainMaterial(text.font);
         turnText.text = title;
         turnText.color = GoldColor;
         dateText.text = subtitle;
         infoText.text = info;
         infoText.gameObject.SetActive(!string.IsNullOrEmpty(infoText.text));
         EnsureScrim();
+        shortPlate = !infoText.gameObject.activeSelf;
+        FitScrim();
         rootGroup.alpha = 1f;
         textRect.localScale = Vector3.zero;
         dateRect.localScale = Vector3.zero;
@@ -192,8 +220,8 @@ public class TurnBanner : MonoBehaviour
         Color bannerHidden = new(1f, 1f, 1f, 0f);
         leftBannerImg.color = bannerHidden;
         rightBannerImg.color = bannerHidden;
-        leftBannerRect.anchoredPosition = new Vector2(-BannerStartX, 0f);
-        rightBannerRect.anchoredPosition = new Vector2(BannerStartX, 0f);
+        leftBannerRect.anchoredPosition = new Vector2(-BannerStartX, BannerY);
+        rightBannerRect.anchoredPosition = new Vector2(BannerStartX, BannerY);
         leftBannerImg.enabled = hasBanner;
         rightBannerImg.enabled = hasBanner;
 
@@ -220,8 +248,8 @@ public class TurnBanner : MonoBehaviour
             {
                 float bannerP = EaseOutCubic(Mathf.Clamp01(p / 0.8f));
                 float bannerX = Mathf.Lerp(BannerStartX, BannerRestX, bannerP);
-                leftBannerRect.anchoredPosition = new Vector2(-bannerX, 0f);
-                rightBannerRect.anchoredPosition = new Vector2(bannerX, 0f);
+                leftBannerRect.anchoredPosition = new Vector2(-bannerX, BannerY);
+                rightBannerRect.anchoredPosition = new Vector2(bannerX, BannerY);
                 Color bannerColor = new(1f, 1f, 1f, bannerP);
                 leftBannerImg.color = bannerColor;
                 rightBannerImg.color = bannerColor;
@@ -239,8 +267,8 @@ public class TurnBanner : MonoBehaviour
         lineRightRect.sizeDelta = new Vector2(LineMaxHalfWidth, LineThickness);
         if (hasBanner)
         {
-            leftBannerRect.anchoredPosition = new Vector2(-BannerRestX, 0f);
-            rightBannerRect.anchoredPosition = new Vector2(BannerRestX, 0f);
+            leftBannerRect.anchoredPosition = new Vector2(-BannerRestX, BannerY);
+            rightBannerRect.anchoredPosition = new Vector2(BannerRestX, BannerY);
             leftBannerImg.color = Color.white;
             rightBannerImg.color = Color.white;
         }
@@ -250,7 +278,7 @@ public class TurnBanner : MonoBehaviour
         while (t < FlashDuration)
         {
             float arc = Mathf.Sin((t / FlashDuration) * Mathf.PI);
-            turnText.color = Color.Lerp(GoldColor, Color.white, arc * 0.65f);
+            turnText.color = Color.Lerp(GoldColor, new Color(0.95f, 0.88f, 0.7f), arc * 0.5f);
             t += Time.deltaTime;
             yield return null;
         }
@@ -278,28 +306,25 @@ public class TurnBanner : MonoBehaviour
     // Calendar-entry descriptions for the day, plus whichever environmental card is (or is about
     // to become) active — read directly rather than via EnvironmentalCardManager.ActiveCard alone,
     // since Game.NewTurn() shows the banner before NewTurnStarted fires and updates it.
+    // The day's tale, set like a line from the books: the event's name as a small-caps gold
+    // heading, and the narrative under it, quoted, in italic parchment.
     private static string BuildInfoText(MiddleEarthDate today)
     {
-        var lines = new List<string>();
-
         IEnumerable<CalendarEntry> calendarEntries = DateEventManager.Instance?.GetEntriesForDate(today);
-        if (calendarEntries != null)
-        {
-            string calendarText = string.Join(" · ", calendarEntries
-                .Where(e => !string.IsNullOrWhiteSpace(e.description))
-                .Select(e => e.description));
-            if (!string.IsNullOrEmpty(calendarText)) lines.Add(calendarText);
-        }
+        string tale = calendarEntries != null
+            ? string.Join(" ", calendarEntries.Where(e => !string.IsNullOrWhiteSpace(e.description)).Select(e => e.description.Trim()))
+            : string.Empty;
 
         CardData envCard = DateEventManager.Instance?.GetEnvironmentCardForDate(today)
             ?? EnvironmentalCardManager.Instance?.ActiveCard;
-        if (envCard != null)
-        {
-            lines.Add(string.IsNullOrWhiteSpace(envCard.description)
-                ? envCard.name
-                : $"{envCard.name}: {envCard.description}");
-        }
+        string heading = envCard != null ? DisplayNames.Format(envCard.name) : null;
+        if (string.IsNullOrWhiteSpace(tale) && envCard != null) tale = envCard.description?.Trim() ?? string.Empty;
 
+        var lines = new List<string>();
+        if (!string.IsNullOrWhiteSpace(heading))
+            lines.Add($"<size=78%><color={UiTheme.GoldHex}><cspace=0.16em>{heading.ToUpperInvariant()}</cspace></color></size>");
+        if (!string.IsNullOrWhiteSpace(tale))
+            lines.Add($"<i><color=#D8CCAE>“{tale}”</color></i>");
         return string.Join("\n", lines);
     }
 

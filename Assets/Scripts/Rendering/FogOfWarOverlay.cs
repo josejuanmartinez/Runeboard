@@ -33,6 +33,15 @@ public class FogOfWarOverlay : MonoBehaviour
     private int lastSignature = int.MinValue;
     private Material material;
 
+    // Held off while the leader selection shows the open board behind its carousel.
+    private static bool hidden;
+
+    public static void SetHidden(bool value)
+    {
+        hidden = value;
+        if (instance != null && instance.TryGetComponent(out SpriteRenderer sr)) sr.enabled = !value;
+    }
+
     public static void Ensure()
     {
         if (instance != null) return;
@@ -91,6 +100,7 @@ public class FogOfWarOverlay : MonoBehaviour
         sr.sharedMaterial = material;
         sr.sortingLayerName = "Hexes";
         sr.sortingOrder = 0;
+        sr.enabled = !hidden;
         transform.position = new Vector3(origin.x + size.x * 0.5f, origin.y + size.y * 0.5f, 0f);
         transform.localScale = new Vector3(size.x, size.y, 1f);
 

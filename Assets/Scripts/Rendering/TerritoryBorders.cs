@@ -62,8 +62,8 @@ public class TerritoryBorders : MonoBehaviour
         var sig = new System.Text.StringBuilder();
         foreach (Hex hex in board.hexes.Values)
         {
-            // Only settlements you have discovered: their hex revealed to you and the place not hidden.
-            PC pc = hex != null && hex.IsHexRevealed() ? hex.GetPC() : null;
+            // Only settlements drawn on your map (Hex.ShouldShowPcVisual): no border round an empty hex.
+            PC pc = hex != null && hex.ShouldShowPcVisual() ? hex.GetPCData() : null;
             if (pc?.owner == null || pc.owner.killed) continue;
             sig.Append(hex.v2).Append(pc.citySize).Append(ColorUtility.ToHtmlStringRGB(pc.owner.nationColor)).Append(';');
             foreach ((Vector2Int at, int distance) in Around(board, hex.v2, Reach(pc)))

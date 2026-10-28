@@ -19,11 +19,19 @@ public abstract class DepthSlabbed : MonoBehaviour
     private static readonly List<DepthSlabbed> live = new();
     private static int sortedFrame = -1;
     private int slot;
+    // Breaks ties between objects at the same board Y (the houses of one row of a town): an
+    // unstable sort swapped their slabs from frame to frame, and overlapping buildings flickered.
+    private static int nextSerial;
+    private int serial = -1;
 
     // Where this object stands on the board: higher = farther back.
     protected virtual float SortY => transform.position.y;
 
-    protected virtual void OnEnable() => live.Add(this);
+    protected virtual void OnEnable()
+    {
+        if (serial < 0) serial = nextSerial++;
+        live.Add(this);
+    }
     protected virtual void OnDisable() => live.Remove(this);
 
     protected static float SlabWidth => BandWidth / Mathf.Max(live.Count, 1);
@@ -42,7 +50,11 @@ public abstract class DepthSlabbed : MonoBehaviour
         if (sortedFrame == Time.frameCount) return;
         sortedFrame = Time.frameCount;
         // Highest on the board = farthest = slot 0.
-        live.Sort((a, b) => b.SortY.CompareTo(a.SortY));
+        live.Sort((a, b) =>
+        {
+            int byY = b.SortY.CompareTo(a.SortY);
+            return byY != 0 ? byY : a.serial.CompareTo(b.serial);
+        });
         for (int i = 0; i < live.Count; i++) live[i].slot = i;
     }
 }
